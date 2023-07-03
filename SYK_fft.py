@@ -4,7 +4,7 @@ import numpy as np
 
 
 def Freq2Time(gg, Nbig, beta):
-    ''' Fast fourier transform (from frequency to time) 
+    ''' Fast fourier transform (from fermionic matsubara frequency to time) 
         Input: 
               gg - array of Greens functions depending on the frequency
               Nbig - size of a grid
