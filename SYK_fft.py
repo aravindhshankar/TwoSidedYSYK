@@ -1,6 +1,3 @@
-#from scipy.fftpack import fft as fft
-#from scipy.fftpack import ifft as ifft
-#from scipy.fftpack import fftshift
 from scipy.fft import fft as fft
 from scipy.fft import ifft as ifft
 import numpy as np
