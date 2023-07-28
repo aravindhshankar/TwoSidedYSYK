@@ -9,7 +9,7 @@ def GconfImag(omega,g,beta):
     c1 = 1.154700
     delta = 0.420374134464041
     
-    return 1/((1j*omega) * (1 + (c1*(np.abs((g**2)/omega)**(2*delta)))))
+    return 1/((1j*omega) * (1 + (c1*np.abs((g**2)/omega)**(2*delta))))
 
 def DconfImag(nu,g,beta):
     ''' 
