@@ -25,6 +25,7 @@ def DconfImag(nu,g,beta):
     
     return 1.0/(nu**2 + omegar2 + c3*(np.abs(nu/(g**2)))**(4*delta - 1))
 
+
 def DfreeImagtau(tau,r,beta):
     '''
     Arguments: tau,r,beta
@@ -35,3 +36,12 @@ def DfreeImagtau(tau,r,beta):
     num = (tau-(beta/2))*m
     den = beta*m/2
     return pref * np.cosh(num)/np.sinh(den)
+
+
+def ret_omegar2(g,beta):
+    ''' Bad programming practice I know, don't judge'''
+    T = 1.0/beta
+    c2 = 0.561228
+    delta = 0.420374134464041
+    omegar2 = c2 * (T/(g**2))**(4*delta - 1)
+    return omegar2
