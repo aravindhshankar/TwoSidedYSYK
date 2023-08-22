@@ -55,3 +55,55 @@ def Time2FreqB(gg, Nbig, beta):
     n = np.arange(Nbig)
     return (beta)*np.exp(1j*np.pi*n/Nbig)*ifft(np.exp(-1j*np.pi*(n + 1./2))*gg) 
 
+
+
+def time2freq(ftau,M,dt): 
+    '''
+    Real time/frequency version
+    '''
+    pref = 2 * M * dt
+    OmegaminusM = np.arange(2*M) - M
+    tau = np.arange(2*M)
+    prefexp = np.exp(-1j * np.pi * OmegaminusM)
+    return prefexp * pref * ifft(np.exp(-1j*np.pi*tau)*ftau) 
+
+def freq2time(fomega,M,dt):
+    '''
+    real frequency/time version
+    NOTE: THIS SIMPLY DOES THE INTEGRAL: need to multiply the result by 1/(2pi) for a fourier transforrm
+    '''
+    dw = np.pi/(M*dt)
+    pref = dw
+    tauminusM = np.arange(2*M) - M
+    omega = np.arange(2*M)
+    prefexp = np.exp(1j*np.pi*tauminusM)
+    return prefexp * pref * fft(np.exp(1j*np.pi*omega)*fomega)
+
+def fermidirac(arg, default = True):
+    '''
+    returns 1/(1+ exp(x))
+    '''
+    if default:
+        return (1.0/(1.0 + np.exp(arg)))
+    else:
+        answer = 1
+        if arg < 0:
+            answer = 1.0/(1.0 + np.exp(arg))
+        else: 
+            answer = np.exp(-arg)/(1.0 + np.exp(-arg))
+        return answer
+    
+def boseeinstein(arg, default = True):
+    '''
+    returns 1/(exp(x)-1)
+    Watch out for x=0
+    '''
+    if default:
+        return (1.0/(np.exp(arg)-1))
+    else:
+        answer = 1
+        if arg < 0:
+            answer = 1.0/(np.exp(arg)-1)
+        elif arg>0: 
+            answer = np.exp(-arg)/(1.0 - np.exp(-arg))
+        return answer
