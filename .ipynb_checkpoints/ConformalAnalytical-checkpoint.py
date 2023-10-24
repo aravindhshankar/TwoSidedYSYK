@@ -62,7 +62,7 @@ def DfreeRealomega(omega,r,eta=1e-6):
     Dinv = r - (omega + 1j*eta)**2
     return 1.0/Dinv
 
-def GfreeRealomega(omega,mu,beta,eta=1e-6):
+def GfreeRealomega(omega,mu,eta=1e-6):
     '''
     Arguments omega, mu 
     Real frequency retarded fermion greens function 
