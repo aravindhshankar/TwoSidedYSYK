@@ -45,3 +45,33 @@ def ret_omegar2(g,beta):
     delta = 0.420374134464041
     omegar2 = c2 * (T/(g**2))**(4*delta - 1)
     return omegar2
+
+def DfreeRealt(t,r,eta=1e-6):
+    '''
+    Arguments t, r(bare boson mass squared)
+    Real time retarded boson greens function 
+    '''
+    omega0 = np.sqrt(r)
+    return np.heaviside(t,1.0) * (np.sin(omega0 * t)/omega0)  * np.exp(-eta*np.abs(t))
+
+def DfreeRealomega(omega,r,eta=1e-6):
+    '''
+    Arguments omega, r(bare boson mass squared) 
+    Real frequency retarded boson greens function 
+    '''
+    Dinv = r - (omega + 1j*eta)**2
+    return 1.0/Dinv
+
+def GfreeRealomega(omega,mu,beta,eta=1e-6):
+    '''
+    Arguments omega, mu 
+    Real frequency retarded fermion greens function 
+    '''
+    return 1. / (omega + 1j*eta - mu)
+
+def GfreeRealt(t,mu,eta=1e-6):
+    '''
+    Arguments t, mu
+    Real time retarded fermion greens function
+    '''
+    return -1j * np.heaviside(t,1.0) * np.exp(-1j*mu*t) * np.exp(-eta*np.abs(t))
