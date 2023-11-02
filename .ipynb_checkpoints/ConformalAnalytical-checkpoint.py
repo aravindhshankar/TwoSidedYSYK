@@ -85,8 +85,12 @@ def CrazyGconfReal(omega,g,beta,eta=0):
     '''
     c1 = 1.154700
     delta = 0.420374134464041
-    
-    return 1/((omega+1j*eta) * (1 + (c1*np.abs((g**2)/(omega+1j*eta))**(2*delta))))
+    ompluit = omega + 1j*eta
+    #return 1/((omega+1j*eta) * (1 + (c1*np.abs((g**2)/(omega+1j*eta))**(2*delta))))
+    denom = ompluit + c1*(g**(4*delta)) * (1j**(2*delta)) * ompluit**(1-2*delta)
+    #denom = ompluit + c1*(g**(4*delta)) * 1 * ompluit**(1-2*delta)
+    print('boo')
+    return 1./denom
 
 def CrazyDconfReal(omega,g,beta,eta=0):
     ''' 
