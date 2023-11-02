@@ -75,3 +75,29 @@ def GfreeRealt(t,mu,eta=1e-6):
     Real time retarded fermion greens function
     '''
     return -1j * np.heaviside(t,1.0) * np.exp(-1j*mu*t) * np.exp(-eta*np.abs(t))
+
+
+def CrazyGconfReal(omega,g,beta,eta=0):
+    ''' 
+    Arguments omega,g,beta
+    So far we will implement only the kappa=1 result eq.16 of esterlis-schmalian
+    omega is the grid of fermionic matsubara frequencies
+    '''
+    c1 = 1.154700
+    delta = 0.420374134464041
+    
+    return 1/((omega+1j*eta) * (1 + (c1*np.abs((g**2)/(omega+1j*eta))**(2*delta))))
+
+def CrazyDconfReal(omega,g,beta,eta=0):
+    ''' 
+    Arguments: nu,g,beta
+    So far we will implement only the kappa=1 result eq.16 of esterlis-schmalian
+    nu is the grid of fermionic matsubara frequencies
+    '''
+    T = 1.0/beta
+    c2 = 0.561228
+    c3 = 0.709618
+    delta = 0.420374134464041
+    omegar2 = c2 * (T/(g**2))**(4*delta - 1)
+    
+    return 1.0/(-1*(omega+1j*eta)**2 + omegar2 + c3*(np.abs((omega+1j*eta)/(g**2)))**(4*delta - 1))
