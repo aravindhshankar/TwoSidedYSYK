@@ -117,6 +117,33 @@ def CrazyGconfReal(omega,g,beta,eta=0):
     return 1./denom
     #return 1/((omega+1j*eta) * (1 + (c1*np.abs((g**2)/(omega+1j*eta))**(2*delta))))
 
+# def CrazyDconfReal(omega,g,beta,eta=0):
+#     ''' 
+#     Arguments: nu,g,beta
+#     So far we will implement only the kappa=1 result eq.16 of esterlis-schmalian
+#     nu is the grid of fermionic matsubara frequencies
+#     '''
+#     T = 1.0/beta
+#     c2 = 0.561228
+#     c3 = 0.709618
+#     delta = 0.420374134464041
+#     omegar2 = c2 * (T/(g**2))**(4*delta - 1)
+#     print('foo')
+#     return 1.0/(-1*(omega+1j*eta)**2 + omegar2 + c3*(np.abs((omega+1j*eta)/(1j* (g**2))))**(4*delta - 1))
+
+def DfreeThermalomega(omega,r,beta,g,eta=1e-6):
+    '''
+    Arguments omega, r(bare boson mass squared) 
+    Real frequency retarded boson greens function 
+    '''
+    omegar2 = ret_omegar2(g,beta)
+    Dinv = omegar2 - (omega + 1j*eta)**2 
+    #Dinv = r - (omega + 1j*eta)**2
+    #M = len(omega) // 2
+    #Dinv[M] = omegar2  
+    print('foo barr')
+    return -1.0/Dinv
+
 def CrazyDconfReal(omega,g,beta,eta=0):
     ''' 
     Arguments: nu,g,beta
@@ -128,16 +155,5 @@ def CrazyDconfReal(omega,g,beta,eta=0):
     c3 = 0.709618
     delta = 0.420374134464041
     omegar2 = c2 * (T/(g**2))**(4*delta - 1)
-    print('foo')
-    return 1.0/(-1*(omega+1j*eta)**2 + omegar2 + c3*(np.abs((omega+1j*eta)/(1j* (g**2))))**(4*delta - 1))
-
-def DfreeThermalomega(omega,r,beta,g,eta=1e-6):
-    '''
-    Arguments omega, r(bare boson mass squared) 
-    Real frequency retarded boson greens function 
-    '''
-    omegar2 = ret_omegar2(g,beta)
-    Dinv = r - (omega + 1j*eta)**2 
-    M = len(omega) // 2
-    Dinv[M] = omegar2  
-    return 1.0/Dinv
+    print('boo')
+    return 1.0/(1*(omega+1j*eta)**2 + omegar2 + c3*(np.abs((omega+1j*eta)/(1j* (g**2))))**(4*delta - 1))
