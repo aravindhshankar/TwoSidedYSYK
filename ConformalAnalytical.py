@@ -1,5 +1,31 @@
 import numpy as np
 
+
+def rhotosigma(rhoG,rhoD,M,dt,t,g,beta,kappa=1,delta=1e-6):
+    '''
+    returns [Sigma,Pi] given rhos
+    '''
+    eta = np.pi/(M*dt)*(0.001)
+    rhoGrev = np.concatenate(([rhoG[-1]], rhoG[1:][::-1]))
+    rhoFpp = (1/np.pi)*freq2time(rhoG * fermidirac(beta*omega),M,dt)
+    rhoFpm = (1/np.pi)*freq2time(rhoG * fermidirac(-1.*beta*omega),M,dt)
+    rhoFmp = (1/np.pi)*freq2time(rhoGrev * fermidirac(beta*(omega)),M,dt)
+    rhoFmm = (1/np.pi)*freq2time(rhoGrev * fermidirac(-1.*beta*omega),M,dt)
+    rhoBpp = (1/np.pi)*freq2time(rhoD * boseeinstein(beta*(omega+eta)),M,dt)
+    rhoBpm = (1/np.pi)*freq2time(rhoD * boseeinstein(-1.*beta*(omega+eta)),M,dt)
+    
+    argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.exp(-np.abs(delta*t)) * np.heaviside(t,1)
+    #argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.heaviside(t,1)
+    Sigma = 1j*(g**2)*kappa * time2freq(argSigma,M,dt)
+    
+    argPi = (rhoFpp*rhoFmp - rhoFpm*rhoFmm) * np.exp(-np.abs(delta*t)) * np.heaviside(t,1)
+    #argPi = (rhoFpp*rhoFmp - rhoFpm*rhoFmm) * np.heaviside(t,1)
+    Pi = 2*1j*(g**2) * time2freq(argPi,M,dt)
+    
+    return [Sigma, Pi]
+
+
+
 def GconfImag(omega,g,beta):
     ''' 
     Arguments omega,g,beta
@@ -87,10 +113,9 @@ def CrazyGconfReal(omega,g,beta,eta=0):
     delta = 0.420374134464041
     ompluit = omega + 1j*eta
     denom = ompluit + c1*(g**(4*delta)) * (1j**(2*delta)) * ompluit**(1-2*delta)
-    #denom = ompluit + c1*(g**(4*delta)) * 1 * ompluit**(1-2*delta)
-    print('foo')
-    #return 1./denom
-    return 1/((omega+1j*eta) * (1 + (c1*np.abs((g**2)/(omega+1j*eta))**(2*delta))))
+    print('bar')
+    return 1./denom
+    #return 1/((omega+1j*eta) * (1 + (c1*np.abs((g**2)/(omega+1j*eta))**(2*delta))))
 
 def CrazyDconfReal(omega,g,beta,eta=0):
     ''' 
@@ -103,5 +128,16 @@ def CrazyDconfReal(omega,g,beta,eta=0):
     c3 = 0.709618
     delta = 0.420374134464041
     omegar2 = c2 * (T/(g**2))**(4*delta - 1)
-    
-    return 1.0/(-1*(omega+1j*eta)**2 + omegar2 + c3*(np.abs((omega+1j*eta)/(g**2)))**(4*delta - 1))
+    print('foo')
+    return 1.0/(-1*(omega+1j*eta)**2 + omegar2 + c3*(np.abs((omega+1j*eta)/(1j* (g**2))))**(4*delta - 1))
+
+def DfreeThermalomega(omega,r,beta,g,eta=1e-6):
+    '''
+    Arguments omega, r(bare boson mass squared) 
+    Real frequency retarded boson greens function 
+    '''
+    omegar2 = ret_omegar2(g,beta)
+    Dinv = r - (omega + 1j*eta)**2 
+    M = len(omega) // 2
+    Dinv[M] = omegar2  
+    return 1.0/Dinv
