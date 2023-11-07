@@ -107,3 +107,11 @@ def boseeinstein(arg, default = True):
         elif arg>0: 
             answer = np.exp(-arg)/(1.0 - np.exp(-arg))
         return answer
+    
+    
+def omega_idx(omegaval,dw,M):
+    '''
+    returns the index of omegaval on the conventional omega grid
+    omega[M] = 0
+    '''
+    return int(M + np.floor(omegaval/dw))
