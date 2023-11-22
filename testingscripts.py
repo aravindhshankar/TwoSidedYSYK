@@ -1,5 +1,7 @@
 import numpy as np
 from SYK_fft import *
+import warnings
+import inspect
 
 def realtimeFFT_validator():
     '''
@@ -18,3 +20,20 @@ def realtimeFFT_validator():
     xprime = 0.5/np.pi * freq2time(y,M,dt)
 
     return np.allclose(xprime , x) 
+
+
+def diff_checker(diffseries, tol = 1e-2, periods = 5, verify = False):
+    '''
+    Used to check if a numerical simulation is converging too slowly. 
+    At the moment the implementation requires at least 7 data points. 
+    Returns flag False if convering too slowly, True otherwise.
+    '''
+    flag = True
+    data = diffseries[-1-periods:-1]
+    if np.var(data)<tol:
+        warnings.warn('converging too slowly in function ' + inspect.stack()[1][3])
+        flag = False
+    return flag
+    
+    
+    

@@ -1,7 +1,8 @@
 import numpy as np
+from SYK_fft import *
 
 
-def rhotosigma(rhoG,rhoD,M,dt,t,g,beta,kappa=1,delta=1e-6):
+def rhotosigma(rhoG,rhoD,M,dt,t,omega,g,beta,kappa=1,delta=1e-6):
     '''
     returns [Sigma,Pi] given rhos
     '''
