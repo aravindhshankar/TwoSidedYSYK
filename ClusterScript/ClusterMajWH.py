@@ -15,13 +15,14 @@ import testingscripts
 savename = 'default_savename'
 path_to_output = './Outputs'
 
-#if not os.path.exists(path_to_output):
-
+if not os.path.exists(path_to_output):
+	os.makedirs(path_to_output)
+	print("Outputs directory created")
 
 if len(sys.argv) > 1:
-	print(sys.argv)
 	savename = str(sys.argv[1])
 
+savefile = os.path.join(path_to_output, savename+'.pkl')
 
 fft_check = testingscripts.realtimeFFT_validator() # Should return True
 
@@ -50,8 +51,6 @@ def rhotosigma(rhoG,M,dt,t,J,delta=1e-6):
 J = 1.
 mu = 0.01
 #mu = 0
-
-
 #beta = 1./(2e-4)
 beta = 50.
 
@@ -59,13 +58,11 @@ M = int(2**16) #number of points in the grid
 T = int(2**10) #upper cut-off fot the time
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
-#dt = t[2] - t[1]
-dt = 5
+dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
 err = 1e-2
 eta = dw*10.
 #delta = 0.420374134464041
-np.testing.assert_almost_equal(np.max(np.abs(omega)),np.pi*M/T,5,"Error in creating omega grid")
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
 print("dw/temp = ", f'{dw*beta:.4f}')
@@ -114,31 +111,38 @@ def main():
 	    if diffG>diffoldG:
 	        xG/=2.
 
-	    print("itern = ",itern, " , diff = ", diffG, " , x = ", xG, end = '\r')
+	    #print("itern = ",itern, " , diff = ", diffG, " , x = ", xG, end = '\r')
+	    print("itern = ",itern, " , diff = ", diffG, " , x = ", xG)
 
 
 
-	GRt = (0.5/np.pi) * freq2time(GRomega,M,dt)
+	#GRt = (0.5/np.pi) * freq2time(GRomega,M,dt)
+	rhoGrev = np.concatenate(([rhoG[-1]], rhoG[1:][::-1]))
+	rhoLL, rhoLR = 0.5 * (rhoG + rhoGrev), 0.5 * (rhoG - rhoGrev)
+	GLLomega = -1j*(1.-fermidirac(beta*omega))*rhoLL
+	GLRomega = -1j*(1.-fermidirac(beta*omega))*rhoLR
+	TLLt = 2 * np.abs((0.5/np.pi)*freq2time(GLLomega,M,dt)) 
+	TLRt = 2 * np.abs((0.5/np.pi)*freq2time(GLRomega,M,dt))
 
 
-###########Data Writing############ 
-print("###########Data Writing############\n")
-dictionary = {
-   "J": J,
-   "mu": mu,
-   "beta": beta,
-   "T": T,
-   "omega": omega,
-   "t": t,
-   "dw": dw,
-   "Gplusomega": GRomega
-}
-with open("largedata.pkl", "wb") as outfile:
-    pickle.dump(dictionary, outfile)	
+	###########Data Writing############ 
+	print("\n###########Data Writing############")
+	dictionary = {
+	   "J": J,
+	   "mu": mu,
+	   "beta": beta,
+	   "M": M, 
+	   "T": T,
+	   "dw": dw,
+	   "rhoLL": rhoLL,
+	   "rhoLR": rhoLR, 
+	   "TLLt": TLLt,
+	   "TLRt": TLRt 
+	}
+	with open(savefile, "wb") as outfile:
+	    pickle.dump(dictionary, outfile)	
 
-
-
-print("*********Program exited successfully with itern = %d *********", itern)
+	print(f"*********Program exited successfully with itern = {itern} *********")
 
 
 if __name__ == "__main__":
