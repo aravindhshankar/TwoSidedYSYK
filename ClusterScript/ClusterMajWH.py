@@ -86,10 +86,7 @@ def main():
 
 	GRomega = 1/(omega + 1j*eta - mu)
 
-
 	itern = 0
-
-
 	diff = 1. 
 	diffG = 1.
 	xG = 0.5
@@ -100,9 +97,7 @@ def main():
 	    GRoldomega= 1.0*GRomega
 	    
 	    rhoG = -1.0*np.imag(GRomega)
-	    
 	    SigmaOmega = rhotosigma(rhoG,M,dt,t,J,delta=eta)
-	    
 	    GRomega = 1.0*xG/(omega + 1j*eta - mu - SigmaOmega) + (1-xG)*GRoldomega
 	    
 	    diffG = (0.5/M) * np.sum((np.abs(GRomega-GRoldomega))**2)
@@ -151,7 +146,11 @@ if __name__ == "__main__":
 
 
 
-
+#with open('largedata.pkl','rb') as fp:
+#   loaded = pickle.load(fp)
+#print("success")
+#plt.plot(loaded["omega"], loaded["rhoLL])
+#loaded['beta'], loaded['T'], loaded['mu']
 
 
 
