@@ -7,6 +7,7 @@ def realtimeFFT_validator():
     '''
     Needs to rerturn True for a successful test
     '''
+    flag = False
     M = int(2**18) 
     T = 2000 
     dt = (2*T)/((2*M))
@@ -19,7 +20,11 @@ def realtimeFFT_validator():
     y = time2freq(x,M,dt)
     xprime = 0.5/np.pi * freq2time(y,M,dt)
 
-    return np.allclose(xprime , x) 
+    flag = np.allclose(xprime , x)
+    if not flag:
+        warnings.warn('realtimeFFT_validator FAILED')
+    return flag 
+
 
 
 def diff_checker(diffseries, tol = 1e-2, periods = 5, verify = False):
@@ -35,5 +40,58 @@ def diff_checker(diffseries, tol = 1e-2, periods = 5, verify = False):
         flag = False
     return flag
     
+    
+
+def RealGridValidator(omega, t, M, T, dt, dw):
+    '''
+    omega, t are created by RealGridMaker(M,T). upon usage, dt = t[2]-t[1] and 
+    likewise dw = omega[2]-omega[1]. 
+    This test checks that the diffs are equal to the theoretical value. 
+    '''
+    flag = False
+    theory_dt = (2*T)/((2*M))
+    theory_dw = np.pi/(M*dt)
+    np.testing.assert_almost_equal(dt*dw*M,np.pi,5, "Error in fundamentals")
+    np.testing.assert_almost_equal(np.max(np.abs(omega)),np.pi*M/T,5,"Error in creating omega grid")
+    np.testing.assert_almost_equal(theory_dt,dt,5, "Time grid not according to theory")
+    np.testing.assert_almost_equal(theory_dw,dw,5, "Frequency grid not according to theory")
+    flag = True
+    return flag
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     

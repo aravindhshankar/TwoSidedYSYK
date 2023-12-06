@@ -12,15 +12,18 @@ from ConformalAnalytical import *
 import testingscripts
 
 
-path_to_output = 
-
-
 savename = 'default_savename'
+path_to_output = './Outputs'
+
+#if not os.path.exists(path_to_output):
+
+
 if len(sys.argv) > 1:
+	print(sys.argv)
 	savename = str(sys.argv[1])
 
 
-testingscripts.realtimeFFT_validator() # Should return True
+fft_check = testingscripts.realtimeFFT_validator() # Should return True
 
 ##################
 
@@ -54,15 +57,13 @@ beta = 50.
 
 M = int(2**16) #number of points in the grid
 T = int(2**10) #upper cut-off fot the time
-dt = (2*T)/((2*M))
-t = dt * (np.arange(2*M) - M)
-
-dw = np.pi/(M*dt)
-eta = dw*10.
-omega = dw * (np.arange(2*M) - M) 
-np.testing.assert_almost_equal(dt*dw*M,np.pi,5, "Error in fundamentals")
+omega, t = RealGridMaker(M,T)
+dw = omega[2]-omega[1]
+#dt = t[2] - t[1]
+dt = 5
+grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
 err = 1e-2
-
+eta = dw*10.
 #delta = 0.420374134464041
 np.testing.assert_almost_equal(np.max(np.abs(omega)),np.pi*M/T,5,"Error in creating omega grid")
 
@@ -118,7 +119,10 @@ def main():
 
 
 	GRt = (0.5/np.pi) * freq2time(GRomega,M,dt)
-#Data to be written
+
+
+###########Data Writing############ 
+print("###########Data Writing############\n")
 dictionary = {
    "J": J,
    "mu": mu,

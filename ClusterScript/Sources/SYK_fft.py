@@ -115,3 +115,49 @@ def omega_idx(omegaval,dw,M):
     omega[M] = 0
     '''
     return int(M + np.floor(omegaval/dw))
+
+
+def RealGridMaker(M,T):
+    '''
+    returns an omega and t grid used in all the real time (I)FFT
+    parameters:
+    M : int - Large positive integer, size of the grid is 2M - 1 
+    T : float - Upper cutoff on time 
+    returns: 
+    omega : real frequency grid 
+    t : real time grid 
+    '''
+    dt = (2*T)/((2*M))
+    t = dt * (np.arange(2*M) - M)
+    dw = np.pi/(M*dt)
+    omega = dw * (np.arange(2*M) - M)
+    return omega,t
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
