@@ -3,8 +3,8 @@
 #SBATCH --output=%x_%j.out
 #SBATCH --mail-user="shankar@lorentz.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --mem=1G
-#SBATCH --time=00:01:00
+#SBATCH --mem=8G
+#SBATCH --time=03:00:00
 #SBATCH --partition=cpu-short
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1

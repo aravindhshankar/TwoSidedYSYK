@@ -51,11 +51,11 @@ def rhotosigma(rhoG,M,dt,t,J,delta=1e-6):
 J = 1.
 mu = 0.01
 #mu = 0
-#beta = 1./(2e-4)
-beta = 50.
+beta = 1./(2e-4)
+#beta = 50.
 
-M = int(2**16) #number of points in the grid
-T = int(2**10) #upper cut-off fot the time
+M = int(2**27) #number of points in the grid
+T = int(2**20) #upper cut-off fot the time
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
