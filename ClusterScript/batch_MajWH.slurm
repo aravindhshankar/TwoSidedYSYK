@@ -17,7 +17,7 @@ echo "[$SHELL] ## This is $SLURM_JOB_USER on #HOSTNAME and job ID $SLURM_JOB_ID"
 export CWD=$(pwd)
 echo "[$SHELL] Current working directory: $CWD"
 #
-export file_name="${SLURM_JOB_NAME}_{$SLURM_JOB_ID}"
+export file_name="${SLURM_JOB_NAME}_${SLURM_JOB_ID}"
 echo "[$SHELL] Running Python script"
 #
 python ClusterMajWH.py "$file_name"
