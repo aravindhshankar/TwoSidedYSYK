@@ -16,9 +16,9 @@ omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2]-t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t,M,T,dt,dw)
-
-tot_freq_grid_points = 500
-omega_max = 2
+print(omega[-1])
+tot_freq_grid_points = int(2**12)
+omega_max = 1
 omega_min = -1*omega_max
 idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
 skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))

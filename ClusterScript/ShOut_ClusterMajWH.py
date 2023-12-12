@@ -126,7 +126,13 @@ def main():
 	total_freq_grid_points = 500
 	omega_max = 1
 	idx = omega_idx(omega_max,dw,M)
-	#compress_slice = slice()
+	tot_freq_grid_points = int(2**12)
+	omega_max = 1
+	omega_min = -1*omega_max
+	idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
+	skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
+	comp_omega_slice = slice(idx_min,idx_max,skip)
+	comp_omega = omega[comp_omega_slice]
 
 
 
@@ -143,11 +149,9 @@ def main():
 	   "beta": beta,
 	   "M": M, 
 	   "T": T,
-	   "dw": dw,
+	   "omega": omega,
 	   "rhoLL": rhoLL,
 	   "rhoLR": rhoLR, 
-	   "TLLt": TLLt,
-	   "TLRt": TLRt 
 	}
 	with open(savefile, "wb") as outfile:
 	    pickle.dump(dictionary, outfile)	

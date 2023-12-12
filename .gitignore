@@ -1,2 +1,4 @@
 *.pkl
 *.out
+*.h5
+*.json
