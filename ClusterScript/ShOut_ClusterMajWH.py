@@ -131,7 +131,7 @@ def main():
 	idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
 	skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
 	comp_omega_slice = slice(idx_min,idx_max,skip)
-	comp_omega = omega[comp_omega_slice]
+	#comp_omega = omega[comp_omega_slice]
 
 
 
@@ -143,7 +143,7 @@ def main():
 	   "beta": beta,
 	   "M": M, 
 	   "T": T,
-	   "omega": omega,
+	   "omega": omega[comp_omega_slice],
 	   "rhoLL": rhoLL[comp_omega_slice],
 	   "rhoLR": rhoLR[comp_omega_slice], 
 	   "compressed": True
