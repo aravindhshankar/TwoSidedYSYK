@@ -3,7 +3,6 @@ import os
 if not os.path.exists('./Sources'):
 	print("Error - Path to Sources directory not found ")
 sys.path.insert(1,'./Sources')
-import h5py
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -55,10 +54,10 @@ mu = 0.01
 beta = 1./(2e-4)
 #beta = 50.
 
-#M = int(2**24) #number of points in the grid
-#T = int(2**16) #upper cut-off fot the time
-M = int(2**16)
-T = int(2**10)
+M = int(2**24) #number of points in the grid
+T = int(2**16) #upper cut-off fot the time
+#M = int(2**18)
+#T = int(2**10)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
