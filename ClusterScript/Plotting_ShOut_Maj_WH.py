@@ -14,7 +14,7 @@ import testingscripts
 from h5_handler import *
 
 path_to_outfile = './Outputs'
-outfile = 'MajWH_2147118.h5'
+outfile = 'MajWH_2147155.h5'
 savepath = os.path.join(path_to_outfile, outfile)
 
 if not os.path.exists(savepath):
@@ -24,13 +24,13 @@ if not os.path.exists(savepath):
 data = h52dict(savepath, verbose = True)
 print(data.keys())
 
-fig, (ax1,ax2) = plt.subplots(2)
+fig, (ax1,ax2) = plt.subplots(1,2)
 
 ax1.plot(data['omega'], data['rhoLL'])
-ax1.set_xrange(-0.5,0.5)
+ax1.set_xlim(-1,1)
 
 ax2.plot(data['omega'], data['rhoLR'])
-ax2.set_xrange(-0.5,0.5)
+ax2.set_xlim(-1,1)
 
-
+plt.show()
 

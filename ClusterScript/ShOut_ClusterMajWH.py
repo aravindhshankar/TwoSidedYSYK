@@ -49,13 +49,14 @@ def rhotosigma(rhoG,M,dt,t,J,delta=1e-6):
 ###################
 
 J = 1.
-mu = 0.01
+mu = 0.001
 #mu = 0
-beta = 1./(2e-4)
+#beta = 1./(2e-4)
+beta = 1./(5e-5)
 #beta = 50.
 
-M = int(2**24) #number of points in the grid
-T = int(2**16) #upper cut-off fot the time
+M = int(2**26) #number of points in the grid
+T = int(2**21) #upper cut-off fot the time
 #M = int(2**18)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
@@ -125,8 +126,8 @@ def main():
 
 
 	#################Data Compression################
-	tot_freq_grid_points = int(2**12)
-	omega_max = 1
+	tot_freq_grid_points = int(2**14)
+	omega_max = 5
 	omega_min = -1*omega_max
 	idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
 	skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))

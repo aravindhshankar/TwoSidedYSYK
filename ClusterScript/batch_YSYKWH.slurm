@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=MajWH
+#SBATCH --job-name=Y_WH
 #SBATCH --output=%x_%j.out
 #SBATCH --mail-user="shankar@lorentz.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
-#SBATCH --mem=14G
-#SBATCH --time=01:00:00
+#SBATCH --mem=50G
+#SBATCH --time=20:00:00
 #SBATCH --partition=cpu-medium
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -20,9 +20,6 @@ echo "[$SHELL] Current working directory: $CWD"
 export file_name="${SLURM_JOB_NAME}_${SLURM_JOB_ID}"
 echo "[$SHELL] Running Python script"
 #
-python ShOut_ClusterMajWH.py "$file_name"
+python YSYKWH.py "$file_name"
 #
 echo "[$SHELL]#### SLURM script finished. "
-
-
-
