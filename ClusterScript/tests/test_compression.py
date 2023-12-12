@@ -9,6 +9,7 @@ import numpy as np
 from SYK_fft import *
 from ConformalAnalytical import *
 import testingscripts
+from h5_handler import *
 
 M = int(2**18)
 T = int(2**12)
@@ -29,5 +30,23 @@ print("# of points on original grid = ", idx_max - idx_min)
 print(omega_min, omega_max)
 print((omega_max-omega_min)/(dw*tot_freq_grid_points), skip)
 print(comp_omega[0],comp_omega[-1], "Total points on final grid = ", len(comp_omega))
+
+
+
+# Your Python dictionary
+my_dict = {'omega': comp_omega}
+
+# Specify the path to the HDF5 file
+file_path = 'test_h5.h5'
+
+dict2h5(my_dict, file_path, verbose=True)
+
+loaded_dict = h52dict(file_path, verbose = True)
+loaded_omega = loaded_dict['omega']
+
+np.testing.assert_almost_equal(my_dict['omega'], loaded_dict['omega'], 5, 'Failed')
+
+print(type(loaded_omega), loaded_omega[0])
+
 
 

@@ -3,13 +3,14 @@ import os
 if not os.path.exists('./Sources'):
 	print("Error - Path to Sources directory not found ")
 sys.path.insert(1,'./Sources')
-import pickle
+import h5py
 
 import numpy as np
 from matplotlib import pyplot as plt
 from SYK_fft import *
 from ConformalAnalytical import *
 import testingscripts
+from h5_handler import *
 
 
 savename = 'default_savename'
@@ -22,7 +23,7 @@ if not os.path.exists(path_to_output):
 if len(sys.argv) > 1:
 	savename = str(sys.argv[1])
 
-savefile = os.path.join(path_to_output, savename+'.pkl')
+savefile = os.path.join(path_to_output, savename+'.h5')
 
 fft_check = testingscripts.realtimeFFT_validator() # Should return True
 
@@ -54,8 +55,10 @@ mu = 0.01
 beta = 1./(2e-4)
 #beta = 50.
 
-M = int(2**24) #number of points in the grid
-T = int(2**16) #upper cut-off fot the time
+#M = int(2**24) #number of points in the grid
+#T = int(2**16) #upper cut-off fot the time
+M = int(2**16)
+T = int(2**10)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
@@ -73,7 +76,7 @@ print("grid_flag = ", grid_flag)
 print("######## State Variables ################")
 print("J = ", J)
 print("mu = ", mu)
-print("M = ", M)
+print("log_2 M = ", np.log2(M))
 print("eta = ", eta)
 print("T = ", T)
 print("err = ", err)
@@ -123,9 +126,6 @@ def main():
 
 
 	#################Data Compression################
-	total_freq_grid_points = 500
-	omega_max = 1
-	idx = omega_idx(omega_max,dw,M)
 	tot_freq_grid_points = int(2**12)
 	omega_max = 1
 	omega_min = -1*omega_max
@@ -133,11 +133,6 @@ def main():
 	skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
 	comp_omega_slice = slice(idx_min,idx_max,skip)
 	comp_omega = omega[comp_omega_slice]
-
-
-
-
-
 
 
 
@@ -150,12 +145,12 @@ def main():
 	   "M": M, 
 	   "T": T,
 	   "omega": omega,
-	   "rhoLL": rhoLL,
-	   "rhoLR": rhoLR, 
+	   "rhoLL": rhoLL[comp_omega_slice],
+	   "rhoLR": rhoLR[comp_omega_slice], 
+	   "compressed": True
 	}
-	with open(savefile, "wb") as outfile:
-	    pickle.dump(dictionary, outfile)	
-
+		
+	dict2h5(dictionary, savefile)
 	print(f"*********Program exited successfully with itern = {itern} *********")
 
 
@@ -164,12 +159,6 @@ if __name__ == "__main__":
 
 
 
-
-#with open('largedata.pkl','rb') as fp:
-#   loaded = pickle.load(fp)
-#print("success")
-#plt.plot(loaded["omega"], loaded["rhoLL])
-#loaded['beta'], loaded['T'], loaded['mu']
 
 
 
