@@ -66,15 +66,17 @@ eta = dw*10.
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
 print("dw/temp = ", f'{dw*beta:.4f}')
+print("flag fft_check = ", fft_check)
+print("grid_flag = ", grid_flag)
 
 ## State varriables go into .out file
 print("######## State Variables ################")
-print("J = ", J, '\n')
-print("mu = ", mu, '\n')
-print("M = ", M, '\n')
-print("eta = ", eta, '\n')
-print("T = ", T, '\n')
-print("err = ", err, '\n')
+print("J = ", J)
+print("mu = ", mu)
+print("M = ", M)
+print("eta = ", eta)
+print("T = ", T)
+print("err = ", err)
 print("######## End of State variables #########")
 
 
@@ -118,6 +120,19 @@ def main():
 	GLRomega = -1j*(1.-fermidirac(beta*omega))*rhoLR
 	TLLt = 2 * np.abs((0.5/np.pi)*freq2time(GLLomega,M,dt)) 
 	TLRt = 2 * np.abs((0.5/np.pi)*freq2time(GLRomega,M,dt))
+
+
+	#################Data Compression################
+	total_freq_grid_points = 500
+	omega_max = 1
+	idx = omega_idx(omega_max,dw,M)
+	#compress_slice = slice()
+
+
+
+
+
+
 
 
 	###########Data Writing############ 
