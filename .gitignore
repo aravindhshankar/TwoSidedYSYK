@@ -2,3 +2,4 @@
 *.out
 *.h5
 *.json
+.DS_Store
