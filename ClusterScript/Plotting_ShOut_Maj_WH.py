@@ -27,10 +27,10 @@ print(data.keys())
 fig, (ax1,ax2) = plt.subplots(1,2)
 
 ax1.plot(data['omega'], data['rhoLL'])
-ax1.set_xlim(-1,1)
+#ax1.set_xlim(-1,1)
 
 ax2.plot(data['omega'], data['rhoLR'])
-ax2.set_xlim(-1,1)
+#ax2.set_xlim(-1,1)
 
 plt.show()
 

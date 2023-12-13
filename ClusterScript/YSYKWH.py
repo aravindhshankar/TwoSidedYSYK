@@ -42,8 +42,8 @@ lamb = 10./beta
 J = 0
 
 
-M = int(2**25) #number of points in the grid
-T = int(2**19) #upper cut-off fot the time
+M = int(2**23) #number of points in the grid
+T = int(2**18) #upper cut-off fot the time
 #M = int(2**16)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
