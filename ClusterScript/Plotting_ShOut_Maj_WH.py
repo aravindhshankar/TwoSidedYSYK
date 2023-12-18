@@ -14,7 +14,7 @@ import testingscripts
 from h5_handler import *
 
 path_to_outfile = './Outputs'
-outfile = 'MajWH_2147155.h5'
+outfile = 'MajWH_2149834.h5'
 savepath = os.path.join(path_to_outfile, outfile)
 
 if not os.path.exists(savepath):
@@ -24,13 +24,25 @@ if not os.path.exists(savepath):
 data = h52dict(savepath, verbose = True)
 print(data.keys())
 
+dw = np.pi/data['T']
+temp = 1./data['beta']
+
+titlestring = 'beta = ' + str(data['beta']) + ' mu = ' + str(data['mu'])
+titlestring += ' Log2M = ' + str(np.log2(data['M']))
+
+
 fig, (ax1,ax2) = plt.subplots(1,2)
 
-ax1.plot(data['omega'], data['rhoLL'])
-#ax1.set_xlim(-1,1)
+fig.suptitle(titlestring)
+xval  = data['omega']/(data['mu']**(2./3.))
 
-ax2.plot(data['omega'], data['rhoLR'])
-#ax2.set_xlim(-1,1)
+ax1.plot(data['omega'], data['rhoLL'],'.-')
+#ax1.set_xlim(-20,60)
+ax1.set_xlim(-0.1,0.1)
+
+ax2.plot(data['omega'], data['rhoLR'],'.-')
+#ax2.set_xlim(-20,60)
+ax1.set_xlim(-0.1,0.1)
 
 plt.show()
 

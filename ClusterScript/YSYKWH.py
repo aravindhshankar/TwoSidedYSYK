@@ -39,11 +39,11 @@ beta = 1./(2e-4)
 mu = 0. 
 r = 1.
 lamb = 10./beta
-J = 0
+J = 20./beta
 
 
-M = int(2**23) #number of points in the grid
-T = int(2**18) #upper cut-off fot the time
+M = int(2**24) #number of points in the grid
+T = int(2**19) #upper cut-off fot the time
 #M = int(2**16)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
@@ -112,8 +112,8 @@ def RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,bet
 		DDRomega = xDD*(((omega+1j*eta)**2 - r - PiDomega)/detDmat) + (1-xDD)*DDRoldomega
 		DODRomega = xDOD*(-1.0*(J - PiODomega)/detDmat) + (1-xDOD)*DODRoldomega
 
-		# if itern > 15 :
-		#     eta=dw*0.01
+		if itern > 15 :
+		    eta=dw*0.01
 
 		diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
 		diffDD = np. sqrt(np.sum((np.abs(DDRomega-DDRoldomega))**2))
@@ -135,7 +135,7 @@ def RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,bet
 		if verbose:
 			print("itern = ",itern, " , diff = ", diffGD, diffDOD, " , x = ", xGOD, xDD)
 		if itern>30:
-			conv_flag = testingscripts.diff_checker(diffseries, tol = 1e-4, periods = 8)
+			conv_flag = testingscripts.diff_checker(diffseries, tol = 1e-4, periods = 5)
 			
 
 	return (GDRomega,GODRomega,DDRomega,DODRomega)
@@ -191,7 +191,8 @@ def main():
 	   "rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
 	   "rhoDD": -np.imag(DDRomega[comp_omega_slice]),
 	   "rhoDOD": -np.imag(DODRomega[comp_omega_slice]), 
-	   "compressed": True
+	   "compressed": True, 
+	   "eta": eta
 	}
 		
 	dict2h5(dictionary, savefile, verbose=True)

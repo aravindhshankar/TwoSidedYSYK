@@ -55,8 +55,8 @@ mu = 0.001
 beta = 1./(5e-5)
 #beta = 50.
 
-M = int(2**26) #number of points in the grid
-T = int(2**21) #upper cut-off fot the time
+M = int(2**25) #number of points in the grid
+T = int(2**20) #upper cut-off fot the time
 #M = int(2**18)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)

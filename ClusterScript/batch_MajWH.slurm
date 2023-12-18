@@ -4,8 +4,8 @@
 #SBATCH --mail-user="shankar@lorentz.leidenuniv.nl"
 #SBATCH --mail-type="ALL"
 #SBATCH --mem=20G
-#SBATCH --time=10:00:00
-#SBATCH --partition=cpu-medium
+#SBATCH --time=2-00:00:00
+#SBATCH --partition=cpu-long
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #
