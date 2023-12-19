@@ -28,13 +28,22 @@ fft_check = testingscripts.realtimeFFT_validator() # Should return True
 
 ##################
 
-def rhotosigma(rhoGD,M,dt,t,omega,J,beta,kappa,delta=eta):
+def rhotosigma(rhoG,M,dt,t,omega,J,beta,kappa,delta=1e-6):
 	'''
 	c-SYK rho to sigma
 	'''
+	eta = np.pi/(M*dt)*(0.001)
+	rhoGrev = np.concatenate(([rhoG[-1]], rhoG[1:][::-1]))
+	rhoFpp = (1/np.pi)*freq2time(rhoG * fermidirac(beta*omega),M,dt)
+	rhoFpm = (1/np.pi)*freq2time(rhoG * fermidirac(-1.*beta*omega),M,dt)
+	rhoFmp = (1/np.pi)*freq2time(rhoGrev * fermidirac(beta*(omega)),M,dt)
+	rhoFmm = (1/np.pi)*freq2time(rhoGrev * fermidirac(-1.*beta*omega),M,dt)
 	
+	argSigma = (rhoFpp*rhoFpp*rhoFmp + rhoFpm*rhoFpm*rhoFmm) * np.exp(-np.abs(delta*t)) * np.heaviside(t,1)
+	#argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.heaviside(t,1)
+	Sigma = -1j*(J**2)*kappa * time2freq(argSigma,M,dt)
 
-	return (-J**2) * Sigma
+	return Sigma
 
 ###################
 
@@ -130,8 +139,9 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbos
 
 def main():
 
-	GDRomega = 1/(omega + 1j*eta + mu)
-	GODRomega = np.zeros_like(omega)
+	GDRomega = -1/(omega + 1j*eta + mu)
+	#GODRomega = np.zeros_like(omega)
+	GODRomega = 1j*eta*np.ones_like(omega)
 
 	GDRomega,GODRomega = RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbose=True)
 
