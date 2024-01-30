@@ -41,7 +41,7 @@ def rhotosigma(rhoG,M,dt,t,omega,J,beta,kappa,delta=1e-6):
 	
 	argSigma = (rhoFpp*rhoFpp*rhoFmp + rhoFpm*rhoFpm*rhoFmm) * np.exp(-np.abs(delta*t)) * np.heaviside(t,1)
 	#argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.heaviside(t,1)
-	Sigma = -1j*(J**2)*kappa * time2freq(argSigma,M,dt)
+	Sigma = -1j*(J**2)* time2freq(argSigma,M,dt)
 
 	return Sigma
 
