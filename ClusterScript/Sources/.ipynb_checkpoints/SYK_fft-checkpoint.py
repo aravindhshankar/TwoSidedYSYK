@@ -158,3 +158,30 @@ def ImagGridMaker(Nbig,beta,which_grid = 'unknown'):
     else :
         raise Exception("which_grid only accepts 'boson', 'fermion', 'tau' ")
         return None
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

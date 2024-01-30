@@ -34,13 +34,10 @@ def diff_checker(diffseries, tol = 1e-2, periods = 5, verify = False):
     Returns flag False if convering too slowly, True otherwise.
     '''
     flag = True
-    if len(diffseries) < periods +2: 
-        flag = True
-    else:
-        data = diffseries[-1-periods:-1]
-        if np.var(data)<tol:
-            warnings.warn('converging too slowly in function ' + inspect.stack()[1][3])
-            flag = False
+    data = diffseries[-1-periods:-1]
+    if np.var(data)<tol:
+        warnings.warn('converging too slowly in function ' + inspect.stack()[1][3])
+        flag = False
     return flag
     
     

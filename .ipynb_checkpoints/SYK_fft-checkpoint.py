@@ -115,3 +115,46 @@ def omega_idx(omegaval,dw,M):
     omega[M] = 0
     '''
     return int(M + np.floor(omegaval/dw))
+
+
+def RealGridMaker(M,T):
+    '''
+    returns an omega and t grid used in all the real time (I)FFT
+    parameters:
+    M : int - Large positive integer, size of the grid is 2M - 1 
+    T : float - Upper cutoff on time 
+    returns: 
+    omega : real frequency grid 
+    t : real time grid 
+    '''
+    dt = (2*T)/((2*M))
+    t = dt * (np.arange(2*M) - M)
+    dw = np.pi/(M*dt)
+    omega = dw * (np.arange(2*M) - M)
+    return omega,t
+
+
+def ImagGridMaker(Nbig,beta,which_grid = 'unknown'):
+    '''
+    Returns imaginary time grid consistent with FFT in matsubara
+    depending on the type asked. 
+    parameters: 
+    Nbig : int - Large positive integer, size of the grid is Nbig
+    beta : inverse temperature
+    which_grid: options: 'tau', 'boson', 'fermion'
+    returns: 
+    depending on type, tau grid from 0 to beta, 
+    boson/fermion - corresponding matsubara freq grid nu/omega
+    '''
+    if which_grid == 'fermion':
+        omega = (2 * np.arange(Nbig) - Nbig + 1) * np.pi/beta
+        return omega
+    elif which_grid == 'boson':
+        nu = (2 * np.arange(Nbig) - Nbig ) * np.pi/beta
+        return nu 
+    elif which_grid == 'tau':
+        tau = (np.arange(Nbig) + 1./2) * beta/Nbig
+        return tau 
+    else :
+        raise Exception("which_grid only accepts 'boson', 'fermion', 'tau' ")
+        return None
