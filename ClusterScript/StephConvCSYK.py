@@ -2,6 +2,7 @@ import sys
 import os 
 if not os.path.exists('./Sources'):
 	print("Error - Path to Sources directory not found ")
+	raise(Exception("Error - Path to Sources directory not found "))
 sys.path.insert(1,'./Sources')
 
 import numpy as np
@@ -26,6 +27,8 @@ savefile = os.path.join(path_to_output, savename+'.h5')
 
 fft_check = testingscripts.realtimeFFT_validator() # Should return True
 
+docstring = ' rhoLL = ImG, rhoLR = ReG '
+
 ##################
 
 def rhotosigma(rhoG,M,dt,t,omega,J,beta,kappa,delta=1e-6):
@@ -39,8 +42,8 @@ def rhotosigma(rhoG,M,dt,t,omega,J,beta,kappa,delta=1e-6):
 	rhoFmp = (1/np.pi)*freq2time(rhoGrev * fermidirac(beta*(omega)),M,dt)
 	rhoFmm = (1/np.pi)*freq2time(rhoGrev * fermidirac(-1.*beta*omega),M,dt)
 	
-	argSigma = (rhoFpp*rhoFpp*rhoFmp + rhoFpm*rhoFpm*rhoFmm) * np.exp(-np.abs(delta*t)) * np.heaviside(t,1)
-	#argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.heaviside(t,1)
+	#argSigma = (rhoFpp*rhoFpp*rhoFmp + rhoFpm*rhoFpm*rhoFmm) * np.exp(-np.abs(delta*t)) * np.heaviside(t,1)
+	argSigma = (rhoFpp*rhoFpp*rhoFmp + rhoFpm*rhoFpm*rhoFmm) * np.heaviside(t,1)
 	Sigma = -1j*(J**2) * time2freq(argSigma,M,dt)
 
 	return Sigma
@@ -52,19 +55,20 @@ J = 1.
 beta = 1./(2e-4)
 #beta = 1./(5e-5)
 mu = 0. 
-kappa = 0.01
+#kappa = 0.01
+kappa = 0.05
 
 
 M = int(2**24) #number of points in the grid
 T = int(2**19) #upper cut-off fot the time
-#M = int(2**16)
-#T = int(2**10)
+#M = int(2**18)
+#T = int(2**14)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
 err = 1e-2
-eta = dw*10.
+eta = dw*2.1
 #delta = 0.420374134464041
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
@@ -101,18 +105,19 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbos
 		GDRoldomega,GODRoldomega= (1.0*GDRomega, 1.0*GODRomega)
 
 		rhoGD = -1.0*np.imag(GDRomega)
-		rhoGOD = -1.0*np.imag(GODRomega)
+		#rhoGOD = -1.0*np.imag(GODRomega)
+		rhoGOD = 1.0*np.real(GODRomega)
 
 		SigmaDomega= rhotosigma(rhoGD,M,dt,t,omega,J,beta,kappa,delta=eta)
 		SigmaODomega= -1.0*rhotosigma(rhoGOD,M,dt,t,omega,J,beta,kappa,delta=eta)
 		
-		detGmat = (-omega-1j*eta - mu - SigmaDomega)**2 + (1j*kappa - SigmaODomega)**2
+		detGmat = (omega+1j*eta - mu - SigmaDomega)**2 + (-1j*kappa - SigmaODomega)**2
 	
-		GDRomega = xGD*((-omega-1j*eta - mu - SigmaDomega)/detGmat) + (1-xGD)*GDRoldomega
-		GODRomega = xGOD*((-1j*kappa + SigmaODomega)/detGmat) + (1-xGOD)*GODRoldomega
+		GDRomega = xGD*((omega-1j*eta - mu - SigmaDomega)/detGmat) + (1-xGD)*GDRoldomega
+		GODRomega = xGOD*((1j*kappa + SigmaODomega)/detGmat) + (1-xGOD)*GODRoldomega
 
-		if itern > 15 :
-		    eta=dw*0.01
+		# if itern > 15 :
+		#     eta=dw*0.01
 
 		diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
 		diffGOD = np. sqrt(np.sum((np.abs(GODRomega-GODRoldomega))**2)) 
@@ -139,9 +144,9 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbos
 
 def main():
 
-	GDRomega = -1/(omega + 1j*eta + mu)
+	GDRomega = 1/(omega + 1j*eta + mu)
 	#GODRomega = np.zeros_like(omega)
-	GODRomega = 1j*eta*np.ones_like(omega)
+	GODRomega = (1./-1j*kappa)*np.ones_like(omega)
 
 	GDRomega,GODRomega = RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbose=True)
 
@@ -176,8 +181,10 @@ def main():
 	   "M": M, 
 	   "T": T,
 	   "omega": omega[comp_omega_slice],
+	   "GDRomega": GDRomega[comp_omega_slice],
+	   "GODRomega": GODRomega[comp_omega_slice],
 	   "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
-	   "rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
+	   "rhoGOD": np.real(GODRomega[comp_omega_slice]),
 	   "compressed": True, 
 	   "eta": eta
 	}

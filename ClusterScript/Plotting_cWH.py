@@ -2,7 +2,9 @@ import sys
 import os
 if not os.path.exists('./Sources'):
 	print("Error - Path to sources directory not found")
-sys.path.insert(1,'./Sources')
+	raise(Exception("Error - Path to sources directory not found"))
+else:
+	sys.path.insert(1,'./Sources')
 import h5py
 import matplotlib.pyplot as plt
 
@@ -14,7 +16,8 @@ import testingscripts
 from h5_handler import *
 
 path_to_outfile = './Outputs'
-outfile = 'cSYK_WH_2165159.h5'
+#outfile = 'cSYK_WH_2332886.h5'
+outfile = 'testingStephconv.h5'
 savepath = os.path.join(path_to_outfile, outfile)
 
 if not os.path.exists(savepath):
@@ -39,12 +42,12 @@ xval  = data['omega']/(data['kappa']**(2./3.))
 ax1.plot(data['omega'], data['rhoGD'],'.-')
 ax1.set_xlabel('omega')
 ax1.set_ylabel('rhoGD')
-#ax1.set_xlim(-20,60)
-ax1.set_xlim(-0.5,0.5)
+#ax1.set_xlim(-10,50)
+ax1.set_xlim(-1,1)
 
 ax2.plot(data['omega'], data['rhoGOD'],'.-')
-#ax2.set_xlim(-20,60)
-ax2.set_xlim(-0.5,0.5)
+ax2.set_xlim(-1,1)
+#ax2.set_xlim(-0.1,0.1)
 ax2.set_xlabel('omega')
 ax2.set_ylabel('rhoGOD')
 
