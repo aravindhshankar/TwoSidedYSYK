@@ -59,10 +59,10 @@ mu = 0.
 kappa = 0.05
 
 
-M = int(2**24) #number of points in the grid
-T = int(2**19) #upper cut-off fot the time
-#M = int(2**18)
-#T = int(2**14)
+#M = int(2**24) #number of points in the grid
+#T = int(2**19) #upper cut-off fot the time
+M = int(2**18)
+T = int(2**14)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
@@ -186,6 +186,7 @@ def main():
 	   "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
 	   "rhoGOD": np.real(GODRomega[comp_omega_slice]),
 	   "compressed": True, 
+	   "docstring": docstring,
 	   "eta": eta
 	}
 		
