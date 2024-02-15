@@ -27,7 +27,7 @@ savefile = os.path.join(path_to_output, savename+'.h5')
 
 fft_check = testingscripts.realtimeFFT_validator() # Should return True
 
-docstring = ' rhoLL = ImG, rhoLR = ReG '
+docstring = ' rhoLL = -ImG, rhoLR = 1j*ReG '
 
 ##################
 
@@ -52,17 +52,18 @@ def rhotosigma(rhoG,M,dt,t,omega,J,beta,kappa,delta=1e-6):
 
 J = 1.
 #beta = 100.
-beta = 1./(2e-4)
+beta = 1e4
+#beta = 1./(2e-4)
 #beta = 1./(5e-5)
 mu = 0. 
-#kappa = 0.01
-kappa = 0.05
+#kappa = 0.00
+kappa = 0.005
 
 
-M = int(2**24) #number of points in the grid
-T = int(2**19) #upper cut-off fot the time
-#M = int(2**18)
-#T = int(2**14)
+#M = int(2**24) #number of points in the grid
+#T = int(2**19) #upper cut-off fot the time
+M = int(2**18)
+T = int(2**14)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
@@ -106,14 +107,14 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbos
 
 		rhoGD = -1.0*np.imag(GDRomega)
 		#rhoGOD = -1.0*np.imag(GODRomega)
-		rhoGOD = 1.0*np.real(GODRomega)
+		rhoGOD = 1j*1.0*np.real(GODRomega)
 
 		SigmaDomega= rhotosigma(rhoGD,M,dt,t,omega,J,beta,kappa,delta=eta)
 		SigmaODomega= -1.0*rhotosigma(rhoGOD,M,dt,t,omega,J,beta,kappa,delta=eta)
 		
 		detGmat = (omega+1j*eta - mu - SigmaDomega)**2 + (-1j*kappa - SigmaODomega)**2
 	
-		GDRomega = xGD*((omega-1j*eta - mu - SigmaDomega)/detGmat) + (1-xGD)*GDRoldomega
+		GDRomega = xGD*((omega+1j*eta - mu - SigmaDomega)/detGmat) + (1-xGD)*GDRoldomega
 		GODRomega = xGOD*((1j*kappa + SigmaODomega)/detGmat) + (1-xGOD)*GODRoldomega
 
 		# if itern > 15 :
@@ -122,7 +123,7 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbos
 		diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
 		diffGOD = np. sqrt(np.sum((np.abs(GODRomega-GODRoldomega))**2)) 
 
-		diff = 0.25*(diffGD+diffGOD)
+		diff = 0.5*(diffGD+diffGOD)
 		diffGD,diffGOD = diff,diff
 		diffseries += [diff]
 
@@ -146,7 +147,7 @@ def main():
 
 	GDRomega = 1/(omega + 1j*eta + mu)
 	#GODRomega = np.zeros_like(omega)
-	GODRomega = (1./-1j*kappa)*np.ones_like(omega)
+	GODRomega = (1./(-1j*(kappa + eta)))*np.ones_like(omega)
 
 	GDRomega,GODRomega = RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbose=True)
 
@@ -162,7 +163,7 @@ def main():
 	#################Data Compression################
 
 	tot_freq_grid_points = int(2**14)
-	omega_max = 5
+	omega_max = 5.
 	omega_min = -1*omega_max
 	idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
 	skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
@@ -184,7 +185,7 @@ def main():
 	   "GDRomega": GDRomega[comp_omega_slice],
 	   "GODRomega": GODRomega[comp_omega_slice],
 	   "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
-	   "rhoGOD": np.real(GODRomega[comp_omega_slice]),
+	   "rhoGOD": 1j*np.real(GODRomega[comp_omega_slice]),
 	   "compressed": True, 
 	   "docstring": docstring,
 	   "eta": eta

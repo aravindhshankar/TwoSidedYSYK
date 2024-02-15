@@ -104,8 +104,10 @@ def boseeinstein(arg, default = True):
         answer = 1
         if arg < 0:
             answer = 1.0/(np.exp(arg)-1)
-        elif arg>0: 
+        elif arg > 0: 
             answer = np.exp(-arg)/(1.0 - np.exp(-arg))
+        else :
+            answer = 0.
         return answer
     
     

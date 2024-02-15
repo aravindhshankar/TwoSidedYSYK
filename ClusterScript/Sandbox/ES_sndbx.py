@@ -33,14 +33,15 @@ tau = ImagGridMaker(Nbig,beta,'tau')
 
 
 Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
-Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
+#Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
+Dfreetau = Freq2TimeB(-1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 Gtau_powerlaw = -1.0*np.sign(tau)*(np.pi/np.abs(beta*np.sin(np.pi*tau/beta))) ** (2*delta)
 Dtau_powerlaw =  1.0*(np.pi/np.abs(beta*np.sin(np.pi*tau/beta))) ** (2 - 4*delta)
 
-# Gtau = Gfreetau
-# Dtau = Dfreetau
+#Gtau = Gfreetau
+#Dtau = Dfreetau
 
 #Gtau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 #Dtau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
@@ -80,13 +81,14 @@ while(diff>err):
     
     Sigmaomega = Time2FreqF(Sigmatau,Nbig,beta)
     Piomega =  Time2FreqB(Pitau,Nbig,beta)
-    if itern < 15 : 
-        Piomega[Nbig//2] = 1.0*r - omegar2
-    #Piomega[Nbig//2] = 1.0*r - omegar2
+    # if itern < 15 : 
+    #     Piomega[Nbig//2] = 1.0*r - omegar2
+    Piomega[Nbig//2] = 1.0*r - omegar2
     
     
     Gomega = xG*(1./(1j*omega + mu - Sigmaomega)) + (1-xG)*oldGomega
-    Domega = xD*(1./(nu**2 + r - Piomega)) + (1-xD)*oldDomega
+    #Domega = xD*(1./(nu**2 + r - Piomega)) + (1-xD)*oldDomega
+    Domega = xD*(1./((nu**2 + r) - Piomega)) + (1-xD)*oldDomega
     # if itern < 10:
     #     Domega[Nbig//2] = 1/omegar2
    
