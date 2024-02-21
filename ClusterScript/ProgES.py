@@ -1,19 +1,37 @@
 import sys
 import os 
-if not os.path.exists('../Sources'):
-	print("Error - Path to Sources directory not found ")
-	raise Exception("Error - Path to Sources directory not found ")
-else:	
-	sys.path.insert(1,'../Sources')	
+if not os.path.exists('./Sources'):
+    print("Error - Path to Sources directory not found ")
+    raise(Exception("Error - Path to Sources directory not found "))
+sys.path.insert(1,'./Sources')
 
-
-from SYK_fft import *
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+from matplotlib import pyplot as plt
+from SYK_fft import *
 from ConformalAnalytical import *
-#import time
+import testingscripts
+from h5_handler import *
 
+
+savename = 'default_savename'
+path_to_output = './Outputs'
+if not os.path.exists(path_to_output):
+    os.makedirs(path_to_output)
+    print("Outputs directory created")
+
+path_to_subfolder = './Outputs/ProgESOutputs' 
+if not os.path.exists(path_to_subfolder):
+    os.makedirs(path_to_subfolder)
+    print("Subfolder ProgESOutputs created")
+
+if len(sys.argv) > 1: 
+    savename = str(sys.argv[1])
+
+compressed_savefile = os.path.join(path_to_subfolder, savename+'.h5')
+docstring = ' rhoLL = -ImG, rhoLR = 1j*ReG '
+
+
+##########################################
 
 Nbig = int(2**18)
 #err = 1e-4
