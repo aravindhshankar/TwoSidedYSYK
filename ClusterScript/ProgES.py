@@ -27,13 +27,13 @@ if not os.path.exists(path_to_subfolder):
 if len(sys.argv) > 1: 
     savename = str(sys.argv[1])
 
-compressed_savefile = os.path.join(path_to_subfolder, savename+'.h5')
-docstring = ' rhoLL = -ImG, rhoLR = 1j*ReG '
+docstring = 'NULL'
+#docstring = ' rhoLL = -ImG, rhoLR = 1j*ReG '
 
 
-##########################################
+###################### Initialization Step #########################
 
-Nbig = int(2**18)
+Nbig = int(2**16)
 #err = 1e-4
 err = 1e-5
 ITERMAX = 200
@@ -46,19 +46,16 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 200
+target_beta = 20
 
 # g = np.sqrt(10**3)
 # r = (10)**2
 
 kappa = 1.
 
-
-
 omega = ImagGridMaker(Nbig,beta,'fermion')
 nu = ImagGridMaker(Nbig,beta,'boson')
 tau = ImagGridMaker(Nbig,beta,'tau')
-
 
 Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
 Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
@@ -76,6 +73,8 @@ Dtau = 1.0*np.ones(Nbig)
 
 #Gtau,Dtau = np.load('temp.npy')
 assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
+
+##################### Calculation Starts ###########################
 
 for beta in range(beta_start, target_beta+1, 1):
     itern = 0
@@ -136,107 +135,58 @@ for beta in range(beta_start, target_beta+1, 1):
                 xG/=2.
             if diffD>diffoldD:
                 xD/=2.
-            #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
+            print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
 
-    if beta % 100 == 0 :
-        savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+    if beta % 10 == 0 :
+        savefile = savename
+        savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-        np.save(savefile, np.array([Gtau,Dtau])) 
+        np.save(os.path.join(path_to_subfolder ,savefile), np.array([Gtau,Dtau])) 
         print(savefile)
 
-################## PLOTTING ######################
-#np.save('temp.npy', np.array([Gtau,Dtau])) 
-print(beta), print(tau[-1])
-Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
-Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
-FreeDtau = DfreeImagtau(tau,r,beta)
+        ################      Compression     ######################
+        tot_tau_grid_points = int(2**14)
+        skip = int(Nbig/tot_tau_grid_points)
+        comp_tau_slice = slice(0,-1,skip)
+        comp_omega_slice = slice(Nbig//2, Nbig//2 + 10000)
 
-fig, ax = plt.subplots(2)
-
-ax[0].plot(tau/beta, np.real(Gtau), 'r', label = 'numerics Gtau')
-ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
-ax[0].set_ylim(-1,1)
-ax[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-ax[0].set_ylabel(r'$\Re{G(\tau)}$')
-ax[0].legend()
-
-ax[1].plot(tau/beta, np.real(Dtau), 'r', label = 'numerics Dtau')
-ax[1].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
-ax[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
-#ax[1].set_ylim(0,1)
-ax[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-ax[1].set_ylabel(r'$\Re{D(\tau)}$')
-ax[1].legend()
-
-#fig.suptitle(r'$\beta$ = ', beta)
-#plt.savefig('../../KoenraadEmails/WithMR_imagtime.pdf',bbox_inches='tight')
-plt.show()
-
-
-
+        #################     Data Writing       ############ 
+        print("\n###########Data Writing############")
+        dictionary = {
+           "g": g,
+           "mu": mu,
+           "beta": beta,
+           "kappa": kappa,
+           "Nbig": Nbig, 
+           "tau": tau[comp_tau_slice], 
+           "Gtau": Gtau[comp_tau_slice], 
+           "Dtau": Dtau[comp_tau_slice], 
+           "omega": omega[comp_omega_slice],
+           "nu": nu[comp_omega_slice],  
+           "Gomega": Gomega[comp_omega_slice],
+           "Domega": Domega[comp_omega_slice],
+           "compressed": True, 
+           "docstring": docstring
+        }
+        savedictfile = savename
+        savedictfile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+        savedictfile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.h5'  
+        dict2h5(dictionary, os.path.join(path_to_subfolder, savedictfile), verbose=True)
 
 
 
-################ POWER LAW PLOT #####################
-
-start, stop = Nbig//2, Nbig//2 + 100
-startB, stopB = Nbig//2 + 1 , Nbig//2 + 101
-delta = 0.420374134464041
-alt_delta = 0.116902  
-
-fitG_val = -np.imag(Gomega[start])*(g**2)
-#fitG_val = -np.imag(Gconf[start:stop])*(g**2)
-conf_fit_G = 1 * np.abs(omega/(g**2))**(2*delta - 1)
-conf_fit_G = conf_fit_G/conf_fit_G[start] * fitG_val
-alt_conf_fit_G = fitG_val * np.abs(omega/(g**2))**(2*alt_delta - 1)
-
-fitD_val = np.real(Domega[startB])*(g**2)
-#fitD_val = np.real(Dconf[startB:stopB])
-conf_fit_D = 1 * np.abs(nu[startB:stopB]/(g**2))**(1-4*delta)
-conf_fit_D = conf_fit_D/conf_fit_D[0] * fitD_val
-alt_conf_fit_D = 1 * np.abs(nu[startB]/(g**2))**(1-4*alt_delta)
 
 
-fig,(ax1,ax2) = plt.subplots(1,2)
-#fig.set_figwidth(10)
-titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
-fig.suptitle(titlestring)
-fig.tight_layout(pad=2)
-
-fitslice = slice(start+0, start + 5)
-#fitslice = slice(start+25, start + 35)
-functoplot = -np.imag(Gomega)*(g**2)
-m,c = np.polyfit(np.log(np.abs(omega[fitslice])/(g**2)), np.log(functoplot[fitslice]),1)
-print(f'slope of fit = {m:.03f}')
-#print('2 Delta - 1 = ', 2*delta-1)
-
-ax1.loglog(omega[start:stop]/(g**2), -np.imag(Gomega[start:stop])*(g**2),'p',label = 'numerics')
-ax1.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
-#ax1.loglog(omega[start:]/(g**2), -np.imag(Gconf[start:])*(g**2),'m.',label = 'ES solution')
-#ax1.loglog(omega[start:]/(g**2), alt_conf_fit_G[start:],'g--', label = 'alt power law')
-#ax1.set_xlim(omega[start]/2,omega[start+15])
-ax1.loglog(omega[start:stop]/(g**2), np.exp(c)*np.abs(omega[start:stop]/(g**2))**m, label=f'Fit with slope {m:.03f}')
-#ax1.set_ylim(1e-1,1e1)
-ax1.set_xlabel(r'$\omega_n/g^2$')
-ax1.set_ylabel(r'$-g^2\,\Im{G(\omega_n)}$')
-ax1.set_aspect('equal', adjustable='box')
-#ax1.axis('square')
-ax1.legend()
+print(f"*********Program exited successfully *********")
 
 
-ax2.loglog(nu[startB:stopB]/(g**2), np.real(Domega[startB:stopB])*(g**2),'p',label='numerics')
-ax2.loglog(nu[startB:stopB]/(g**2), conf_fit_D,'k--',label = 'ES power law')
-#ax2.loglog(nu[startB:]/(g**2), np.real(Dconf[startB:]),'m.',label = 'ES solution')
-#ax2.loglog(nu[startB:]/(g**2), alt_conf_fit_D,'g--', label = 'alt power law')
-#ax2.set_xlim(nu[startB]/2,nu[startB+15])
-#ax2.set_ylim(5e-1,100)
-ax2.set_xlabel(r'$\nu_n/g^2$')
-ax2.set_ylabel(r'$g^2\,\Re{D(\nu_n)}$',labelpad = None)
-ax2.set_aspect('equal', adjustable='box')
-ax2.legend()
 
-#plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
-#plt.savefig('KoenraadEmails/ImagFreqpowerlaw_withMR.pdf', bbox_inches = 'tight')
-plt.show()
+
+
+
+
+
+
+
 
 
