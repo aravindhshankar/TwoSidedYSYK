@@ -24,6 +24,11 @@ if not os.path.exists(path_to_subfolder):
     os.makedirs(path_to_subfolder)
     print("Subfolder ProgESOutputs created")
 
+path_to_dump = './Dump'
+if not os.path.exists(path_to_dump):
+    os.makedirs(path_to_dump)
+    print("Dump directory created")
+
 if len(sys.argv) > 1: 
     savename = str(sys.argv[1])
 
@@ -33,7 +38,7 @@ docstring = 'NULL'
 
 ###################### Initialization Step #########################
 
-Nbig = int(2**16)
+Nbig = int(2**23)
 #err = 1e-4
 err = 1e-5
 ITERMAX = 200
@@ -46,7 +51,7 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 20
+target_beta = 500
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -137,12 +142,12 @@ for beta in range(beta_start, target_beta+1, 1):
                 xD/=2.
             print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
 
-    if beta % 10 == 0 :
-        savefile = savename
-        savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-        savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-        np.save(os.path.join(path_to_subfolder ,savefile), np.array([Gtau,Dtau])) 
-        print(savefile)
+    if beta % 100 == 0 :
+        dumpfile = savename
+        dumpfile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+        dumpfile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
+        np.save(os.path.join(path_to_dump,dumpfile), np.array([Gtau,Dtau])) 
+        print(dumpfile)
 
         ################      Compression     ######################
         tot_tau_grid_points = int(2**14)
@@ -170,7 +175,7 @@ for beta in range(beta_start, target_beta+1, 1):
         }
         savedictfile = savename
         savedictfile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-        savedictfile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.h5'  
+        savedictfile += 'g' + str(g).replace('.','_') + 'r' + str(r).replace('.','_')  + '.h5'  
         dict2h5(dictionary, os.path.join(path_to_subfolder, savedictfile), verbose=True)
 
 
