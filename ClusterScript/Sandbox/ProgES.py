@@ -15,25 +15,28 @@ from ConformalAnalytical import *
 #import time
 
 
-Nbig = int(2**18)
-#err = 1e-4
-err = 1e-5
+DUMP = False
+
+Nbig = int(2**16)
+err = 1e-2
+#err = 1e-2
 ITERMAX = 200
 
 global beta
 
-beta_start = 1
+beta_start = 100
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 200
+target_beta = 140
 
 # g = np.sqrt(10**3)
 # r = (10)**2
 
 kappa = 1.
+beta_step = 1
 
 
 
@@ -47,19 +50,23 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-#Gtau = Gfreetau
-#Dtau = Dfreetau
+Gtau = Gfreetau
+Dtau = Dfreetau
 
 #Gtau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 #Dtau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
 
-Gtau = -0.5*np.ones(Nbig)
-Dtau = 1.0*np.ones(Nbig)
+# Gtau = -0.5*np.ones(Nbig)
+# Dtau = 1.0*np.ones(Nbig)
 
-#Gtau,Dtau = np.load('temp.npy')
+Gtau,Dtau = np.load('temp.npy')
 assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 
-for beta in range(beta_start, target_beta+1, 1):
+#for beta in np.arange(beta_start, target_beta+1, beta_step):
+while(beta < target_beta):
+    # Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
+    # Gfreebetaplus = Freq2TimeF(1./(1j*omega + mu),Nbig,beta-beta_step)
+    # err  = 0.1*np.sum(np.abs(Gfreetau - Gfreebetaplus)**2)
     itern = 0
     diff = 1.
     diffG = 1.
@@ -67,7 +74,7 @@ for beta in range(beta_start, target_beta+1, 1):
     x = 0.5
     xG = 0.5
     xD = 0.5
-
+    beta_step = 1 if (beta>130) else 1
     print("##### NOW beta = ", beta, "############\n")
 
     omega = ImagGridMaker(Nbig,beta,'fermion')
@@ -108,8 +115,10 @@ for beta in range(beta_start, target_beta+1, 1):
 
         
         if itern>0:
-            diffG = np.sqrt(np.sum((np.abs(Gtau-oldGtau))**2)) #changed
-            diffD = np.sqrt(np.sum((np.abs(Dtau-oldDtau))**2))
+            # diffG = np.sqrt(np.sum((np.abs(Gtau-oldGtau))**2)) #changed
+            # diffD = np.sqrt(np.sum((np.abs(Dtau-oldDtau))**2))
+            diffG = np.sum((np.abs(Gtau-oldGtau))**2)#changed
+            diffD = np.sum((np.abs(Dtau-oldDtau))**2)
             #diff = np.max([diffG,diffD])
             diff = 0.5*(diffG+diffD)
             diffG, diffD = diff, diff
@@ -120,11 +129,12 @@ for beta in range(beta_start, target_beta+1, 1):
                 xD/=2.
             #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
 
-    if beta % 100 == 0 :
-        savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-        savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-        np.save(savefile, np.array([Gtau,Dtau])) 
-        print(savefile)
+    # if DUMP == True and beta % 10 == 0 :
+    #     savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+    #     savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
+    #     np.save(savefile, np.array([Gtau,Dtau])) 
+    #     print(savefile)
+    beta = beta + beta_step
 
 ################## PLOTTING ######################
 #np.save('temp.npy', np.array([Gtau,Dtau])) 
@@ -135,6 +145,9 @@ FreeDtau = DfreeImagtau(tau,r,beta)
 
 fig, ax = plt.subplots(2)
 
+titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+fig.suptitle(titlestring)
+fig.tight_layout(pad=2)
 ax[0].plot(tau/beta, np.real(Gtau), 'r', label = 'numerics Gtau')
 ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
 ax[0].set_ylim(-1,1)
@@ -166,7 +179,7 @@ startB, stopB = Nbig//2 + 1 , Nbig//2 + 101
 delta = 0.420374134464041
 alt_delta = 0.116902  
 
-fitG_val = -np.imag(Gomega[start])*(g**2)
+fitG_val = -np.imag(Gomega[start+2])*(g**2)
 #fitG_val = -np.imag(Gconf[start:stop])*(g**2)
 conf_fit_G = 1 * np.abs(omega/(g**2))**(2*delta - 1)
 conf_fit_G = conf_fit_G/conf_fit_G[start] * fitG_val
@@ -185,7 +198,7 @@ titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig
 fig.suptitle(titlestring)
 fig.tight_layout(pad=2)
 
-fitslice = slice(start+0, start + 5)
+fitslice = slice(start+2, start + 7)
 #fitslice = slice(start+25, start + 35)
 functoplot = -np.imag(Gomega)*(g**2)
 m,c = np.polyfit(np.log(np.abs(omega[fitslice])/(g**2)), np.log(functoplot[fitslice]),1)

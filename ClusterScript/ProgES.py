@@ -34,13 +34,14 @@ if len(sys.argv) > 1:
 
 docstring = 'NULL'
 #docstring = ' rhoLL = -ImG, rhoLR = 1j*ReG '
+DUMP = False
 
 
 ###################### Initialization Step #########################
 
-Nbig = int(2**23)
+Nbig = int(2**20)
 #err = 1e-4
-err = 1e-5
+err = 1e-4
 ITERMAX = 200
 
 global beta
@@ -51,7 +52,7 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 500
+target_beta = 200
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -132,17 +133,16 @@ for beta in range(beta_start, target_beta+1, 1):
         if itern>0:
             diffG = np.sqrt(np.sum((np.abs(Gtau-oldGtau))**2)) #changed
             diffD = np.sqrt(np.sum((np.abs(Dtau-oldDtau))**2))
-            #diff = np.max([diffG,diffD])
             diff = 0.5*(diffG+diffD)
             diffG, diffD = diff, diff
             
-            if diffG>diffoldG:
+            if diffG>diffoldG and xG > 10. * err:
                 xG/=2.
-            if diffD>diffoldD:
+            if diffD>diffoldD and xD > 10. * err:
                 xD/=2.
             print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
 
-    if beta % 100 == 0 :
+    if DUMP == True and beta % 100 == 0 :
         dumpfile = savename
         dumpfile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         dumpfile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
