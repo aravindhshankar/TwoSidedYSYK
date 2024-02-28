@@ -16,21 +16,22 @@ from ConformalAnalytical import *
 
 
 DUMP = False
+print("Here")
 
-Nbig = int(2**16)
-err = 1e-2
+Nbig = int(2**14)
+err = 1e-5
 #err = 1e-2
-ITERMAX = 200
+ITERMAX = 500
 
 global beta
 
-beta_start = 100
+beta_start = 1.
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 140
+target_beta = 10000
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -38,6 +39,7 @@ target_beta = 140
 kappa = 1.
 beta_step = 1
 
+num = 1.1 
 
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
@@ -59,30 +61,30 @@ Dtau = Dfreetau
 # Gtau = -0.5*np.ones(Nbig)
 # Dtau = 1.0*np.ones(Nbig)
 
-Gtau,Dtau = np.load('temp.npy')
+#Gtau,Dtau = np.load('temp.npy')
 assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 
-#for beta in np.arange(beta_start, target_beta+1, beta_step):
 while(beta < target_beta):
     # Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
     # Gfreebetaplus = Freq2TimeF(1./(1j*omega + mu),Nbig,beta-beta_step)
     # err  = 0.1*np.sum(np.abs(Gfreetau - Gfreebetaplus)**2)
     itern = 0
-    diff = 1.
+    diff = err*1.1
     diffG = 1.
     diffD = 1.
-    x = 0.5
-    xG = 0.5
-    xD = 0.5
+    x = 0.01
+    xG = 0.01
+    xD = 0.01
     beta_step = 1 if (beta>130) else 1
-    print("##### NOW beta = ", beta, "############\n")
 
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
     tau = ImagGridMaker(Nbig,beta,'tau')
-
+    diff = 1.
+    iterni=0
     while(diff>err and itern < ITERMAX):
         itern+=1
+        iterni += 1 
         diffold = 1.0*diff
         diffoldG = 1.0*diffG
         diffoldD = 1.0*diffD
@@ -90,7 +92,7 @@ while(beta < target_beta):
         oldGtau = 1.0*Gtau
         oldDtau = 1.0*Dtau
         
-        if itern == 1:
+        if iterni == 1:
             oldGomega = Time2FreqF(oldGtau,Nbig,beta)
             oldDomega = Time2FreqB(oldDtau,Nbig,beta)
         else:
@@ -107,14 +109,14 @@ while(beta < target_beta):
         #Piomega[Nbig//2] = 1.0*r - omegar2
         
         
-        Gomega = xG*(1./(1j*omega + mu - Sigmaomega)) + (1-xG)*oldGomega
-        Domega = xD*(1./(nu**2 + r - Piomega)) + (1-xD)*oldDomega
+        Gomega = x*(1./(1j*omega + mu - Sigmaomega)) + (1-x)*oldGomega
+        Domega = x*(1./(nu**2 + r - Piomega)) + (1-x)*oldDomega
 
         Gtau = Freq2TimeF(Gomega,Nbig,beta)
         Dtau = Freq2TimeB(Domega,Nbig,beta)
 
         
-        if itern>0:
+        if iterni>0:
             # diffG = np.sqrt(np.sum((np.abs(Gtau-oldGtau))**2)) #changed
             # diffD = np.sqrt(np.sum((np.abs(Dtau-oldDtau))**2))
             diffG = np.sum((np.abs(Gtau-oldGtau))**2)#changed
@@ -123,21 +125,28 @@ while(beta < target_beta):
             diff = 0.5*(diffG+diffD)
             diffG, diffD = diff, diff
             
-            if diffG>diffoldG:
-                xG/=2.
-            if diffD>diffoldD:
-                xD/=2.
-            #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
+            # if diffG<diffoldG and xG < 1./num:
+            #     xG *= num
+            # if diffD<diffoldD and xD < 1./num:
+            #     xD *= num
+            # if diffG>diffoldG and xG > num * err :
+            #     xG /= num
+            # if diffD>diffoldD and xD > num * err :
+            #     xD /= num
 
+
+            #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
     # if DUMP == True and beta % 10 == 0 :
     #     savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
     #     savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
     #     np.save(savefile, np.array([Gtau,Dtau])) 
     #     print(savefile)
+    print("##### Finished beta = ", beta, "############")
+    print("end x = ", x, " , end diff = ", diffG,' , end itern = ',itern, '\n')
     beta = beta + beta_step
 
 ################## PLOTTING ######################
-#np.save('temp.npy', np.array([Gtau,Dtau])) 
+np.save('beta10kN14g0_5r1x0_01.npy', np.array([Gtau,Dtau])) 
 print(beta), print(tau[-1])
 Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
@@ -164,7 +173,7 @@ ax[1].set_ylabel(r'$\Re{D(\tau)}$')
 ax[1].legend()
 
 #fig.suptitle(r'$\beta$ = ', beta)
-#plt.savefig('../../KoenraadEmails/WithMR_imagtime.pdf',bbox_inches='tight')
+#plt.savefig('../../KoenraadEmails/Withx0_01constImagTime.pdf',bbox_inches='tight')
 plt.show()
 
 
@@ -179,7 +188,7 @@ startB, stopB = Nbig//2 + 1 , Nbig//2 + 101
 delta = 0.420374134464041
 alt_delta = 0.116902  
 
-fitG_val = -np.imag(Gomega[start+2])*(g**2)
+fitG_val = -np.imag(Gomega[start+0])*(g**2)
 #fitG_val = -np.imag(Gconf[start:stop])*(g**2)
 conf_fit_G = 1 * np.abs(omega/(g**2))**(2*delta - 1)
 conf_fit_G = conf_fit_G/conf_fit_G[start] * fitG_val
@@ -198,7 +207,7 @@ titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig
 fig.suptitle(titlestring)
 fig.tight_layout(pad=2)
 
-fitslice = slice(start+2, start + 7)
+fitslice = slice(start+0, start + 15)
 #fitslice = slice(start+25, start + 35)
 functoplot = -np.imag(Gomega)*(g**2)
 m,c = np.polyfit(np.log(np.abs(omega[fitslice])/(g**2)), np.log(functoplot[fitslice]),1)
@@ -214,7 +223,7 @@ ax1.loglog(omega[start:stop]/(g**2), np.exp(c)*np.abs(omega[start:stop]/(g**2))*
 #ax1.set_ylim(1e-1,1e1)
 ax1.set_xlabel(r'$\omega_n/g^2$')
 ax1.set_ylabel(r'$-g^2\,\Im{G(\omega_n)}$')
-ax1.set_aspect('equal', adjustable='box')
+#ax1.set_aspect('equal', adjustable='box')
 #ax1.axis('square')
 ax1.legend()
 
@@ -227,11 +236,11 @@ ax2.loglog(nu[startB:stopB]/(g**2), conf_fit_D,'k--',label = 'ES power law')
 #ax2.set_ylim(5e-1,100)
 ax2.set_xlabel(r'$\nu_n/g^2$')
 ax2.set_ylabel(r'$g^2\,\Re{D(\nu_n)}$',labelpad = None)
-ax2.set_aspect('equal', adjustable='box')
+#ax2.set_aspect('equal', adjustable='box')
 ax2.legend()
 
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
-#plt.savefig('KoenraadEmails/ImagFreqpowerlaw_withMR.pdf', bbox_inches = 'tight')
+#plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 plt.show()
 
 
