@@ -17,10 +17,10 @@ from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
-DUMP = True
+DUMP = False
 
 M = int(2**13) #number of points in the grid
-T = 2**9 #upper cut-off for the time
+T = 2**10 #upper cut-off for the time
 err = 1e-5
 #err = 1e-2
 
@@ -40,7 +40,7 @@ eta = dw*2.1
 
 beta_start = 1.
 beta = beta_start
-target_beta = 100.
+target_beta = 50.
 beta_step = 0.1
 
 
@@ -53,7 +53,7 @@ grid = [M,omega,t]
 pars = [g,mu,r]
 while(beta < target_beta):
     #beta_step = 0.01 if (beta<1) else 1
-    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True) 
+    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False) 
    
     if DUMP == True and int(beta) % 10 == 0 :
         savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
