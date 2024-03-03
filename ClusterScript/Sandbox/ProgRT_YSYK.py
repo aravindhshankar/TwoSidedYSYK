@@ -29,7 +29,7 @@ dw = omega[2] - omega[1]
 dt = t[2] - t[1]
 
 delta = 0.420374134464041
-ITERMAX = 500
+ITERMAX = 5000
 global beta
 
 mu = 0.0
@@ -40,7 +40,7 @@ eta = dw*2.1
 
 beta_start = 1.
 beta = beta_start
-target_beta = 10.
+target_beta = 2.
 beta_step = 0.1
 
 
