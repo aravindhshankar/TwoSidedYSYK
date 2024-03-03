@@ -17,7 +17,7 @@ from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
-DUMP = False
+DUMP = True
 
 M = int(2**13) #number of points in the grid
 T = 2**9 #upper cut-off for the time
@@ -40,7 +40,7 @@ eta = dw*2.1
 
 beta_start = 1.
 beta = beta_start
-target_beta = 2.
+target_beta = 100.
 beta_step = 0.1
 
 
@@ -55,11 +55,12 @@ while(beta < target_beta):
     #beta_step = 0.01 if (beta<1) else 1
     GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True) 
    
-    # if DUMP == True and beta % 10 == 0 :
-    #     savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-    #     savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-    #     np.save(savefile, np.array([Gtau,Dtau])) 
-    #     print(savefile)
+    if DUMP == True and int(beta) % 10 == 0 :
+        savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
+        savefile += 'beta' + str(beta) 
+        savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
+        np.save(savefile, np.array([GRomega,DRomega])) 
+        print(savefile)
     print("##### Finished beta = ", beta, "############")
     beta = beta + beta_step
 
@@ -194,7 +195,7 @@ print(omega[meet_idx])
 functoplot = avg
 m,c = np.polyfit(np.log(np.abs(omega[fitslice])), np.log(functoplot[fitslice]),1)
 print(f'slope of fit = {m:.03f}')
-print('2\Delta - 1 = ', 2*delta-1)
+print('2Delta - 1 = ', 2*delta-1)
 
 # fitD_val = np.abs(DRomega[start])
 # conf_fit_D = 1 * np.abs(omega[start:stop]+1j*eta)**(1-4*delta)
