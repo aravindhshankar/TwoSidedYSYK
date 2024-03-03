@@ -40,8 +40,8 @@ eta = dw*2.1
 
 beta_start = 1.
 beta = beta_start
-target_beta = 10
-beta_step = 1
+target_beta = 10.
+beta_step = 0.1
 
 
 #Gtau,Dtau = np.load('temp.npy')
@@ -52,14 +52,8 @@ DRomega = 1/(-1.0*(omega + 1j*eta)**2 + r)
 grid = [M,omega,t]
 pars = [g,mu,r]
 while(beta < target_beta):
-    diff = 1.
-    diffG = 1.
-    diffD = 1.
-    x = 0.01
-    xG = 0.01
-    xD = 0.01
-    beta_step = 1 if (beta>130) else 1
-    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=100,eta = eta,verbose=True) 
+    #beta_step = 0.01 if (beta<1) else 1
+    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True) 
    
     # if DUMP == True and beta % 10 == 0 :
     #     savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 

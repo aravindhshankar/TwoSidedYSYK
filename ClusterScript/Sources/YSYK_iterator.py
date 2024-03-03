@@ -33,6 +33,35 @@ def newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=1e-6):
 
 
 
+def newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=1e-6):
+    '''
+    returns [Sigma,Pi] given rhos
+    '''
+    #eta = np.pi/(M*dt)*(0.001)
+    dt = t[2]-t[1]
+    fdplus,fdminus,beplus,beminus = BMf
+    rhoGrev = np.concatenate(([rhoG[-1]], rhoG[1:][::-1]))
+    rhoFpp = (1/np.pi)*freq2time(rhoG * fdminus,M,dt)
+    rhoFpm = (1/np.pi)*freq2time(rhoG * fdplus,M,dt)
+    rhoFmp = (1/np.pi)*freq2time(rhoGrev * fdminus,M,dt)
+    rhoFmm = (1/np.pi)*freq2time(rhoGrev * fdplus,M,dt)
+    rhoBpp = (1/np.pi)*freq2time(rhoD * beminus,M,dt)
+    rhoBpm = (1/np.pi)*freq2time(rhoD * beplus,M,dt)
+    
+    #argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.exp(-np.abs(delta*t)) * np.heaviside(t,0)
+    #argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.heaviside(t,1)
+    argSigma = (rhoFpm*rhoBpm - rhoFpp*rhoBpp) * np.exp(-delta*t) * np.heaviside(t,0)
+    Sigma = 1j*(g**2)*kappa * time2freq(argSigma,M,dt)
+    
+    #argPi = (rhoFpp*rhoFmp - rhoFpm*rhoFmm) * np.exp(-np.abs(delta*t)) * np.heaviside(t,0)
+    #argPi = (rhoFpp*rhoFmp - rhoFpm*rhoFmm) * np.heaviside(t,1)
+    argPi = (rhoFpp*rhoFmp - rhoFpm*rhoFmm) * np.exp(-delta*t) * np.heaviside(t,0)
+    Pi = 2*1j*(g**2) * time2freq(argPi,M,dt)
+    
+    return [Sigma, Pi]
+
+
+
 
 def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
     '''
@@ -67,8 +96,8 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
         rhoG = -1.0*np.imag(GRomega)
         rhoD = -1.0*np.imag(DRomega)
 
-        #SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,dt,t,g,beta,kappa=1,zeta = 1.,delta=eta)
-        SigmaOmega,PiOmega = newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        #SigmaOmega,PiOmega = newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
         if np.imag(SigmaOmega[M] > 0) :
             warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
      
