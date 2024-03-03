@@ -15,7 +15,7 @@ from ConformalAnalytical import *
 #import time
 from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
-assert(testingscripts.realtimeFFT_validator(), "FT_Testing failed") # Should return True
+assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
 DUMP = False
 
@@ -49,7 +49,8 @@ beta_step = 1
 GRomega = 1/(omega + 1j*eta + mu)
 #DRomega = -1/(-1.0*(omega + 1j*eta)**2 + r) # modified
 DRomega = 1/(-1.0*(omega + 1j*eta)**2 + r)
-
+grid = [M,omega,t]
+pars = [g,mu,r]
 while(beta < target_beta):
     diff = 1.
     diffG = 1.
@@ -58,7 +59,7 @@ while(beta < target_beta):
     xG = 0.01
     xD = 0.01
     beta_step = 1 if (beta>130) else 1
-    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,omega,t,g,beta,err=err,ITERMAX=100,eta = eta,verbose=True) 
+    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=100,eta = eta,verbose=True) 
    
     # if DUMP == True and beta % 10 == 0 :
     #     savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
@@ -75,11 +76,12 @@ while(beta < target_beta):
 GRt = (0.5/np.pi) * freq2time(GRomega,M,dt)
 DRt = (0.5/np.pi) * freq2time(DRomega,M,dt)
 
-
+temp = 1./beta
+Tstar = g**2 * np.sqrt(r)
 
 ################## PLOTTING ######################
 #np.save('beta10kN14g0_5r1x0_01.npy', np.array([Gtau,Dtau])) 
-print(beta), print(tau[-1])
+print('beta = ', beta)
 fig, ax = plt.subplots(2)
 
 ax[0].plot(2*np.pi*t/beta, np.real(GRt), label = r'numerics Re(GR(t))')
@@ -218,7 +220,7 @@ ax1.loglog(np.abs(omega[start:stop]), avg[start:stop],'p',label = 'avg')
 ax1.loglog(np.abs(omega[start:stop]), conf_fit_G[start:stop],'k--',label = 'ES power law')
 ax1.loglog(np.abs(omega[start:stop]),np.exp(c)*np.abs(omega[start:stop])**m, label=f'Fit with slope {m:.03f}')
 #ax1.set_xlim(1e-3,1e-1)
-ax1.axvline([temp],ls = '--', c= 'gray',label = 'temperature')
+ax1.axvline([temp],ls = '-.', c= 'gray',label = 'temperature')
 ax1.axvline([g**(2/3)],ls = '--', c= 'purple',label = r'$g^{2/3}$')
 ax1.axvline([np.sqrt(r)],ls = '--', c= 'magenta',label = r'$\omega_0$')
 ax1.axvline([omega[meet_idx]],ls = '--', label = 'fit omega')

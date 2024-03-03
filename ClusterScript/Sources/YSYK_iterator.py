@@ -34,17 +34,20 @@ def newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=1e-6):
 
 
 
-def RE_YSYK_iterator(GRomega,DRomega,omega,t,g,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
+def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
     '''
     signature:
-    GRomega,DRomega,omega,t,g,beta,eta=1e-6, verbose=True, diffcheck = False)
-    
+    GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False
+    grid is a list [M,omega,t]
+    pars is a list [g,mu,r]
     '''
+    M,omega,t = grid
+    g,mu,r = pars
     itern = 0
     omegar2 = ret_omegar2(g,beta)
 
     diff = 1.
-    diffG,diffD = (1,0.1.0)
+    diffG,diffD = (1.0,1.0)
     xG,xD = (0.01,0.01)
     diffseries = []
     flag = True
