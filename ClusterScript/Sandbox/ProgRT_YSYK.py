@@ -57,10 +57,12 @@ while(beta < target_beta):
    
     if DUMP == True and int(beta) % 10 == 0 :
         savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
-        savefile += 'beta' + str(beta) 
-        savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
+        savefile += 'beta' + str((int(beta*100))/100.) 
+        savefile += 'g' + str(g) + 'r' + str(r) 
+        savefile = savefile.replace('.','_') 
+        savefile +=  '.npy' 
+        print(savefile) 
         np.save(savefile, np.array([GRomega,DRomega])) 
-        print(savefile)
     print("##### Finished beta = ", beta, "############")
     beta = beta + beta_step
 
