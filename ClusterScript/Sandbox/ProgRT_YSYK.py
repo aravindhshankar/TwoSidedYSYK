@@ -41,13 +41,13 @@ r = 1.
 kappa = 1.
 eta = dw*2.1
 
-beta_start = 30.
+beta_start = 1
 beta = beta_start
 target_beta = 50.
-beta_step = 0.1
+beta_step = 1
 
 
-GRomega,DRomega = np.load('M13T10beta30_0g0_5r1_0.npy')
+#GRomega,DRomega = np.load('M13T10beta30_0g0_5r1_0.npy')
 #assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 GRomega = 1/(omega + 1j*eta + mu)
 #DRomega = -1/(-1.0*(omega + 1j*eta)**2 + r) # modified
@@ -56,8 +56,8 @@ grid = [M,omega,t]
 pars = [g,mu,r]
 while(beta < target_beta):
     #beta_step = 0.01 if (beta<1) else 1
-    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False) 
-   
+    GRomega, DRomega, INFO = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False) 
+    itern, = INFO
     if DUMP == True and round(beta) % 10 == 0 and np.abs(beta-round(beta)) < 1e-4:
         savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
         savefile += 'beta' + str((round(beta*100))/100.) 
@@ -66,7 +66,7 @@ while(beta < target_beta):
         savefile +=  '.npy' 
         print(savefile) 
         np.save(savefile, np.array([GRomega,DRomega])) 
-    print("##### Finished beta = ", beta, "############")
+    print("##### Finished beta = ", beta," in ", itern, " iterations ############")
     beta = beta + beta_step
 
 
@@ -194,7 +194,7 @@ meet_idx = omega_idx(temp,dw,M)
 #fitslice = slice(meet_idx, meet_idx + 15)
 #fitslice = slice(start+10, start + 20)
 #fitslice = slice(start+25, start + 35)
-fitslice = slice(meet_idx + 1, meet_idx+10)
+fitslice = slice(meet_idx + 5, meet_idx+15)
 print(omega[meet_idx])
 functoplot = -np.imag(GRomega)
 #functoplot = avg
@@ -205,6 +205,12 @@ print('2Delta - 1 = ', 2*delta-1)
 # fitD_val = np.abs(DRomega[start])
 # conf_fit_D = 1 * np.abs(omega[start:stop]+1j*eta)**(1-4*delta)
 # conf_fit_D = conf_fit_D/conf_fit_D[0] * fitD_val
+
+fitsliceD = slice(meet_idx + 5, meet_idx+15)
+functoplotD = np.imag(DRomega)
+mD,cD = np.polyfit(np.log(np.abs(omega[fitslice])), np.log(functoplotD[fitsliceD]),1)
+print(f'slope of fit = {mD:.03f}')
+print('1 - 4Delta = ', 1-4*delta)
 
 fig,(ax1,ax2) = plt.subplots(1,2)
 fig.set_figwidth(10)
@@ -233,12 +239,13 @@ ax1.set_ylabel(r'$-\,\Im{G(\omega)}$')
 ax1.legend(loc = 'lower left')
 #ax1.text(0.05,100,f'slope of fit = {m:.03f}')
 
-ax2.loglog(np.abs(omega[start:stop]), -np.imag(DRomega[start:stop]),'p',label='numerics')
+ax2.loglog(np.abs(omega[start:stop]), np.imag(DRomega[start:stop]),'p',label='numerics')
 #ax2.loglog(omega[start:stop], np.abs(DRomega[start:stop]),'p',label='numerics')
 #ax2.loglog(np.abs(omega[start:stop]+1j*eta), conf_fit_D,'k--',label = 'ES power law')
+ax2.loglog(np.abs(omega[start:stop]),np.exp(cD)*np.abs(omega[start:stop])**mD, label=f'Fit with slope {mD:.03f}')
 
 ax2.set_xlabel(r'$\omega$')
-ax2.set_ylabel(r'$-\Im{D(\omega)}$',labelpad = None)
+ax2.set_ylabel(r'$\Im{D(\omega)}$',labelpad = None)
 #ax2.set_ylabel(r'$|D(\omega)|$',labelpad = None)
 #ax2.set_aspect('equal', adjustable='box')
 ax2.legend(loc = 'upper right')

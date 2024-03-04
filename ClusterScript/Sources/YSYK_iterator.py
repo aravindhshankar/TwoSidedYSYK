@@ -77,7 +77,7 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
 
     diff = 1.
     diffG,diffD = (1.0,1.0)
-    xG,xD = (0.2,0.2)
+    xG,xD = (0.01,0.01)
     diffseries = []
     flag = True
     fdplus = np.array([fermidirac(beta*omegaval, default = False) for omegaval in omega])
@@ -96,8 +96,8 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
         rhoG = -1.0*np.imag(GRomega)
         rhoD = -1.0*np.imag(DRomega)
 
-        SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
-        #SigmaOmega,PiOmega = newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        #SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        SigmaOmega,PiOmega = newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
         if np.imag(SigmaOmega[M] > 0) :
             warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
      
@@ -117,6 +117,7 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
         if verbose:
             print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
 
-    return (GRomega,DRomega)
+    INFO = (itern,)
+    return (GRomega,DRomega, INFO)
 
 
