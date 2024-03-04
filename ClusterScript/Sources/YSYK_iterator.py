@@ -77,7 +77,15 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
 
     diff = 1.
     diffG,diffD = (1.0,1.0)
-    xG,xD = (0.01,0.01)
+    x = 0.01
+    if beta < 20:
+        x = 0.2
+    elif beta < 40:
+        x = 0.1
+    else: 
+        x = 0.01
+
+    xG, xD = x,x
     diffseries = []
     flag = True
     fdplus = np.array([fermidirac(beta*omegaval, default = False) for omegaval in omega])
