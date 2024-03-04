@@ -6,6 +6,12 @@ if not os.path.exists('../Sources'):
 else:	
 	sys.path.insert(1,'../Sources')	
 
+if not os.path.exists('../Dump/ProgRT_YSYK_Dumpfiles'):
+    print("Error - Path to Dump directory not found ")
+    raise Exception("Error - Path to Dump directory not found ")
+else:
+    path_to_dump = '../Dump/ProgRT_YSYK_Dumpfiles'
+
 
 from SYK_fft import *
 import numpy as np
@@ -17,10 +23,10 @@ from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
-DUMP = False
+DUMP = True
 
-M = int(2**13) #number of points in the grid
-T = 2**10 #upper cut-off for the time
+M = int(2**16) #number of points in the grid
+T = 2**13 #upper cut-off for the time
 err = 1e-5
 #err = 1e-2
 
@@ -43,7 +49,7 @@ eta = dw*2.1
 
 beta_start = 1
 beta = beta_start
-target_beta = 50.
+target_beta = 500.
 beta_step = 1
 
 
@@ -65,7 +71,7 @@ while(beta < target_beta):
         savefile = savefile.replace('.','_') 
         savefile +=  '.npy' 
         print(savefile) 
-        np.save(savefile, np.array([GRomega,DRomega])) 
+        np.save(os.path.join(path_to_dump,savefile), np.array([GRomega,DRomega])) 
     print("##### Finished beta = ", beta," in ", itern, " iterations ############")
     beta = beta + beta_step
 
@@ -131,9 +137,9 @@ match_coeff = rhoD[match_point]*(np.abs(omega[match_point] - om_th + 1j*eta )**(
 match_rhoD = match_coeff * np.abs(omega-om_th)**(1-4*delta)
 
 ax[0].plot(omega, rhoG, 'r', label = r'numerics $\rho_G(\omega)$')
-#ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
+ax[0].plot(omega, np.real(GRomega), 'b', label = r'numerics $\Re G^R(\omega)$')
 #ax[0].set_ylim(-1,1)
-ax[0].set_xlim(-0.1,0.1)
+ax[0].set_xlim(-1,1)
 ax[0].set_xlabel(r'$\omega$',labelpad = 0)
 ax[0].set_ylabel(r'$-\Im{G^R(\omega)}$')
 ax[0].legend()
@@ -206,9 +212,9 @@ print('2Delta - 1 = ', 2*delta-1)
 # conf_fit_D = 1 * np.abs(omega[start:stop]+1j*eta)**(1-4*delta)
 # conf_fit_D = conf_fit_D/conf_fit_D[0] * fitD_val
 
-fitsliceD = slice(meet_idx + 5, meet_idx+15)
+fitsliceD = slice(meet_idx + 10, meet_idx+25)
 functoplotD = np.imag(DRomega)
-mD,cD = np.polyfit(np.log(np.abs(omega[fitslice])), np.log(functoplotD[fitsliceD]),1)
+mD,cD = np.polyfit(np.log(np.abs(omega[fitsliceD])), np.log(functoplotD[fitsliceD]),1)
 print(f'slope of fit = {mD:.03f}')
 print('1 - 4Delta = ', 1-4*delta)
 
