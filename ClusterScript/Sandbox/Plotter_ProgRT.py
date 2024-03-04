@@ -17,7 +17,8 @@ from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
-DUMP = False
+
+
 
 M = int(2**13) #number of points in the grid
 T = 2**10 #upper cut-off for the time
@@ -41,36 +42,15 @@ r = 1.
 kappa = 1.
 eta = dw*2.1
 
-beta_start = 30.
+beta_start = 1.
 beta = beta_start
-target_beta = 50.
+target_beta = 100.
 beta_step = 0.1
 
+beta = 100
 
-GRomega,DRomega = np.load('M13T10beta30_0g0_5r1_0.npy')
+GRomega, DRomega = np.load('M13T10beta100_0g0_5r1_0.npy')
 #assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
-GRomega = 1/(omega + 1j*eta + mu)
-#DRomega = -1/(-1.0*(omega + 1j*eta)**2 + r) # modified
-DRomega = 1/(-1.0*(omega + 1j*eta)**2 + r)
-grid = [M,omega,t]
-pars = [g,mu,r]
-while(beta < target_beta):
-    #beta_step = 0.01 if (beta<1) else 1
-    GRomega, DRomega = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False) 
-   
-    if DUMP == True and round(beta) % 10 == 0 and np.abs(beta-round(beta)) < 1e-4:
-        savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
-        savefile += 'beta' + str((round(beta*100))/100.) 
-        savefile += 'g' + str(g) + 'r' + str(r) 
-        savefile = savefile.replace('.','_') 
-        savefile +=  '.npy' 
-        print(savefile) 
-        np.save(savefile, np.array([GRomega,DRomega])) 
-    print("##### Finished beta = ", beta, "############")
-    beta = beta + beta_step
-
-
-
 
 
 GRt = (0.5/np.pi) * freq2time(GRomega,M,dt)
@@ -80,7 +60,7 @@ temp = 1./beta
 Tstar = g**2 * np.sqrt(r)
 
 ################## PLOTTING ######################
-
+#np.save('beta10kN14g0_5r1x0_01.npy', np.array([Gtau,Dtau])) 
 print('beta = ', beta)
 fig, ax = plt.subplots(2)
 
@@ -106,7 +86,7 @@ ax[1].legend()
 
 print('eta = ', eta)
 
-fig.suptitle(r'$\beta$ = ' + str(round(beta)))
+#fig.suptitle(r'$\beta$ = ', beta)
 #plt.savefig('../../KoenraadEmails/Withx0_01constImagTime.pdf',bbox_inches='tight')
 #plt.show()
 
@@ -131,9 +111,10 @@ match_coeff = rhoD[match_point]*(np.abs(omega[match_point] - om_th + 1j*eta )**(
 match_rhoD = match_coeff * np.abs(omega-om_th)**(1-4*delta)
 
 ax[0].plot(omega, rhoG, 'r', label = r'numerics $\rho_G(\omega)$')
+ax[0].plot(omega, np.real(GRomega), 'r', label = r'numerics $\Re G(\omega)$')
 #ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
 #ax[0].set_ylim(-1,1)
-ax[0].set_xlim(-0.1,0.1)
+ax[0].set_xlim(-1,1)
 ax[0].set_xlabel(r'$\omega$',labelpad = 0)
 ax[0].set_ylabel(r'$-\Im{G^R(\omega)}$')
 ax[0].legend()
@@ -175,7 +156,7 @@ print(DRomega[-1])
 
 # powD = 1. - 4*Delta
 delta = 0.420374134464041
-start,stop = M+1, M+10000
+start,stop = M+1, M+100
 
 avg = 0.5*(np.real(GRomega)- np.imag(GRomega))
 
@@ -194,7 +175,7 @@ meet_idx = omega_idx(temp,dw,M)
 #fitslice = slice(meet_idx, meet_idx + 15)
 #fitslice = slice(start+10, start + 20)
 #fitslice = slice(start+25, start + 35)
-fitslice = slice(meet_idx + 1, meet_idx+10)
+fitslice = slice(meet_idx +5 , meet_idx+20)
 print(omega[meet_idx])
 functoplot = -np.imag(GRomega)
 #functoplot = avg
@@ -205,6 +186,12 @@ print('2Delta - 1 = ', 2*delta-1)
 # fitD_val = np.abs(DRomega[start])
 # conf_fit_D = 1 * np.abs(omega[start:stop]+1j*eta)**(1-4*delta)
 # conf_fit_D = conf_fit_D/conf_fit_D[0] * fitD_val
+fitsliceD = slice(meet_idx +5 , meet_idx+20)
+functoplotD = np.imag(DRomega)
+#functoplotD = avg
+mD,cD = np.polyfit(np.log(np.abs(omega[fitsliceD])), np.log(functoplotD[fitsliceD]),1)
+print(f'slope of fit = {mD:.03f}')
+print('1 - 4Delta  = ', 1-4*delta)
 
 fig,(ax1,ax2) = plt.subplots(1,2)
 fig.set_figwidth(10)
@@ -233,13 +220,16 @@ ax1.set_ylabel(r'$-\,\Im{G(\omega)}$')
 ax1.legend(loc = 'lower left')
 #ax1.text(0.05,100,f'slope of fit = {m:.03f}')
 
-ax2.loglog(np.abs(omega[start:stop]), -np.imag(DRomega[start:stop]),'p',label='numerics')
+ax2.loglog(np.abs(omega[start:stop]), np.imag(DRomega[start:stop]),'p',label='numerics')
 #ax2.loglog(omega[start:stop], np.abs(DRomega[start:stop]),'p',label='numerics')
 #ax2.loglog(np.abs(omega[start:stop]+1j*eta), conf_fit_D,'k--',label = 'ES power law')
+ax2.loglog(np.abs(omega[start:stop]),np.exp(cD)*np.abs(omega[start:stop])**mD, label=f'Fit with slope {mD:.03f}')
+
 
 ax2.set_xlabel(r'$\omega$')
-ax2.set_ylabel(r'$-\Im{D(\omega)}$',labelpad = None)
-#ax2.set_ylabel(r'$|D(\omega)|$',labelpad = None)
+#ax2.set_ylabel(r'$-\Im{D(\omega)}$',labelpad = None)
+ax2.set_ylabel(r'$+\Im{D(\omega)}$',labelpad = None)
+ax2.set_ylabel(r'$|D(\omega)|$',labelpad = None)
 #ax2.set_aspect('equal', adjustable='box')
 ax2.legend(loc = 'upper right')
 
