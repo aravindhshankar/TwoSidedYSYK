@@ -61,6 +61,29 @@ def newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=1e-6):
     return [Sigma, Pi]
 
 
+def Dav_rhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=1e-6):
+    '''
+    Direct implementation of Davide's email
+    '''
+    dt = t[2]-t[1]
+    fdplus,fdminus,beplus,beminus = BMf
+    ADt = (1/np.pi) * freq2time(rhoD,M,dt)
+    aGt = (1/np.pi) * freq2time(rhoG * fdplus, M,dt)
+    AGt = (1/np.pi) * freq2time(rhoG,M,dt)
+    aDt = (1/np.pi) * freq2time(rhoD * beplus, M,dt)
+
+    argSigma = (ADt * aGt - AGt * np.conj(aDt)) * np.heaviside(t,0)
+    Sigma = -1j*(g**2)*kappa* time2freq(argSigma,M,dt)
+
+    argPi = (AGt * np.conj(aGt) - np.conj(AGt) * (aGt)) * np.heaviside(t,0)
+    Pi = 2j*(g**2)*kappa* time2freq(argPi,M,dt)
+
+    return [Sigma,Pi]
+
+    
+
+
+
 
 
 def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
@@ -104,7 +127,8 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
         rhoG = -1.0*np.imag(GRomega)
         rhoD = -1.0*np.imag(DRomega)
 
-        SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        #SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        SigmaOmega,PiOmega = Dav_rhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
         #SigmaOmega,PiOmega = newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
         if np.imag(SigmaOmega[M] > 0) :
             warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
@@ -125,7 +149,7 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
         if verbose:
             print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
 
-    INFO = (itern,)
+    INFO = (itern, diff)
     return (GRomega,DRomega, INFO)
 
 

@@ -23,10 +23,10 @@ from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
-DUMP = True
+DUMP = False
 
-M = int(2**16) #number of points in the grid
-T = 2**13 #upper cut-off for the time
+M = int(2**14) #number of points in the grid
+T = 2**11 #upper cut-off for the time
 err = 1e-5
 #err = 1e-2
 
@@ -49,7 +49,7 @@ eta = dw*2.1
 
 beta_start = 1
 beta = beta_start
-target_beta = 500.
+target_beta = 50.
 beta_step = 1
 
 
@@ -63,7 +63,7 @@ pars = [g,mu,r]
 while(beta < target_beta):
     #beta_step = 0.01 if (beta<1) else 1
     GRomega, DRomega, INFO = RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False) 
-    itern, = INFO
+    itern, diff = INFO
     if DUMP == True and round(beta) % 10 == 0 and np.abs(beta-round(beta)) < 1e-4:
         savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
         savefile += 'beta' + str((round(beta*100))/100.) 
@@ -72,7 +72,7 @@ while(beta < target_beta):
         savefile +=  '.npy' 
         print(savefile) 
         np.save(os.path.join(path_to_dump,savefile), np.array([GRomega,DRomega])) 
-    print("##### Finished beta = ", beta," in ", itern, " iterations ############")
+    print("##### Finished beta = ", beta," in ", itern, " iterations with diff = ", diff, " ############")
     beta = beta + beta_step
 
 
