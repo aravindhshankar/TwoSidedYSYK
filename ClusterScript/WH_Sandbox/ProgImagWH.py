@@ -7,6 +7,13 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 
+if not os.path.exists('../Dump/WHYSYKImagDumpfiles'):
+    print("Error - Path to Dump directory not found ")
+    raise Exception("Error - Path to Dump directory not found ")
+else:
+    path_to_dump = '../Dump/WHYSYKImagDumpfiles'
+
+
 from SYK_fft import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,7 +22,7 @@ from ConformalAnalytical import *
 #import time
 
 
-DUMP = False
+DUMP = True
 print("DUMP = ", DUMP)
 
 Nbig = int(2**14)
@@ -34,7 +41,7 @@ r = 1.
 lamb = 0.05
 J = 0.05
 
-target_beta = 5
+target_beta = 10001
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -142,10 +149,13 @@ while(beta < target_beta):
 
 
             #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
-    if DUMP == True and beta % 10 == 0 :
+    if DUMP == True and beta in [50,100,500,1000,2000,5000,10000]:
         savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-        savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-        #np.save(savefile, np.array([Gtau,Dtau])) 
+        savefile += 'lamb' + str(lamb) + 'J' + str(J)
+        savefile += 'g' + str(g) + 'r' + str(r)
+        savefile = savefile.replace('.','_') 
+        savefile += '.npy'
+        np.save(os.path.join(path_to_dump, savefile), np.array([GDtau,GODtau,DDtau,DODtau])) 
         print(savefile)
     print("##### Finished beta = ", beta, "############")
     #print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
@@ -289,7 +299,7 @@ ax[0,0].semilogy(tau[startT:stopT], np.abs(np.real(GDtau[startT:stopT])),'p',lab
 #ax[0,0].semilogy(tau[startT:], -np.imag(Gconf[startT:]),'m.',label = 'ES solution')
 #ax[0,0].semilogy(tau[startT:], alt_conf_fit_G[startT:],'g--', label = 'alt power law')
 #ax[0,0].set_xlim(tau[startT]/2,tau[startT+15])
-ax[0,0].semilogy(tau[startT:stopT], np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {m:.03f}')
+ax[0,0].semilogy(tau[startT:stopT], np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
 #ax[0,0].set_ylim(1e-1,1e1)
 ax[0,0].set_xlabel(r'$\tau$')
 ax[0,0].set_ylabel(r'$-\Re G(\tau)$')
