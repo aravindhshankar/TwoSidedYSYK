@@ -23,10 +23,10 @@ from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
-DUMP = False
+DUMP = True
 
-M = int(2**14) #number of points in the grid
-T = 2**11 #upper cut-off for the time
+M = int(2**16) #number of points in the grid
+T = 2**12 #upper cut-off for the time
 err = 1e-5
 #err = 1e-2
 
@@ -49,11 +49,11 @@ eta = dw*2.1
 
 beta_start = 1
 beta = beta_start
-target_beta = 50.
+target_beta = 100.
 beta_step = 1
 
 
-#GRomega,DRomega = np.load('M13T10beta30_0g0_5r1_0.npy')
+#GRomega,DRomega = np.load(os.path.join(path_to_dump,'M16T12beta10_0g0_5r1_0.npy'))
 #assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 GRomega = 1/(omega + 1j*eta + mu)
 #DRomega = -1/(-1.0*(omega + 1j*eta)**2 + r) # modified

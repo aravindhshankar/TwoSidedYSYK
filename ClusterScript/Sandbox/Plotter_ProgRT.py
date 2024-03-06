@@ -17,11 +17,14 @@ from YSYK_iterator import RE_YSYK_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
+path_to_dump = '../Dump/ProgRT_YSYK_Dumpfiles'
 
 
 
-M = int(2**13) #number of points in the grid
-T = 2**10 #upper cut-off for the time
+
+
+M = int(2**16) #number of points in the grid
+T = 2**12 #upper cut-off for the time
 err = 1e-5
 #err = 1e-2
 
@@ -42,14 +45,15 @@ r = 1.
 kappa = 1.
 eta = dw*2.1
 
-beta_start = 1.
-beta = beta_start
-target_beta = 100.
-beta_step = 0.1
 
-beta = 100
 
-GRomega, DRomega = np.load('M13T10beta100_0g0_5r1_0.npy')
+beta = 20
+
+try:
+    GRomega, DRomega = np.load(os.path.join(path_to_dump, 'M16T12beta30_0g0_5r1_0.npy'))
+except FileNotFoundError:
+    print("**********PATH TO INPUT FILE NOT FOUND!***************")
+    exit(1)
 #assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 
 
@@ -156,7 +160,7 @@ print(DRomega[-1])
 
 # powD = 1. - 4*Delta
 delta = 0.420374134464041
-start,stop = M+1, M+100
+start,stop = M+1, M+1000
 
 avg = 0.5*(np.real(GRomega)- np.imag(GRomega))
 
@@ -170,7 +174,7 @@ conf_fit_D = 1 * np.abs(omega[start:stop])**(1-4*delta)
 conf_fit_D = conf_fit_D/conf_fit_D[0] * fitD_val
 
 #meet_idx= np.argmin(abs(np.real(GRomega)+np.imag(GRomega)))
-meet_idx = omega_idx(temp,dw,M)
+meet_idx = omega_idx(temp*1.1,dw,M)
 
 #fitslice = slice(meet_idx, meet_idx + 15)
 #fitslice = slice(start+10, start + 20)
