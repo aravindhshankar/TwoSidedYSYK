@@ -31,10 +31,10 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-lamb = 0.01
-J = 0.01
+lamb = 0.05
+J = 0.05
 
-target_beta = 5000
+target_beta = 5
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -163,7 +163,7 @@ FreeDtau = DfreeImagtau(tau,r,beta)
 fig, ax = plt.subplots(2,2)
 
 titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
-titlestring += r' \lambda = ' + str(lamb) + r' J = ' + str(J)
+titlestring += r' $\lambda$ = ' + str(lamb) + r' J = ' + str(J)
 fig.suptitle(titlestring)
 fig.tight_layout(pad=2)
 ax[0,0].plot(tau/beta, np.real(GDtau), 'r', label = 'numerics GDtau')
@@ -263,6 +263,56 @@ ax[1,0].set_xlabel(r'$\nu_n/g^2$')
 ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
 #ax[1,0].set_aspect('equal', adjustable='box')
 ax[1,0].legend()
+
+
+
+###################### Log-Linear Plot ###############################
+
+
+fig,ax = plt.subplots(2,2)
+#fig.set_figwidth(10)
+#titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+fig.suptitle(titlestring)
+fig.tight_layout(pad=2)
+
+startT, stopT  = 1, 2000
+
+fitsliceT = slice(startT, startT + 10)
+#fitslice = slice(start+25, start + 35)
+functoplotT = np.abs(np.real(GDtau))
+mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
+print(f'slope of fit = {mT:.03f}')
+# print('2 Delta  = ', 2*delta)
+
+ax[0,0].semilogy(tau[startT:stopT], np.abs(np.real(GDtau[startT:stopT])),'p',label = 'numerics GDtau')
+#ax[0,0].semilogy(tau[startT:stopT], conf_fit_GD[startT:stopT],'k--',label = 'ES power law')
+#ax[0,0].semilogy(tau[startT:], -np.imag(Gconf[startT:]),'m.',label = 'ES solution')
+#ax[0,0].semilogy(tau[startT:], alt_conf_fit_G[startT:],'g--', label = 'alt power law')
+#ax[0,0].set_xlim(tau[startT]/2,tau[startT+15])
+ax[0,0].semilogy(tau[startT:stopT], np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {m:.03f}')
+#ax[0,0].set_ylim(1e-1,1e1)
+ax[0,0].set_xlabel(r'$\tau$')
+ax[0,0].set_ylabel(r'$-\Re G(\tau)$')
+#ax[0,0].set_aspect('equal', adjustable='box')
+#ax[0,0].axis('square')
+ax[0,0].legend()
+ax[0,0].set_yscale('log')
+
+
+# ax[1,0].semilogy(tau[startB:stopB], np.real(DDomega[startB:stopB]),'p',label='numerics')
+# #ax[1,0].semilogy(tau[startB:stopB], conf_fit_DD,'k--',label = 'ES power law')
+# #ax[1,0].semilogy(tau[startB:], np.real(Dconf[startB:]),'m.',label = 'ES solution')
+# #ax[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
+# #ax[1,0].set_xlim(tau[startB]/2,tau[startB+15])
+# #ax[1,0].set_ylim(5e-1,100)
+# ax[1,0].set_xlabel(r'$\nu_n/g^2$')
+# ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
+# #ax[1,0].set_aspect('equal', adjustable='box')
+# ax[1,0].legend()
+
+
+
+
 
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
