@@ -22,15 +22,12 @@ from ConformalAnalytical import *
 #import time
 
 
-plotfile = os.path.join(path_to_dump, 'Nbig14beta10000_0lamb0_05J0_05g0_5r1_0.npy')
-
-
 Nbig = int(2**14)
 err = 1e-5
 
 global beta
 
-beta = 10000
+beta = 50.0
 mu = 0.0
 g = 0.5
 r = 1.
@@ -38,6 +35,20 @@ r = 1.
 kappa = 1.
 lamb = 0.05
 J = 0.05
+
+savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+savefile += 'lamb' + str(lamb) + 'J' + str(J)
+savefile += 'g' + str(g) + 'r' + str(r)
+savefile = savefile.replace('.','_') 
+savefile += '.npy'
+
+try :
+    #plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
+    plotfile = os.path.join(path_to_dump, savefile)
+except FileNotFoundError: 
+    print("INPUT FILE NOT FOUND")
+    exit(1)
+
 
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
@@ -56,10 +67,10 @@ omegar2 = ret_omegar2(g,beta)
 GDtau, GODtau, DDtau, DODtau = np.load(plotfile)
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
-GDomega = Freq2TimeF(GDtau, Nbig, beta)
-GODomega = Freq2TimeF(GODtau, Nbig, beta)
-DDomega = Freq2TimeB(DDtau, Nbig, beta)
-DODomega = Freq2TimeB(DODtau, Nbig, beta)
+GDomega = Time2FreqF(GDtau, Nbig, beta)
+GODomega = Time2FreqF(GODtau, Nbig, beta)
+DDomega = Time2FreqB(DDtau, Nbig, beta)
+DODomega = Time2FreqB(DODtau, Nbig, beta)
 
 
 ################## PLOTTING ######################
@@ -208,16 +219,16 @@ ax[0,0].legend()
 ax[0,0].set_yscale('log')
 
 
-# ax[1,0].semilogy(tau[startB:stopB], np.real(DDomega[startB:stopB]),'p',label='numerics')
-# #ax[1,0].semilogy(tau[startB:stopB], conf_fit_DD,'k--',label = 'ES power law')
-# #ax[1,0].semilogy(tau[startB:], np.real(Dconf[startB:]),'m.',label = 'ES solution')
-# #ax[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
-# #ax[1,0].set_xlim(tau[startB]/2,tau[startB+15])
-# #ax[1,0].set_ylim(5e-1,100)
-# ax[1,0].set_xlabel(r'$\nu_n/g^2$')
-# ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
-# #ax[1,0].set_aspect('equal', adjustable='box')
-# ax[1,0].legend()
+ax[1,0].semilogy(tau[startB:stopB], np.abs(np.real(DDtau[startT:stopT])),'p',label='numerics DDtau')
+#ax[1,0].semilogy(tau[startB:stopB], conf_fit_DD,'k--',label = 'ES power law')
+#ax[1,0].semilogy(tau[startB:], np.real(Dconf[startB:]),'m.',label = 'ES solution')
+#ax[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
+#ax[1,0].set_xlim(tau[startB]/2,tau[startB+15])
+#ax[1,0].set_ylim(5e-1,100)
+ax[1,0].set_xlabel(r'$\nu_n/g^2$')
+ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
+#ax[1,0].set_aspect('equal', adjustable='box')
+ax[1,0].legend()
 
 
 
