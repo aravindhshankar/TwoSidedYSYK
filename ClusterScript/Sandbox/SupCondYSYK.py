@@ -27,17 +27,17 @@ print("Here")
 Nbig = int(2**14)
 err = 1e-5
 #err = 1e-2
-ITERMAX = 500
+ITERMAX = 5000
 
 global beta
 
-beta_start = 1.
+beta_start = 100
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 100
+target_beta = 500
 
 kappa = 1.
 beta_step = 1
@@ -53,9 +53,10 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-Gtau = Gfreetau
+#Gtau = Gfreetau
 Dtau = Dfreetau
-Ftau = np.ones_like(Gtau)
+Gtau = np.zeros_like(Dtau)
+Ftau = np.ones_like(Dtau)
 
 
 #Gtau,Dtau = np.load('temp.npy')
@@ -157,10 +158,10 @@ ax[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[1].set_ylabel(r'$\Re{D(\tau)}$')
 ax[1].legend()
 
-ax[2].plot(tau/beta, np.real(Ftau), 'r', label = 'numerics Real Ftau')
+ax[2].plot(tau/beta, np.real(Ftau), 'r--', label = 'numerics Real Ftau')
 ax[2].plot(tau/beta, np.imag(Ftau), 'b', label = 'numerics Imag Ftau')
 #ax[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
-ax[2].set_ylim(-1,1)
+#ax[2].set_ylim(-1,1)
 ax[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[2].set_ylabel(r'$\Re{F(\tau)}$')
 ax[2].legend()
@@ -232,7 +233,8 @@ ax2.set_ylabel(r'$g^2\,\Re{D(\nu_n)}$',labelpad = None)
 ax2.legend()
 
 
-ax3.loglog(omega[start:stop]/(g**2), -np.imag(Fomega[start:stop])*(g**2),'p',label = 'numerics -imagFomega')
+ax3.loglog(omega[start:stop]/(g**2), np.abs(np.imag(Fomega[start:stop])*(g**2)),'p',label = 'numerics imag Fomega')
+ax3.loglog(omega[start:stop]/(g**2), np.abs(np.real(Fomega[start:stop])*(g**2)),'p',label = 'numerics real Fomega')
 #ax3.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
 #ax3.loglog(omega[start:]/(g**2), -np.imag(Gconf[start:])*(g**2),'m.',label = 'ES solution')
 #ax3.loglog(omega[start:]/(g**2), alt_conf_fit_G[start:],'g--', label = 'alt power law')
