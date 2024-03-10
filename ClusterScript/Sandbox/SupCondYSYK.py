@@ -6,6 +6,12 @@ if not os.path.exists('../Sources'):
 else:	
 	sys.path.insert(1,'../Sources')	
 
+if not os.path.exists('../Dump/SupCondYSYKImagDumpfiles'):
+    print("Error - Path to Dump directory not found ")
+    raise Exception("Error - Path to Dump directory not found ")
+else:
+    path_to_dump = '../Dump/SupCondYSYKImagDumpfiles'
+
 
 from SYK_fft import *
 import numpy as np
@@ -119,7 +125,7 @@ while(beta < target_beta):
     # if DUMP == True and beta % 10 == 0 :
     #     savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
     #     savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-    #     np.save(savefile, np.array([Gtau,Dtau])) 
+    #     np.save(os.path.join(path_to_dump, savefile), np.array([Gtau,Dtau,Ftau])) 
     #     print(savefile)
     print("##### Finished beta = ", beta, "############")
     print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
