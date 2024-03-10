@@ -219,7 +219,7 @@ ax[0,0].legend()
 ax[0,0].set_yscale('log')
 
 
-ax[1,0].semilogy(tau[startB:stopB], np.abs(np.real(DDtau[startT:stopT])),'p',label='numerics DDtau')
+ax[1,0].semilogy(tau[startT:stopT], np.abs(np.real(DDtau[startT:stopT])),'p',label='numerics DDtau')
 #ax[1,0].semilogy(tau[startB:stopB], conf_fit_DD,'k--',label = 'ES power law')
 #ax[1,0].semilogy(tau[startB:], np.real(Dconf[startB:]),'m.',label = 'ES solution')
 #ax[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
