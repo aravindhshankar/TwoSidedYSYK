@@ -22,26 +22,26 @@ from ConformalAnalytical import *
 #import time
 
 
-DUMP = True
+DUMP = False
 print("DUMP = ", DUMP)
 
 Nbig = int(2**14)
 err = 1e-5
 #err = 1e-2
-ITERMAX = 500
+ITERMAX = 5000
 
 global beta
 
-beta_start = 1.
+beta_start = 1000.
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-lamb = 0.001
-J = 0.001
+lamb = 0.0001
+J = 0.0001
 
-target_beta = 100001
+target_beta = 1100.
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -50,6 +50,9 @@ kappa = 1.
 beta_step = 1
 
 num = 1.1 
+
+load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
+GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
 
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
@@ -62,8 +65,8 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-GDtau, GODtau = Gfreetau, np.zeros_like(Gfreetau)
-DDtau, DODtau = Dfreetau, np.zeros_like(Dfreetau)
+# GDtau, GODtau = Gfreetau, np.zeros_like(Gfreetau)
+# DDtau, DODtau = Dfreetau, np.zeros_like(Dfreetau)
 
 #Gtau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 #Dtau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)

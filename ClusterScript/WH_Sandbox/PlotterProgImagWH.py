@@ -27,7 +27,7 @@ err = 1e-5
 
 global beta
 
-beta = 50.0
+beta = 1000.0
 mu = 0.0
 g = 0.5
 r = 1.
@@ -49,7 +49,7 @@ except FileNotFoundError:
     print("INPUT FILE NOT FOUND")
     exit(1)
 
-
+print('savefile = ', savefile)
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
 nu = ImagGridMaker(Nbig,beta,'boson')
