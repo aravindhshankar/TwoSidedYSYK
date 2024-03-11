@@ -38,10 +38,10 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-lamb = 0.05
-J = 0.05
+lamb = 0.001
+J = 0.001
 
-target_beta = 10001
+target_beta = 100001
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -149,7 +149,7 @@ while(beta < target_beta):
 
 
             #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
-    if DUMP == True and beta in [50,100,500,1000,2000,5000,10000]:
+    if DUMP == True and beta in [50,100,500,1000,2000,5000,10000,50000,100000]:
         savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         savefile += 'lamb' + str(lamb) + 'J' + str(J)
         savefile += 'g' + str(g) + 'r' + str(r)
@@ -163,7 +163,6 @@ while(beta < target_beta):
     beta = beta + beta_step
 
 ################## PLOTTING ######################
-#np.save('beta10kN14g0_5r1x0_01.npy', np.array([Gtau,Dtau])) 
 print(beta), print(tau[-1])
 Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
