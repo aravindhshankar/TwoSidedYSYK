@@ -58,7 +58,6 @@ Gtau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
 Ftau = Freq2TimeF(GAP/((1j*omega)**2 + mu**2),Nbig,beta)
 
 
-
 fig, ax = plt.subplots(3)
 
 titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)

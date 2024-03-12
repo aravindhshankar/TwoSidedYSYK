@@ -31,13 +31,13 @@ ITERMAX = 5000
 
 global beta
 
-beta_start = 100
+beta_start = 1
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 500
+target_beta = 50.
 
 kappa = 1.
 beta_step = 1

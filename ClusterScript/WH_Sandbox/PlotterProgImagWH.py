@@ -27,7 +27,7 @@ err = 1e-5
 
 global beta
 
-beta = 1000.0
+beta = 10000.0
 mu = 0.0
 g = 0.5
 r = 1.
