@@ -15,7 +15,7 @@ err = 1e-5
 
 global beta
 
-beta_start = 100
+beta_start = 1000
 beta = beta_start
 #mu = 0.0
 mu = 1e-6
@@ -58,7 +58,7 @@ def test2():
 		path_to_dump = '../Dump/WHYSYKImagDumpfiles'
 	   
 	try :
-		plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
+		plotfile = os.path.join(path_to_dump, 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy')
 		#plotfile = os.path.join(path_to_dump, savefile)
 	except FileNotFoundError: 
 		print("INPUT FILE NOT FOUND")
@@ -96,21 +96,10 @@ def test2():
 	f_arr.append(np.sum(DDomega*PiDomega))
 	f_arr.append(np.sum(DODomega*PiODomega))
 	print(f_arr)
-	f = np.sum(f_arr)
+	f = np.sum(f_arr)/beta
 	print('total free energy = ', f)
 
 	
-
-
-
-
-
-
-
-
-
-
-
 
 
 
