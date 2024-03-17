@@ -3,34 +3,50 @@ import os
 
 from SYK_fft import *
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+
 #from ConformalAnalytical import *
 #import time
 
 
-Nbig = int(2**14)
-err = 1e-5
-#err = 1e-2
+def free_energy_YSYKWH(GFs, Nbig, beta, g, r, mu, kappa, freq_grids):
+	'''
+	Used to calculate free energy after loading Gtaus from file
+	Signature : free_energy_YSYKWH(GFs, Nbig, beta, g, r, mu, kappa, freq_grids)
+	GDtau, GODtau, DDtau, DODtau = GFs
+	omega,nu = freq_grids
 
-global beta
+	'''
+	GDtau, GODtau, DDtau, DODtau = GFs
+	omega,nu = freq_grids
 
-beta_start = 1000
-beta = beta_start
-#mu = 0.0
-mu = 1e-6
-g = 0.5
-r = 1.
+	np.testing.assert_almost_equal(omega[2] - omega[1], 2*np.pi/beta)
+	np.testing.assert_equal(Nbig, len(DDtau))
 
-target_beta = 50.
+	GDomega = Time2FreqF(GDtau, Nbig, beta)
+	GODomega = Time2FreqF(GODtau, Nbig, beta)
+	DDomega = Time2FreqB(DDtau, Nbig, beta)
+	DODomega = Time2FreqB(DODtau, Nbig, beta)
 
-kappa = 1.
-beta_step = 1
+	PiDtau = 2.0 * g**2 * GDtau * GDtau[::-1] 
+	PiODtau = 2.0 * g**2 * GODtau * GODtau[::-1] 
+	PiDomega = Freq2TimeB(PiDtau,Nbig,beta) 
+	PiODomega = Freq2TimeB(PiODtau,Nbig,beta) 
+
+	detGinv = 1./(GDomega**2 + GODomega**2)
+	detDinv = 1./(DDomega**2 + DODomega**2)
+
+	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
+	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 
+	free_energy += np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)
+	free_energy = free_energy.real / beta
+
+	return free_energy
 
 
-omega = ImagGridMaker(Nbig,beta,'fermion')
-nu = ImagGridMaker(Nbig,beta,'boson')
-tau = ImagGridMaker(Nbig,beta,'tau')
+
+
+
+################ tests ########################
 
 
 def test1():
@@ -51,6 +67,26 @@ def test1():
 		print("cutoff ", cutoff, "    :     " ,-2*np.sum(np.log(Gomega[chopslice])))
 
 def test2():
+	Nbig = int(2**14)
+	err = 1e-5
+	#err = 1e-2
+
+	beta_start = 1000
+	beta = beta_start
+	#mu = 0.0
+	mu = 1e-6
+	g = 0.5
+	r = 1.
+
+	target_beta = 50.
+
+	kappa = 1.
+	beta_step = 1
+	omega = ImagGridMaker(Nbig,beta,'fermion')
+	nu = ImagGridMaker(Nbig,beta,'boson')
+	tau = ImagGridMaker(Nbig,beta,'tau')
+
+
 	if not os.path.exists('../Dump/WHYSYKImagDumpfiles'):
 		print("Error - Path to Dump directory not found ")
 		raise Exception("Error - Path to Dump directory not found ")
@@ -69,10 +105,18 @@ def test2():
 	GDomega = Time2FreqF(GDtau, Nbig, beta)
 	GODomega = Time2FreqF(GODtau, Nbig, beta)
 	DDomega = Time2FreqB(DDtau, Nbig, beta)
-	DODomega = Time2FreqB(DODtau, Nbig, beta)
+	DODomega = Time2FreqB(DODtau, Nbig, beta)	
+
+	# GDomega = 1./(1j*omega+mu)
+	# GODomega = np.zeros_like(GDomega)
+	# DDomega = 1./(nu**2 + r)
+	# DODomega = np.zeros_like(DDomega)
+
 
 	detGinv = 1./(GDomega**2 + GODomega**2)
 	detDinv = 1./(DDomega**2 + DODomega**2)
+
+
 
 	fs = []
 	fs.append(np.sum(np.log(detGinv/((1j*omega + mu)**2))))
@@ -99,7 +143,19 @@ def test2():
 	f = np.sum(f_arr)/beta
 	print('total free energy = ', f)
 
-	
+	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
+	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 
+	free_energy += np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)
+	free_energy = free_energy.real / beta
+	print('direct calculated free energy = ', free_energy)
+	print(np.testing.assert_almost_equal(f,free_energy), np.testing.assert_almost_equal(2,2))
+
+	GFs = [GDtau, GODtau, DDtau, DODtau]
+	freq_grids = [omega,nu]
+	fromfunc = free_energy_YSYKWH(GFs, Nbig, beta, g, r, mu, kappa, freq_grids)
+
+	print('from function = ', fromfunc)
+	print(np.testing.assert_almost_equal(fromfunc,f), np.testing.assert_almost_equal(2,2))
 
 
 
