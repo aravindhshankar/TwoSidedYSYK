@@ -8,10 +8,10 @@ import numpy as np
 #import time
 
 
-def free_energy_YSYKWH(GFs, Nbig, beta, g, r, mu, kappa, freq_grids):
+def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa):
 	'''
 	Used to calculate free energy after loading Gtaus from file
-	Signature : free_energy_YSYKWH(GFs, Nbig, beta, g, r, mu, kappa, freq_grids)
+	Signature : free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa)
 	GDtau, GODtau, DDtau, DODtau = GFs
 	omega,nu = freq_grids
 
@@ -32,6 +32,30 @@ def free_energy_YSYKWH(GFs, Nbig, beta, g, r, mu, kappa, freq_grids):
 	PiDomega = Freq2TimeB(PiDtau,Nbig,beta) 
 	PiODomega = Freq2TimeB(PiODtau,Nbig,beta) 
 
+	detGinv = 1./(GDomega**2 + GODomega**2)
+	detDinv = 1./(DDomega**2 + DODomega**2)
+
+	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
+	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 
+	free_energy += np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)
+	free_energy = free_energy.real / beta
+
+	return free_energy
+
+def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa):
+	'''
+	Here GFs are frequency green functions, SEs are frequency bosonic self energies
+	GDomega,GODomega,DDomega,DODomega = GFs
+	PiDomega,PiODomega = SEs
+	omega,nu = freq_grids
+	'''
+	GDomega,GODomega,DDomega,DODomega = GFs
+	PiDomega,PiODomega = SEs
+	omega,nu = freq_grids
+
+	# np.testing.assert_almost_equal(omega[2] - omega[1], 2*np.pi/beta)
+	# np.testing.assert_equal(Nbig, len(PiDomega))
+	# np.testing.assert_equal(Nbig, len(GDomega))
 	detGinv = 1./(GDomega**2 + GODomega**2)
 	detDinv = 1./(DDomega**2 + DODomega**2)
 
