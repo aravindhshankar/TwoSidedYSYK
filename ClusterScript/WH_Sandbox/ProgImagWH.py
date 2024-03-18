@@ -19,6 +19,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
+from free_energy import free_energy_rolling_YSYKWH 
 #import time
 
 
@@ -26,7 +27,7 @@ DUMP = False
 print("DUMP = ", DUMP)
 
 Nbig = int(2**14)
-err = 1e-5
+err = 1e-6
 #err = 1e-2
 ITERMAX = 5000
 
@@ -38,8 +39,10 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-lamb = 0.0001
-J = 0.0001
+lamb = 0.001
+J = np.sqrt(lamb)
+#J = 0.0001
+#J = 0.
 
 target_beta = 1100.
 
@@ -52,6 +55,7 @@ beta_step = 1
 num = 1.1 
 
 load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
+# load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
 GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
 
 
@@ -78,6 +82,7 @@ while(beta < target_beta):
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
     tau = ImagGridMaker(Nbig,beta,'tau')
+    freq_grids = [omega,nu] #used for free energy calculation
     diff = 1.
     iterni=0
     while(diff>err and itern < ITERMAX):
@@ -114,12 +119,17 @@ while(beta < target_beta):
         DDtau = Freq2TimeB(DDomega,Nbig,beta)
         DODtau = Freq2TimeB(DODomega,Nbig,beta)
 
-        
+    
         diffGD = np.sum((np.abs(GDtau-oldGDtau))**2)#changed
-        diff = diffGD
+        diffDOD = np.sum((np.abs(DODtau-oldDODtau))**2)#changed 
+        diff = 0.5*(diffGD+diffDOD)
 
 
         #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
+
+    GFs = [GDomega,GODomega,DDomega,DODomega]
+    BSEs = [PiDomega,PiODomega]
+    fe = free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa)
     if DUMP == True and beta in [50,100,500,1000,2000,5000,10000,50000,100000]:
         savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -130,7 +140,7 @@ while(beta < target_beta):
         print(savefile)
     print("##### Finished beta = ", beta, "############")
     #print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
-    print("diff = ", diff,' , itern = ',itern)
+    print("diff = ", diff,' , itern = ',itern, " , free energy = ", fe)
     beta = beta + beta_step
 
 

@@ -20,6 +20,7 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa):
 	omega,nu = freq_grids
 
 	np.testing.assert_almost_equal(omega[2] - omega[1], 2*np.pi/beta)
+	np.testing.assert_almost_equal(nu[2] - nu[1], 2*np.pi/beta)
 	np.testing.assert_equal(Nbig, len(DDtau))
 
 	GDomega = Time2FreqF(GDtau, Nbig, beta)
@@ -42,20 +43,23 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa):
 
 	return free_energy
 
-def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa):
+def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa,tests=True):
 	'''
 	Here GFs are frequency green functions, SEs are frequency bosonic self energies
-	GDomega,GODomega,DDomega,DODomega = GFs
+	NOTE: GDomega,GODomega,DDomega,DODomega = GFs
 	PiDomega,PiODomega = SEs
 	omega,nu = freq_grids
 	'''
 	GDomega,GODomega,DDomega,DODomega = GFs
-	PiDomega,PiODomega = SEs
+	PiDomega,PiODomega = BSEs
 	omega,nu = freq_grids
 
-	# np.testing.assert_almost_equal(omega[2] - omega[1], 2*np.pi/beta)
-	# np.testing.assert_equal(Nbig, len(PiDomega))
-	# np.testing.assert_equal(Nbig, len(GDomega))
+	if tests == True:
+		np.testing.assert_almost_equal(omega[2] - omega[1], 2*np.pi/beta)
+		np.testing.assert_almost_equal(nu[2] - nu[1], 2*np.pi/beta)
+		np.testing.assert_equal(Nbig, len(PiDomega))
+		np.testing.assert_equal(Nbig, len(GDomega))
+
 	detGinv = 1./(GDomega**2 + GODomega**2)
 	detDinv = 1./(DDomega**2 + DODomega**2)
 
@@ -73,7 +77,7 @@ def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa):
 ######################## tests ##########################
 
 
-def test1():
+def free_energy_test1():
 	Gomega = 1./(-1j*omega - mu)
 	mats_sum = -np.sum(np.log(Gomega**2))
 	log2val = np.log(2)
@@ -90,7 +94,7 @@ def test1():
 		chopslice = slice(Nbig//2 - cutoff, Nbig//2 + cutoff)
 		print("cutoff ", cutoff, "    :     " ,-2*np.sum(np.log(Gomega[chopslice])))
 
-def test2():
+def free_energy_test2():
 	Nbig = int(2**14)
 	err = 1e-5
 	#err = 1e-2
@@ -184,7 +188,7 @@ def test2():
 
 
 if __name__ == '__main__':
-	test2()
+	free_energy_test2()
 
 
 
