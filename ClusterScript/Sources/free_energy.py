@@ -70,7 +70,7 @@ def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa):
 
 
 
-################ tests ########################
+######################## tests ##########################
 
 
 def test1():

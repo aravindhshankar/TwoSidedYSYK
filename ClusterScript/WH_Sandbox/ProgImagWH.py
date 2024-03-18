@@ -65,22 +65,9 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-# GDtau, GODtau = Gfreetau, np.zeros_like(Gfreetau)
-# DDtau, DODtau = Dfreetau, np.zeros_like(Dfreetau)
-
-#Gtau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
-#Dtau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
-
-# Gtau = -0.5*np.ones(Nbig)
-# Dtau = 1.0*np.ones(Nbig)
-
-#Gtau,Dtau = np.load('temp.npy')
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
 while(beta < target_beta):
-    # Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
-    # Gfreebetaplus = Freq2TimeF(1./(1j*omega + mu),Nbig,beta-beta_step)
-    # err  = 0.1*np.sum(np.abs(Gfreetau - Gfreebetaplus)**2)
     itern = 0
     diff = err*1.1
     diffG = 1.
@@ -114,9 +101,6 @@ while(beta < target_beta):
         
         SigmaDomega, SigmaODomega = Time2FreqF(SigmaDtau,Nbig,beta),Time2FreqF(SigmaODtau,Nbig,beta)
         PiDomega, PiODomega =  Time2FreqB(PiDtau,Nbig,beta), Time2FreqB(PiODtau,Nbig,beta)
-        # if itern < 15 : 
-        #     Piomega[Nbig//2] = 1.0*r - omegar2
-        #Piomega[Nbig//2] = 1.0*r - omegar2
         
         detG = (1j*omega+mu-SigmaDomega)**2 - (lamb - SigmaODomega)**2
         detD = (nu**2 + r - PiDomega)**2 - (J - PiODomega)**2
@@ -131,27 +115,11 @@ while(beta < target_beta):
         DODtau = Freq2TimeB(DODomega,Nbig,beta)
 
         
-        if iterni>0:
-            # diffG = np.sqrt(np.sum((np.abs(Gtau-oldGtau))**2)) #changed
-            # diffD = np.sqrt(np.sum((np.abs(Dtau-oldDtau))**2))
-            diffGD = np.sum((np.abs(GDtau-oldGDtau))**2)#changed
-            #diffD = np.sum((np.abs(Dtau-oldDtau))**2)
-            #diff = np.max([diffG,diffD])
-            #diff = 0.5*(diffG+diffD)
-            diff = diffGD
-            #diffG, diffD = diff, diff
-            
-            # if diffG<diffoldG and xG < 1./num:
-            #     xG *= num
-            # if diffD<diffoldD and xD < 1./num:
-            #     xD *= num
-            # if diffG>diffoldG and xG > num * err :
-            #     xG /= num
-            # if diffD>diffoldD and xD > num * err :
-            #     xD /= num
+        diffGD = np.sum((np.abs(GDtau-oldGDtau))**2)#changed
+        diff = diffGD
 
 
-            #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
+        #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
     if DUMP == True and beta in [50,100,500,1000,2000,5000,10000,50000,100000]:
         savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -164,6 +132,17 @@ while(beta < target_beta):
     #print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
     print("diff = ", diff,' , itern = ',itern)
     beta = beta + beta_step
+
+
+
+
+
+
+
+
+
+
+
 
 ################## PLOTTING ######################
 print(beta), print(tau[-1])
