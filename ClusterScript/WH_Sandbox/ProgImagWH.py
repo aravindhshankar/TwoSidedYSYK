@@ -23,6 +23,9 @@ from free_energy import free_energy_rolling_YSYKWH
 #import time
 
 
+######### TODO: IMPLEMENT THE BLOODY PLOTTER FOR THE OFF_DIAG ELEMENTS ##########
+
+
 DUMP = False
 print("DUMP = ", DUMP)
 
@@ -33,18 +36,20 @@ ITERMAX = 5000
 
 global beta
 
-beta_start = 1000.
+beta_start = 1.
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-lamb = 0.001
-J = np.sqrt(lamb)
+lamb = 0.01
+J = 0
+#J = np.sqrt(lamb)
 #J = 0.0001
 #J = 0.
 
-target_beta = 1100.
+target_beta = 1000.
+print("############ Started : target beta = , ", target_beta, " #############")
 
 # g = np.sqrt(10**3)
 # r = (10)**2
@@ -54,20 +59,24 @@ beta_step = 1
 
 num = 1.1 
 
-load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
-# load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
-GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
-
+#load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
+#load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
+#GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
 nu = ImagGridMaker(Nbig,beta,'boson')
 tau = ImagGridMaker(Nbig,beta,'tau')
 
-
 Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
 Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
+
+
+GDtau, DDtau = Gfreetau, Dfreetau
+GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+
 
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
