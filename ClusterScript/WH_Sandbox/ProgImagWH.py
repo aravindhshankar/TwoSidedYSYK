@@ -36,7 +36,7 @@ ITERMAX = 5000
 
 global beta
 
-beta_start = 1.
+beta_start = 1000.
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -48,7 +48,7 @@ J = 0
 #J = 0.0001
 #J = 0.
 
-target_beta = 1000.
+target_beta = 1100.
 print("############ Started : target beta = , ", target_beta, " #############")
 
 # g = np.sqrt(10**3)
@@ -58,10 +58,6 @@ kappa = 1.
 beta_step = 1
 
 num = 1.1 
-
-#load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
-#load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
-#GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
 nu = ImagGridMaker(Nbig,beta,'boson')
@@ -73,9 +69,13 @@ delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
 
-GDtau, DDtau = Gfreetau, Dfreetau
-GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+# GDtau, DDtau = Gfreetau, Dfreetau
+# GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+# DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+
+load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
+#load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
+GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
 
 
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
