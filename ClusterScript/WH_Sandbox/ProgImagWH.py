@@ -36,7 +36,7 @@ ITERMAX = 5000
 
 global beta
 
-beta_start = 1000.
+beta_start = 1.
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -48,7 +48,7 @@ J = 0
 #J = 0.0001
 #J = 0.
 
-target_beta = 1100.
+target_beta = 1000.
 print("############ Started : target beta = , ", target_beta, " #############")
 
 # g = np.sqrt(10**3)
@@ -69,14 +69,15 @@ delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
 
-# GDtau, DDtau = Gfreetau, Dfreetau
-# GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-# DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+GDtau, DDtau = Gfreetau, Dfreetau
+GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
 
-load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
-#load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
-GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
+# load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
+# #load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
+# GDtau, GODtau, DDtau, DODtau = np.load(os.path.join(path_to_dump,load_file))
 
+fe_list = [] #could be slow - try prealloacating for speed later
 
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
@@ -129,9 +130,14 @@ while(beta < target_beta):
         DODtau = Freq2TimeB(DODomega,Nbig,beta)
 
     
-        diffGD = np.sum((np.abs(GDtau-oldGDtau))**2)#changed
-        diffDOD = np.sum((np.abs(DODtau-oldDODtau))**2)#changed 
+        # diffGD = np.sum((np.abs(GDtau-oldGDtau))**2)#changed
+        # diffDOD = np.sum((np.abs(DODtau-oldDODtau))**2)#changed 
+        # diff = 0.5*(diffGD+diffDOD)
+        diffGD = np.sqrt(np.sum(np.abs(SigmaDtau - 1.0*kappa*(g**2)*DDtau*GDtau)**2))
+        diffDOD = np.sqrt(np.sum(np.abs(PiODtau - 2.0 * g**2 * GODtau * GODtau[::-1])**2))
         diff = 0.5*(diffGD+diffDOD)
+
+
 
 
         #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
@@ -139,6 +145,8 @@ while(beta < target_beta):
     GFs = [GDomega,GODomega,DDomega,DODomega]
     BSEs = [PiDomega,PiODomega]
     fe = free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa)
+    fe_list += [fe]
+    
     if DUMP == True and beta in [50,100,500,1000,2000,5000,10000,50000,100000]:
         savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -326,6 +334,16 @@ ax[0,0].set_yscale('log')
 
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
+
+fig,ax = plt.subplots(1)
+fig.suptitle('Free energy as a function of temp')
+ax.plot(np.arange(beta_start,target_beta,beta_step), fe_list)
+ax.set_ylabel('Free energy')
+ax.set_xlabel(r'$\beta')
+
+
+
+
 plt.show()
 
 
