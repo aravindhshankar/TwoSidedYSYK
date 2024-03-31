@@ -27,7 +27,7 @@ err = 1e-5
 
 global beta
 
-beta = 1000.0
+beta = 5000.0
 mu = 0.0
 g = 0.5
 r = 1.
@@ -127,7 +127,7 @@ ax[1,1].legend()
 
 
 
-############### POWER LAW PLOT #####################
+############### LOG-LOG POWER LAW PLOT #####################
 
 start, stop = Nbig//2, Nbig//2 + 100
 startB, stopB = Nbig//2 + 1 , Nbig//2 + 101
@@ -173,6 +173,12 @@ ax[0,0].set_ylabel(r'$-g^2\,\Im{GD(\omega_n)}$')
 ax[0,0].legend()
 
 
+# ax[0,1].loglog(omega[start:stop]/(g**2), np.imag(GODomega[start:stop])*(g**2),'p',label = 'numerics Im GODomega')
+ax[0,1].loglog(omega[start:stop]/(g**2), np.real(GODomega[start:stop])*(g**2),'p',label = 'numerics Re GODomega')
+ax[0,1].set_xlabel(r'$\omega_n/g^2$')
+ax[0,1].set_ylabel(r'$g^2\,GOD(\omega_n)$')
+ax[0,1].legend()
+
 ax[1,0].loglog(nu[startB:stopB]/(g**2), np.real(DDomega[startB:stopB])*(g**2),'p',label='numerics')
 ax[1,0].loglog(nu[startB:stopB]/(g**2), conf_fit_DD,'k--',label = 'ES power law')
 #ax[1,0].loglog(nu[startB:]/(g**2), np.real(Dconf[startB:]),'m.',label = 'ES solution')
@@ -185,6 +191,14 @@ ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
 ax[1,0].legend()
 
 
+ax[1,1].loglog(nu[startB:stopB]/(g**2), -np.real(DODomega[startB:stopB])*(g**2),'p',label='numerics -Re DODomega')
+# ax[1,1].loglog(nu[startB:stopB]/(g**2), np.imag(DODomega[startB:stopB])*(g**2),'p',label='numerics Im DODomega')
+# ax[1,1].loglog(nu[startB:stopB]/(g**2), conf_fit_DD,'k--',label = 'ES power law')
+ax[1,1].set_xlabel(r'$\nu_n/g^2$')
+ax[1,1].set_ylabel(r'$g^2\,DOD(\nu_n)$',labelpad = None)
+ax[1,1].legend()
+
+
 
 ###################### Log-Linear Plot ###############################
 
@@ -195,7 +209,7 @@ fig,ax = plt.subplots(2,2)
 fig.suptitle(titlestring)
 fig.tight_layout(pad=2)
 
-startT, stopT  = 1, 2000
+startT, stopT  = 1, 100
 
 fitsliceT = slice(startT, startT + 10)
 #fitslice = slice(start+25, start + 35)
