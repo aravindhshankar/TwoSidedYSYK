@@ -23,7 +23,7 @@ from free_energy import free_energy_rolling_YSYKWH
 #import time
 
 Nbig = int(2**14)
-err = 1e-8
+err = 1e-6
 #err = 1e-2
 ITERMAX = 5000
 
@@ -41,7 +41,7 @@ J = 0
 #J = 0.0001
 #J = 0.
 
-target_beta = 1000.
+target_beta = 10.
 print("############ Started : target beta = , ", target_beta, " #############")
 
 # g = np.sqrt(10**3)
@@ -62,9 +62,11 @@ delta = 0.420374134464041
 # omegar2 = ret_omegar2(g,beta)
 
 
-GDtau, DDtau = Gfreetau, Dfreetau
+# GDtau, DDtau = Gfreetau, Dfreetau
+GDtau = Freq2TimeF((1j*omega + mu)/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+DDtau = Freq2TimeB((nu**2+r)/((nu**2 + r)**2 - J**2), Nbig, beta)
 GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+DODtau = Freq2TimeB(-J/((nu**2 + r)**2 - J**2), Nbig, beta)
 
 # load_file = 'Nbig14beta1000_0lamb0_05J0_05g0_5r1_0.npy'
 # #load_file = 'Nbig14beta1000_0lamb0_001J0_001g0_5r1_0.npy'
@@ -80,7 +82,7 @@ while(beta < target_beta):
     diffG = 1.
     diffD = 1.
     x = 0.01
-    beta_step = 10 if (beta>100) else 1
+    beta_step = 10 if (beta>=100) else 1
 
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
