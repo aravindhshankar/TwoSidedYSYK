@@ -32,16 +32,16 @@ global beta
 beta_start = 1.
 beta = beta_start
 mu = 0.0
-g = 0.0
+g = 0.5
 r = 1.
 
-lamb = 1.
+lamb = 0.01
 J = 0
 #J = np.sqrt(lamb)
 #J = 0.0001
 #J = 0.
 
-target_beta = 10.
+target_beta = 200.
 print("############ Started : target beta = , ", target_beta, " #############")
 
 # g = np.sqrt(10**3)
@@ -82,7 +82,7 @@ while(beta < target_beta):
     diffG = 1.
     diffD = 1.
     x = 0.01
-    beta_step = 10 if (beta>=100) else 1
+    beta_step = 1 if (beta>=100) else 1
 
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
