@@ -12,11 +12,13 @@ if not os.path.exists('../Dump/AnnealersWHImagDumpfiles'):
     print("Error - Path to Dump directory not found ")
     print("Creating required Dump directory" )
     os.mkdir('../Dump/AnnealersWHImagDumpfiles')
-    path_to_dump = '../Dump/AnnealersWHImagDumpfiles'
+    path_to_dump = '../Dump/AnnealersWHImagDumpfiles/'
     #raise Exception("Error - Path to Dump directory not found ")
 else:
     path_to_dump = '../Dump/AnnealersWHImagDumpfiles'
 
+
+# Make 2 directories one for NFL, one for WH, dump GFs there 
 
 from SYK_fft import *
 import numpy as np

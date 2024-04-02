@@ -300,17 +300,18 @@ def test_anneal_temp():
 
 def test_anneal_lamb():
 	Nbig = int(2**14)
-	beta = int(5e3)
+	beta = int(1e3)
 	mu = 0.0
 	g = 0.5
 	r = 1.
 	#lamb = 0.005
-	lamb_list = np.arange(1,0.01 - 1e-10,-0.01)
+	lamb_list = np.arange(1,0.001 - 1e-10,-0.001)
 	lamb = lamb_list[0]
 	savelist = []
 	J = 0
 	kappa = 1.
 	DUMP = False
+	calcfe = True
 
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
@@ -329,7 +330,7 @@ def test_anneal_lamb():
 	GFtaus = [GDtau,GODtau,DDtau,DODtau]
 
 	GDtau,GODtau,DDtau,DODtau,fe_list = anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,
-						DUMP=False,path_to_dump=None,savelist=None,calcfe=True,verbose=True)
+						DUMP=False,path_to_dump=None,savelist=None,calcfe=calcfe,verbose=True)
 
 	lamb = lamb_list[-1]
 	Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
@@ -371,12 +372,13 @@ def test_anneal_lamb():
 	ax[1,1].set_ylabel(r'$\Re{DOD(\tau)}$')
 	ax[1,1].legend()
 
-	fig,ax = plt.subplots(1)
-	fig.suptitle('Free energy as a function of temp')
-	# ax.plot(np.arange(beta_start,target_beta,beta_step), fe_list)
-	ax.plot(lamb_list, fe_list)
-	ax.set_ylabel('Free energy')
-	ax.set_xlabel(r'$\lambda')
+	if calcfe:
+		fig,ax = plt.subplots(1)
+		fig.suptitle('Free energy as a function of temp')
+		# ax.plot(np.arange(beta_start,target_beta,beta_step), fe_list)
+		ax.plot(lamb_list, fe_list)
+		ax.set_ylabel('Free energy')
+		ax.set_xlabel(r'$\lambda')
 
 	plt.show()
 
