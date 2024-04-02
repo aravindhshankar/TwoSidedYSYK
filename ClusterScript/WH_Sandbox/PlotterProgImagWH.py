@@ -19,6 +19,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
+from free_energy import free_energy_YSYKWH
 #import time
 
 
@@ -27,14 +28,14 @@ err = 1e-5
 
 global beta
 
-beta = 5000.0
+beta = 2000.0
 mu = 0.0
 g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.05
-J = 0.05
+lamb = 0.001
+J = 0.001
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -64,7 +65,10 @@ omegar2 = ret_omegar2(g,beta)
 #Gtau = Gfreetau
 #Dtau = Dfreetau
 
-GDtau, GODtau, DDtau, DODtau = np.load(plotfile)
+#GDtau, GODtau, DDtau, DODtau = np.load(plotfile)
+GFs = np.load(plotfile)
+GDtau, GODtau, DDtau, DODtau = GFs
+
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
 GDomega = Time2FreqF(GDtau, Nbig, beta)
@@ -72,6 +76,10 @@ GODomega = Time2FreqF(GODtau, Nbig, beta)
 DDomega = Time2FreqB(DDtau, Nbig, beta)
 DODomega = Time2FreqB(DODtau, Nbig, beta)
 
+
+freq_grids = [omega,nu]
+fe = free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa)
+print(f'Free energy = {fe}')
 
 ################## PLOTTING ######################
 print(beta), print(tau[-1])

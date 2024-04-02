@@ -59,7 +59,7 @@ def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa,tests=
 		np.testing.assert_almost_equal(nu[2] - nu[1], 2*np.pi/beta)
 		np.testing.assert_equal(Nbig, len(PiDomega))
 		np.testing.assert_equal(Nbig, len(GDomega))
-
+		
 	detGinv = 1./(GDomega**2 - GODomega**2)
 	detDinv = 1./(DDomega**2 - DODomega**2)
 
@@ -141,8 +141,8 @@ def free_energy_test2():
 	# DODomega = np.zeros_like(DDomega)
 
 
-	detGinv = 1./(GDomega**2 + GODomega**2)
-	detDinv = 1./(DDomega**2 + DODomega**2)
+	detGinv = 1./(GDomega**2 - GODomega**2)
+	detDinv = 1./(DDomega**2 - DODomega**2)
 
 
 

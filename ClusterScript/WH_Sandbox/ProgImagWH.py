@@ -30,7 +30,7 @@ DUMP = False
 print("DUMP = ", DUMP)
 
 Nbig = int(2**14)
-err = 1e-10
+err = 1e-4
 #err = 1e-2
 ITERMAX = 5000
 
@@ -42,13 +42,13 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-lamb = 0.005
-J = 0
+lamb = 0.05
+J = 0.05
 #J = np.sqrt(lamb)
 #J = 0.0001
 #J = 0.
 
-target_beta = 10000.
+target_beta = 1000.
 print("############ Started : target beta = , ", target_beta, " #############")
 
 # g = np.sqrt(10**3)
@@ -87,7 +87,7 @@ while(beta < target_beta):
     diffG = 1.
     diffD = 1.
     x = 0.01
-    beta_step = 10 if (beta>=500) else 1
+    beta_step = 1 if (beta>=500) else 1
 
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
