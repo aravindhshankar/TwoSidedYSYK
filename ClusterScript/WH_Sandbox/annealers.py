@@ -124,9 +124,8 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 
 def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True):
 	if verbose: 
-		print("############ Started : target lamb = , ", target_lamb, " #############")
+		print("############ Started : target lamb = , ", lamb_list[-1], " #############")
 	GDtau,GODtau,DDtau,DODtau = GFtaus
-	lamb = lamb_start
 
 	fe_list = [] #could be slow - try prealloacating for speed later
 	fe = 0.0
@@ -205,7 +204,7 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 				print(savefile)
 
 		if verbose == True :
-			print("##### Finished beta = ", beta, "############")
+			print(f"##### Finished lamb =  {lamb} ############")
 			print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}')
 
 	return GDtau,GODtau,DDtau,DODtau,fe_list
@@ -299,94 +298,94 @@ def test_anneal_temp():
 
 
 
-	def test_anneal_lamb():
-		Nbig = int(2**14)
-		beta = int(5e3)
-		mu = 0.0
-		g = 0.5
-		r = 1.
-		#lamb = 0.005
-		lamb_list = np.arange(1,0.01 - 1e-10,-0.01)
-		J = 0
-		kappa = 1.
-		DUMP = False
-		beta_step = 1 
+def test_anneal_lamb():
+	Nbig = int(2**14)
+	beta = int(5e3)
+	mu = 0.0
+	g = 0.5
+	r = 1.
+	#lamb = 0.005
+	lamb_list = np.arange(1,0.01 - 1e-10,-0.01)
+	lamb = lamb_list[0]
+	savelist = []
+	J = 0
+	kappa = 1.
+	DUMP = False
 
-		omega = ImagGridMaker(Nbig,beta,'fermion')
-		nu = ImagGridMaker(Nbig,beta,'boson')
-		tau = ImagGridMaker(Nbig,beta,'tau')
+	omega = ImagGridMaker(Nbig,beta,'fermion')
+	nu = ImagGridMaker(Nbig,beta,'boson')
+	tau = ImagGridMaker(Nbig,beta,'tau')
 
-		Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
-		Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
-		delta = 0.420374134464041
-		omegar2 = ret_omegar2(g,beta)
+	Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
+	Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
+	delta = 0.420374134464041
+	omegar2 = ret_omegar2(g,beta)
 
-		GDtau, DDtau = Gfreetau, Dfreetau
-		GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-		DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
-		GFtaus = [GDtau,GODtau,DDtau,DODtau]
+	#GDtau, DDtau = Gfreetau, Dfreetau
+	GDtau = Freq2TimeF((1j*omega + mu)/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+	DDtau = Freq2TimeB((nu**2+r)/((nu**2 + r)**2 - J**2), Nbig, beta)
+	GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+	DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+	GFtaus = [GDtau,GODtau,DDtau,DODtau]
 
-		GDtau,GODtau,DDtau,DODtau,fe_list = anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa,
-												DUMP=DUMP,path_to_dump=None,calcfe=True,verbose=True)
+	GDtau,GODtau,DDtau,DODtau,fe_list = anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,
+						DUMP=False,path_to_dump=None,savelist=None,calcfe=True,verbose=True)
 
-		beta = target_beta
-		omega = ImagGridMaker(Nbig,beta,'fermion')
-		nu = ImagGridMaker(Nbig,beta,'boson')
-		tau = ImagGridMaker(Nbig,beta,'tau')
+	lamb = lamb_list[-1]
+	Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
+	Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
+	FreeDtau = DfreeImagtau(tau,r,beta)
 
-		Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
-		Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
-		FreeDtau = DfreeImagtau(tau,r,beta)
+	fig, ax = plt.subplots(2,2)
 
-		fig, ax = plt.subplots(2,2)
+	titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+	titlestring += r' $\lambda$ = ' + str(lamb) + r' J = ' + str(J)
+	fig.suptitle(titlestring)
+	fig.tight_layout(pad=2)
+	ax[0,0].plot(tau/beta, np.real(GDtau), 'r', label = 'numerics GDtau')
+	ax[0,0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
+	#ax[0,0].set_ylim(-1,1)
+	ax[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+	ax[0,0].set_ylabel(r'$\Re{GD(\tau)}$')
+	ax[0,0].legend()
 
-		titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
-		titlestring += r' $\lambda$ = ' + str(lamb) + r' J = ' + str(J)
-		fig.suptitle(titlestring)
-		fig.tight_layout(pad=2)
-		ax[0,0].plot(tau/beta, np.real(GDtau), 'r', label = 'numerics GDtau')
-		ax[0,0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
-		#ax[0,0].set_ylim(-1,1)
-		ax[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-		ax[0,0].set_ylabel(r'$\Re{GD(\tau)}$')
-		ax[0,0].legend()
+	ax[0,1].plot(tau/beta, np.real(GODtau), 'r', label = 'numerics Real GODtau')
+	ax[0,1].plot(tau/beta, np.imag(GODtau), 'k', label = 'numerics imag GODtau')
+	#ax[0,1].set_ylim(-1,1)
+	ax[0,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+	ax[0,1].set_ylabel(r'$\Re{GOD(\tau)}$')
+	ax[0,1].legend()
 
-		ax[0,1].plot(tau/beta, np.real(GODtau), 'r', label = 'numerics Real GODtau')
-		ax[0,1].plot(tau/beta, np.imag(GODtau), 'k', label = 'numerics imag GODtau')
-		#ax[0,1].set_ylim(-1,1)
-		ax[0,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-		ax[0,1].set_ylabel(r'$\Re{GOD(\tau)}$')
-		ax[0,1].legend()
+	ax[1,0].plot(tau/beta, np.real(DDtau), 'r', label = 'numerics DDtau')
+	ax[1,0].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
+	ax[1,0].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
+	#ax[1,0].set_ylim(0,1)
+	ax[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+	ax[1,0].set_ylabel(r'$\Re{DD(\tau)}$')
+	ax[1,0].legend()
 
-		ax[1,0].plot(tau/beta, np.real(DDtau), 'r', label = 'numerics DDtau')
-		ax[1,0].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
-		ax[1,0].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
-		#ax[1,0].set_ylim(0,1)
-		ax[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-		ax[1,0].set_ylabel(r'$\Re{DD(\tau)}$')
-		ax[1,0].legend()
+	ax[1,1].plot(tau/beta, np.real(DODtau), 'r', label = 'numerics real DODtau')
+	ax[1,1].plot(tau/beta, np.imag(DODtau), 'k', label = 'numerics imag DODtau')
+	#ax[1,1].set_ylim(0,1)
+	ax[1,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+	ax[1,1].set_ylabel(r'$\Re{DOD(\tau)}$')
+	ax[1,1].legend()
 
-		ax[1,1].plot(tau/beta, np.real(DODtau), 'r', label = 'numerics real DODtau')
-		ax[1,1].plot(tau/beta, np.imag(DODtau), 'k', label = 'numerics imag DODtau')
-		#ax[1,1].set_ylim(0,1)
-		ax[1,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-		ax[1,1].set_ylabel(r'$\Re{DOD(\tau)}$')
-		ax[1,1].legend()
+	fig,ax = plt.subplots(1)
+	fig.suptitle('Free energy as a function of temp')
+	# ax.plot(np.arange(beta_start,target_beta,beta_step), fe_list)
+	ax.plot(lamb_list, fe_list)
+	ax.set_ylabel('Free energy')
+	ax.set_xlabel(r'$\lambda')
 
-		fig,ax = plt.subplots(1)
-		fig.suptitle('Free energy as a function of temp')
-		# ax.plot(np.arange(beta_start,target_beta,beta_step), fe_list)
-		ax.plot(np.arange(beta_start,target_beta+1), fe_list)
-		ax.set_ylabel('Free energy')
-		ax.set_xlabel(r'$\beta')
-
-		plt.show()
+	plt.show()
 
 
 
 
 if __name__ == '__main__': 
-	test_anneal_temp()
+	#test_anneal_temp()
+	test_anneal_lamb()
 
 
 
