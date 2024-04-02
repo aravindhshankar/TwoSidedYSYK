@@ -33,8 +33,8 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa):
 	PiDomega = Freq2TimeB(PiDtau,Nbig,beta) 
 	PiODomega = Freq2TimeB(PiODtau,Nbig,beta) 
 
-	detGinv = 1./(GDomega**2 + GODomega**2)
-	detDinv = 1./(DDomega**2 + DODomega**2)
+	detGinv = 1./(GDomega**2 - GODomega**2) #Was + in earlier version of code: mistake!
+	detDinv = 1./(DDomega**2 - DODomega**2) 
 
 	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
 	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 
@@ -60,8 +60,8 @@ def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa,tests=
 		np.testing.assert_equal(Nbig, len(PiDomega))
 		np.testing.assert_equal(Nbig, len(GDomega))
 
-	detGinv = 1./(GDomega**2 + GODomega**2)
-	detDinv = 1./(DDomega**2 + DODomega**2)
+	detGinv = 1./(GDomega**2 - GODomega**2)
+	detDinv = 1./(DDomega**2 - DODomega**2)
 
 	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
 	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 
