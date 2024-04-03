@@ -226,7 +226,7 @@ def test_anneal_temp():
 	kappa = 1.
 	DUMP = False
 	beta_step = 1 
-
+	savelist = [50,100,500,1000,5000,10000]
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
