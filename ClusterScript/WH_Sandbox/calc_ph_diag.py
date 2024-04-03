@@ -52,6 +52,9 @@ betasavelist = [50,100,500,1000,5000,10000]
 lambsavelist = [0.1,0.05,0.01,0.005,0.001]
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 
+
+
+
 ### Setting up initial conditions for temp annealer
 omega = ImagGridMaker(Nbig,beta,'fermion')
 nu = ImagGridMaker(Nbig,beta,'boson')
@@ -80,18 +83,22 @@ beta = target_beta
 
 
 #Step2: anneal in lamb for all betas
+for beta in betasavelist:
+	omega = ImagGridMaker(Nbig,beta,'fermion')
+	nu = ImagGridMaker(Nbig,beta,'boson')
+	tau = ImagGridMaker(Nbig,beta,'tau')
+	GDtau = Freq2TimeF((1j*omega + mu)/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+	DDtau = Freq2TimeB((nu**2+r)/((nu**2 + r)**2 - J**2), Nbig, beta)
+	GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+	DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+	GFtaus = [GDtau,GODtau,DDtau,DODtau]
+	_,_,_,_,_ = anneal_lamb(lamblooplist,GFtaus,Nbig,g,r,mu,beta,J,kappa,
+						DUMP=DUMP,path_to_dump=path_to_dump_lamb,savelist=lambsavelist,
+							calcfe=False,verbose=True)
 
 
-omega = ImagGridMaker(Nbig,beta,'fermion')
-nu = ImagGridMaker(Nbig,beta,'boson')
-tau = ImagGridMaker(Nbig,beta,'tau')
 
 
-
-
-freq_grids = [omega,nu]
-fe = free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa)
-print(f'Free energy = {fe}')
 
 
 if not PLOTTING:
