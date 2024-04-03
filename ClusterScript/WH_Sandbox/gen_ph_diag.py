@@ -8,9 +8,9 @@ else:
 
 
 if not os.path.exists('../Dump/'):
-    print("Error - Path to Dump directory not found ")
-    raise Exception("Error - Path to Dump directory not found ")
-    exit(1)
+	print("Error - Path to Dump directory not found ")
+	raise Exception("Error - Path to Dump directory not found ")
+	exit(1)
 else:
 	path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
 	path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
@@ -65,19 +65,19 @@ for i, beta in enumerate(betasavelist):
 		savefile += '.npy'
 		#print('savefile = ', savefile)
 		try :
-		    #plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
-		    plotfiletemp = os.path.join(path_to_dump_temp, savefile)
+			#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
+			plotfiletemp = os.path.join(path_to_dump_temp, savefile)
 		except FileNotFoundError: 
-		    print("TEMP ANNEAL INPUT FILE NOT FOUND")
-		    print(f'lamb = {lamb}, beta = {beta}')
-		    exit(1)
-	    try :
-		    #plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
-		    plotfilelamb = os.path.join(path_to_dump_lamb, savefile)
+			print("TEMP ANNEAL INPUT FILE NOT FOUND")
+			print(f'lamb = {lamb}, beta = {beta}')
+			exit(1)
+		try :
+			#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
+			plotfilelamb = os.path.join(path_to_dump_lamb, savefile)
 		except FileNotFoundError: 
-		    print("LAMB ANNEAL INPUT FILE NOT FOUND")
-		    print(f'lamb = {lamb}, beta = {beta}')
-		    exit(1)
+			print("LAMB ANNEAL INPUT FILE NOT FOUND")
+			print(f'lamb = {lamb}, beta = {beta}')
+			exit(1)
 
 		GFstemp = np.load(plotfiletemp)
 		GFslamb = np.load(plotfilelamb)
