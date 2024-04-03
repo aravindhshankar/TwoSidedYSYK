@@ -20,11 +20,11 @@ from free_energy import free_energy_rolling_YSYKWH
 #import time
 
 #err = 1e-8
-err = 1e-5
+err = 1e-6
 ITERMAX = 5000
 
 
-def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa,DUMP=False,path_to_dump=None,calcfe=False,verbose=True):
+def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa,DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True):
 	if verbose: 
 		print("############ Started : target beta = , ", target_beta, " #############")
 	GDtau,GODtau,DDtau,DODtau = GFtaus
@@ -98,7 +98,7 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 			fe = free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa)
 			fe_list += [fe]
 
-		if DUMP == True and beta in [50,100,500,1000,2000,5000,10000,50000,100000]:
+		if DUMP == True and beta in np.isclose(beta,savelist).any():
 			savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 			savefile += 'lamb' + str(lamb) + 'J' + str(J)
 			savefile += 'g' + str(g) + 'r' + str(r)
@@ -114,7 +114,7 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 			print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}')
 		beta = beta + beta_step
 
-	beta -= 1 
+	beta -= beta_step 
 	return GDtau,GODtau,DDtau,DODtau,fe_list
 
 
@@ -193,9 +193,10 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 			fe = free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa)
 			fe_list += [fe]
 
-		if DUMP == True and np.isclose(lamb,savelist).any():
+		if DUMP == True and np.isclose(savelist,lamb).any():
+			lambval = savelist[np.isclose(savelist,lamb)][0]
 			savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-			savefile += 'lamb' + str(lamb) + 'J' + str(J)
+			savefile += 'lamb' + str(lambval) + 'J' + str(J)
 			savefile += 'g' + str(g) + 'r' + str(r)
 			savefile = savefile.replace('.','_') 
 			savefile += '.npy'
@@ -305,7 +306,7 @@ def test_anneal_lamb():
 	g = 0.5
 	r = 1.
 	#lamb = 0.005
-	lamb_list = np.arange(1,0.001 - 1e-10,-0.001)
+	lamb_list = np.arange(1,0.001 - 1e-10,-0.001) # IT would be be nice if this can be rounded 
 	lamb = lamb_list[0]
 	savelist = []
 	J = 0

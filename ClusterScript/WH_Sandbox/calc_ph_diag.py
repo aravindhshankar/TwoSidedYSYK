@@ -1,4 +1,3 @@
-
 import sys
 import os 
 if not os.path.exists('../Sources'):
@@ -8,17 +7,21 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 
-if not os.path.exists('../Dump/AnnealersWHImagDumpfiles'):
-    print("Error - Path to Dump directory not found ")
-    print("Creating required Dump directory" )
-    os.mkdir('../Dump/AnnealersWHImagDumpfiles')
-    path_to_dump = '../Dump/AnnealersWHImagDumpfiles/'
-    #raise Exception("Error - Path to Dump directory not found ")
-else:
-    path_to_dump = '../Dump/AnnealersWHImagDumpfiles'
-
-
 # Make 2 directories one for NFL, one for WH, dump GFs there 
+if not os.path.exists('../Dump/'):
+    print("Error - Path to Dump directory not found ")
+    raise Exception("Error - Path to Dump directory not found ")
+    exit(1)
+else:
+	path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
+	path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
+	if not os.path.exists(path_to_dump_lamb):
+		print("Making directory for lamb dump")
+		os.mkdir(path_to_dump_lamb)
+	if not os.path.exists(path_to_dump_temp):
+		print("Making directory for temp dump")
+		os.mkdir(path_to_dump_temp)
+
 
 from SYK_fft import *
 import numpy as np
