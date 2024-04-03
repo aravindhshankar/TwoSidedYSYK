@@ -49,8 +49,8 @@ lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 lamb = lamblooplist[0]
 
-FEstemp = np.zeros(len(betasavelist),len(lambsavelist))
-FEslamb = np.zeros(len(betasavelist),len(lambsavelist))
+FEstemp = np.zeros((len(betasavelist),len(lambsavelist)))
+FEslamb = np.zeros((len(betasavelist),len(lambsavelist)))
 
 #load both the dumpfiles files 
 for i, beta in enumerate(betasavelist):
