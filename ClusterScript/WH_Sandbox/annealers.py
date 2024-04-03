@@ -98,7 +98,7 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 			fe = free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa)
 			fe_list += [fe]
 
-		if DUMP == True and beta in np.isclose(beta,savelist).any():
+		if DUMP == True and np.isclose(beta,savelist).any():
 			savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 			savefile += 'lamb' + str(lamb) + 'J' + str(J)
 			savefile += 'g' + str(g) + 'r' + str(r)
