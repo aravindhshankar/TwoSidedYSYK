@@ -44,13 +44,13 @@ beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
-lamb = 0.05
 J = 0
 kappa = 1.
 beta_step = 1
 betasavelist = [50,100,500,1000,5000,10000]
 lambsavelist = [0.1,0.05,0.01,0.005,0.001]
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
+lamb = lamblooplist[0]
 
 
 
@@ -64,14 +64,18 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-GDtau, DDtau = Gfreetau, Dfreetau
-GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
-GFtaus = [GDtau,GODtau,DDtau,DODtau]
+# GDtau, DDtau = Gfreetau, Dfreetau
+# GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+# DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+# GFtaus = [GDtau,GODtau,DDtau,DODtau]
 
 
 #Step 1 : anneal in temperature for all lambs
 for lamb in lambsavelist:
+	GDtau, DDtau = Gfreetau, Dfreetau
+	GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
+	DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+	GFtaus = [GDtau,GODtau,DDtau,DODtau]
 	_,_,_,_,_ = anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,
 					g,r,mu,lamb,J,kappa,
 						DUMP=DUMP,path_to_dump=path_to_dump_temp,savelist=betasavelist,
@@ -80,10 +84,12 @@ for lamb in lambsavelist:
 
 
 beta = target_beta
+lamb = lamblooplist[0]
 
 
 #Step2: anneal in lamb for all betas
 for beta in betasavelist:
+	lamb = lamblooplist[0]
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
