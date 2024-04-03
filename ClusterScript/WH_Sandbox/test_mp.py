@@ -27,5 +27,14 @@ def main():
     _,_ = my_function(1,2,3)
     print("passed")
 
+
+    #checking savelist condition 
+    lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
+    lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
+    lamb = lamblooplist[900]
+    print(f'lamb = {lamb}')
+    print(np.isclose(lambsavelist, lamb))
+    print(lambsavelist[np.isclose(lambsavelist, lamb)][0])
+
 if __name__ == "__main__":
     main()
