@@ -106,7 +106,7 @@ plt.show()
 
 
 
-
+print(FEstemp-FEslamb)
 
 
 

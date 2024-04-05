@@ -19,8 +19,8 @@ from ConformalAnalytical import *
 from free_energy import free_energy_rolling_YSYKWH 
 #import time
 
-#err = 1e-8
-err = 1e-6
+err = 1e-8
+#err = 1e-6
 ITERMAX = 5000
 
 
