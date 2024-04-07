@@ -89,16 +89,17 @@ for i, beta in enumerate(betasavelist):
 
 fig,ax = plt.subplots(1)
 fig.suptitle('Phase diagram')
-ax.set_xlabel(r'$\beta$')
+ax.set_xlabel(r'$T$')
 ax.set_ylabel(r'$\lambda$')
 for i, beta in enumerate(betasavelist):
+	temp = 1./beta 
 	for j, lamb in enumerate(lambsavelist):
 		if FEslamb[i,j] < FEstemp[i,j]: #WH
-			ax.scatter(beta,lamb,c='r',marker='*')
+			ax.scatter(lamb,temp,c='r',marker='*')
 		elif FEslamb[i,j] > FEstemp[i,j]: #NFL
-			ax.scatter(beta,lamb,c='b',marker='^')
+			ax.scatter(lamb,temp,c='b',marker='^')
 		else:
-			ax.scatter(beta,lamb,c='g',marker='o')
+			ax.scatter(lamb,temp,c='g',marker='o')
 
 plt.show()
 
