@@ -8,7 +8,7 @@ import numpy as np
 #import time
 
 
-def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa):
+def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa, lamb, J, impose_saddle=True):
 	'''
 	Used to calculate free energy after loading Gtaus from file
 	Signature : free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa)
@@ -23,8 +23,6 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa):
 	np.testing.assert_almost_equal(nu[2] - nu[1], 2*np.pi/beta)
 	np.testing.assert_equal(Nbig, len(DDtau))
 
-	GDomega = Time2FreqF(GDtau, Nbig, beta)
-	GODomega = Time2FreqF(GODtau, Nbig, beta)
 	DDomega = Time2FreqB(DDtau, Nbig, beta)
 	DODomega = Time2FreqB(DODtau, Nbig, beta)
 
@@ -33,8 +31,17 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa):
 	PiDomega = Freq2TimeB(PiDtau,Nbig,beta) 
 	PiODomega = Freq2TimeB(PiODtau,Nbig,beta) 
 
-	detGinv = 1./(GDomega**2 - GODomega**2) #Was + in earlier version of code: mistake!
-	detDinv = 1./(DDomega**2 - DODomega**2) 
+	if impose_saddle == True:
+		GDomega = Time2FreqF(GDtau, Nbig, beta)
+		GODomega = Time2FreqF(GODtau, Nbig, beta)
+		detGinv = 1./(GDomega**2 - GODomega**2) #Was + in earlier version of code: mistake!
+		detDinv = 1./(DDomega**2 - DODomega**2) 
+	else: 
+		SigmaDomega = Time2FreqF(g**2 * GDtau * DDtau, Nbig,beta)
+		SigmaODomega = Time2FreqF(g**2 * GODtau * DODtau, Nbig, beta)
+		detGinv = (1j*omega+mu-SigmaDomega)**2 - (lamb+SigmaODomega)**2
+		detDinv = (nu**2+r-PiDomega)**2 - (J + PiODomega)**2
+
 
 	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
 	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 

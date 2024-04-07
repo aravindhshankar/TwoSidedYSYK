@@ -6,3 +6,4 @@
 *.npy
 *.npz
 *.txt
+*.pyc
