@@ -40,7 +40,7 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 		diff = err*1.1
 		diffG = 1.
 		diffD = 1.
-		x = 0.01
+		x = 0.001
 		#beta_step = 1 if (beta>=500) else 1
 
 		omega = ImagGridMaker(Nbig,beta,'fermion')
@@ -140,7 +140,7 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 		diff = err*1.1
 		diffG = 1.
 		diffD = 1.
-		x = 0.01
+		x = 0.001
 		
 		diff = 1.
 		iterni=0
