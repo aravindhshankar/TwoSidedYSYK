@@ -7,11 +7,26 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 
-if not os.path.exists('../Dump/WHYSYKImagDumpfiles'):
-    print("Error - Path to Dump directory not found ")
-    raise Exception("Error - Path to Dump directory not found ")
+# if not os.path.exists('../Dump/WHYSYKImagDumpfiles'):
+#     print("Error - Path to Dump directory not found ")
+#     raise Exception("Error - Path to Dump directory not found ")
+# else:
+#     path_to_dump = '../Dump/WHYSYKImagDumpfiles'
+
+if not os.path.exists('../Dump/'):
+	print("Error - Path to Dump directory not found ")
+	raise Exception("Error - Path to Dump directory not found ")
+	exit(1)
 else:
-    path_to_dump = '../Dump/WHYSYKImagDumpfiles'
+	path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
+	path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
+	if not os.path.exists(path_to_dump_lamb):
+		raise Exception('Generate Data first! Path to lamb dump not found')
+		exit(1)
+	if not os.path.exists(path_to_dump_temp):
+		raise Exception('Generate Data first! Path to temp dump not found')
+		exit(1)
+
 
 
 from SYK_fft import *
@@ -19,7 +34,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
-from free_energy import free_energy_YSYKWH
 #import time
 
 
@@ -28,14 +42,16 @@ err = 1e-5
 
 global beta
 
-beta = 2000.0
+beta = 1000
 mu = 0.0
 g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.001
-J = 0.001
+lamb = 0.01
+J = 0
+
+path_to_dump = path_to_dump_lamb
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -47,7 +63,7 @@ try :
     #plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
     plotfile = os.path.join(path_to_dump, savefile)
 except FileNotFoundError: 
-    print("INPUT FILE NOT FOUND")
+    print("INPUT FILE NOT FOUND") 
     exit(1)
 
 print('savefile = ', savefile)
@@ -65,10 +81,7 @@ omegar2 = ret_omegar2(g,beta)
 #Gtau = Gfreetau
 #Dtau = Dfreetau
 
-#GDtau, GODtau, DDtau, DODtau = np.load(plotfile)
-GFs = np.load(plotfile)
-GDtau, GODtau, DDtau, DODtau = GFs
-
+GDtau, GODtau, DDtau, DODtau = np.load(plotfile)
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
 GDomega = Time2FreqF(GDtau, Nbig, beta)
@@ -76,10 +89,6 @@ GODomega = Time2FreqF(GODtau, Nbig, beta)
 DDomega = Time2FreqB(DDtau, Nbig, beta)
 DODomega = Time2FreqB(DODtau, Nbig, beta)
 
-
-freq_grids = [omega,nu]
-fe = free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa)
-print(f'Free energy = {fe}')
 
 ################## PLOTTING ######################
 print(beta), print(tau[-1])

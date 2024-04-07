@@ -81,8 +81,8 @@ for i, beta in enumerate(betasavelist):
 
 		GFstemp = np.load(plotfiletemp)
 		GFslamb = np.load(plotfilelamb)
-		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lambsavelist[j],J,impose_saddle = False)
-		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lambsavelist[j],J,impose_saddle = False )
+		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = False)
+		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = False )
 
 
 
