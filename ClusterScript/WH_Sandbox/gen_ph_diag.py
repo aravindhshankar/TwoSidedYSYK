@@ -36,7 +36,7 @@ DUMP = True
 Nbig = int(2**14)
 
 beta_start = 1 
-target_beta = 100001
+target_beta = 10001
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -81,8 +81,8 @@ for i, beta in enumerate(betasavelist):
 
 		GFstemp = np.load(plotfiletemp)
 		GFslamb = np.load(plotfilelamb)
-		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = False)
-		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = False )
+		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = True)
+		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = True )
 
 
 

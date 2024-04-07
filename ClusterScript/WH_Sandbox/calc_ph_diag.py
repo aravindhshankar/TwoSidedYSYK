@@ -39,7 +39,7 @@ DUMP = True
 Nbig = int(2**14)
 
 beta_start = 1 
-target_beta = 100001
+target_beta = 10001
 beta = beta_start
 mu = 0.0
 g = 0.5
