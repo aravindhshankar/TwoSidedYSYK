@@ -194,23 +194,23 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, 
         rhoGOD = -1.0*np.imag(GODRomega)
         rhoDOD = -1.0*np.imag(DODRomega)
 
-        SigmaDOmega,PiDOmega = Dav_rhotosigma(rhoGD,rhoDD,M,t,g,beta,BMf,kappa=1,delta=eta)
-        SigmaODOmega,PiODOmega = Dav_rhotosigma(rhoGOD,rhoDOD,M,t,g,beta,BMf,kappa=1,delta=eta)
-        if np.imag(SigmaOmega[M] > 0) :
-            warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
+        SigmaDomega,PiDomega = Dav_rhotosigma(rhoGD,rhoDD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        SigmaODomega,PiODomega = Dav_rhotosigma(rhoGOD,rhoDOD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        # if np.imag(SigmaOmega[M] > 0) :
+        #     warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
      
         detGmat = (omega+1j*eta + mu - SigmaDomega)**2 - (lamb - SigmaODomega)**2
-        detDmat = (r-(omega+1j*eta)**2 - PiDOmega)**2 - (J-PiODOmega)**2
+        detDmat = (r-(omega+1j*eta)**2 - PiDomega)**2 - (J-PiODomega)**2
 
         GDRomega = x*((omega+1j*eta + mu - SigmaDomega)/detGmat) + (1-x)*GDRoldomega
         GODRomega = x*(-1.0*(lamb - SigmaODomega)/detGmat) + (1-x)*GODRoldomega
-        DDRomega = x*((r - (omega+1j*eta)**2 - PiDOmega)/detDmat) + (1-x)*DDRoldomega
+        DDRomega = x*((r - (omega+1j*eta)**2 - PiDomega)/detDmat) + (1-x)*DDRoldomega
         DODRomega = x*(-1.0*(J - PiODomega)/detDmat) + (1-x)*DODRoldomega
 
 
 
 
-        diffGD = np. sqrt(np.sum((np.abs(GRomega-GRoldomega))**2)) #changed
+        diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
         #diffD = np. sqrt(np.sum((np.abs(DRomega-DRoldomega))**2))
         #diff = 0.5*(diffG+diffD)
         diff = diffGD
