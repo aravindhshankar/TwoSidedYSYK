@@ -153,3 +153,102 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
     return (GRomega,DRomega, INFO)
 
 
+
+
+
+
+def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
+    '''
+    signature:
+    GFs = GDRomega, GODRomega, DDRomega, DODRomega
+    GFs,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False
+    grid is a list [M,omega,t]
+    pars is a list [g,mu,r]
+    '''
+    GDRomega, GODRomega, DDRomega, DODRomega = GFs
+    M,omega,t = grid
+    g,mu,r = pars
+    itern = 0
+
+    diff = 1.
+    diffG,diffD = (1.0,1.0)
+    x = 0.01
+
+    diffseries = []
+    flag = True
+    fdplus = np.array([fermidirac(beta*omegaval, default = False) for omegaval in omega])
+    fdminus = np.array([fermidirac(-1.0*beta*omegaval, default = False) for omegaval in omega])
+    beplus = np.array([boseeinstein(beta*omegaval, default = False) for omegaval in omega])
+    beminus = np.array([boseeinstein(-1.0*beta*omegaval, default = False) for omegaval in omega])
+    BMf = [fdplus, fdminus, beplus, beminus]
+
+    while (diff>err and itern<ITERMAX and flag): 
+        itern += 1 
+        if itern == ITERMAX:
+            warnings.warn('WARNING: ITERMAX reached for beta = ' + str(beta))
+        #diffoldG,diffoldD = (diffG,diffD)
+        GDRoldomega,DDRoldomega = (1.0*GDRomega, 1.0*DDRomega)
+        GODRoldomega,DODRoldomega = (1.0*GODRomega, 1.0*DODRomega)
+
+        rhoGD = -1.0*np.imag(GDRomega)
+        rhoDD = -1.0*np.imag(DDRomega)
+        rhoGOD = -1.0*np.imag(GODRomega)
+        rhoDOD = -1.0*np.imag(DODRomega)
+
+        SigmaDOmega,PiDOmega = Dav_rhotosigma(rhoGD,rhoDD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        SigmaODOmega,PiODOmega = Dav_rhotosigma(rhoGOD,rhoDOD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        if np.imag(SigmaOmega[M] > 0) :
+            warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
+     
+        detGmat = (omega+1j*eta + mu - SigmaDomega)**2 - (lamb - SigmaODomega)**2
+        detDmat = (r-(omega+1j*eta)**2 - PiDOmega)**2 - (J-PiODOmega)**2
+
+        GDRomega = x*((omega+1j*eta + mu - SigmaDomega)/detGmat) + (1-x)*GDRoldomega
+        GODRomega = x*(-1.0*(lamb - SigmaODomega)/detGmat) + (1-x)*GODRoldomega
+        DDRomega = x*((r - (omega+1j*eta)**2 - PiDomega)/detDmat) + (1-x)*DDRoldomega
+        DODRomega = x*(-1.0*(J - PiODomega)/detDmat) + (1-x)*DODRoldomega
+
+
+
+
+        diffGD = np. sqrt(np.sum((np.abs(GRomega-GRoldomega))**2)) #changed
+        #diffD = np. sqrt(np.sum((np.abs(DRomega-DRoldomega))**2))
+        #diff = 0.5*(diffG+diffD)
+        diff = diffGD
+        #diffG,diffD = diff,diff
+        if diffcheck:
+            diffseries += [diff]
+            flag = testingscripts.diff_checker(diffseries, tol = 1e-3, periods = 5)
+        
+        if verbose:
+            print("itern = ",itern, " , diff = ", diff, " , x = ", x)
+
+    GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
+    INFO = (itern, diff)
+    return (GFs, INFO)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
