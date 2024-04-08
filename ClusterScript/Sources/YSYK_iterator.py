@@ -171,7 +171,6 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, 
     itern = 0
 
     diff = 1.
-    diffG,diffD = (1.0,1.0)
     x = 0.01
 
     diffseries = []
@@ -205,7 +204,7 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, 
 
         GDRomega = x*((omega+1j*eta + mu - SigmaDomega)/detGmat) + (1-x)*GDRoldomega
         GODRomega = x*(-1.0*(lamb - SigmaODomega)/detGmat) + (1-x)*GODRoldomega
-        DDRomega = x*((r - (omega+1j*eta)**2 - PiDomega)/detDmat) + (1-x)*DDRoldomega
+        DDRomega = x*((r - (omega+1j*eta)**2 - PiDOmega)/detDmat) + (1-x)*DDRoldomega
         DODRomega = x*(-1.0*(J - PiODomega)/detDmat) + (1-x)*DODRoldomega
 
 
