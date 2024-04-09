@@ -42,7 +42,7 @@ err = 1e-5
 
 global beta
 
-beta = 1000
+beta = 500
 mu = 0.0
 g = 0.5
 r = 1.
@@ -227,12 +227,13 @@ fig,ax = plt.subplots(2,2)
 fig.suptitle(titlestring)
 fig.tight_layout(pad=2)
 
-startT, stopT  = 1, 100
+startT, stopT  = 0, 5000
 
-fitsliceT = slice(startT, startT + 10)
+fitsliceT = slice(startT+4500, startT + 4600)
 #fitslice = slice(start+25, start + 35)
 functoplotT = np.abs(np.real(GDtau))
 mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
+print(f'tau/beta at start of fit = {(tau[fitsliceT][0]/beta):.3f}')
 print(f'slope of fit = {mT:.03f}')
 # print('2 Delta  = ', 2*delta)
 
