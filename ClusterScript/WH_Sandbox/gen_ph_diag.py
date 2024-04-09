@@ -32,7 +32,6 @@ from annealers import anneal_temp, anneal_lamb
 
 
 PLOTTING = False
-DUMP = True
 Nbig = int(2**14)
 
 beta_start = 1 
@@ -81,7 +80,7 @@ for i, beta in enumerate(betasavelist):
 
 		GFstemp = np.load(plotfiletemp)
 		GFslamb = np.load(plotfilelamb)
-		impose_saddle = True
+		impose_saddle = False
 		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = impose_saddle)
 		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = impose_saddle )
 

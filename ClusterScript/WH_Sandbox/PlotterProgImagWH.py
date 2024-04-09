@@ -52,6 +52,7 @@ lamb = 0.01
 J = 0
 
 path_to_dump = path_to_dump_lamb
+# path_to_dump = path_to_dump_temp
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
