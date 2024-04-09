@@ -81,33 +81,41 @@ for i, beta in enumerate(betasavelist):
 
 		GFstemp = np.load(plotfiletemp)
 		GFslamb = np.load(plotfilelamb)
-		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = True)
-		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = True )
+		impose_saddle = True
+		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = impose_saddle)
+		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = impose_saddle )
 
 
+residuals = FEstemp-FEslamb
+print(np.array2string(residuals,precision=4,floatmode='fixed'))
 
 
 fig,ax = plt.subplots(1)
 fig.suptitle('Phase diagram')
-ax.set_xlabel(r'$T$')
-ax.set_ylabel(r'$\lambda$')
+ax.set_ylabel(r'$T$')
+ax.set_xlabel(r'$\lambda$')
 for i, beta in enumerate(betasavelist):
 	temp = 1./beta 
 	for j, lamb in enumerate(lambsavelist):
 		if FEslamb[i,j] < FEstemp[i,j]: #WH
-			ax.scatter(lamb,temp,c='r',marker='*')
+			ax.scatter(lamb,temp,c='r',marker='*',label='WH')
 		elif FEslamb[i,j] > FEstemp[i,j]: #NFL
-			ax.scatter(lamb,temp,c='b',marker='^')
+			ax.scatter(lamb,temp,c='b',marker='^',label='NFL')
 		else:
 			ax.scatter(lamb,temp,c='g',marker='o')
 
+handles, labels = ax.get_legend_handles_labels()
+unique_labels = list(set(labels))
+unique_handles = [handles[labels.index(label)] for label in unique_labels]
+ax.legend(unique_handles,unique_labels)
+#ax.legend()
 plt.show()
 
 
 
 
 
-print(FEstemp-FEslamb)
+
 
 
 
