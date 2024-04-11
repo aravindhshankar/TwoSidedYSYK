@@ -32,9 +32,9 @@ if len(sys.argv) > 1:
 
 DUMP = True
 
-M = int(2**20) #number of points in the grid
-T = 2**16 #upper cut-off for the time
-err = 1e-4
+M = int(2**18) #number of points in the grid
+T = 2**15 #upper cut-off for the time
+err = 1e-2
 #err = 1e-2
 
 omega,t  = RealGridMaker(M,T)
@@ -79,16 +79,18 @@ betasavelist = np.array([20,50,100,200,500,700,1000,2000,5000])
 #GRomega,DRomega = np.load(os.path.join(path_to_dump,'M16T12beta10_0g0_5r1_0.npy'))
 #assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 
-GDRomega = 1/(omega + 1j*eta + mu)
-DDRomega = 1/(-1.0*(omega + 1j*eta)**2 + r)
-GODRomega = np.zeros_like(GDRomega)
-DODRomega = np.zeros_like(DDRomega)
+GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
+DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
+# GODRomega = np.zeros_like(GDRomega)
+# DODRomega = np.zeros_like(DDRomega)
+GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
+DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
 GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
 grid = [M,omega,t]
 pars = [g,mu,r]
 while(beta < target_beta):
     #beta_step = 0.01 if (beta<1) else 1
-    GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True) 
+    GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=True) 
     itern, diff = INFO
     if beta in betasavelist:
         savefile = savename

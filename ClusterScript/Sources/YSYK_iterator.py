@@ -2,6 +2,7 @@ import numpy as np
 from SYK_fft import *
 from ConformalAnalytical import *
 import warnings
+import testingscripts
 
 
 def newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=1e-6):
@@ -157,7 +158,7 @@ def RE_YSYK_iterator(GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-
 
 
 
-def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
+def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
     '''
     signature:
     GFs = GDRomega, GODRomega, DDRomega, DODRomega
@@ -171,7 +172,7 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, 
     itern = 0
 
     diff = 1.
-    x = 0.01
+    #x = 0.01
 
     diffseries = []
     flag = True
@@ -210,14 +211,16 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, 
 
 
 
-        diffGD = np.sum((np.abs(GDRomega-GDRoldomega))/np.abs(GDRoldomega)) #changed
+        diffGD = (1.)*np.sum((np.abs(GDRomega-GDRoldomega))**2) #changed
         #diffD = np.sum((np.abs(DRomega-DRoldomega))**2)
         #diff = 0.5*(diffG+diffD)
         diff = diffGD
+        x = 0.5 if diff > 10 else 0.01
         #diffG,diffD = diff,diff
-        if diffcheck:
+        if diffcheck == True:
             diffseries += [diff]
-            flag = testingscripts.diff_checker(diffseries, tol = 1e-3, periods = 5)
+            if itern >10:
+                flag = testingscripts.diff_checker(diffseries, tol = 1e-4, periods = 7)
         
         if verbose:
             print("itern = ",itern, " , diff = ", diff, " , x = ", x)
