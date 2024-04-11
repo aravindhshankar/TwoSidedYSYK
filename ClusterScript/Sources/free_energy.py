@@ -44,7 +44,7 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa, lamb, J, im
 
 
 	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
-	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 
+	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r)**2))) 
 	free_energy += np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)
 	free_energy = free_energy.real / beta
 
@@ -71,7 +71,7 @@ def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa,tests=
 	detDinv = 1./(DDomega**2 - DODomega**2)
 
 	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
-	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r**2)**2))) 
+	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r)**2))) 
 	free_energy += np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)
 	free_energy = free_energy.real / beta
 
