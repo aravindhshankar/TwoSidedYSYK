@@ -210,8 +210,8 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=1e-5,ITERMAX=150,eta=1e-6, 
 
 
 
-        diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
-        #diffD = np. sqrt(np.sum((np.abs(DRomega-DRoldomega))**2))
+        diffGD = np.sum((np.abs(GDRomega-GDRoldomega))/GDRoldomega) #changed
+        #diffD = np.sum((np.abs(DRomega-DRoldomega))**2)
         #diff = 0.5*(diffG+diffD)
         diff = diffGD
         #diffG,diffD = diff,diff

@@ -32,9 +32,9 @@ if len(sys.argv) > 1:
 
 DUMP = True
 
-M = int(2**22) #number of points in the grid
-T = 2**18 #upper cut-off for the time
-err = 1e-3
+M = int(2**20) #number of points in the grid
+T = 2**16 #upper cut-off for the time
+err = 1e-2
 #err = 1e-2
 
 omega,t  = RealGridMaker(M,T)
@@ -57,7 +57,7 @@ eta = dw*2.1
 
 beta_start = 1
 beta = beta_start
-target_beta = 5001.
+target_beta = 2001.
 beta_step = 1
 
 lamb = 0.01
