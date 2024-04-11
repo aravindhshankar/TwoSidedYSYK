@@ -39,8 +39,8 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa, lamb, J, im
 	else: 
 		SigmaDomega = Time2FreqF(g**2 * GDtau * DDtau, Nbig,beta)
 		SigmaODomega = Time2FreqF(g**2 * GODtau * DODtau, Nbig, beta)
-		detGinv = (1j*omega+mu-SigmaDomega)**2 - (lamb+SigmaODomega)**2
-		detDinv = (nu**2+r-PiDomega)**2 - (J + PiODomega)**2
+		detGinv = (1j*omega+mu-SigmaDomega)**2 - (lamb-SigmaODomega)**2
+		detDinv = (nu**2+r-PiDomega)**2 - (J - PiODomega)**2
 
 
 	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
