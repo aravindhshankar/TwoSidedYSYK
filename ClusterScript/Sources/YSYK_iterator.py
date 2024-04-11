@@ -172,6 +172,7 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
     itern = 0
 
     diff = 1.
+    diffold = 1.
     #x = 0.01
 
     diffseries = []
@@ -182,8 +183,11 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
     beminus = np.array([boseeinstein(-1.0*beta*omegaval, default = False) for omegaval in omega])
     BMf = [fdplus, fdminus, beplus, beminus]
 
+    x = 0.5 if beta < 10 else 0.01
+
     while (diff>err and itern<ITERMAX and flag): 
         itern += 1 
+        diffold = diff
         if itern == ITERMAX:
             warnings.warn('WARNING: ITERMAX reached for beta = ' + str(beta))
         #diffoldG,diffoldD = (diffG,diffD)
@@ -212,10 +216,20 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
 
 
         diffGD = (1.)*np.sum((np.abs(GDRomega-GDRoldomega))**2) #changed
+        diffDOD = (1.)*np.sum((np.abs(DODRomega-DODRoldomega))**2) #changed
         #diffD = np.sum((np.abs(DRomega-DRoldomega))**2)
-        #diff = 0.5*(diffG+diffD)
+        diff = 0.5*(diffGD+diffDOD)
         diff = diffGD
-        x = 0.5 if diff > 10 else 0.01
+
+        if diff > diffold and x*0.5 > 0.01 and itern % 5 == 0:
+            x *= 0.5
+        elif diff > diffold and x*2. <= 1. and itern % 5 == 0:
+            x *= 2.0
+        if diff < 0.01:
+            x = 1.
+        elif diff < 0.1: 
+            x = 0.5
+        #x = 0.5 if diff > 10 else 0.01
         #diffG,diffD = diff,diff
         if diffcheck == True:
             diffseries += [diff]

@@ -46,7 +46,7 @@ print("dt = ", dt)
 
 
 delta = 0.420374134464041
-ITERMAX = 5000
+ITERMAX = 200
 global beta
 
 mu = 0.0
@@ -81,10 +81,13 @@ betasavelist = np.array([20,50,100,200,500,700,1000,2000,5000])
 
 GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
 DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
-# GODRomega = np.zeros_like(GDRomega)
-# DODRomega = np.zeros_like(DDRomega)
 GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
 DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
+# GDRomega = 1./ (omega + 1j*eta + mu)
+# DDRomega = 1./(-1.0*(omega + 1j*eta)**2 + r)
+# GODRomega = np.zeros_like(GDRomega)
+# DODRomega = np.zeros_like(DDRomega)
+
 GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
 grid = [M,omega,t]
 pars = [g,mu,r]
