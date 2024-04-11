@@ -216,10 +216,11 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
 
 
         diffGD = (1.)*np.sum((np.abs(GDRomega-GDRoldomega))**2) #changed
+        diffGOD = (1.)*np.sum((np.abs(GODRomega-GODRoldomega))**2) #changed
+        diffDD = (1.)*np.sum((np.abs(DDRomega-DDRoldomega))**2) #changed
         diffDOD = (1.)*np.sum((np.abs(DODRomega-DODRoldomega))**2) #changed
         #diffD = np.sum((np.abs(DRomega-DRoldomega))**2)
-        diff = 0.5*(diffGD+diffDOD)
-        diff = diffGD
+        diff = 0.25*(diffGD+diffDOD+diffDD+diffGOD)
 
         if diff > diffold and x*0.5 > 0.01 and itern % 5 == 0:
             x *= 0.5

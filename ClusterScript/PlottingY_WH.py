@@ -15,7 +15,7 @@ from h5_handler import *
 
 path_to_outfile = './Outputs/RTWH/'
 #outfile = 'Y_WH_2153063.h5'
-outfile = 'RTWHlocalM18T15beta50g0_5lamb0_01.h5'
+outfile = 'RTWHlocalM18T15beta20g0_5lamb0_01.h5'
 savepath = os.path.join(path_to_outfile, outfile)
 
 if not os.path.exists(savepath):
@@ -70,7 +70,7 @@ ax.loglog(data['omega'][start:stop], functoplot[start:stop],'p',label = 'numeric
 ax.loglog(data['omega'][start:stop], np.exp(c)*np.abs(data['omega'][start:stop])**m, label=f'Fit with slope {m:.03f}')
 #ax.set_ylim(1e-1,1e1)
 ax.set_xlabel(r'$\omega$')
-ax.set_ylabel(r'$\Im{GD(\omega)}$')
+ax.set_ylabel(r'$-\Im{GD(\omega)}$')
 #ax.set_aspect('equal', adjustable='box')
 #ax.axis('square')
 ax.legend()
