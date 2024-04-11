@@ -34,7 +34,7 @@ DUMP = True
 
 M = int(2**20) #number of points in the grid
 T = 2**16 #upper cut-off for the time
-err = 1e-2
+err = 1e-4
 #err = 1e-2
 
 omega,t  = RealGridMaker(M,T)
