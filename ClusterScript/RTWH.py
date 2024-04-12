@@ -14,8 +14,10 @@ from YSYK_iterator import RE_WHYSYK_iterator
 
 
 savename = 'default_savename'
-path_to_output = './Outputs/RTWH/NFLstart/'
-path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
+# path_to_output = './Outputs/RTWH/NFLstart/'
+# path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
+path_to_output = './Outputs/RTWH/'
+path_to_dump = './Dump/RTWHDumpfiles/'
 path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
 
 if not os.path.exists(path_to_output):
@@ -36,8 +38,8 @@ if not os.path.exists(path_to_loadfile):
 
 DUMP = True
 
-M = int(2**16) #number of points in the grid
-T = 2**12 #upper cut-off for the time
+M = int(2**18) #number of points in the grid
+T = 2**15 #upper cut-off for the time
 err = 1e-4
 #err = 1e-2
 
@@ -59,9 +61,9 @@ r = 1.
 kappa = 1.
 eta = dw*2.1
 
-beta_start = 10
+beta_start = 1
 beta = beta_start
-target_beta = 2001.
+target_beta = 5001.
 beta_step = 1
 
 lamb = 0.01
@@ -80,21 +82,21 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 
 betasavelist = np.array([20,50,100,200,500,700,1000,2000,5000])
 
-try:
-    GDRomega,DDRomega = np.load(os.path.join(path_to_loadfile,'M16T12beta10_0g0_5r1_0.npy'))
-except FileNotFoundError:
-    print('INPUT FILE NOT FOUND!!!!!!')
-    exit(1)
+# try:
+#     GDRomega,DDRomega = np.load(os.path.join(path_to_loadfile,'M16T12beta10_0g0_5r1_0.npy'))
+# except FileNotFoundError:
+#     print('INPUT FILE NOT FOUND!!!!!!')
+#     exit(1)
 #assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 
-GDRomega += (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
-DDRomega += (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
-# GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
-# DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
+GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
+DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
+GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
+DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
 # GDRomega = 1./ (omega + 1j*eta + mu)
 # DDRomega = 1./(-1.0*(omega + 1j*eta)**2 + r)
-GODRomega = np.zeros_like(GDRomega)
-DODRomega = np.zeros_like(DDRomega)
+# GODRomega = np.zeros_like(GDRomega)
+# DODRomega = np.zeros_like(DDRomega)
 
 GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
 grid = [M,omega,t]
@@ -138,7 +140,7 @@ while(beta < target_beta):
         dict2h5(dictionary, os.path.join(path_to_output,savefileoutput), verbose=True)
 
         if DUMP == True:
-            np.save(os.path.join(path_to_dump,savefiledump), [GDRomega,GODRomega,DDRomega]) 
+            np.save(os.path.join(path_to_dump,savefiledump), GFs) 
     print("##### Finished beta = ", beta, " INFO = ", INFO)
     beta = beta + beta_step
 
