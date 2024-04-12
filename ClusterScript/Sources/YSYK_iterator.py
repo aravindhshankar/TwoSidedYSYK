@@ -222,20 +222,20 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
         #diffD = np.sum((np.abs(DRomega-DRoldomega))**2)
         diff = 0.25*(diffGD+diffDOD+diffDD+diffGOD)
 
-        if diff > diffold and x*0.5 > 0.01 and itern % 5 == 0:
-            x *= 0.5
-        elif diff > diffold and x*2. <= 1. and itern % 5 == 0:
-            x *= 2.0
-        if diff < 0.01:
-            x = 1.
-        elif diff < 0.1: 
-            x = 0.5
-        #x = 0.5 if diff > 10 else 0.01
+        # if diff > diffold and x*0.5 > 0.01 and itern % 5 == 0:
+        #     x *= 0.5
+        # elif diff > diffold and x*2. <= 1. and itern % 5 == 0:
+        #     x *= 2.0
+        # if diff < 0.01:
+        #     x = 1.
+        # elif diff < 0.1: 
+        #     x = 0.5
+        x = 0.01 if diff > 10 else 0.01
         #diffG,diffD = diff,diff
         if diffcheck == True:
             diffseries += [diff]
             if itern >10:
-                flag = testingscripts.diff_checker(diffseries, tol = 1e-4, periods = 7)
+                flag = testingscripts.diff_checker(diffseries, tol = 1e-6, periods = 7)
         
         if verbose:
             print("itern = ",itern, " , diff = ", diff, " , x = ", x)
