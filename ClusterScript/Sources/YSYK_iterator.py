@@ -230,7 +230,7 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
         #     x = 1.
         # elif diff < 0.1: 
         #     x = 0.5
-        x = 0.01 if diff > 10 else 0.01
+        x = 0.001 if diff > 10 else 0.001
         #diffG,diffD = diff,diff
         if diffcheck == True:
             diffseries += [diff]
