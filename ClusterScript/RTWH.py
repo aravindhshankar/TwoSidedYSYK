@@ -39,8 +39,8 @@ if not os.path.exists(path_to_loadfile):
 DUMP = True
 
 M = int(2**18) #number of points in the grid
-T = 2**15 #upper cut-off for the time
-err = 1e-4
+T = 2**14 #upper cut-off for the time
+err = 1e-5
 #err = 1e-2
 
 omega,t  = RealGridMaker(M,T)

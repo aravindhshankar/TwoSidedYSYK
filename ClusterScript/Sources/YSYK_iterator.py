@@ -183,7 +183,8 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
     beminus = np.array([boseeinstein(-1.0*beta*omegaval, default = False) for omegaval in omega])
     BMf = [fdplus, fdminus, beplus, beminus]
 
-    x = 0.5 if beta < 10 else 0.01
+    # x = 0.5 if beta < 10 else 0.01
+    x = 0.001 if diff > 10 else 0.001
 
     while (diff>err and itern<ITERMAX and flag): 
         itern += 1 
@@ -230,7 +231,7 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
         #     x = 1.
         # elif diff < 0.1: 
         #     x = 0.5
-        x = 0.001 if diff > 10 else 0.001
+       
         #diffG,diffD = diff,diff
         if diffcheck == True:
             diffseries += [diff]
