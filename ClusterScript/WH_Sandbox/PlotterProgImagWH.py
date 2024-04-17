@@ -19,7 +19,8 @@ if not os.path.exists('../Dump/'):
 	exit(1)
 else:
 	path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
-	path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
+	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
+	path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
 	if not os.path.exists(path_to_dump_lamb):
 		raise Exception('Generate Data first! Path to lamb dump not found')
 		exit(1)
@@ -42,17 +43,17 @@ err = 1e-5
 
 global beta
 
-beta = 500
+beta = 50
 mu = 0.0
 g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.01
+lamb = 0.1
 J = 0
 
-path_to_dump = path_to_dump_lamb
-# path_to_dump = path_to_dump_temp
+# path_to_dump = path_to_dump_lamb
+path_to_dump = path_to_dump_temp
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
