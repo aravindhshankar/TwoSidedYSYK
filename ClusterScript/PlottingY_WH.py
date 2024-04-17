@@ -17,7 +17,7 @@ path_to_outfile = './Outputs/RTWH/'
 #outfile = 'Y_WH_2153063.h5'
 #path_to_outfile = './Outputs/RTWH/NFLstart'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
-outfile = 'RTWHlocalM18T14beta50g0_5lamb0_01.h5'
+outfile = 'RTWHlocalM18T14beta2000g0_5lamb0_01.h5'
 savepath = os.path.join(path_to_outfile, outfile)
 
 if not os.path.exists(savepath):
@@ -42,7 +42,7 @@ fig, ax = plt.subplots(2,2)
 fig.suptitle(titlestring)
 
 ax[0,0].plot(data['omega'], data['rhoGD'])
-ax[0,0].set_xlim(-0.5,0.5)
+ax[0,0].set_xlim(-5,5)
 ax[0,0].set_title(r'rho GD')
 
 ax[0,1].plot(data['omega'], data['rhoGOD'])

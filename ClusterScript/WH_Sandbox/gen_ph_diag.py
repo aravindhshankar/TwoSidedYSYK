@@ -102,6 +102,7 @@ for i, beta in enumerate(betasavelist):
 			ax.scatter(lamb,temp,c='b',marker='^',label='NFL')
 		else:
 			ax.scatter(lamb,temp,c='g',marker='o')
+ax.plot(lambsavelist,lambsavelist)
 
 handles, labels = ax.get_legend_handles_labels()
 unique_labels = list(set(labels))
