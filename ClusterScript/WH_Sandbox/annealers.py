@@ -40,7 +40,8 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 		diff = err*1.1
 		diffG = 1.
 		diffD = 1.
-		x = 0.001
+		# x = 0.01
+		x = 0.5 if beta < 10 else 0.01
 		#beta_step = 1 if (beta>=500) else 1
 
 		omega = ImagGridMaker(Nbig,beta,'fermion')
@@ -50,6 +51,8 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 		diff = 1.
 		iterni=0
 		while(diff>err and itern < ITERMAX):
+			if itern == ITERMAX - 1: 
+				print(f"WARNING : CONVERGENCE NOT REACHED FOR BETA = {beta}, LAMB = {lamb} in TEMP ANNEAL")
 			itern+=1
 			iterni += 1 
 
@@ -115,6 +118,14 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 		beta = beta + beta_step
 
 	beta -= beta_step 
+	if diff > diffold and x*0.9 > 0.01 and itern % 5 == 0:
+		x *= 0.9
+	elif diff > diffold and x*1.1 <= 1. and itern % 5 == 0:
+		x *= 1.1
+	if diff < 1e-6:
+		x = 1.
+	if x > 0.80:
+		x = 1.
 	return GDtau,GODtau,DDtau,DODtau,fe_list
 
 
@@ -140,11 +151,15 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 		diff = err*1.1
 		diffG = 1.
 		diffD = 1.
-		x = 0.001
+		# x = 0.01
+		x = 0.5 if beta < 10 else 0.01
+		
 		
 		diff = 1.
 		iterni=0
 		while(diff>err and itern < ITERMAX):
+			if itern == ITERMAX - 1: 
+				print(f"WARNING : CONVERGENCE NOT REACHED FOR BETA = {beta}, LAMB = {lamb} in LAMB ANNEAL")
 			itern+=1
 			iterni += 1 
 
@@ -207,7 +222,15 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 		if verbose == True :
 			print(f"##### Finished lamb =  {lamb} ############")
 			print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}')
-
+	
+		if diff > diffold and x*0.9 > 0.01 and itern % 5 == 0:
+			x *= 0.9
+		elif diff > diffold and x*1.1 <= 1. and itern % 5 == 0:
+			x *= 1.1
+		if diff < 1e-6:
+			x = 1.
+		if x > 0.80:
+			x = 1.
 	return GDtau,GODtau,DDtau,DODtau,fe_list
 
 
