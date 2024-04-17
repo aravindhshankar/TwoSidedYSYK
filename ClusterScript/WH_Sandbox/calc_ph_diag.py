@@ -49,7 +49,8 @@ kappa = 1.
 beta_step = 1
 # betasavelist = np.array([10,20,50,100,500,1000,5000,10000])
 betasavelist = np.array([10,20,50,100,200,500])
-lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
+# lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
+lambsavelist = np.array([0.01,0.005,0.001])
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 lamb = lamblooplist[0]
 
