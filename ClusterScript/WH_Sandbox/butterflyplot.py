@@ -85,7 +85,7 @@ for i, beta in enumerate(betasavelist):
 
 		
 		
-		impose_saddle = True
+		impose_saddle = False
 		FEstempfwd[i] = free_energy_YSYKWH(GFstempfwd, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = impose_saddle)
 		FEstemprev[i] = free_energy_YSYKWH(GFstemprev, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = impose_saddle )
 
@@ -98,10 +98,12 @@ lamb = lambsavelist[lambi]
 fig, ax = plt.subplots(1)
 ax.plot(1./betasavelist, FEstempfwd,'.-', label='temp annealed fwd')
 ax.plot(1./betasavelist, FEstemprev,'.-', label='lamb annealed rev' )
+ax.axvline(lamb,ls='--')
 ax.legend()
 ax.set_xlabel('temperature T')
 ax.set_ylabel('Free energy')
 ax.set_title(r'$\lambda$ = ' + str(lamb))
+# ax.set_xscale('log')
 
 plt.show()
 
