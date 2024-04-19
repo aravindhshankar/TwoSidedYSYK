@@ -12,8 +12,10 @@ if not os.path.exists('../Dump/'):
 	raise Exception("Error - Path to Dump directory not found ")
 	exit(1)
 else:
-	path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
-	path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
+	# path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
+	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
+	path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/' 
 	if not os.path.exists(path_to_dump_lamb):
 		raise Exception('Generate Data first! Path to lamb dump not found')
 		exit(1)
@@ -43,8 +45,11 @@ r = 1.
 J = 0
 kappa = 1.
 beta_step = 1
-betasavelist = np.array([50,100,500,1000,5000,10000])
+# betasavelist = np.array([50,100,500,1000,5000,10000])
+# lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
+betasavelist = np.array([10,20,50,100,150,200,300,500,700,1000])
 lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
+
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 lamb = lamblooplist[0]
 
@@ -66,6 +71,7 @@ for i, beta in enumerate(betasavelist):
 		try :
 			#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
 			plotfiletemp = os.path.join(path_to_dump_temp, savefile)
+			GFstemp = np.load(plotfiletemp)
 		except FileNotFoundError: 
 			print("TEMP ANNEAL INPUT FILE NOT FOUND")
 			print(f'lamb = {lamb}, beta = {beta}')
@@ -73,13 +79,14 @@ for i, beta in enumerate(betasavelist):
 		try :
 			#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
 			plotfilelamb = os.path.join(path_to_dump_lamb, savefile)
+			GFslamb = np.load(plotfilelamb)
 		except FileNotFoundError: 
 			print("LAMB ANNEAL INPUT FILE NOT FOUND")
 			print(f'lamb = {lamb}, beta = {beta}')
 			exit(1)
 
-		GFstemp = np.load(plotfiletemp)
-		GFslamb = np.load(plotfilelamb)
+		
+		
 		impose_saddle = False
 		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = impose_saddle)
 		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = impose_saddle )
@@ -88,7 +95,7 @@ for i, beta in enumerate(betasavelist):
 residuals = FEstemp-FEslamb
 # print(np.array2string(residuals,precision=4,floatmode='fixed'))
 
-lambi = 4 
+lambi = 2
 lamb = lambsavelist[lambi]
 fig, ax = plt.subplots(1)
 ax.plot(1./betasavelist, FEstemp[:,lambi],'.-', label='temp annealed')
