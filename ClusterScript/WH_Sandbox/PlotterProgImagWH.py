@@ -44,17 +44,17 @@ err = 1e-5
 
 global beta
 
-beta = 1000
+beta = 50
 mu = 0.0
 g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.01
+lamb = 0.05
 J = 0
 
-path_to_dump = path_to_dump_lamb
-# path_to_dump = path_to_dump_temp
+# path_to_dump = path_to_dump_lamb
+path_to_dump = path_to_dump_temp
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)

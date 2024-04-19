@@ -95,7 +95,7 @@ for i, beta in enumerate(betasavelist):
 residuals = FEstemp-FEslamb
 # print(np.array2string(residuals,precision=4,floatmode='fixed'))
 
-lambi = 2
+lambi = 1
 lamb = lambsavelist[lambi]
 fig, ax = plt.subplots(1)
 ax.plot(1./betasavelist, FEstemp[:,lambi],'.-', label='temp annealed')

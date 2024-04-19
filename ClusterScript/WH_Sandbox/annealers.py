@@ -35,7 +35,7 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 
 	assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
-	while(beta <= target_beta):
+	while(beta != target_beta):
 		itern = 0
 		diff = err*1.1
 		diffG = 1.
