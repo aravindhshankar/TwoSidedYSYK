@@ -99,15 +99,30 @@ fig, ax = plt.subplots(1)
 ax.plot(1./betasavelist, FEstempfwd,'.-', label='temp annealed fwd')
 ax.plot(1./betasavelist, FEstemprev,'.-', label='lamb annealed rev' )
 ax.axvline(lamb,ls='--')
+ax.axvline(1/62, ls = '--', c='grey')
+
 ax.legend()
 ax.set_xlabel('temperature T')
 ax.set_ylabel('Free energy')
 ax.set_title(r'$\lambda$ = ' + str(lamb))
 # ax.set_xscale('log')
+# ax2 = ax.twiny()
+# ax2.plot(betasavelist, FEstempfwd, '--', c= 'k', alpha = 0.1)
+# ax2 = ax.secondary_xaxis('top', functions =(lambda x: 1/x, lambda x : 1/x))
+# ax2.set_xlabel('Inverse temperature $\\beta$')
+# ax2.set_ticks(betasavelist)
+
+
+ax3 = ax.twinx()
+ax3.plot(1./betasavelist, -1.*(betasavelist**2) * np.gradient(FEstempfwd,betasavelist), '.-', c = 'k', label=r'Gradient $\frac{dF}{dT}$')
+ax3.set_ylabel(r'$\frac{dF}{dT}$')
+ax3.legend()
+
+
+fig.tight_layout()
+
 
 plt.show()
-
-
 
 
 

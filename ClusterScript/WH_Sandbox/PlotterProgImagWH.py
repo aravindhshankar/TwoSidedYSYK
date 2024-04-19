@@ -19,15 +19,18 @@ if not os.path.exists('../Dump/'):
 	exit(1)
 else:
 	# path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
-	path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
+	# path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
-	path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
-	if not os.path.exists(path_to_dump_lamb):
-		raise Exception('Generate Data first! Path to lamb dump not found')
-		exit(1)
-	if not os.path.exists(path_to_dump_temp):
-		raise Exception('Generate Data first! Path to temp dump not found')
-		exit(1)
+	# path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
+	path_to_dump_temp_fwd = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
+	path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
+	
+	# if not os.path.exists(path_to_dump_lamb):
+	# 	raise Exception('Generate Data first! Path to lamb dump not found')
+	# 	exit(1)
+	# if not os.path.exists(path_to_dump_temp):
+	# 	raise Exception('Generate Data first! Path to temp dump not found')
+	# 	exit(1)
 
 
 
@@ -44,7 +47,7 @@ err = 1e-5
 
 global beta
 
-beta = 50
+beta = 75
 mu = 0.0
 g = 0.5
 r = 1.
@@ -54,7 +57,8 @@ lamb = 0.05
 J = 0
 
 # path_to_dump = path_to_dump_lamb
-path_to_dump = path_to_dump_temp
+# path_to_dump = path_to_dump_temp
+path_to_dump = path_to_dump_temp_fwd
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -260,7 +264,7 @@ ax[1,0].semilogy(tau[startT:stopT], np.abs(np.real(DDtau[startT:stopT])),'p',lab
 #ax[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
 #ax[1,0].set_xlim(tau[startB]/2,tau[startB+15])
 #ax[1,0].set_ylim(5e-1,100)
-ax[1,0].set_xlabel(r'$\nu_n/g^2$')
+ax[1,0].set_xlabel(r'$\tau$')
 ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
 #ax[1,0].set_aspect('equal', adjustable='box')
 ax[1,0].legend()
