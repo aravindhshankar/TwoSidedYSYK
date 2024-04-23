@@ -184,7 +184,8 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
     BMf = [fdplus, fdminus, beplus, beminus]
 
     # x = 0.5 if beta < 10 else 0.01
-    x = 0.001 if diff > 10 else 0.001
+    x = 0.5 if beta < 5 else 1.
+    # x = 0.5
 
     while (diff>err and itern<ITERMAX and flag): 
         itern += 1 
@@ -223,15 +224,18 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
         #diffD = np.sum((np.abs(DRomega-DRoldomega))**2)
         diff = 0.25*(diffGD+diffDOD+diffDD+diffGOD)
 
-        # if diff > diffold and x*0.5 > 0.01 and itern % 5 == 0:
-        #     x *= 0.5
-        # elif diff > diffold and x*2. <= 1. and itern % 5 == 0:
-        #     x *= 2.0
-        # if diff < 0.01:
-        #     x = 1.
-        # elif diff < 0.1: 
-        #     x = 0.5
-       
+        if diff > diffold and x*0.9 > 0.01 and itern % 10 == 0:
+            x *= 0.9
+        elif diff < diffold and x*1.1 <= 1. and itern % 10 == 0:
+            x *= 1.1
+        if diff < 1e-6 and x > 0.5:
+            x = 1.
+        if x > 0.9:
+            x = 1.
+        if diff < 100.*err: 
+            x = 1.
+
+
         #diffG,diffD = diff,diff
         if diffcheck == True:
             diffseries += [diff]
@@ -242,7 +246,7 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
             print("itern = ",itern, " , diff = ", diff, " , x = ", x)
 
     GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
-    INFO = (itern, diff)
+    INFO = (itern, diff, x)
     return (GFs, INFO)
 
 

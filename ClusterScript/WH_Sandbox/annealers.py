@@ -50,8 +50,10 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 		
 		diff = 1.
 		iterni=0
-		while(diff>err and itern < ITERMAX):
+		while(diff>err and itern < ITERMAX and np.isclose(x,1.)==False):
 			diffold = diff
+			if diff < 10*err and itern > 5:
+				x = 1.
 			if itern == ITERMAX - 1: 
 				print(f"WARNING : CONVERGENCE NOT REACHED FOR BETA = {beta}, LAMB = {lamb} in TEMP ANNEAL")
 			itern+=1
@@ -94,16 +96,16 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 			# diffGD = np.sqrt(np.sum(np.abs(SigmaDtau - 1.0*kappa*(g**2)*DDtau*GDtau)**2))
 			# diffDOD = np.sqrt(np.sum(np.abs(PiODtau - 2.0 * g**2 * GODtau * GODtau[::-1])**2))
 			# diff = 0.5*(diffGD+diffDOD)
-			if diff > diffold and x*0.5 > 0.01 :
-				x *= 0.5
+			if diff > diffold and x*0.9 > 0.01 :
+				x *= 0.9
 			elif diff < diffold and x*1.1 <= 1. :
 				x *= 1.1
-			if diff < 1e-8 and x > 0.5:
-				x = 1.
-			if x > 0.9:
-				x = 1.
-			if diff < err: 
-				x = 1.
+			# if diff < 1e-8 and x > 0.5:
+			# 	x = 1.
+			# if x > 0.9:
+			# 	x = 1.
+			# if diff < err: 
+			# 	x = 1.
 
 		if calcfe == True:
 			GFs = [GDomega,GODomega,DDomega,DODomega]
@@ -156,12 +158,14 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 		diffD = 1.
 		# x = 0.01
 		# x = 0.5 if beta < 10 else 0.01
-		x = 0.5 if beta < 5 else 0.1
+		x = 0.5 if beta < 5 else 1.
 		
 		
 		diff = 1.
 		iterni=0
-		while(diff>err and itern < ITERMAX):
+		while(diff>err and itern < ITERMAX and np.isclose(x,1.) == False):
+			if diff > 0.8 and itern > 5: 
+				x = 1.
 			diffold = diff
 			if itern == ITERMAX - 1: 
 				print(f"WARNING : CONVERGENCE NOT REACHED FOR BETA = {beta}, LAMB = {lamb} in LAMB ANNEAL")
@@ -209,12 +213,12 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 				x *= 0.5
 			elif diff < diffold and x*1.1 <= 1. :
 				x *= 1.1
-			if diff < 1e-8 and x > 0.5:
-				x = 1.
-			if x > 0.9:
-				x = 1.
-			if diff < err: 
-				x = 1.
+			# if diff < 1e-8 and x > 0.5:
+			# 	x = 1.
+			# if x > 0.9:
+			# 	x = 1.
+			# if diff < err: 
+			# 	x = 1.
 
 		if calcfe == True:
 			GFs = [GDomega,GODomega,DDomega,DODomega]
@@ -417,8 +421,8 @@ def test_anneal_lamb():
 
 
 if __name__ == '__main__': 
-	#test_anneal_temp()
-	test_anneal_lamb()
+	test_anneal_temp()
+	# test_anneal_lamb()
 
 
 

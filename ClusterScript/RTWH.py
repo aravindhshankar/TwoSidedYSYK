@@ -16,8 +16,8 @@ from YSYK_iterator import RE_WHYSYK_iterator
 savename = 'default_savename'
 # path_to_output = './Outputs/RTWH/NFLstart/'
 # path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
-path_to_output = './Outputs/RTWH/'
-path_to_dump = './Dump/RTWHDumpfiles/'
+path_to_output = './Outputs/RTWHxFID/'
+path_to_dump = './Dump/RTWHDumpfilesxFID/'
 path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
 
 if not os.path.exists(path_to_output):
@@ -36,11 +36,13 @@ if not os.path.exists(path_to_loadfile):
     exit(1)
 #savefile = os.path.join(path_to_output, savename+'.h5')
 
-DUMP = True
+DUMP = False
 
-M = int(2**18) #number of points in the grid
-T = 2**14 #upper cut-off for the time
-err = 1e-5
+# M = int(2**18) #number of points in the grid
+# T = 2**14 #upper cut-off for the time
+M = int(2**14)
+T = 2**10
+err = 1e-10
 #err = 1e-2
 
 omega,t  = RealGridMaker(M,T)
@@ -52,7 +54,7 @@ print("dt = ", dt)
 
 
 delta = 0.420374134464041
-ITERMAX = 200
+ITERMAX = 5000
 #global beta
 
 mu = 0.0
@@ -63,10 +65,10 @@ eta = dw*2.1
 
 beta_start = 1
 beta = beta_start
-target_beta = 5001.
+target_beta = 201.
 beta_step = 1
 
-lamb = 0.01
+lamb = 0.05
 J = 0
 print("T Target = ", 1/target_beta)
 ####### DATA COMPRESSION #######
@@ -80,7 +82,8 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 
 #############################
 
-betasavelist = np.array([20,50,100,200,500,700,1000,2000,5000])
+# betasavelist = np.array([20,50,100,200,500,700,1000,2000,5000])
+betasavelist = np.arange(beta_start,target_beta+1,10) - 1
 
 # try:
 #     GDRomega,DDRomega = np.load(os.path.join(path_to_loadfile,'M16T12beta10_0g0_5r1_0.npy'))
@@ -104,7 +107,7 @@ pars = [g,mu,r]
 while(beta < target_beta):
     #beta_step = 0.01 if (beta<1) else 1
     GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False) 
-    itern, diff = INFO
+    # itern, diff, x = INFO
     if beta in betasavelist:
         savefile = savename
         savefile += 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
@@ -136,8 +139,9 @@ while(beta < target_beta):
            "eta": eta, 
            "INFO": INFO
         }
-            
-        dict2h5(dictionary, os.path.join(path_to_output,savefileoutput), verbose=True)
+
+        if DUMP == True:    
+            dict2h5(dictionary, os.path.join(path_to_output,savefileoutput), verbose=True)
 
         if DUMP == True:
             np.save(os.path.join(path_to_dump,savefiledump), GFs) 
