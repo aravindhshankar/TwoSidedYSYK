@@ -19,8 +19,8 @@ from ConformalAnalytical import *
 from free_energy import free_energy_rolling_YSYKWH 
 #import time
 
-err = 1e-10
-#err = 1e-6
+# err = 1e-10
+err = 1e-8
 ITERMAX = 5000
 
 
@@ -50,9 +50,10 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 		
 		diff = 1.
 		iterni=0
-		while(diff>err and itern < ITERMAX and np.isclose(x,1.)==False):
+		conv_flag = False
+		while(conv_flag == False): 
 			diffold = diff
-			if diff < 10*err and itern > 5:
+			if diff < 10*err :
 				x = 1.
 			if itern == ITERMAX - 1: 
 				print(f"WARNING : CONVERGENCE NOT REACHED FOR BETA = {beta}, LAMB = {lamb} in TEMP ANNEAL")
@@ -96,10 +97,19 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 			# diffGD = np.sqrt(np.sum(np.abs(SigmaDtau - 1.0*kappa*(g**2)*DDtau*GDtau)**2))
 			# diffDOD = np.sqrt(np.sum(np.abs(PiODtau - 2.0 * g**2 * GODtau * GODtau[::-1])**2))
 			# diff = 0.5*(diffGD+diffDOD)
-			if diff > diffold and x*0.9 > 0.01 :
-				x *= 0.9
-			elif diff < diffold and x*1.1 <= 1. :
-				x *= 1.1
+			if (diff>err or np.isclose(x,1.)==False) and itern < ITERMAX: #means you need to iterate more 
+				if diff > diffold  :
+					x = max(x*0.5, 0.01)
+				elif diff < diffold:
+					x = min(x*1.1, 1)
+				# if diff < 1e-8 and x > 0.5:
+				# 	x = 1.
+				# if x > 0.9:
+				# 	x = 1.
+				if diff < err: 
+					x = 1.
+			else:
+				conv_flag = True
 			# if diff < 1e-8 and x > 0.5:
 			# 	x = 1.
 			# if x > 0.9:
@@ -158,13 +168,14 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 		diffD = 1.
 		# x = 0.01
 		# x = 0.5 if beta < 10 else 0.01
-		x = 0.5 if beta < 5 else 1.
-		
+		# x = 0.5 if beta < 5 else 1.
+		x = 0.5 if beta < 5 else 0.9
 		
 		diff = 1.
 		iterni=0
-		while(diff>err and itern < ITERMAX and np.isclose(x,1.) == False):
-			if diff > 0.8 and itern > 5: 
+		conv_flag = False
+		while(conv_flag == False):
+			if diff < 10*err and itern > 2:
 				x = 1.
 			diffold = diff
 			if itern == ITERMAX - 1: 
@@ -209,10 +220,19 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 			# diffGD = np.sqrt(np.sum(np.abs(SigmaDtau - 1.0*kappa*(g**2)*DDtau*GDtau)**2))
 			# diffDOD = np.sqrt(np.sum(np.abs(PiODtau - 2.0 * g**2 * GODtau * GODtau[::-1])**2))
 			# diff = 0.5*(diffGD+diffDOD)
-			if diff > diffold and x*0.5 > 0.01 :
-				x *= 0.5
-			elif diff < diffold and x*1.1 <= 1. :
-				x *= 1.1
+			if (diff>err or np.isclose(x,1.)==False) and itern < ITERMAX:
+				if diff > diffold and x*0.5 > 0.01 :
+					x *= 0.5
+				elif diff < diffold and x*1.1 <= 1. :
+					x *= 1.1
+				if diff < 1e-8 and x > 0.5:
+					x = 1.
+				if x > 0.9:
+					x = 1.
+				if diff < err: 
+					x = 1.
+			else: 
+				conv_flag = True
 			# if diff < 1e-8 and x > 0.5:
 			# 	x = 1.
 			# if x > 0.9:
@@ -276,7 +296,7 @@ def test_anneal_temp():
 	GFtaus = [GDtau,GODtau,DDtau,DODtau]
 
 	GDtau,GODtau,DDtau,DODtau,fe_list = anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa,
-											DUMP=DUMP,path_to_dump=None,calcfe=True,verbose=True)
+											DUMP=DUMP,path_to_dump=None,calcfe=False,verbose=True)
 
 	beta = target_beta
 	omega = ImagGridMaker(Nbig,beta,'fermion')

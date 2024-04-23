@@ -14,8 +14,8 @@ if not os.path.exists('../Dump/'):
     exit(1)
 else:
 	# path_to_dump_lamb = '../Dump/zoom_xshift_lamb_anneal_dumpfiles/'
-	path_to_dump_temp_fwd = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
-	path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
+	path_to_dump_temp_fwd = '../Dump/23Aprzoom_xshift_temp_anneal_dumpfiles/fwd/'
+	path_to_dump_temp_rev = '../Dump/23Aprzoom_xshift_temp_anneal_dumpfiles/rev/'
 	# if not os.path.exists(path_to_dump_lamb):
 	# 	print("Making directory for lamb dump")
 	# 	os.mkdir(path_to_dump_lamb)
@@ -43,7 +43,7 @@ DUMP = True
 Nbig = int(2**14)
 
 beta_start = 1 
-target_beta = 101
+target_beta = 2001
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -58,7 +58,7 @@ betasavelist = np.arange(beta_start,target_beta)
 # lambsavelist = np.array([0.01,0.005,0.001])
 # lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 # lamb = lamblooplist[0]
-lamb = 0.05
+lamb = 0.005
 lambsavelist = (lamb,)
 
 
