@@ -80,6 +80,75 @@ def free_energy_rolling_YSYKWH(GFs,BSEs,freq_grids,Nbig,beta,g,r,mu,kappa,tests=
 
 
 
+def FUNCTIONALfree_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa, lamb, J, impose_saddle=False):
+	'''
+	Used to calculate free energy after loading Gtaus from file
+	Signature : free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa)
+	GDtau, GODtau, DDtau, DODtau = GFs
+	omega,nu = freq_grids
+
+	'''
+	GDtau, GODtau, DDtau, DODtau = GFs
+	omega,nu = freq_grids
+
+	np.testing.assert_almost_equal(omega[2] - omega[1], 2*np.pi/beta)
+	np.testing.assert_almost_equal(nu[2] - nu[1], 2*np.pi/beta)
+	np.testing.assert_equal(Nbig, len(DDtau))
+
+	DDomega = Time2FreqB(DDtau, Nbig, beta)
+	DODomega = Time2FreqB(DODtau, Nbig, beta)
+
+	PiDtau = 2.0 * g**2 * GDtau * GDtau[::-1] 
+	PiODtau = 2.0 * g**2 * GODtau * GODtau[::-1] 
+	PiDomega = Freq2TimeB(PiDtau,Nbig,beta) 
+	PiODomega = Freq2TimeB(PiODtau,Nbig,beta) 
+
+	if impose_saddle == True:
+		GDomega = Time2FreqF(GDtau, Nbig, beta)
+		GODomega = Time2FreqF(GODtau, Nbig, beta)
+		detGinv = 1./(GDomega**2 - GODomega**2) #Was + in earlier version of code: mistake!
+		detDinv = 1./(DDomega**2 - DODomega**2)
+	else: 
+		SigmaDomega = Time2FreqF(g**2 * kappa* GDtau * DDtau, Nbig,beta)
+		SigmaODomega = Time2FreqF(g**2 * kappa * GODtau * DODtau, Nbig, beta)
+		detGinv = (1j*omega+mu-SigmaDomega)**2 - (lamb-SigmaODomega)**2
+		detDinv = (nu**2+r-PiDomega)**2 - (J - PiODomega)**2
+
+	detGinv = detGinv.real
+	detDinv = detDinv.real
+	free_energy = 2*np.log(2)-np.sum(np.log(detGinv/((1j*omega + mu)**2)))
+	free_energy += 0.5*kappa*np.sum(np.log((detDinv)/((nu**2+r)**2))) 
+	free_energy += 1.0*kappa*(np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)) #changed
+	free_energy = free_energy.real / beta
+
+	return free_energy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ######################## tests ##########################
