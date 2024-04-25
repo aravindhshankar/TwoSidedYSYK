@@ -15,7 +15,7 @@ else:
 	# path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
 	path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
-	path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/' 
+	path_to_dump_temp = '../Dump/23Aprzoom_xshift_temp_anneal_dumpfiles/fwd' 
 	if not os.path.exists(path_to_dump_lamb):
 		raise Exception('Generate Data first! Path to lamb dump not found')
 		exit(1)
@@ -37,7 +37,7 @@ PLOTTING = False
 Nbig = int(2**14)
 
 beta_start = 1 
-target_beta = 10001
+target_beta = 970
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -52,6 +52,7 @@ lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
 
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 lamb = lamblooplist[0]
+lamb = 0.005
 
 FEstemp = np.zeros((len(betasavelist),len(lambsavelist)))
 FEslamb = np.zeros((len(betasavelist),len(lambsavelist)))

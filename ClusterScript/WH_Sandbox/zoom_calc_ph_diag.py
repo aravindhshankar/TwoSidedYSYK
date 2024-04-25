@@ -14,8 +14,8 @@ if not os.path.exists('../Dump/'):
     exit(1)
 else:
 	# path_to_dump_lamb = '../Dump/zoom_xshift_lamb_anneal_dumpfiles/'
-	path_to_dump_temp_fwd = '../Dump/23Aprzoom_xshift_temp_anneal_dumpfiles/fwd/'
-	path_to_dump_temp_rev = '../Dump/23Aprzoom_xshift_temp_anneal_dumpfiles/rev/'
+	path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
+	path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
 	# if not os.path.exists(path_to_dump_lamb):
 	# 	print("Making directory for lamb dump")
 	# 	os.mkdir(path_to_dump_lamb)

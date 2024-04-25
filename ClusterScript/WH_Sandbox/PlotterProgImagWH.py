@@ -22,7 +22,7 @@ else:
 	# path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
-	path_to_dump_temp_fwd = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
+	path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
 	path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
 	
 	# if not os.path.exists(path_to_dump_lamb):
@@ -47,13 +47,13 @@ err = 1e-5
 
 global beta
 
-beta = 75
+beta = 800
 mu = 0.0
 g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.05
+lamb = 0.005
 J = 0
 
 # path_to_dump = path_to_dump_lamb
