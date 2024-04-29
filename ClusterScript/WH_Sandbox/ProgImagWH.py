@@ -43,12 +43,12 @@ g = 0.5
 r = 1.
 
 lamb = 0.05
-J = 0.05
+# J = 0.05
 #J = np.sqrt(lamb)
 #J = 0.0001
 #J = 0.
 
-target_beta = 1000.
+target_beta = 100.
 print("############ Started : target beta = , ", target_beta, " #############")
 
 # g = np.sqrt(10**3)
