@@ -22,15 +22,16 @@ else:
 	# path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
-	path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
-	path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
+	# path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
+	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
+	path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
 	
 	# if not os.path.exists(path_to_dump_lamb):
 	# 	raise Exception('Generate Data first! Path to lamb dump not found')
 	# 	exit(1)
-	# if not os.path.exists(path_to_dump_temp):
-	# 	raise Exception('Generate Data first! Path to temp dump not found')
-	# 	exit(1)
+	if not os.path.exists(path_to_dump):
+		raise Exception('Generate Data first! Path to temp dump not found')
+		exit(1)
 
 
 
@@ -47,18 +48,17 @@ err = 1e-5
 
 global beta
 
-beta = 800
+beta = 100
 mu = 0.0
 g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.005
+lamb = 0.001
 J = 0
 
 # path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
-path_to_dump = path_to_dump_temp_rev
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -243,14 +243,14 @@ print(f'tau/beta at start of fit = {(tau[fitsliceT][0]/beta):.3f}')
 print(f'slope of fit = {mT:.03f}')
 # print('2 Delta  = ', 2*delta)
 
-ax[0,0].semilogy(tau[startT:stopT], np.abs(np.real(GDtau[startT:stopT])),'p',label = 'numerics GDtau')
+ax[0,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GDtau[startT:stopT])),'p',label = 'numerics GDtau')
 #ax[0,0].semilogy(tau[startT:stopT], conf_fit_GD[startT:stopT],'k--',label = 'ES power law')
 #ax[0,0].semilogy(tau[startT:], -np.imag(Gconf[startT:]),'m.',label = 'ES solution')
 #ax[0,0].semilogy(tau[startT:], alt_conf_fit_G[startT:],'g--', label = 'alt power law')
 #ax[0,0].set_xlim(tau[startT]/2,tau[startT+15])
-ax[0,0].semilogy(tau[startT:stopT], np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
+ax[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
 #ax[0,0].set_ylim(1e-1,1e1)
-ax[0,0].set_xlabel(r'$\tau$')
+ax[0,0].set_xlabel(r'$\tau/\beta$')
 ax[0,0].set_ylabel(r'$-\Re G(\tau)$')
 #ax[0,0].set_aspect('equal', adjustable='box')
 #ax[0,0].axis('square')

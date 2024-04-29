@@ -13,14 +13,18 @@ if not os.path.exists('../Dump/'):
     raise Exception("Error - Path to Dump directory not found ")
     exit(1)
 else:
-	path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
-	path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
+	# path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev'
 	if not os.path.exists(path_to_dump_lamb):
 		print("Making directory for lamb dump")
 		os.mkdir(path_to_dump_lamb)
-	if not os.path.exists(path_to_dump_temp):
-		print("Making directory for temp dump")
-		os.mkdir(path_to_dump_temp)
+		# print('Input File not found')
+		# exit(1)
+	# if not os.path.exists(path_to_dump_temp):
+	# 	print("Making directory for temp dump")
+	# 	os.mkdir(path_to_dump_temp)
+	# 	# print('Input File not found')
+	# 	# exit(1)
 
 
 from SYK_fft import *
@@ -32,14 +36,14 @@ from free_energy import free_energy_YSYKWH
 from annealers import anneal_temp, anneal_lamb
 
 
-calc = False
+calc = True
 delta = 0.420374134464041
 
 if calc == True:
 	### TODO: Implement parallization
-
+	path_to_dump = path_to_dump_lamb
 	PLOTTING = False
-	DUMP = False
+	DUMP = True
 	calcfe = False
 	verbose = True
 
@@ -57,16 +61,16 @@ if calc == True:
 	J = 0
 	kappa = 1.
 	beta_step = 1
-	err = 1e-6
+	err = 1e-8
 	ITERMAX = 2000
 
 
 	betasavelist = np.array([100,])
 	# lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
-	lambsavelist = np.linspace(0.001,1.,100)
+	lambsavelist = np.linspace(0.001,1.,1000)
 	lambsavelist = lambsavelist[::-1]
 	lamblooplist = lambsavelist
-
+	beta = betasavelist[0]
 
 
 	omegar2 = ret_omegar2(g,beta)
@@ -78,9 +82,10 @@ if calc == True:
 
 	gaplist = []
 	# GFtaus = [GDtau,GODtau,DDtau,DODtau]
-
-	startT, stopT  = Nbig//2 - 60, Nbig//2 - 30
-	fitsliceT = slice(startT, stopT)
+	startT, stopT  = 0, 5000
+	fitsliceT = slice(startT+4500, startT + 4600)
+	# startT, stopT  = Nbig//2 - 60, Nbig//2 - 30
+	# fitsliceT = slice(startT, stopT)
 	#Step2: anneal in lamb for all betas
 	for beta in betasavelist:
 		lamb = lamblooplist[0]
@@ -114,7 +119,7 @@ if calc == True:
 			iterni=0
 			conv_flag = False
 			# while(conv_flag == False):
-			for x in [0.1]:
+			for x in [0.1,]:
 				diff = 1.
 				# err = 1e-6 if x < 0.5 else 1e-8
 				while(diff>err and itern < ITERMAX):
@@ -191,9 +196,9 @@ if calc == True:
 				fe_list += [fe]
 
 			if DUMP == True and np.isclose(lambsavelist,lamb).any():
-				lambval = savelist[np.isclose(lambsavelist,lamb)][0]
+				lambval = lambsavelist[np.isclose(lambsavelist,lamb)][0]
 				savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-				savefile += 'lamb' + str(lambval) + 'J' + str(J)
+				savefile += 'lamb' + f'{lambval:.3}' + 'J' + str(J)
 				savefile += 'g' + str(g) + 'r' + str(r)
 				savefile = savefile.replace('.','_') 
 				savefile += '.npy'
@@ -204,7 +209,7 @@ if calc == True:
 			if verbose == True :
 				print(f"##### Finished lamb =  {lamb} ############")
 				print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}, x = {x:.3}')
-			
+
 			functoplotT = np.abs(np.real(GDtau))
 			mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
 			gaplist += [-1.*mT]
@@ -212,6 +217,7 @@ if calc == True:
 
 	gaplist = np.array(gaplist)
 	np.save('beta100lambgaplist.npy',np.array([lamblooplist,gaplist]))
+
 
 
 
@@ -228,10 +234,12 @@ lamblooplist = lamblooplist[::-1]
 gaplist = gaplist[::-1]
 
 
-m1,c1 = np.polyfit(np.log(np.abs(lamblooplist[0:20])), np.log(gaplist[0:20]),1)
-m2,c2 = np.polyfit(np.log(np.abs(lamblooplist[100:120])), np.log(gaplist[100:120]),1)
+m1,c1 = np.polyfit(np.log(np.abs(lamblooplist[50:60])), np.log(gaplist[50:60]),1)
+m2,c2 = np.polyfit(np.log(np.abs(lamblooplist[6:20])), np.log(gaplist[6:20]),1)
 gradslope = np.gradient(gaplist,lamblooplist)
 
+beta = 100.
+g= 0.5
 slope_expect = 1./(2-2*delta)
 print(f'Expected Slope = {slope_expect:.4}')
 # print(f'Fit slope = {m}:.4')
@@ -241,6 +249,8 @@ ax.set_xlabel(r'$\lambda$')
 ax.set_ylabel('mass from exponential fit')
 ax.loglog(lamblooplist, np.exp(c1)*np.abs(lamblooplist)**m1, label=f'Fit with slope {m1:.03f}')
 ax.loglog(lamblooplist, np.exp(c2)*np.abs(lamblooplist)**m2, label=f'Fit with slope {m2:.03f}')
+ax.axvline(1./beta,ls='--',c='gray',label='Temperature')
+ax.axvline(g**(2./3.),ls='--',c='green',label=r'$g^{2/3}$')
 ax.legend()
 
 ax3 = ax.twinx()
