@@ -14,8 +14,10 @@ if not os.path.exists('../Dump/'):
 else:
 	# path_to_dump_temp_fwd = '../Dump/lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
-	path_to_dump_temp_fwd = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
-	path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
+	# path_to_dump_temp_fwd = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
+	# path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
+	path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
+	path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
 	if not os.path.exists(path_to_dump_temp_fwd):
 		raise Exception('Generate Data first! Path to lamb dump not found')
 		exit(1)
@@ -36,8 +38,9 @@ from annealers import anneal_temp, anneal_lamb
 PLOTTING = False
 Nbig = int(2**14)
 
-beta_start = 1 
-target_beta = 101
+beta_start = 2 
+target_beta = 2001
+# target_beta = 101
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -49,7 +52,7 @@ beta_step = 1
 # lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
 betasavelist = np.arange(beta_start,target_beta)
 # lamb = lamblooplist[0]
-lambsavelist = (0.05,)
+lambsavelist = (0.005,)
 
 FEstempfwd = np.zeros((len(betasavelist), ))
 FEstemprev= np.zeros((len(betasavelist),))
@@ -76,7 +79,7 @@ for i, beta in enumerate(betasavelist):
 			exit(1)
 		try :
 			#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
-			plotfiletemprev = os.path.join(path_to_dump_temp_fwd, savefile)
+			plotfiletemprev = os.path.join(path_to_dump_temp_rev, savefile)
 			GFstemprev = np.load(plotfiletemprev)
 		except FileNotFoundError: 
 			print("TEMP REV ANNEAL INPUT FILE NOT FOUND")
@@ -96,8 +99,8 @@ residuals = FEstempfwd-FEstemprev
 lambi = 0
 lamb = lambsavelist[lambi]
 fig, ax = plt.subplots(1)
-ax.plot(1./betasavelist, FEstempfwd,'.-', label='temp annealed fwd')
-ax.plot(1./betasavelist, FEstemprev,'.-', label='lamb annealed rev' )
+ax.plot(1./betasavelist, FEstempfwd,'.--', label='temp annealed fwd')
+ax.plot(1./betasavelist, FEstemprev,'.--', label='lamb annealed rev' )
 ax.axvline(lamb,ls='--')
 ax.axvline(1/62, ls = '--', c='grey')
 

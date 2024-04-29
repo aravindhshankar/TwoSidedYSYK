@@ -42,16 +42,17 @@ lamb = 10./beta
 J = 20./beta
 
 
-M = int(2**24) #number of points in the grid
-T = int(2**19) #upper cut-off fot the time
+M = int(2**16) #number of points in the grid
+T = int(2**12) #upper cut-off fot the time
 #M = int(2**16)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
-err = 1e-2
-eta = dw*10.
+err = 1e-8
+# eta = dw*10.
+eta = dw*2.1
 #delta = 0.420374134464041
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 

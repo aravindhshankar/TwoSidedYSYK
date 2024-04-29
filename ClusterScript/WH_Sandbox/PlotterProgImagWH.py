@@ -23,7 +23,7 @@ else:
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
 	path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
-	path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
+	path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
 	
 	# if not os.path.exists(path_to_dump_lamb):
 	# 	raise Exception('Generate Data first! Path to lamb dump not found')
@@ -58,7 +58,7 @@ J = 0
 
 # path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
-path_to_dump = path_to_dump_temp_fwd
+path_to_dump = path_to_dump_temp_rev
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
