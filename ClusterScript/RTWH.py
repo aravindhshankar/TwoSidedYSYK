@@ -16,10 +16,10 @@ from YSYK_iterator import RE_WHYSYK_iterator
 savename = 'default_savename'
 # path_to_output = './Outputs/RTWH/NFLstart/'
 # path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
-path_to_output = './Outputs/RTWHxFID/'
-path_to_dump = './Dump/RTWHDumpfilesxFID/'
+path_to_output = './Outputs/RTWH0_00/'
+path_to_dump = './Dump/RTWHDumpfiles0_00/'
 # path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
-path_to_loadfile = './Dump/RTWHDumpfilesxFID/'
+path_to_loadfile = './Dump/RTWHDumpfiles0_00/'
 
 if not os.path.exists(path_to_output):
     os.makedirs(path_to_output)
@@ -35,7 +35,7 @@ if len(sys.argv) > 1:
 if not os.path.exists(path_to_loadfile):
     print('Load directory not found!')
     exit(1)
-#savefile = os.path.join(path_to_output, savename+'.h5')
+# savefile = os.path.join(path_to_output, savename+'.h5')
 
 DUMP = True
 
@@ -43,8 +43,8 @@ DUMP = True
 # T = 2**14 #upper cut-off for the time
 M = int(2**16)
 T = 2**12
-err = 1e-10
-#err = 1e-2
+err = 1e-8
+# err = 1e-5
 
 omega,t  = RealGridMaker(M,T)
 dw = omega[2] - omega[1]
@@ -64,12 +64,12 @@ r = 1.
 kappa = 1.
 eta = dw*2.1
 
-beta_start = 30
+beta_start = 1
 beta = beta_start
-target_beta = 1001.
+target_beta = 201.
 beta_step = 1
 
-lamb = 0.005
+lamb = 0.00
 J = 0
 print("T Target = ", 1/target_beta)
 ####### DATA COMPRESSION #######
@@ -84,29 +84,30 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 #############################
 
 # betasavelist = np.array([20,50,100,200,500,700,1000,2000,5000])
-betasavelist = np.arange(beta_start,target_beta+1,10) - 1
+betasavelist = np.arange(beta_start,target_beta+1,5) - 1
 
-try:
-    GFs = np.load(os.path.join(path_to_loadfile,'RTWHlocalM16T12beta30g0_5lamb0_005.npy'))
-except FileNotFoundError:
-    print('INPUT FILE NOT FOUND!!!!!!')
-    exit(1)
+# try:
+#     GFs = np.load(os.path.join(path_to_loadfile,'l_05M16T12beta100g0_5lamb0_05.npy'))
+# except FileNotFoundError:
+#     print('INPUT FILE NOT FOUND!!!!!!')
+#     exit(1)
 
-# GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
-# DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
-# GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
-# DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
+GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
+DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
+GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
+DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
+
 # GDRomega = 1./ (omega + 1j*eta + mu)
 # DDRomega = 1./(-1.0*(omega + 1j*eta)**2 + r)
 # GODRomega = np.zeros_like(GDRomega)
 # DODRomega = np.zeros_like(DDRomega)
 
-# GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
+GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
 grid = [M,omega,t]
 pars = [g,mu,r]
 while(beta < target_beta):
     #beta_step = 0.01 if (beta<1) else 1
-    GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False) 
+    GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,x=0.05,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False) 
     # itern, diff, x = INFO
     if beta in betasavelist:
         savefile = savename

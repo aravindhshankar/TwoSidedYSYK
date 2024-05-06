@@ -5,7 +5,7 @@ if not os.path.exists('./Sources'):
 sys.path.insert(1,'./Sources')
 import h5py
 import matplotlib.pyplot as plt
-
+from scipy.signal import find_peaks
 
 import numpy as np
 from SYK_fft import *
@@ -13,11 +13,11 @@ from ConformalAnalytical import *
 import testingscripts
 from h5_handler import *
 
-path_to_outfile = './Outputs/RTWHxFID/'
+path_to_outfile = './Outputs/RTWH0_05/'
 #outfile = 'Y_WH_2153063.h5'
 #path_to_outfile = './Outputs/RTWH/NFLstart'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
-outfile = 'RTWHlocalM16T12beta30g0_5lamb0_005.h5'
+outfile = 'l_05M16T12beta199g0_5lamb0_05.h5'
 savepath = os.path.join(path_to_outfile, outfile)
 
 if not os.path.exists(savepath):
@@ -37,6 +37,11 @@ titlestring = 'beta = ' + str(data['beta']) + ' lamb = ' + str(data['lamb']) + '
 titlestring += ' Log2M = ' + str(np.log2(data['M']))
 titlestring += ' g = ' + str(data['g'])
 
+
+peakpoints = find_peaks(data['rhoGD'],prominence=0.001)[0]
+peakvals = [data['omega'][peak] for peak in peakpoints]
+print(f'peakvals  = {peakvals}')
+print(f'diffs = {np.diff(peakvals)}')
 fig, ax = plt.subplots(2,2)
 
 fig.suptitle(titlestring)
@@ -61,7 +66,8 @@ ax[1,1].set_title(r'rho DOD')
 delta = 0.420374134464041
 fig, ax = plt.subplots(1)
 start = len(data['omega'])//2 + 1 
-stop = start + 200
+# stop = start + 1000
+stop = -1
 temp_idx = np.argmin(np.abs(temp - data['omega']))
 fitslice = slice(temp_idx+40, temp_idx + 50)
 #fitslice = slice(start+25, start + 35)
@@ -72,7 +78,7 @@ print(f'slope of fit = {m:.03f}')
 print('2 Delta - 1 = ', 2*delta-1)
 
 ax.loglog(data['omega'][start:stop], functoplot[start:stop],'p',label = 'numerics rhoGDomega')
-ax.loglog(data['omega'][start:stop], np.exp(c)*np.abs(data['omega'][start:stop])**m, label=f'Fit with slope {m:.03f}')
+# ax.loglog(data['omega'][start:stop], np.exp(c)*np.abs(data['omega'][start:stop])**m, label=f'Fit with slope {m:.03f}')
 ax.axvline((temp,),ls='--')
 #ax.set_ylim(1e-1,1e1)
 ax.set_xlabel(r'$\omega$')

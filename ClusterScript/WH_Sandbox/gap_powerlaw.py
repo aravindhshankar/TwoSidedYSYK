@@ -36,7 +36,7 @@ from free_energy import free_energy_YSYKWH
 from annealers import anneal_temp, anneal_lamb
 
 
-calc = True
+calc = False
 delta = 0.420374134464041
 
 if calc == True:
