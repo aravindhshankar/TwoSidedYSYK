@@ -16,10 +16,10 @@ from YSYK_iterator import RE_WHYSYK_iterator
 savename = 'default_savename'
 # path_to_output = './Outputs/RTWH/NFLstart/'
 # path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
-path_to_output = './Outputs/RTWH0_00/'
-path_to_dump = './Dump/RTWHDumpfiles0_00/'
+path_to_output = './Outputs/LowTempBH/'
+path_to_dump = './Dump/LowTempBH/'
 # path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
-path_to_loadfile = './Dump/RTWHDumpfiles0_00/'
+path_to_loadfile = './Dump/LowTempBH/'
 
 if not os.path.exists(path_to_output):
     os.makedirs(path_to_output)
@@ -41,10 +41,10 @@ DUMP = True
 
 # M = int(2**18) #number of points in the grid
 # T = 2**14 #upper cut-off for the time
-M = int(2**16)
-T = 2**12
-err = 1e-8
-# err = 1e-5
+M = int(2**21)
+T = 2**17
+# err = 1e-8
+err = 1e-5
 
 omega,t  = RealGridMaker(M,T)
 dw = omega[2] - omega[1]
@@ -66,7 +66,7 @@ eta = dw*2.1
 
 beta_start = 1
 beta = beta_start
-target_beta = 201.
+target_beta = 2001.
 beta_step = 1
 
 lamb = 0.00
@@ -74,7 +74,7 @@ J = 0
 print("T Target = ", 1/target_beta)
 ####### DATA COMPRESSION #######
 tot_freq_grid_points = int(2**14)
-omega_max = 5
+omega_max = 10
 omega_min = -1*omega_max
 idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
 skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
@@ -83,8 +83,8 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 
 #############################
 
-# betasavelist = np.array([20,50,100,200,500,700,1000,2000,5000])
-betasavelist = np.arange(beta_start,target_beta+1,5) - 1
+betasavelist = np.array([20,50,100,150,200,300,500,700,800,1000,1500,2000,5000])
+# betasavelist = np.arange(beta_start,target_beta+1,5) - 1
 
 # try:
 #     GFs = np.load(os.path.join(path_to_loadfile,'l_05M16T12beta100g0_5lamb0_05.npy'))
