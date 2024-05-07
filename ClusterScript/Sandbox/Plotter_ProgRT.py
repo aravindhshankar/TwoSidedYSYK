@@ -47,10 +47,10 @@ eta = dw*2.1
 
 
 
-beta = 20
+beta = 1000
 
 try:
-    GRomega, DRomega = np.load(os.path.join(path_to_dump, 'M16T12beta30_0g0_5r1_0.npy'))
+    GRomega, DRomega = np.load(os.path.join(path_to_dump, 'M16T12beta1000_0g0_5r1_0.npy'))
 except FileNotFoundError:
     print("**********PATH TO INPUT FILE NOT FOUND!***************")
     exit(1)
@@ -97,9 +97,9 @@ print('eta = ', eta)
 
 
 ############### Spectral functions plot ####################
-
 rhoG, rhoD = -1.0*np.imag(GRomega), -1.0*np.imag(DRomega)
 #rhoG, rhoD = -1.0*np.imag(GRomega), 1.0*np.imag(DRomega)
+print(f'minimum of rhoG = {min(rhoG)}')
 fig, ax = plt.subplots(2)
 titlestring = r'$\beta$ = ' + str(beta) + r', temp/dw = ' + f'{(temp/dw):.2f}' + r', $g = $' + str(g)
 fig.suptitle(titlestring)
@@ -115,10 +115,10 @@ match_coeff = rhoD[match_point]*(np.abs(omega[match_point] - om_th + 1j*eta )**(
 match_rhoD = match_coeff * np.abs(omega-om_th)**(1-4*delta)
 
 ax[0].plot(omega, rhoG, 'r', label = r'numerics $\rho_G(\omega)$')
-ax[0].plot(omega, np.real(GRomega), 'r', label = r'numerics $\Re G(\omega)$')
+ax[0].plot(omega, np.real(GRomega), 'b', label = r'numerics $\Re G(\omega)$')
 #ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
 #ax[0].set_ylim(-1,1)
-ax[0].set_xlim(-1,1)
+ax[0].set_xlim(-5,5)
 ax[0].set_xlabel(r'$\omega$',labelpad = 0)
 ax[0].set_ylabel(r'$-\Im{G^R(\omega)}$')
 ax[0].legend()
