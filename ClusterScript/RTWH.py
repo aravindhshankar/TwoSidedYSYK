@@ -16,10 +16,10 @@ from YSYK_iterator import RE_WHYSYK_iterator
 savename = 'default_savename'
 # path_to_output = './Outputs/RTWH/NFLstart/'
 # path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
-path_to_output = './Outputs/LowTempBH/'
-path_to_dump = './Dump/LowTempBH/'
+path_to_output = './Outputs/NEGLAMBWH/'
+path_to_dump = './Dump/NEGLAMBWH/'
 # path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
-path_to_loadfile = './Dump/LowTempBH/'
+path_to_loadfile = './Dump/NEGLAMBWH/'
 
 if not os.path.exists(path_to_output):
     os.makedirs(path_to_output)
@@ -39,12 +39,12 @@ if not os.path.exists(path_to_loadfile):
 
 DUMP = True
 
-# M = int(2**18) #number of points in the grid
-# T = 2**14 #upper cut-off for the time
-M = int(2**21)
-T = 2**17
-# err = 1e-8
-err = 1e-5
+M = int(2**16) #number of points in the grid
+T = 2**12 #upper cut-off for the time
+# M = int(2**21)
+# T = 2**17
+err = 1e-8
+# err = 1e-5
 
 omega,t  = RealGridMaker(M,T)
 dw = omega[2] - omega[1]
@@ -66,10 +66,10 @@ eta = dw*2.1
 
 beta_start = 1
 beta = beta_start
-target_beta = 2001.
+target_beta = 201.
 beta_step = 1
 
-lamb = 0.00
+lamb = -0.05
 J = 0
 print("T Target = ", 1/target_beta)
 ####### DATA COMPRESSION #######
@@ -146,7 +146,7 @@ while(beta < target_beta):
 
         if DUMP == True:
             np.save(os.path.join(path_to_dump,savefiledump), GFs) 
-    print("##### Finished beta = ", beta, " INFO = ", INFO)
+    print("##### Finished beta = ", beta, " INFO = ", INFO,flush=True)
     beta = beta + beta_step
 
 

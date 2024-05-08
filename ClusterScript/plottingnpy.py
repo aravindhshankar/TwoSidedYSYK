@@ -40,18 +40,30 @@ J = 0.
 loaded = np.array(np.load(savepath))
 loaded_BH = np.array(np.load(BHsavepath))
 
+
+
 # print(len(loaded))
 # print(len(loaded[2]), 2*M)
 delta = 0.420374134464041
-expo = 1./(2-2*delta)
+# expo = 1./(2-2*delta)
+expo = 1.
 lambexpo = lamb**expo
 
 omega,t  = RealGridMaker(M,T)
+dt = t[2]-t[1]
 
 idx = 0
 fig,ax  = plt.subplots(1)
 to_plot = -np.imag(loaded[idx])
 BH_to_plot = -np.imag(loaded_BH[idx])
+
+G_great_om_D = -1j*(1-fermidirac(beta*omega))*loaded[0]
+G_great_D = (0.5/np.pi) * freq2time(G_great_om_D,M,dt)
+trans_am_D = 2 * np.abs(G_great_D)
+
+G_great_om_OD = -1j*(1-fermidirac(beta*omega))*loaded_BH[0]
+G_great_OD = (0.5/np.pi) * freq2time(G_great_om_OD,M,dt)
+trans_am_OD = 2 * np.abs(G_great_OD)
 
 # to_plot -= min(to_plot)
 # BH_to_plot -= min(BH_to_plot)
@@ -81,6 +93,18 @@ for peak in peakvals:
     ax.axvline(peak,ls='--',c='gray')
 ax.legend()
 ax.set_xticks(np.arange(-20,50,1))
+
+
+fig,ax = plt.subplots(1)
+ax.set_title('Transmission amplitude')
+ax.plot(t,trans_am_D,'.-',label='Diagonal')
+ax.plot(t,trans_am_OD,'.-',label='Off-Diagonal')
+ax.set_xlabel('t')
+ax.legend()
+
+
+
+
 
 # GDomega,GODomega,DDomega,DODomega = loaded_BH
 # rhoGD = -np.imag(GDomega)

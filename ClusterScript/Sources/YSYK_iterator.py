@@ -186,8 +186,8 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
     # x = 0.5 if beta < 10 else 0.01
     # x = 0.5 if beta < 5 else 0.1
     # x = 0.5
-    # for x in np.linspace(0.05,1.,10):
-    for x in (0.01,):
+    # for x in (0.01,):
+    for x in np.linspace(0.05,1.,10):
         diff = 1
         while (diff>err and itern<ITERMAX and flag): 
             itern += 1 
