@@ -7,3 +7,4 @@
 *.npz
 *.txt
 *.pyc
+.DS_Store
