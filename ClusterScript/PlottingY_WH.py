@@ -13,11 +13,12 @@ from ConformalAnalytical import *
 import testingscripts
 from h5_handler import *
 
-path_to_outfile = './Outputs/RTWH0_00/'
+path_to_outfile = './Outputs/LOWTEMPBH/'
 #outfile = 'Y_WH_2153063.h5'
 #path_to_outfile = './Outputs/RTWH/NFLstart'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
-outfile = 'l_00M16T12beta20g0_5lamb0_0.h5'
+# outfile = 'RTWH_2442136M19T15beta20g0_5lamb0_005.h5'
+outfile = 'RTWH_2442159M19T15beta20g0_5lamb0_0.h5'
 savepath = os.path.join(path_to_outfile, outfile)
 
 if not os.path.exists(savepath):
