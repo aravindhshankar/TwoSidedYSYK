@@ -16,10 +16,10 @@ from YSYK_iterator import RE_WHYSYK_iterator
 savename = 'default_savename'
 # path_to_output = './Outputs/RTWH/NFLstart/'
 # path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
-path_to_output = './Outputs/NEGLAMBWH/'
-path_to_dump = './Dump/NEGLAMBWH/'
+path_to_output = './Outputs/LowTempWH/'
+path_to_dump = './Dump/LowTempWH/'
 # path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
-path_to_loadfile = './Dump/NEGLAMBWH/'
+path_to_loadfile = './Dump/LowTempWH/'
 
 if not os.path.exists(path_to_output):
     os.makedirs(path_to_output)
@@ -39,12 +39,12 @@ if not os.path.exists(path_to_loadfile):
 
 DUMP = True
 
-M = int(2**16) #number of points in the grid
-T = 2**12 #upper cut-off for the time
-# M = int(2**21)
-# T = 2**17
-err = 1e-8
-# err = 1e-5
+# M = int(2**18) #number of points in the grid
+# T = 2**14 #upper cut-off for the time
+M = int(2**19)
+T = 2**15
+# err = 1e-8
+err = 1e-5
 
 omega,t  = RealGridMaker(M,T)
 dw = omega[2] - omega[1]
@@ -64,12 +64,12 @@ r = 1.
 kappa = 1.
 eta = dw*2.1
 
-beta_start = 1
+beta_start = 301
 beta = beta_start
-target_beta = 201.
+target_beta = 2001.
 beta_step = 1
 
-lamb = -0.05
+lamb = 0.005
 J = 0
 print("T Target = ", 1/target_beta)
 ####### DATA COMPRESSION #######
@@ -83,26 +83,26 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 
 #############################
 
-betasavelist = np.array([20,50,100,150,200,300,500,700,800,1000,1500,2000,5000])
+betasavelist = np.array([20,50,100,150,200,300,400,500,700,800,1000,1200,1500,1800,2000,5000])
 # betasavelist = np.arange(beta_start,target_beta+1,5) - 1
 
-# try:
-#     GFs = np.load(os.path.join(path_to_loadfile,'l_05M16T12beta100g0_5lamb0_05.npy'))
-# except FileNotFoundError:
-#     print('INPUT FILE NOT FOUND!!!!!!')
-#     exit(1)
+try:
+    GFs = np.load(os.path.join(path_to_loadfile,'RTWH_2442136M19T15beta300g0_5lamb0_005.npy'))
+except FileNotFoundError:
+    print('INPUT FILE NOT FOUND!!!!!!')
+    exit(1)
 
-GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
-DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
-GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
-DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
+# GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
+# DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
+# GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
+# DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
 
 # GDRomega = 1./ (omega + 1j*eta + mu)
 # DDRomega = 1./(-1.0*(omega + 1j*eta)**2 + r)
 # GODRomega = np.zeros_like(GDRomega)
 # DODRomega = np.zeros_like(DDRomega)
 
-GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
+# GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
 grid = [M,omega,t]
 pars = [g,mu,r]
 while(beta < target_beta):
@@ -146,7 +146,7 @@ while(beta < target_beta):
 
         if DUMP == True:
             np.save(os.path.join(path_to_dump,savefiledump), GFs) 
-    print("##### Finished beta = ", beta, " INFO = ", INFO,flush=True)
+    print("##### Finished beta = ", beta, " INFO = ", INFO, flush = True)
     beta = beta + beta_step
 
 

@@ -186,8 +186,8 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
     # x = 0.5 if beta < 10 else 0.01
     # x = 0.5 if beta < 5 else 0.1
     # x = 0.5
-    # for x in (0.01,):
-    for x in np.linspace(0.05,1.,10):
+    # for x in np.linspace(0.05,1.,10):
+    for x in (0.01,):
         diff = 1
         while (diff>err and itern<ITERMAX and flag): 
             itern += 1 
@@ -236,12 +236,12 @@ def RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,e
             #     x = 1.
             # if diff < 100.*err: 
             #     x = 1.
-            if diff > 10 and itern > 100: 
-                GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
-                DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
-                GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
-                DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
-                break
+            # if diff > 10 and itern > 100: 
+            #     GDRomega = (omega + 1j*eta + mu)/((omega+1j*eta + mu)**2 - lamb**2)
+            #     DDRomega = (-1.0*(omega + 1j*eta)**2 + r)/((r - (omega+1j*eta)**2)**2 - (J)**2)
+            #     GODRomega = -lamb/((omega+1j*eta + mu)**2 - lamb**2)
+            #     DODRomega = -J / ((r - (omega+1j*eta)**2)**2 - (J)**2)
+            #     break
 
             #diffG,diffD = diff,diff
             if diffcheck == True:
