@@ -46,7 +46,8 @@ beta_step = 1
 betasavelist = [target_beta,]
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 # lambsavelist = [0.1,0.05,0.01,0.005,0.001]
-lambsavelist = np.arange(0.01,0.001 - 1e-10,-0.001)
+# lambsavelist = np.arange(0.01,0.001 - 1e-10,-0.001)
+lambsavelist = lamblooplist
 
 
 

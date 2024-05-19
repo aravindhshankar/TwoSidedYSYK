@@ -60,7 +60,7 @@ if calc == True:
 	betasavelist = [target_beta,]
 	lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 	# lambsavelist = [0.1,0.05,0.01,0.005,0.001]
-	lambsavelist = np.arange(0.005,0.001 - 1e-10,-0.001)
+	lambsavelist = np.arange(0.1,0.001 - 1e-10,-0.001)
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
@@ -82,8 +82,8 @@ if calc == True:
 		plottable = np.abs(np.real(GDtau))
 		xaxis = tau[startT:stopT]/beta
 		logder = np.gradient(np.log(plottable))
-		start_idx = np.argmin(np.abs(xaxis-0.04))
-		stop_idx = np.argmin(np.abs(xaxis-0.08))
+		start_idx = np.argmin(np.abs(xaxis-0.01))
+		stop_idx = np.argmin(np.abs(xaxis-0.02))
 		fitslice = slice(start_idx,stop_idx)
 		slope = -np.mean(logder[startT:stopT][fitslice])
 		gaplist += [slope]
@@ -124,6 +124,8 @@ if calc == True:
 	print(f'dimensional analysis scaling = {slope_expect:.4}')
 	print(f'calculated scaling = {m:.4}')
 	ax.legend()
+
+
 	plt.show()
 
 

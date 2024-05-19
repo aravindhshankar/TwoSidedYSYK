@@ -21,7 +21,7 @@ from free_energy import free_energy_rolling_YSYKWH
 
 # err = 1e-10
 # err = 1e-8
-err = 1e-10
+err = 1e-14
 ITERMAX = 5000
 
 
