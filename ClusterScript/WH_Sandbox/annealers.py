@@ -253,7 +253,7 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 		if DUMP == True and np.isclose(savelist,lamb).any():
 			lambval = savelist[np.isclose(savelist,lamb)][0]
 			savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-			savefile += 'lamb' + str(lambval) + 'J' + str(J)
+			savefile += 'lamb' + f'{lambval:.3}' + 'J' + str(J)
 			savefile += 'g' + str(g) + 'r' + str(r)
 			savefile = savefile.replace('.','_') 
 			savefile += '.npy'
