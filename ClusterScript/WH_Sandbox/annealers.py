@@ -139,7 +139,7 @@ def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa
 		if verbose == True :
 			print("##### Finished beta = ", beta, "############")
 			#print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
-			print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}, x = {x:.5}')
+			print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}, x = {x:.5}',flush=True)
 		beta = beta + beta_step
 
 	beta -= beta_step 
@@ -263,7 +263,7 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 
 		if verbose == True :
 			print(f"##### Finished lamb =  {lamb} ############")
-			print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}, x = {x:.3}')
+			print(f'diff = {diff:.5}, itern = {itern}, free energy = {fe:.5}, x = {x:.3}',flush=True)
 	
 	return GDtau,GODtau,DDtau,DODtau,fe_list
 

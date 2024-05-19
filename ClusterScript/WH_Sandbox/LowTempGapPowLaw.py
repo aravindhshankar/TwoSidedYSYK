@@ -30,7 +30,7 @@ from annealers import anneal_temp, anneal_lamb
 
 PLOTTING = False
 DUMP = True
-Nbig = int(2**18)
+Nbig = int(2**16)
 
 beta_start = 1 
 target_beta = 5000
