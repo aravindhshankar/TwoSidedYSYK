@@ -30,7 +30,7 @@ from annealers import anneal_temp, anneal_lamb
 
 PLOTTING = False
 DUMP = True
-Nbig = int(2**16)
+Nbig = int(2**18)
 
 beta_start = 1 
 target_beta = 5000
@@ -46,7 +46,7 @@ beta_step = 1
 betasavelist = [target_beta,]
 lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 # lambsavelist = [0.1,0.05,0.01,0.005,0.001]
-lambsavelist = lamblooplist
+lambsavelist = np.arange(0.01,0.001 - 1e-10,-0.001)
 
 
 
