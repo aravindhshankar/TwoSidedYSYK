@@ -60,12 +60,12 @@ if calc == True:
 	betasavelist = [target_beta,]
 	lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 	# lambsavelist = [0.1,0.05,0.01,0.005,0.001]
-	lambsavelist = np.arange(0.1,0.001 - 1e-10,-0.001)
+	lambsavelist = np.arange(0.04,0.01 - 1e-10,-0.001)
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
 	# lambval = savelist[np.isclose(savelist,lamb)][0]
-	lambval = 0.01
+	lambval = 0.05
 	startT, stopT = 0, Nbig//2
 
 	# for lambval in (lambval,):
@@ -99,6 +99,7 @@ if calc == True:
 	# ax[0].semilogy(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau')
 	# ax[0].set_xlabel(r'$\tau/\beta$')
 	# ax[0].set_ylabel(r'$-\Re G(\tau)$')
+	# ax[0].axvline(1./(g**(2./3) * beta),ls='--', c='gray', label = 'YSYK scale')
 	# ax[0].legend()
 
 
