@@ -21,8 +21,8 @@ from free_energy import free_energy_rolling_YSYKWH
 
 # err = 1e-10
 # err = 1e-8
-err = 1e-20
-ITERMAX = 20000
+err = 1e-30
+ITERMAX = 50000
 
 
 def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa,DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True):
