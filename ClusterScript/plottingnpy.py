@@ -13,28 +13,30 @@ import matplotlib.pyplot as plt
 
 
 # path_to_outfile = './Dump/RTWHDumpfiles/'
-path_to_outfile = './Dump/RTWHDumpfiles0_05'
-path_to_BH = './Dump/RTWHDumpfiles0_00'
+# path_to_outfile = './Dump/RTWHDumpfiles0_05'
+# path_to_BH = './Dump/RTWHDumpfiles0_00'
+path_to_outfile = './Dump/LowTempWH/'
+path_to_BH = './Dump/LowTempBH/'
 #outfile = 'Y_WH_2153063.h5'
 #path_to_outfile = './Outputs/RTWH/NFLstart'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
 # outfile = 'RTWHlocalM18T15beta20g0_5lamb0_01.npy'
-BH_outfile = 'l_00M16T12beta200g0_5lamb0_0.npy'
-outfile = 'l_05M16T12beta199g0_5lamb0_05.npy'
+BH_outfile = 'RTWH_2442159M19T15beta300g0_5lamb0_0.npy'
+outfile = 'RTWH_2442136M19T15beta300g0_5lamb0_005.npy'
 savepath = os.path.join(path_to_outfile, outfile)
 BHsavepath = os.path.join(path_to_BH, BH_outfile)
 if not os.path.exists(savepath):
-	raise(Exception("WH Output file not found"))
+	raise(Exception(f"WH Output file {outfile} not found"))
 if not os.path.exists(BHsavepath):
 	raise(Exception("BH Output file not found"))
 
 
-M=int(2**16)
-T=2**12
-beta = 200.
+M=int(2**19)
+T=2**15
+beta = 300.
 temp=1./beta
 g = 0.5
-lamb = 0.05
+lamb = 0.005
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 loaded = np.array(np.load(savepath))
@@ -68,20 +70,21 @@ trans_am_OD = 2 * np.abs(G_great_OD)
 # to_plot -= min(to_plot)
 # BH_to_plot -= min(BH_to_plot)
 
-deltarho = to_plot / BH_to_plot
+# deltarho = np.abs(to_plot-BH_to_plot) / BH_to_plot
+deltarho = to_plot/ BH_to_plot
 
 # xaxis = omega
 xaxis = omega/lambexpo
 ax.set_xlabel(r'$\frac{\omega}{\lambda^{1/(2-2\Delta)}}$')
-ax.plot(xaxis,to_plot)
-ax.plot(xaxis,BH_to_plot,'--')
+# ax.plot(xaxis,to_plot)
+# ax.plot(xaxis,BH_to_plot,'--')
 ax.plot(xaxis,deltarho)
 # ax.set_ylim(0,10)
 # ax.set_xlim(-5,5)
-ax.set_xlim(-20,50)
+# ax.set_xlim(-20,50)
 print(f'min BH = {min(BH_to_plot)}')
 print(f'min WH = {min(to_plot)}')
-peakpoints = find_peaks(deltarho,prominence=1.)[0]
+peakpoints = find_peaks(deltarho,prominence=0.1)[0]
 peakvals = [xaxis[peak] for peak in peakpoints if peak>=M]
 print(f'peakvals = {peakvals}')
 print(f'diffs = {np.diff(peakvals)}')
@@ -92,7 +95,7 @@ ax.axvline(temp/lambexpo,ls='--',c='magenta',label=r'temperature')
 for peak in peakvals:
     ax.axvline(peak,ls='--',c='gray')
 ax.legend()
-ax.set_xticks(np.arange(-20,50,1))
+# ax.set_xticks(np.arange(-20,50,1))
 
 
 fig,ax = plt.subplots(1)
@@ -100,6 +103,7 @@ ax.set_title('Transmission amplitude')
 ax.plot(t,trans_am_D,'.-',label='Diagonal')
 ax.plot(t,trans_am_OD,'.-',label='Off-Diagonal')
 ax.set_xlabel('t')
+ax.set_xlim(-10,100)
 ax.legend()
 
 
