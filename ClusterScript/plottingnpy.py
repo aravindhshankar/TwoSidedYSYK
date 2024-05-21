@@ -54,7 +54,7 @@ lambexpo = lamb**expo
 omega,t  = RealGridMaker(M,T)
 dt = t[2]-t[1]
 
-idx = 0
+idx = 1
 fig,ax  = plt.subplots(1)
 to_plot = -np.imag(loaded[idx])
 BH_to_plot = -np.imag(loaded_BH[idx])
@@ -63,7 +63,7 @@ G_great_om_D = -1j*(1-fermidirac(beta*omega))*loaded[0]
 G_great_D = (0.5/np.pi) * freq2time(G_great_om_D,M,dt)
 trans_am_D = 2 * np.abs(G_great_D)
 
-G_great_om_OD = -1j*(1-fermidirac(beta*omega))*loaded_BH[0]
+G_great_om_OD = -1j*(1-fermidirac(beta*omega))*loaded[1]
 G_great_OD = (0.5/np.pi) * freq2time(G_great_om_OD,M,dt)
 trans_am_OD = 2 * np.abs(G_great_OD)
 
