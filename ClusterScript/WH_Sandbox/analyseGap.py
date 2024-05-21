@@ -60,7 +60,7 @@ if calc == True:
 	betasavelist = [target_beta,]
 	lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 	# lambsavelist = [0.1,0.05,0.01,0.005,0.001]
-	lambsavelist = np.arange(0.04,0.01 - 1e-10,-0.001)
+	lambsavelist = np.arange(0.05,0.01 - 1e-10,-0.001)
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
@@ -68,64 +68,66 @@ if calc == True:
 	lambval = 0.05
 	startT, stopT = 0, Nbig//2
 
-	for lambval in (lambval,):
-	# for lambval in lambsavelist:
+	# for lambval in (lambval,):
+	for lambval in lambsavelist:
 		savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 		savefile += 'lamb' + f'{lambval:.3}' + 'J' + str(J)
 		savefile += 'g' + str(g) + 'r' + str(r)
 		savefile = savefile.replace('.','_') 
 		savefile += '.npy'
 		try:
-			GDtau,_,_,_ = np.load(os.path.join(path_to_dump_lamb,savefile))
+			GDtau,_,DDtau,_ = np.load(os.path.join(path_to_dump_lamb,savefile))
 		except FileNotFoundError: 
 			print(f"InputFile not found for lamb = {lambval:.3}")
-		plottable = np.abs(np.real(GDtau))
+
+		plottable = np.abs(np.real(DDtau))
+
 		xaxis = tau[startT:stopT]/beta
 		logder = np.gradient(np.log(plottable))
-		start_idx = np.argmin(np.abs(xaxis-0.01))
-		stop_idx = np.argmin(np.abs(xaxis-0.02))
+		start_idx = np.argmin(np.abs(xaxis-0.02))
+		stop_idx = np.argmin(np.abs(xaxis-0.03))
 		fitslice = slice(start_idx,stop_idx)
 		slope = -np.mean(logder[startT:stopT][fitslice])
 		gaplist += [slope]
 
-	titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
-	titlestring += r' $\lambda$ = ' + f'{lambval:.3}' + r' J = ' + str(J)
-	plottable = np.abs(np.real(GDtau))
-	fig,ax = plt.subplots(2)
-	fig.suptitle(titlestring)
-	startT, stopT = 0, Nbig//2
-	xaxis = tau[startT:stopT]/beta
-	# yaxis = 
-	ax[0].semilogy(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau')
-	ax[0].set_xlabel(r'$\tau/\beta$')
-	ax[0].set_ylabel(r'$-\Re G(\tau)$')
-	ax[0].axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
-	ax[0].axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
-	ax[0].legend()
+	# titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+	# titlestring += r' $\lambda$ = ' + f'{lambval:.3}' + r' J = ' + str(J)
+	# #plottable = np.abs(np.real(GDtau))
+	# fig,ax = plt.subplots(2)
+	# fig.suptitle(titlestring)
+	# startT, stopT = 0, Nbig//2
+	# xaxis = tau[startT:stopT]/beta
+	# # yaxis = 
+	# ax[0].semilogy(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau')
+	# ax[0].set_xlabel(r'$\tau/\beta$')
+	# ax[0].set_ylabel(r'$-\Re G(\tau)$')
+	# ax[0].axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
+	# ax[0].axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
+	# ax[0].legend()
 
 
 
-	logder = np.gradient(np.log(plottable))
-	ax[1].plot(xaxis, logder[startT:stopT])
-	ax[1].set_xlabel(r'$\tau/\beta$')
-	ax[1].set_ylabel(r'$\frac{d|\Re G(\tau)|}{d\tau}$')
+	# logder = np.gradient(np.log(plottable))
+	# ax[1].plot(xaxis, logder[startT:stopT])
+	# ax[1].set_xlabel(r'$\tau/\beta$')
+	# ax[1].set_ylabel(r'$\frac{d|\Re G(\tau)|}{d\tau}$')
 
-	start_idx = np.argmin(np.abs(xaxis-0.3))
-	stop_idx = np.argmin(np.abs(xaxis-0.4))
-	print(start_idx,stop_idx)
-	fitslice = slice(start_idx,stop_idx)
-	slope = -np.mean(logder[startT:stopT][fitslice])
-	print(slope)
+	# start_idx = np.argmin(np.abs(xaxis-0.3))
+	# stop_idx = np.argmin(np.abs(xaxis-0.4))
+	# print(start_idx,stop_idx)
+	# fitslice = slice(start_idx,stop_idx)
+	# slope = -np.mean(logder[startT:stopT][fitslice])
+	# print(slope)
 
 
-	# slope_expect = 1./(2-2*delta)
-	# fig,ax = plt.subplots(1)
-	# ax.loglog(lambsavelist,gaplist,'.')
-	# m,c = np.polyfit(np.log(lambsavelist),np.log(gaplist),1)
-	# ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'fit with slope {m:.4}')
-	# print(f'dimensional analysis scaling = {slope_expect:.4}')
-	# print(f'calculated scaling = {m:.4}')
-	# ax.legend()
+	slope_expect = 1./(2-2*delta)
+	fig,ax = plt.subplots(1)
+	ax.loglog(lambsavelist,gaplist,'.')
+	m,c = np.polyfit(np.log(lambsavelist),np.log(gaplist),1)
+	ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'fit with slope {m:.4}')
+	print(f'dimensional analysis scaling = {slope_expect:.4}')
+	print(f'calculated scaling = {m:.4}')
+	ax.legend()
 
 
 	plt.show()
