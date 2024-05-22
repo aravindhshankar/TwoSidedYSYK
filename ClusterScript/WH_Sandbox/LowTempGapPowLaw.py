@@ -12,7 +12,7 @@ if not os.path.exists('../Dump/'):
     raise Exception("Error - Path to Dump directory not found ")
     exit(1)
 else:
-	path_to_dump_lamb = '../Dump/v2LOWTEMP_lamb_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/v3LOWTEMP_lamb_anneal_dumpfiles/'
 	if not os.path.exists(path_to_dump_lamb):
 		print("Making directory for lamb dump")
 		os.mkdir(path_to_dump_lamb)
@@ -33,7 +33,7 @@ DUMP = True
 Nbig = int(2**16)
 
 beta_start = 1 
-target_beta = 2000
+target_beta = 10000
 beta = beta_start
 mu = 0.0
 g = 0.5
