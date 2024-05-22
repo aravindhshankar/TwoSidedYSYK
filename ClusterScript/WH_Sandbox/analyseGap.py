@@ -13,7 +13,7 @@ if not os.path.exists('../Dump/'):
     raise Exception("Error - Path to Dump directory not found ")
     exit(1)
 else:
-	path_to_dump_lamb = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/v2LOWTEMP_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev'
 	if not os.path.exists(path_to_dump_lamb):
 		# print("Making directory for lamb dump")
@@ -46,7 +46,7 @@ if calc == True:
 	gaplist = []
 	Nbig = int(2**16)
 	beta_start = 1 
-	target_beta = 5000
+	target_beta = 2000
 	beta = target_beta
 	mu = 0.0
 	g = 0.5
@@ -60,12 +60,14 @@ if calc == True:
 	betasavelist = [target_beta,]
 	lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 	# lambsavelist = [0.1,0.05,0.01,0.005,0.001]
-	lambsavelist = np.arange(0.05,0.01 - 1e-10,-0.001)
+
+	lambsavelist = np.arange(0.06,0.006 - 1e-10,-0.001)
+
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
 	# lambval = savelist[np.isclose(savelist,lamb)][0]
-	lambval = 0.05
+	lambval = 0.01
 	startT, stopT = 0, Nbig//2
 
 	# for lambval in (lambval,):
@@ -80,13 +82,14 @@ if calc == True:
 		except FileNotFoundError: 
 			print(f"InputFile not found for lamb = {lambval:.3}")
 
-		plottable = np.abs(np.real(DDtau))
-
+		plottable = np.abs(np.real(GDtau))
+		lambinv = 1./(lambval*beta)
 		xaxis = tau[startT:stopT]/beta
 		logder = np.gradient(np.log(plottable))
-		start_idx = np.argmin(np.abs(xaxis-0.02))
-		stop_idx = np.argmin(np.abs(xaxis-0.03))
+		start_idx = np.argmin(np.abs(xaxis-lambinv*1.01))
+		stop_idx = np.argmin(np.abs(xaxis-lambinv*1.05))
 		fitslice = slice(start_idx,stop_idx)
+		print(f'lambval = {lambval:.3}, points in fit = {stop_idx-start_idx}, fitscale = {tau[start_idx]/beta:.2}, {tau[stop_idx]/beta :.2}')
 		slope = -np.mean(logder[startT:stopT][fitslice])
 		gaplist += [slope]
 
@@ -127,6 +130,8 @@ if calc == True:
 	ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'fit with slope {m:.4}')
 	print(f'dimensional analysis scaling = {slope_expect:.4}')
 	print(f'calculated scaling = {m:.4}')
+	ax.set_xlabel(r'$\lambda$')
+	ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
 	ax.legend()
 
 
