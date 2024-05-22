@@ -61,7 +61,7 @@ if calc == True:
 	lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 	# lambsavelist = [0.1,0.05,0.01,0.005,0.001]
 
-	lambsavelist = np.arange(0.06,0.006 - 1e-10,-0.001)
+	lambsavelist = np.arange(0.05,0.01 - 1e-10,-0.001)
 
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
@@ -82,12 +82,15 @@ if calc == True:
 		except FileNotFoundError: 
 			print(f"InputFile not found for lamb = {lambval:.3}")
 
-		plottable = np.abs(np.real(GDtau))
+		plottable = np.abs(np.real(DDtau))
 		lambinv = 1./(lambval*beta)
 		xaxis = tau[startT:stopT]/beta
 		logder = np.gradient(np.log(plottable))
-		start_idx = np.argmin(np.abs(xaxis-lambinv*1.01))
-		stop_idx = np.argmin(np.abs(xaxis-lambinv*1.05))
+		# start_idx = np.argmin(np.abs(xaxis-lambinv*2))
+		# stop_idx = np.argmin(np.abs(xaxis-lambinv*2.5))
+		start_idx = np.argmin(np.abs(xaxis-0.1))
+		stop_idx = np.argmin(np.abs(xaxis-0.13))
+
 		fitslice = slice(start_idx,stop_idx)
 		print(f'lambval = {lambval:.3}, points in fit = {stop_idx-start_idx}, fitscale = {tau[start_idx]/beta:.2}, {tau[stop_idx]/beta :.2}')
 		slope = -np.mean(logder[startT:stopT][fitslice])

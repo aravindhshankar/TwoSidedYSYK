@@ -21,8 +21,8 @@ from free_energy import free_energy_rolling_YSYKWH
 
 # err = 1e-10
 # err = 1e-8
-err = 1e-30
-ITERMAX = 60000
+err = 1e-6
+ITERMAX = 5000
 
 
 def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa,DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True):
@@ -372,7 +372,7 @@ def anneal_J(J_list,GFtaus,Nbig,g,r,mu,beta,lamb,kappa,DUMP=False,path_to_dump=N
 		if DUMP == True and np.isclose(savelist,J).any():
 			Jval = savelist[np.isclose(savelist,J)][0]
 			savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-			savefile += 'lamb' + f'{lamb:.3}' + 'J' + f'{Jval:.3}'
+			savefile += 'lamb' + str(lamb) + 'J' + f'{Jval:.3}'
 			savefile += 'g' + str(g) + 'r' + str(r)
 			savefile = savefile.replace('.','_') 
 			savefile += '.npy'

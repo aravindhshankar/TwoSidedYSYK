@@ -63,7 +63,7 @@ lambsavelist = lamblooplist
 
 # GDtau, DDtau = Gfreetau, Dfreetau
 # GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-# DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+# DODtau = Freq2TimeB(-J/((nu**2 + r)**2 - J**2), Nbig, beta)
 # GFtaus = [GDtau,GODtau,DDtau,DODtau]
 
 
@@ -87,7 +87,7 @@ for beta in betasavelist:
 	GDtau = Freq2TimeF((1j*omega + mu)/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
 	DDtau = Freq2TimeB((nu**2+r)/((nu**2 + r)**2 - J**2), Nbig, beta)
 	GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-	DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+	DODtau = Freq2TimeB(-J/((nu**2 + r)**2 - J**2), Nbig, beta)
 	GFtaus = [GDtau,GODtau,DDtau,DODtau]
 	_,_,_,_,_ = anneal_lamb(lamblooplist,GFtaus,Nbig,g,r,mu,beta,J,kappa,
 						DUMP=DUMP,path_to_dump=path_to_dump_lamb,savelist=lambsavelist,

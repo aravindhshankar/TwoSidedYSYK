@@ -30,7 +30,7 @@ from annealers import anneal_temp, anneal_lamb, anneal_J
 
 PLOTTING = False
 DUMP = True
-Nbig = int(2**16)
+Nbig = int(2**14)
 
 beta_start = 1 
 target_beta = 2000
@@ -39,17 +39,18 @@ mu = 0.0
 g = 0.5
 r = 1.
 lamb = 0
-J = 0.05
+# J = 0.05
+J = 10.
 kappa = 1.
 beta_step = 1
 # betasavelist = [50,100,500,1000,5000,10000]
 betasavelist = [target_beta,]
-Jlooplist = np.arange(1,0.001 - 1e-10,-0.001)
+Jlooplist = np.arange(1-1e-10,0.001 - 1e-10,-0.001)
 # Jsavelist = [0.1,0.05,0.01,0.005,0.001]
 # Jsavelist = np.arange(0.01,0.001 - 1e-10,-0.001)
 Jsavelist = Jlooplist
 
-
+# J = Jlooplist[0]
 
 
 ### Setting up initial conditions for temp annealer
@@ -63,7 +64,7 @@ Jsavelist = Jlooplist
 
 # GDtau, DDtau = Gfreetau, Dfreetau
 # GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-# DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+# DODtau = Freq2TimeB(-J/((nu**2 + r)**2 - J**2), Nbig, beta)
 # GFtaus = [GDtau,GODtau,DDtau,DODtau]
 
 
@@ -87,7 +88,7 @@ for beta in betasavelist:
 	GDtau = Freq2TimeF((1j*omega + mu)/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
 	DDtau = Freq2TimeB((nu**2+r)/((nu**2 + r)**2 - J**2), Nbig, beta)
 	GODtau = Freq2TimeF(-lamb/((1j*omega+mu)**2 - lamb**2), Nbig, beta)
-	DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
+	DODtau = Freq2TimeB(-J/((nu**2 + r)**2 - J**2), Nbig, beta)
 	GFtaus = [GDtau,GODtau,DDtau,DODtau]
 	_,_,_,_,_ = anneal_J(Jlooplist,GFtaus,Nbig,g,r,mu,beta,lamb,kappa,
 						DUMP=DUMP,path_to_dump=path_to_dump_J,savelist=Jsavelist,
