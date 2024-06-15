@@ -67,7 +67,7 @@ def fixed_point_egraal(T, x0, err, ITERMAX = 2000, phi=1.5, output=False):
 DUMP = False
 
 Nbig = int(2**14)
-err = 1e-8
+err = 1e-6
 #err = 1e-2
 ITERMAX = 2000
 
@@ -78,7 +78,7 @@ g = 0.5
 r = 1.
 
 # target_beta = 500
-beta = 2000.
+beta = 200.
 kappa = 1.
 
 
@@ -169,6 +169,18 @@ ax[1].set_ylabel(r'$\Re{D(\tau)}$')
 ax[1].legend()
 
 #plt.savefig('KoenraadEmails/WithMR_imagtime.pdf',bbox_inches='tight')
+
+
+
+
+
+fig, ax = plt.subplots(1)
+ax.plot(values, '.-', label='values')
+ax.set_yscale('log')
+ax2 = ax.twinx()
+ax2.plot(step_list, '.-', c='r', label = 'step_list')
+ax.legend(loc=0)
+ax2.legend(loc=0)
 plt.show()
 
 
