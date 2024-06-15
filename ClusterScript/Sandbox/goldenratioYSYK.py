@@ -116,16 +116,6 @@ x = 0.5
 Gtau, Dtau = Gconftau, Dconftau
 Gtaus = np.array((Gtau,Dtau))
 
-################## Event Loop ##########################
-
-# while(diff > err and itern < ITERMAX):
-# 	if (itern == ITERMAX-1):
-# 		print(f'ITERMAX  = {ITERMAX} has been reached')
-# 	oldGtau,oldDtau = Gtau.copy(),Dtau.copy() #G_{k-1}
-# 	xf = (10./9.) * x_1
-# 	num = (norm(Gtau - ))**2
-
-
 T = partial(stepYSYK, g=g,beta=beta,Nbig=Nbig,omega=omega,nu=nu,kappa=kappa,mu=mu,r=r)
 
 sol = fixed_point_egraal(T, Gtaus, err, ITERMAX = ITERMAX)
