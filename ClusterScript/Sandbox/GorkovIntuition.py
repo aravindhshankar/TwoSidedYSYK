@@ -30,7 +30,7 @@ ITERMAX = 5000
 
 global beta
 
-beta = 1.
+beta = 50.
 mu = 0.0
 g = 0.5
 r = 1.
@@ -54,8 +54,10 @@ omegar2 = ret_omegar2(g,beta)
 GAP = 0.1
 #Gtau = Gfreetau
 Dtau = Dfreetau
-Gtau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
-Ftau = Freq2TimeF(GAP/((1j*omega)**2 + mu**2),Nbig,beta)
+# Gtau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
+# Ftau = Freq2TimeF(GAP/((1j*omega)**2 + mu**2),Nbig,beta)
+Gtau = Freq2TimeF((1j*omega + mu)/((1j*omega + mu)**2 + GAP**2),Nbig,beta)
+Ftau = Freq2TimeF((GAP)/((1j*omega + mu)**2 + GAP**2),Nbig,beta)
 
 
 fig, ax = plt.subplots(3)
