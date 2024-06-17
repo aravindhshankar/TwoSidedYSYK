@@ -12,7 +12,7 @@ if not os.path.exists('../Dump/'):
     raise Exception("Error - Path to Dump directory not found ")
     exit(1)
 else:
-	path_to_dump_lamb = '../Dump/v3LOWTEMP_lamb_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/kappa10LOWTEMP_lamb_anneal_dumpfiles/'
 	if not os.path.exists(path_to_dump_lamb):
 		print("Making directory for lamb dump")
 		os.mkdir(path_to_dump_lamb)
@@ -33,14 +33,14 @@ DUMP = True
 Nbig = int(2**16)
 
 beta_start = 1 
-target_beta = 10000
+target_beta = 5000
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 lamb = 0.05
 J = 0
-kappa = 1.
+kappa = 10.
 beta_step = 1
 # betasavelist = [50,100,500,1000,5000,10000]
 betasavelist = [target_beta,]
@@ -48,7 +48,7 @@ lamblooplist = np.arange(1,0.001 - 1e-10,-0.001)
 # lambsavelist = [0.1,0.05,0.01,0.005,0.001]
 # lambsavelist = np.arange(0.01,0.001 - 1e-10,-0.001)
 lambsavelist = lamblooplist
-
+lamb = lamblooplist[0]
 
 
 

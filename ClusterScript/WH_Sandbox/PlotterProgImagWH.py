@@ -18,13 +18,13 @@ if not os.path.exists('../Dump/'):
 	raise Exception("Error - Path to Dump directory not found ")
 	exit(1)
 else:
-	# path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
+	path_to_dump = '../Dump/lamb_anneal_dumpfiles/'
 	# path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
 	# path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
 	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
-	path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
+	# path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
 	
 	# if not os.path.exists(path_to_dump_lamb):
 	# 	raise Exception('Generate Data first! Path to lamb dump not found')
@@ -48,13 +48,13 @@ err = 1e-5
 
 global beta
 
-beta = 100
+beta = 500
 mu = 0.0
 g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.001
+lamb = 0.01
 J = 0
 
 # path_to_dump = path_to_dump_lamb

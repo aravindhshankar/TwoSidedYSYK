@@ -21,8 +21,9 @@ from free_energy import free_energy_rolling_YSYKWH
 
 # err = 1e-10
 # err = 1e-8
-err = 1e-6
-ITERMAX = 5000
+#err = 1e-6
+err = 1e-20
+ITERMAX = 20000
 
 
 def anneal_temp(target_beta,GFtaus,Nbig,beta_start,beta_step,g,r,mu,lamb,J,kappa,DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True):
@@ -252,7 +253,7 @@ def anneal_lamb(lamb_list,GFtaus,Nbig,g,r,mu,beta,J,kappa,DUMP=False,path_to_dum
 
 		if DUMP == True and np.isclose(savelist,lamb).any():
 			lambval = savelist[np.isclose(savelist,lamb)][0]
-			savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+			savefile = 'kappa' + str(kappa) + 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 			savefile += 'lamb' + f'{lambval:.3}' + 'J' + str(J)
 			savefile += 'g' + str(g) + 'r' + str(r)
 			savefile = savefile.replace('.','_') 
