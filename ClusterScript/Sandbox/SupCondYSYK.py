@@ -37,7 +37,7 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 50.
+target_beta = 20.
 
 kappa = 1.
 beta_step = 1

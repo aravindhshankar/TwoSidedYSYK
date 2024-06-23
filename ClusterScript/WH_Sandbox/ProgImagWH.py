@@ -7,11 +7,12 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 
-if not os.path.exists('../Dump/WHYSYKImagDumpfiles'):
-    print("Error - Path to Dump directory not found ")
-    raise Exception("Error - Path to Dump directory not found ")
-else:
-    path_to_dump = '../Dump/WHYSYKImagDumpfiles'
+path_to_dump = '../Dump/WHYSYKImagDumpfiles/SCWH/'
+if not os.path.exists(path_to_dump):
+    print("Path to Dump directory not found ")
+    #raise Exception("Error - Path to Dump directory not found ")
+    print("Creating Dump directory")
+    os.makedirs(path_to_dump)
 
 
 from SYK_fft import *
@@ -26,27 +27,27 @@ from free_energy import free_energy_rolling_YSYKWH
 ######### TODO: IMPLEMENT THE BLOODY PLOTTER FOR THE OFF_DIAG ELEMENTS ##########
 
 
-DUMP = False
+DUMP = True
 print("DUMP = ", DUMP)
 
 Nbig = int(2**14)
-err = 1e-4
+err = 1e-6
 #err = 1e-2
-ITERMAX = 5000
+ITERMAX = 8000
 
 global beta
 
 beta_start = 1.
 beta = beta_start
 mu = 0.0
-g = 0.5
+g = 2.
 r = 1.
 
 lamb = 0.05
 # J = 0.05
 #J = np.sqrt(lamb)
 #J = 0.0001
-#J = 0.
+J = 0.
 
 target_beta = 100.
 print("############ Started : target beta = , ", target_beta, " #############")
@@ -86,7 +87,7 @@ while(beta < target_beta):
     diff = err*1.1
     diffG = 1.
     diffD = 1.
-    x = 0.01
+    x = 0.005
     beta_step = 1 if (beta>=500) else 1
 
     omega = ImagGridMaker(Nbig,beta,'fermion')
