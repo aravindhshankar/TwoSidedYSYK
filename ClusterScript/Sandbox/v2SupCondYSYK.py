@@ -25,19 +25,20 @@ DUMP = False
 print("Here")
 
 Nbig = int(2**14)
-err = 1e-8
+err = 1e-12
 #err = 1e-2
 ITERMAX = 5000
 
 global beta
 
-beta_start = 100
+beta_start = 30
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 101.
+#target_beta = 101.
+target_beta = beta + 1 
 
 kappa = 1.
 beta_step = 1
@@ -53,6 +54,7 @@ savefile += '.npy'
 try:
     Gtau,Dtau,Ftau = np.load(os.path.join(path_to_dump,savefile))
 except FileNotFoundError:
+    print("Filename: ", savefile)
     print("Input File not found!!! Exiting.......")
     exit(1)
 
@@ -68,10 +70,10 @@ delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
 
-Ftau = Gtau.copy()
+#Ftau = Gtau.copy()
 # Ftau = np.ones_like(Dtau)
 # Ftau = np.zeros_like(Dtau)
-
+Ftau = (2-1j)*np.ones_like(Gtau)
 
 #Gtau,Dtau = np.load('temp.npy')
 assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
@@ -107,8 +109,8 @@ while(beta < target_beta):
             oldFomega = 1.0*Fomega
         
         Sigmatau = 1.0 * kappa * (g**2) * Dtau * Gtau
-        Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
-        # Pitau = -2.0 * g**2 * (-1.* Gtau * Gtau[::-1] - np.conj(Ftau) * Ftau)#KMS G(-tau) = -G(beta-tau), me
+        #Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
+        Pitau = -2.0 * g**2 * (-1.* Gtau * Gtau[::-1] - np.conj(Ftau) * Ftau)#KMS G(-tau) = -G(beta-tau), me
         Phitau = -1.0 * kappa * (g**2) * Dtau * Ftau
         
         Sigmaomega = Time2FreqF(Sigmatau,Nbig,beta)
@@ -150,6 +152,9 @@ while(beta < target_beta):
     print(f"F(tau = 0+) = {Ftau[0]:.4}")
     print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
     beta = beta + beta_step
+
+
+beta = beta - beta_step   
 
 ################## PLOTTING ######################
 print(beta), print(tau[-1])
