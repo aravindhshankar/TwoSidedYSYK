@@ -21,26 +21,40 @@ from ConformalAnalytical import *
 #import time
 
 
-DUMP = True
+DUMP = False
 print("Here")
 
 Nbig = int(2**14)
-err = 1e-24
+err = 1e-8
 #err = 1e-2
 ITERMAX = 5000
 
 global beta
 
-beta_start = 1
+beta_start = 100
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 100.
+target_beta = 101.
 
 kappa = 1.
 beta_step = 1
+
+
+
+savefile = 'MET'
+savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+savefile += 'g' + str(g) + 'r' + str(r)
+savefile = savefile.replace('.','_') 
+savefile += '.npy'
+
+try:
+    Gtau,Dtau,Ftau = np.load(os.path.join(path_to_dump,savefile))
+except FileNotFoundError:
+    print("Input File not found!!! Exiting.......")
+    exit(1)
 
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
@@ -53,10 +67,7 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-#Gtau = Gfreetau
-Dtau = Dfreetau
-# Gtau = np.zeros_like(Dtau)
-Gtau = Gfreetau
+
 Ftau = Gtau.copy()
 # Ftau = np.ones_like(Dtau)
 # Ftau = np.zeros_like(Dtau)
@@ -129,7 +140,6 @@ while(beta < target_beta):
             diff = 0.33*(diffG+diffD+diffF)
 
     if DUMP == True and beta % 10 == 0 :
-        savefile = 'MET'
         savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         savefile += 'g' + str(g) + 'r' + str(r)
         savefile = savefile.replace('.','_') 
