@@ -131,15 +131,15 @@ while(beta < target_beta):
         # detGmat = (1j*omega + mu - Sigmaomega) * (1j*omega - mu + np.conj(Sigmaomega)) - (np.abs(Phiomega))**2
         detD = (nu**2 + r - PiDomega)**2 - (J - PiODomega)**2
         
-        GDomega = x*() + (1-x)*oldGDomega
+        GDomega = 0.5*x*(-((lamb + 1j*omega + np.conj(SigmaDomega) - np.conj(SigmaODomega))/(-((lamb - SigmaDomega + SigmaODomega + 1j*omega)*(lamb + 1j*omega + np.conj(SigmaDomega) - np.conj(SigmaODomega))) + (PhiDomega - PhiODomega)*(np.conj(PhiDomega) - np.conj(PhiODomega)))) + (-lamb + 1j*omega + np.conj(SigmaDomega) + np.conj(SigmaODomega))/((lamb - 1j*omega)**2 - (SigmaDomega + SigmaODomega)*(np.conj(SigmaDomega) + np.conj(SigmaODomega)) - (PhiDomega + PhiODomega)*(np.conj(PhiDomega) + np.conj(PhiODomega)) + 2*(1j*lamb + omega)*np.imag(SigmaDomega + SigmaODomega))) + (1-x)*oldGDomega
 
-        FDomega = x*() + (1-x)*oldFDomega
+        FDomega = 0.5*x*((-PhiDomega + PhiODomega)/(-((lamb - SigmaDomega + SigmaODomega + 1j*omega)*(lamb + 1j*omega + np.conj(SigmaDomega) - np.conj(SigmaODomega))) + (PhiDomega - PhiODomega)*(np.conj(PhiDomega) - np.conj(PhiODomega))) + (PhiDomega + PhiODomega)/((lamb + SigmaDomega + SigmaODomega - 1j*omega)*(lamb - 1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - (PhiDomega + PhiODomega)*(np.conj(PhiDomega) + np.conj(PhiODomega)))) + (1-x)*oldFDomega
 
         DDomega = x*((nu**2 + r - PiDomega)/(detD)) + (1-x)*oldDDomega
 
-        GODomega = x*() + (1-x)*oldGODomega
+        GODomega = 0.5*x*((lamb + 1j*omega + np.conj(SigmaDomega) - np.conj(SigmaODomega))/(-((lamb - SigmaDomega + SigmaODomega + 1j*omega)*(lamb + 1j*omega + np.conj(SigmaDomega) - np.conj(SigmaODomega))) + (PhiDomega - PhiODomega)*(np.conj(PhiDomega) - np.conj(PhiODomega))) + (-lamb + 1j*omega + np.conj(SigmaDomega) + np.conj(SigmaODomega))/((lamb - 1j*omega)**2 - (SigmaDomega + SigmaODomega)*(np.conj(SigmaDomega) + np.conj(SigmaODomega)) - (PhiDomega + PhiODomega)*(np.conj(PhiDomega) + np.conj(PhiODomega)) + 2*(1j*lamb + omega)*np.imag(SigmaDomega + SigmaODomega))) + (1-x)*oldGODomega
 
-        FODomega = x*() + (1-x)*oldFODomega
+        FODomega = 0.5*x*((PhiDomega - PhiODomega)/(-((lamb - SigmaDomega + SigmaODomega + 1j*omega)*(lamb + 1j*omega + np.conj(SigmaDomega) - np.conj(SigmaODomega))) + (PhiDomega - PhiODomega)*(np.conj(PhiDomega) - np.conj(PhiODomega))) + (PhiDomega + PhiODomega)/((lamb + SigmaDomega + SigmaODomega - 1j*omega)*(lamb - 1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - (PhiDomega + PhiODomega)*(np.conj(PhiDomega) + np.conj(PhiODomega)))) + (1-x)*oldFODomega
 
         DODomega = x*(-1.*(J- PiODomega)/(detD)) + (1-x)*oldDODomega
 
