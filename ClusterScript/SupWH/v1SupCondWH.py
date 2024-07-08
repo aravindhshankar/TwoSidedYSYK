@@ -39,8 +39,8 @@ mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-# lamb = 0.01
-lamb = 0.0
+lamb = 0.01
+# lamb = 0.0
 J = 0.0
 
 target_beta = 100.
@@ -166,7 +166,7 @@ while(beta < target_beta):
         savefile += 'lamb' + f'{lamb:.3}'
         savefile = savefile.replace('.','_') 
         savefile += '.npy'
-        np.save(os.path.join(path_to_dump, savefile), np.array([Gtau,Dtau,Ftau,GODtau,DODtau,FODtau])) 
+        np.save(os.path.join(path_to_dump, savefile), np.array([GDtau,DDtau,FDtau,GODtau,DODtau,FODtau])) 
         print(savefile)
     print("##### Finished beta = ", beta, "############")
     print(f"FD(tau = 0+) = {FDtau[0]:.4}")
