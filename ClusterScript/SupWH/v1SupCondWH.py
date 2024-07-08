@@ -128,20 +128,20 @@ while(beta < target_beta):
         PiODomega =  Time2FreqB(PiODtau,Nbig,beta)
         PhiODomega = Time2FreqF(PhiODtau,Nbig,beta)
 
-        detGmat = (1j*omega + mu - Sigmaomega) * (1j*omega - mu + np.conj(Sigmaomega)) - (np.abs(Phiomega))**2
+        # detGmat = (1j*omega + mu - Sigmaomega) * (1j*omega - mu + np.conj(Sigmaomega)) - (np.abs(Phiomega))**2
+        detD = (nu**2 + r - PiDomega)**2 - (J - PiODomega)**2
         
         GDomega = x*() + (1-x)*oldGDomega
 
         FDomega = x*() + (1-x)*oldFDomega
 
-        DDomega = x*() + (1-x)*oldDDomega
+        DDomega = x*((nu**2 + r - PiDomega)/(detD)) + (1-x)*oldDDomega
 
         GODomega = x*() + (1-x)*oldGODomega
 
         FODomega = x*() + (1-x)*oldFODomega
 
-        DODomega = x*() + (1-x)*oldDODomega
-
+        DODomega = x*(-1.*(J- PiODomega)/(detD)) + (1-x)*oldDODomega
 
 
         GDtau = Freq2TimeF(GDomega,Nbig,beta)
