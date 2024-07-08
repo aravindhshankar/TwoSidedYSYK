@@ -23,7 +23,7 @@ from ConformalAnalytical import *
 #import time
 
 
-DUMP = False
+DUMP = True
 PLOTTING = False
 
 Nbig = int(2**14)
@@ -39,8 +39,9 @@ mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-lamb = 0.01
-J=0.0
+# lamb = 0.01
+lamb = 0.0
+J = 0.0
 
 target_beta = 100.
 
