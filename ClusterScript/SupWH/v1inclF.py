@@ -34,17 +34,18 @@ ITERMAX = 5000
 
 global beta
 
-beta_start = 80
+beta_start = 40
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-lamb = 0.01
+lamb = 0.05
 # lamb = 0.0
 J = 0.0
 
-target_beta = 80.
+# target_beta = 40.
+target_beta = beta_start
 
 kappa = 1.
 beta_step = 1
@@ -171,15 +172,15 @@ while(beta <= target_beta):
 
         diff = 0.33*(diffGD+diffDD+diffFD)
 
-    if DUMP == True and beta % 10 == 0 :
-        savefile = 'MET'
-        savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-        savefile += 'g' + str(g) + 'r' + str(r)
-        savefile += 'lamb' + f'{lamb:.3}'
-        savefile = savefile.replace('.','_') 
-        savefile += '.npy'
-        np.save(os.path.join(path_to_dump, savefile), np.array([GDtau,DDtau,FDtau,GODtau,DODtau,FODtau])) 
-        print(savefile)
+    # if DUMP == True and beta % 10 == 0 :
+    #     savefile = 'MET'
+    #     savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+    #     savefile += 'g' + str(g) + 'r' + str(r)
+    #     savefile += 'lamb' + f'{lamb:.3}'
+    #     savefile = savefile.replace('.','_') 
+    #     savefile += '.npy'
+    #     np.save(os.path.join(path_to_dump, savefile), np.array([GDtau,DDtau,FDtau,GODtau,DODtau,FODtau])) 
+    #     print(savefile)
     print("##### Finished beta = ", beta, "############")
     print(f"FD(tau = 0+) = {FDtau[0]:.4}")
     print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
@@ -192,6 +193,20 @@ np.testing.assert_almost_equal(beta,target_beta)
 
 
 print(f"Simulation with inclusion of superconductivity ended with FDtau[0] = {FDtau[0]:.4}, FDomega[0] = {FDomega[Nbig//2]:.4}")
+tanph = np.imag(FDomega[Nbig//2]) / np.real(FDomega[Nbig//2])
+phaseangle = np.arctan(tanph) * 180/ np.pi
+print(f"The phase angle of each superconductor is {phaseangle:.4f} degrees")
+BCSgap = 1j*omega * FDomega/ GDomega 
+fig,ax = plt.subplots(1)
+ax.plot(omega, BCSgap.real,label='Re$\\Delta$') 
+ax.plot(omega,BCSgap.imag, label='Im$\\Delta$')
+ax.set_xlabel(r'$\omega_n$')
+ax.set_ylabel(r'$\Delta$')
+titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+ax.set_title(titlestring)
+BCSphaseangle = np.arctan(BCSgap[Nbig//2].imag / BCSgap[Nbig//2].real) 
+BCSphaseangle = BCSphaseangle * 180 / np.pi
+print(f"BCS gap phase angle is = {BCSphaseangle:.4f} degrees")
 
 ################## PLOTTING ######################
 if PLOTTING == False:

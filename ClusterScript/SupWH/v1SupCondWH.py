@@ -39,11 +39,11 @@ mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-lamb = 0.01
+lamb = 0.05
 # lamb = 0.0
 J = 0.0
 
-target_beta = 100.
+target_beta = 120.
 
 kappa = 1.
 beta_step = 1
@@ -175,7 +175,7 @@ while(beta <= target_beta):
 
 
 
-
+beta = beta-beta_step
 
 ################## PLOTTING ######################
 if PLOTTING == False:
