@@ -10,9 +10,10 @@ path_to_dump = '../Dump/SupCondWHImagDumpfiles'
 
 if not os.path.exists(path_to_dump):
     print("Error - Path to Dump directory not found")
-    print("Creating Dump directory : ", path_to_dump)
-    os.makedirs(path_to_dump)
-    #raise Exception("Error - Path to Dump directory not found ")
+    print("expected path: ", path_to_dump)
+    # print("Creating Dump directory : ", path_to_dump)
+    #os.makedirs(path_to_dump)
+    raise Exception("Error - Path to Dump directory not found ")
 
 
 from SYK_fft import *
@@ -23,8 +24,8 @@ from ConformalAnalytical import *
 #import time
 
 
-DUMP = True
-PLOTTING = False
+DUMP = False
+PLOTTING = True
 
 Nbig = int(2**14)
 err = 1e-12
@@ -33,7 +34,7 @@ ITERMAX = 5000
 
 global beta
 
-beta_start = 1
+beta_start = 80
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -43,7 +44,7 @@ lamb = 0.01
 # lamb = 0.0
 J = 0.0
 
-target_beta = 100.
+target_beta = 80.
 
 kappa = 1.
 beta_step = 1
@@ -62,19 +63,30 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-#Gtau = Gfreetau
-DDtau = Dfreetau
-# Gtau = np.zeros_like(Dtau)
-GDtau = Gfreetau
-FDtau = GDtau.copy()
-# Ftau = np.ones_like(Dtau)
-# Ftau = np.zeros_like(Dtau)
 
-DODtau = np.zeros_like(DDtau)
-GODtau = np.zeros_like(GDtau)
-FODtau = np.zeros_like(FDtau)
+################# LOADING STEP ##########################
+savefile = 'MET'
+savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+savefile += 'g' + str(g) + 'r' + str(r)
+savefile += 'lamb' + f'{lamb:.3}'
+savefile = savefile.replace('.','_') 
+savefile += '.npy'
+try:
+    GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
+except FileNotFoundError:
+    print(savefile, " not found")
+    exit(1)
+
+##########################################################
 
 assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
+
+#Include anomalous propagators
+FDtau = (1+1j)*np.ones_like(GDtau)
+FODtau = (1-1j)*np.ones_like(GODtau)
+
+
+
 
 while(beta <= target_beta):
     itern = 0
@@ -175,12 +187,17 @@ while(beta <= target_beta):
 
 
 
+beta = beta - beta_step
+np.testing.assert_almost_equal(beta,target_beta)
 
+
+print(f"Simulation with inclusion of superconductivity ended with FDtau[0] = {FDtau[0]:.4}, FDomega[0] = {FDomega[Nbig//2]:.4}")
 
 ################## PLOTTING ######################
 if PLOTTING == False:
     print("Simulation Finished, exiting Without PLOTTING ........")
     exit(0)
+
 
 
 
@@ -195,14 +212,14 @@ fig, ax = plt.subplots(3)
 titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
 fig.suptitle(titlestring)
 fig.tight_layout(pad=2)
-ax[0].plot(tau/beta, np.real(Gtau), 'r', label = 'numerics Gtau')
+ax[0].plot(tau/beta, np.real(GDtau), 'r', label = 'numerics Gtau')
 ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
 ax[0].set_ylim(-1,1)
 ax[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[0].set_ylabel(r'$\Re{G(\tau)}$')
 ax[0].legend()
 
-ax[1].plot(tau/beta, np.real(Dtau), 'r', label = 'numerics Dtau')
+ax[1].plot(tau/beta, np.real(DDtau), 'r', label = 'numerics Dtau')
 ax[1].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
 ax[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
 #ax[1].set_ylim(0,1)
@@ -210,8 +227,8 @@ ax[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[1].set_ylabel(r'$\Re{D(\tau)}$')
 ax[1].legend()
 
-ax[2].plot(tau/beta, np.real(Ftau), 'r--', label = 'numerics Real Ftau')
-ax[2].plot(tau/beta, np.imag(Ftau), 'b', label = 'numerics Imag Ftau')
+ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
+ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
 #ax[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
 #ax[2].set_ylim(-1,1)
 ax[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
@@ -233,13 +250,13 @@ startB, stopB = Nbig//2 + 1 , Nbig//2 + 101
 delta = 0.420374134464041
 alt_delta = 0.116902  
 
-fitG_val = -np.imag(Gomega[start+0])*(g**2)
+fitG_val = -np.imag(GDomega[start+0])*(g**2)
 #fitG_val = -np.imag(Gconf[start:stop])*(g**2)
 conf_fit_G = 1 * np.abs(omega/(g**2))**(2*delta - 1)
 conf_fit_G = conf_fit_G/conf_fit_G[start] * fitG_val
 alt_conf_fit_G = fitG_val * np.abs(omega/(g**2))**(2*alt_delta - 1)
 
-fitD_val = np.real(Domega[startB])*(g**2)
+fitD_val = np.real(DDomega[startB])*(g**2)
 #fitD_val = np.real(Dconf[startB:stopB])
 conf_fit_D = 1 * np.abs(nu[startB:stopB]/(g**2))**(1-4*delta)
 conf_fit_D = conf_fit_D/conf_fit_D[0] * fitD_val
@@ -254,12 +271,12 @@ fig.tight_layout(pad=2)
 
 fitslice = slice(start+0, start + 15)
 #fitslice = slice(start+25, start + 35)
-functoplot = -np.imag(Gomega)*(g**2)
+functoplot = -np.imag(GDomega)*(g**2)
 m,c = np.polyfit(np.log(np.abs(omega[fitslice])/(g**2)), np.log(functoplot[fitslice]),1)
 print(f'slope of fit = {m:.03f}')
 #print('2 Delta - 1 = ', 2*delta-1)
 
-ax1.loglog(omega[start:stop]/(g**2), -np.imag(Gomega[start:stop])*(g**2),'p',label = 'numerics')
+ax1.loglog(omega[start:stop]/(g**2), -np.imag(GDomega[start:stop])*(g**2),'p',label = 'numerics')
 ax1.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
 #ax1.loglog(omega[start:]/(g**2), -np.imag(Gconf[start:])*(g**2),'m.',label = 'ES solution')
 #ax1.loglog(omega[start:]/(g**2), alt_conf_fit_G[start:],'g--', label = 'alt power law')
@@ -267,13 +284,13 @@ ax1.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES po
 ax1.loglog(omega[start:stop]/(g**2), np.exp(c)*np.abs(omega[start:stop]/(g**2))**m, label=f'Fit with slope {m:.03f}')
 #ax1.set_ylim(1e-1,1e1)
 ax1.set_xlabel(r'$\omega_n/g^2$')
-ax1.set_ylabel(r'$-g^2\,\Im{G(\omega_n)}$')
+ax1.set_ylabel(r'$-g^2\,\Im{GD(\omega_n)}$')
 #ax1.set_aspect('equal', adjustable='box')
 #ax1.axis('square')
 ax1.legend()
 
 
-ax2.loglog(nu[startB:stopB]/(g**2), np.real(Domega[startB:stopB])*(g**2),'p',label='numerics')
+ax2.loglog(nu[startB:stopB]/(g**2), np.real(DDomega[startB:stopB])*(g**2),'p',label='numerics')
 ax2.loglog(nu[startB:stopB]/(g**2), conf_fit_D,'k--',label = 'ES power law')
 #ax2.loglog(nu[startB:]/(g**2), np.real(Dconf[startB:]),'m.',label = 'ES solution')
 #ax2.loglog(nu[startB:]/(g**2), alt_conf_fit_D,'g--', label = 'alt power law')
@@ -285,8 +302,8 @@ ax2.set_ylabel(r'$g^2\,\Re{D(\nu_n)}$',labelpad = None)
 ax2.legend()
 
 
-ax3.loglog(omega[start:stop]/(g**2), np.abs(np.imag(Fomega[start:stop])*(g**2)),'p',label = 'numerics imag Fomega')
-ax3.loglog(omega[start:stop]/(g**2), np.abs(np.real(Fomega[start:stop])*(g**2)),'p',label = 'numerics real Fomega')
+ax3.loglog(omega[start:stop]/(g**2), np.abs(np.imag(FDomega[start:stop])*(g**2)),'p',label = 'numerics imag Fomega')
+ax3.loglog(omega[start:stop]/(g**2), np.abs(np.real(FDomega[start:stop])*(g**2)),'p',label = 'numerics real Fomega')
 #ax3.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
 #ax3.loglog(omega[start:]/(g**2), -np.imag(Gconf[start:])*(g**2),'m.',label = 'ES solution')
 #ax3.loglog(omega[start:]/(g**2), alt_conf_fit_G[start:],'g--', label = 'alt power law')
