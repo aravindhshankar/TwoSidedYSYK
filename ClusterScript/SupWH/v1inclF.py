@@ -6,7 +6,8 @@ if not os.path.exists('../Sources'):
 else:	
 	sys.path.insert(1,'../Sources')	
 
-path_to_dump = '../Dump/SupCondWHImagDumpfiles'
+# path_to_dump = '../Dump/SupCondWHImagDumpfiles'
+path_to_dump = '../Dump/LOWTEMP_lamb_anneal_dumpfiles'
 
 if not os.path.exists(path_to_dump):
     print("Error - Path to Dump directory not found")
@@ -27,22 +28,24 @@ from ConformalAnalytical import *
 DUMP = False
 PLOTTING = True
 
-Nbig = int(2**14)
+# Nbig = int(2**14)
+Nbig = int(2**16)
 err = 1e-12
 #err = 1e-2
-ITERMAX = 5000
+ITERMAX = 8000
 
 global beta
 
-beta_start = 40
+beta_start = 5000
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-lamb = 0.05
-# lamb = 0.0
-J = 0.0
+# lamb = 0.05
+lamb = 0.01
+#J = 0.0
+J = 0
 
 # target_beta = 40.
 target_beta = beta_start
@@ -66,14 +69,22 @@ omegar2 = ret_omegar2(g,beta)
 
 
 ################# LOADING STEP ##########################
-savefile = 'MET'
-savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+# savefile = 'MET'
+# savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+# savefile += 'g' + str(g) + 'r' + str(r)
+# savefile += 'lamb' + f'{lamb:.3}'
+# savefile = savefile.replace('.','_') 
+# savefile += '.npy'
+
+savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+savefile += 'lamb' + str(lamb) + 'J' + str(J)
 savefile += 'g' + str(g) + 'r' + str(r)
-savefile += 'lamb' + f'{lamb:.3}'
 savefile = savefile.replace('.','_') 
 savefile += '.npy'
+
 try:
-    GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
+    # GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
+    GDtau,GODtau,DDtau,DODtau = np.load(os.path.join(path_to_dump, savefile)) 
 except FileNotFoundError:
     print(savefile, " not found")
     exit(1)
@@ -330,6 +341,56 @@ ax3.set_ylabel(r'$-g^2\,-\Im{F(\omega_n)}$')
 #ax3.set_aspect('equal', adjustable='box')
 #ax3.axis('square')
 ax3.legend()
+
+
+###################### Log-Linear Plot ###############################
+
+
+fig,ax = plt.subplots(2,2)
+#fig.set_figwidth(10)
+#titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+fig.suptitle(titlestring)
+fig.tight_layout(pad=2)
+
+startT, stopT  = 0, 5000
+
+fitsliceT = slice(startT+4500, startT + 4600)
+#fitslice = slice(start+25, start + 35)
+functoplotT = np.abs(np.real(GDtau))
+mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
+print(f'tau/beta at start of fit = {(tau[fitsliceT][0]/beta):.3f}')
+print(f'slope of fit = {mT:.03f}')
+# print('2 Delta  = ', 2*delta)
+
+ax[0,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GDtau[startT:stopT])),'p',label = 'numerics GDtau')
+#ax[0,0].semilogy(tau[startT:stopT], conf_fit_GD[startT:stopT],'k--',label = 'ES power law')
+#ax[0,0].semilogy(tau[startT:], -np.imag(Gconf[startT:]),'m.',label = 'ES solution')
+#ax[0,0].semilogy(tau[startT:], alt_conf_fit_G[startT:],'g--', label = 'alt power law')
+#ax[0,0].set_xlim(tau[startT]/2,tau[startT+15])
+ax[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
+#ax[0,0].set_ylim(1e-1,1e1)
+ax[0,0].set_xlabel(r'$\tau/\beta$')
+ax[0,0].set_ylabel(r'$-\Re G(\tau)$')
+#ax[0,0].set_aspect('equal', adjustable='box')
+#ax[0,0].axis('square')
+ax[0,0].legend()
+ax[0,0].set_yscale('log')
+
+
+ax[1,0].semilogy(tau[startT:stopT], np.abs(np.real(DDtau[startT:stopT])),'p',label='numerics DDtau')
+#ax[1,0].semilogy(tau[startB:stopB], conf_fit_DD,'k--',label = 'ES power law')
+#ax[1,0].semilogy(tau[startB:], np.real(Dconf[startB:]),'m.',label = 'ES solution')
+#ax[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
+#ax[1,0].set_xlim(tau[startB]/2,tau[startB+15])
+#ax[1,0].set_ylim(5e-1,100)
+ax[1,0].set_xlabel(r'$\tau$')
+ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
+#ax[1,0].set_aspect('equal', adjustable='box')
+ax[1,0].legend()
+
+
+
+
 
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
