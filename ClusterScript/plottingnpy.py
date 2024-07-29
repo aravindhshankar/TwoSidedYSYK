@@ -13,16 +13,18 @@ import matplotlib.pyplot as plt
 
 
 # path_to_outfile = './Dump/RTWHDumpfiles/'
-# path_to_outfile = './Dump/RTWHDumpfiles0_05'
-# path_to_BH = './Dump/RTWHDumpfiles0_00'
-path_to_outfile = './Dump/LowTempWH/'
-path_to_BH = './Dump/LowTempBH/'
+path_to_outfile = './Dump/RTWHDumpfiles0_05'
+path_to_BH = './Dump/RTWHDumpfiles0_00'
+# path_to_outfile = './Dump/LowTempWH/'
+# path_to_BH = './Dump/LowTempBH/'
 #outfile = 'Y_WH_2153063.h5'
 #path_to_outfile = './Outputs/RTWH/NFLstart'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
 # outfile = 'RTWHlocalM18T15beta20g0_5lamb0_01.npy'
-BH_outfile = 'RTWH_2442159M19T15beta300g0_5lamb0_0.npy'
-outfile = 'RTWH_2442136M19T15beta300g0_5lamb0_005.npy'
+outfile = 'l_05M16T12beta20g0_5lamb0_05.npy'
+BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
+# BH_outfile = 'RTWH_2442159M19T15beta300g0_5lamb0_0.npy'
+# outfile = 'RTWH_2442136M19T15beta300g0_5lamb0_005.npy'
 savepath = os.path.join(path_to_outfile, outfile)
 BHsavepath = os.path.join(path_to_BH, BH_outfile)
 if not os.path.exists(savepath):
@@ -31,12 +33,12 @@ if not os.path.exists(BHsavepath):
 	raise(Exception("BH Output file not found"))
 
 
-M=int(2**19)
-T=2**15
-beta = 300.
+M=int(2**16)
+T=2**12
+beta = 40.
 temp=1./beta
 g = 0.5
-lamb = 0.005
+lamb = 0.05
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 loaded = np.array(np.load(savepath))
@@ -110,57 +112,71 @@ ax.legend()
 
 
 
-# GDomega,GODomega,DDomega,DODomega = loaded_BH
-# rhoGD = -np.imag(GDomega)
-# rhoGOD = -np.imag(GODomega)
-# rhoDD = -np.imag(DDomega)
-# rhoDOD = -np.imag(DODomega)
+GDomega,GODomega,DDomega,DODomega = loaded
+rhoGD = -np.imag(GDomega)
+rhoGOD = -np.imag(GODomega)
+rhoDD = -np.imag(DDomega)
+rhoDOD = -np.imag(DODomega)
 
-# fig, ax = plt.subplots(2,2)
-# titlestring = 'beta = ' + str(beta) + ' lamb = ' + str(lamb) + ' J = ' + str(J)
-# titlestring += ' Log2M = ' + str(np.log2(M))
-# titlestring += ' g = ' + str(g)
-# fig.suptitle(titlestring)
 
-# ax[0,0].plot(omega, rhoGD)
-# ax[0,0].set_xlim(-5,5)
-# ax[0,0].set_title(r'rho GD')
-# delta = 0.420374134464041
-# ax[0,1].plot(omega, rhoGOD)
-# #ax[0,1].set_xlim(-1,1)
-# ax[0,1].set_title(r'rho GOD')
+BHGDomega,BHGODomega,BHDDomega,BHDODomega = loaded_BH
+BHrhoGD = -np.imag(BHGDomega)
+BHrhoGOD = -np.imag(BHGODomega)
+BHrhoDD = -np.imag(BHDDomega)
+BHrhoDOD = -np.imag(BHDODomega)
 
-# ax[1,0].plot(omega, rhoDD)
-# #ax[1,0].set_xlim(-1,1)
-# ax[1,0].set_title(r'rho DD')
 
-# ax[1,1].plot(omega, rhoDOD)
-# #ax[1,1].set_xlim(-1,1)
-# ax[1,1].set_title(r'rho DOD')
 
-# ############# log log plot ###################
+fig, ax = plt.subplots(2,2)
+titlestring = 'beta = ' + str(beta) + ' lamb = ' + str(lamb) + ' J = ' + str(J)
+titlestring += ' Log2M = ' + str(np.log2(M))
+titlestring += ' g = ' + str(g)
+fig.suptitle(titlestring)
 
-# fig, ax = plt.subplots(1)
-# start = len(omega)//2 + 1 
-# stop = start + 500
-# temp_idx = np.argmin(np.abs(temp - omega))
-# fitslice = slice(temp_idx+40, temp_idx + 50)
-# #fitslice = slice(start+25, start + 35)
+ax[0,0].plot(omega, rhoGD)
+ax[0,0].plot(omega, BHrhoGD, '--', label='BH')
+ax[0,0].set_xlim(-5,5)
+ax[0,0].set_title(r'rho GD')
+delta = 0.420374134464041
+ax[0,1].plot(omega, rhoGOD)
+ax[0,1].plot(omega, BHrhoGOD, '--', label='BH')
 
-# functoplot = rhoGD
-# m,c = np.polyfit(np.log(np.abs(omega[fitslice])), np.log(functoplot[fitslice]),1)
-# print(f'slope of fit = {m:.03f}')
-# print('2 Delta - 1 = ', 2*delta-1)
+#ax[0,1].set_xlim(-1,1)
+ax[0,1].set_title(r'rho GOD')
 
-# ax.loglog(omega[start:stop], functoplot[start:stop],'p',label = 'numerics rhoGDomega')
-# ax.loglog(omega[start:stop], np.exp(c)*np.abs(omega[start:stop])**m, label=f'Fit with slope {m:.03f}')
-# ax.axvline((temp,),ls='--')
-# #ax.set_ylim(1e-1,1e1)
-# ax.set_xlabel(r'$\omega$')
-# ax.set_ylabel(r'$-\Im{GD(\omega)}$')
-# #ax.set_aspect('equal', adjustable='box')
-# #ax.axis('square')
-# ax.legend()
+ax[1,0].plot(omega, rhoDD)
+#ax[1,0].set_xlim(-1,1)
+ax[1,0].set_title(r'rho DD')
+ax[1,0].plot(omega, BHrhoDD, '--', label='BH')
+
+ax[1,1].plot(omega, rhoDOD)
+#ax[1,1].set_xlim(-1,1)
+ax[1,1].set_title(r'rho DOD')
+ax[1,1].plot(omega, BHrhoDOD, '--', label='BH')
+
+############# log log plot ###################
+
+fig, ax = plt.subplots(1)
+start = len(omega)//2 + 1 
+stop = start + 500
+temp_idx = np.argmin(np.abs(temp - omega))
+fitslice = slice(temp_idx+40, temp_idx + 50)
+#fitslice = slice(start+25, start + 35)
+
+functoplot = rhoGD
+m,c = np.polyfit(np.log(np.abs(omega[fitslice])), np.log(functoplot[fitslice]),1)
+print(f'slope of fit = {m:.03f}')
+print('2 Delta - 1 = ', 2*delta-1)
+
+ax.loglog(omega[start:stop], functoplot[start:stop],'p',label = 'numerics rhoGDomega')
+ax.loglog(omega[start:stop], np.exp(c)*np.abs(omega[start:stop])**m, label=f'Fit with slope {m:.03f}')
+ax.axvline((temp,),ls='--')
+#ax.set_ylim(1e-1,1e1)
+ax.set_xlabel(r'$\omega$')
+ax.set_ylabel(r'$-\Im{GD(\omega)}$')
+#ax.set_aspect('equal', adjustable='box')
+#ax.axis('square')
+ax.legend()
 
 
 
