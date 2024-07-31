@@ -71,8 +71,10 @@ eta = dw*2.1
 
 beta = 200
 
-lamb_start = 0.05
-target_lamb = 0.01
+# lamb_start = 0.05
+# target_lamb = 0.01
+lamb_start = 0.051
+target_lamb = 0.1
 J = 0.
 ####### DATA COMPRESSION #######
 tot_freq_grid_points = int(2**14)
@@ -87,7 +89,7 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 
 # betasavelist = np.array([20,50,100,150,200,300,400,500,700,800,1000,1200,1500,1800,2000,5000])
 # betasavelist = np.arange(beta_start,target_beta+1,5) - 1
-lamblooplist = np.arange(lamb_start,target_lamb-1e-10, -0.001)
+lamblooplist = np.arange(lamb_start,target_lamb-1e-10, 0.001)
 lambsavelist = lamblooplist
 
 try:
