@@ -24,7 +24,7 @@ T=2**12
 beta = 200
 temp=1./beta
 g = 0.5
-lamb = 0.06
+lamb = 0.05
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 
@@ -38,6 +38,7 @@ savefile += 'lamb' + f'{lamb:.3}'
 savefile = savefile.replace('.','_') 
 savefiledump = savefile + '.npy'
 outfile = savefiledump
+print(outfile)
 
 
 savepath = os.path.join(path_to_outfile, outfile)
@@ -136,7 +137,7 @@ peakvals = omega[peaks]
 print(peakvals)
 
 peakmax = omega[M + np.argmax(rhoGD[M:])]
-print(peakmax)
+print(f'peakmax at {peakmax}')
 
 fig, ax = plt.subplots(2,2)
 titlestring = 'beta = ' + str(beta) + ' lamb = ' + str(lamb) + ' J = ' + str(J)

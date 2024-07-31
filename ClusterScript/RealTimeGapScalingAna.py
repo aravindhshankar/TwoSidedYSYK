@@ -28,14 +28,20 @@ g = 0.5
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 lamb_start = 0.01
-target_lamb = 0.1
-lamblooplist = np.arange(lamb_start,target_lamb-1e-10, 0.001)
+target_lamb = 0.035
+lamblooplist = np.arange(lamb_start,target_lamb+1e-10, 0.005)
 lambsavelist = lamblooplist
 delta = 0.420374134464041
 
 omega,t  = RealGridMaker(M,T)
 dt = t[2]-t[1]
+dw = omega[2]-omega[1]
+print(f'grid spacing = {dw}')
 gaplist = np.zeros_like(lambsavelist)
+
+
+
+
 
 for ival, lamb in enumerate(lamblooplist):
 	savefile = 'RTgap'
@@ -72,7 +78,7 @@ for ival, lamb in enumerate(lamblooplist):
 print('Exited from loop after loading all data')
 
 gradslope = np.gradient(gaplist,lamblooplist)
-m1,c1 = np.polyfit(np.log(np.abs(lamblooplist[50:60])), np.log(gaplist[50:60]),1)
+m1,c1 = np.polyfit(np.log(np.abs(lamblooplist)), np.log(gaplist),1)
 slope_expect = 1./(2-2*delta)
 print(f'Expected Slope = {slope_expect:.4}')
 print(f'mean gradient = {np.mean(gradslope):.4}')
