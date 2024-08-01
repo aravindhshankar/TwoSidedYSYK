@@ -14,10 +14,10 @@ if not os.path.exists('../Dump/'):
 else:
 	# path_to_dump_temp_fwd = '../Dump/lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
-	# path_to_dump_temp_fwd = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
-	# path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
-	path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
-	path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
+	path_to_dump_temp_fwd = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
+	path_to_dump_temp_rev = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev/'
+	# path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
+	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
 	if not os.path.exists(path_to_dump_temp_fwd):
 		raise Exception('Generate Data first! Path to lamb dump not found')
 		exit(1)
@@ -39,8 +39,8 @@ PLOTTING = False
 Nbig = int(2**14)
 
 beta_start = 2 
-target_beta = 2001
-# target_beta = 101
+# target_beta = 2001
+target_beta = 101
 beta = beta_start
 mu = 0.0
 g = 0.5
@@ -52,7 +52,7 @@ beta_step = 1
 # lambsavelist = np.array([0.1,0.05,0.01,0.005,0.001])
 betasavelist = np.arange(beta_start,target_beta)
 # lamb = lamblooplist[0]
-lambsavelist = (0.005,)
+lambsavelist = (0.05,)
 
 FEstempfwd = np.zeros((len(betasavelist), ))
 FEstemprev= np.zeros((len(betasavelist),))
@@ -96,13 +96,34 @@ for i, beta in enumerate(betasavelist):
 residuals = FEstempfwd-FEstemprev
 # print(np.array2string(residuals,precision=4,floatmode='fixed'))
 
+############# Fit of FE in different phases #################
+# F0 = 40
+F0 = 0
+nflslice = slice(48,58)
+whslice = slice(90,99)
+mbh, cbh = np.polyfit(1./betasavelist[nflslice], FEstempfwd[nflslice] + F0 , 1)
+mwh, cwh = np.polyfit(1./betasavelist[whslice], FEstempfwd[whslice] + F0 , 1)
+
+pbh,qbh,rbh = np.polyfit(1./betasavelist[nflslice], FEstempfwd[nflslice] + F0 , 2)
+
+
+
+
+
+
+xaxis = 1./betasavelist
+
 lambi = 0
 lamb = lambsavelist[lambi]
 fig, ax = plt.subplots(1)
-ax.plot(1./betasavelist, FEstempfwd,'.--', label='temp annealed fwd')
-ax.plot(1./betasavelist, FEstemprev,'.--', label='lamb annealed rev' )
+ax.plot(1./betasavelist, FEstempfwd + F0,'.--', label='temp annealed fwd')
+ax.plot(1./betasavelist, FEstemprev+F0,'.--', label='lamb annealed rev' )
 ax.axvline(lamb,ls='--')
 ax.axvline(1/62, ls = '--', c='grey')
+
+# ax.plot(xaxis, mbh*xaxis + cbh, ls = '--', label = f'nflFit with intercept {cbh:.6}')
+# ax.plot(xaxis, pbh*xaxis**2 + qbh*xaxis + rbh, ls = '--', label = f'nfl parabolic Fit with intercept {rbh:.6}')
+# ax.plot(xaxis, mwh*xaxis + cwh, ls = '--', label = f'whFit with intercept {cwh:.6}')
 
 ax.legend()
 ax.set_xlabel('temperature T')
@@ -116,10 +137,10 @@ ax.set_title(r'$\lambda$ = ' + str(lamb))
 # ax2.set_ticks(betasavelist)
 
 
-ax3 = ax.twinx()
-ax3.plot(1./betasavelist, -1.*(betasavelist**2) * np.gradient(FEstempfwd,betasavelist), '.-', c = 'k', label=r'Gradient $\frac{dF}{dT}$')
-ax3.set_ylabel(r'$\frac{dF}{dT}$')
-ax3.legend()
+# ax3 = ax.twinx()
+# ax3.plot(1./betasavelist, -1.*(betasavelist**2) * np.gradient(FEstempfwd,betasavelist), '.-', c = 'k', label=r'Gradient $\frac{dF}{dT}$')
+# ax3.set_ylabel(r'$\frac{dF}{dT}$')
+# ax3.legend()
 
 
 fig.tight_layout()
