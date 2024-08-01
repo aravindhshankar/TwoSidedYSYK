@@ -82,7 +82,7 @@ if calc == True:
 		except FileNotFoundError: 
 			print(f"InputFile not found for lamb = {lambval:.3}")
 
-		plottable = np.abs(np.real(DDtau))
+		plottable = np.abs(np.real(GDtau))
 		lambinv = 1./(lambval*beta)
 		xaxis = tau[startT:stopT]/beta
 		logder = np.gradient(np.log(plottable))
@@ -129,7 +129,8 @@ if calc == True:
 	slope_expect = 1./(2-2*delta)
 	fig,ax = plt.subplots(1)
 	ax.loglog(lambsavelist,gaplist,'.')
-	m,c = np.polyfit(np.log(lambsavelist),np.log(gaplist),1)
+	# m,c = np.polyfit(np.log(lambsavelist),np.log(gaplist),1)
+	m,c = np.polyfit(np.log(lambsavelist[-10:-1]),np.log(gaplist[-10:-1]),1)
 	ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'fit with slope {m:.4}')
 	print(f'dimensional analysis scaling = {slope_expect:.4}')
 	print(f'calculated scaling = {m:.4}')
