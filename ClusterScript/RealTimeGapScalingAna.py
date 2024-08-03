@@ -28,8 +28,8 @@ g = 0.5
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 lamb_start = 0.01
-target_lamb = 0.035
-lamblooplist = np.arange(lamb_start,target_lamb+1e-10, 0.005)
+target_lamb = 0.04
+lamblooplist = np.arange(lamb_start,target_lamb+1e-10, 0.001)
 lambsavelist = lamblooplist
 delta = 0.420374134464041
 
@@ -92,5 +92,8 @@ ax.loglog(lamblooplist, np.exp(c1)*np.abs(lamblooplist)**m1, label=f'Fit with sl
 ax.axvline(1./beta,ls='--',c='gray',label='Temperature')
 ax.legend()
 
+
+
+# np.save('RTgaplistExtended.npy', np.array([lamblooplist, gaplist]))
 
 plt.show()

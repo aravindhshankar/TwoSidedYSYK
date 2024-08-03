@@ -24,7 +24,7 @@ T=2**12
 beta = 200
 temp=1./beta
 g = 0.5
-lamb = 0.05
+lamb = 0.06
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 
@@ -131,7 +131,7 @@ BHrhoGOD = -np.imag(BHGODomega)
 BHrhoDD = -np.imag(BHDDomega)
 BHrhoDOD = -np.imag(BHDODomega)
 
-peaks = find_peaks(rhoGD,prominence=1)[0]
+peaks = find_peaks(rhoDOD,prominence=0.1)[0]
 # print(peaks)
 peakvals = omega[peaks]
 print(peakvals)
