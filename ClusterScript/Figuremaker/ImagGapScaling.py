@@ -109,7 +109,7 @@ if calc == True:
 		except FileNotFoundError: 
 			print(f"InputFile not found for lamb = {lambval:.3}")
 
-		plottable = np.abs(np.real(DDtau))
+		plottable = np.abs(np.real(GDtau))
 		lambinv = 1./(lambval*beta)
 		xaxis = tau[startT:stopT]/beta
 		# logder = np.gradient(np.log(plottable))
@@ -142,7 +142,7 @@ if calc == True:
 	print(f'calculated scaling = {m:.4}')
 	ax.set_xlabel(r'$\lambda$')
 	ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
-	ax.set_title(r'Gap scaling calculated from $D_d$')
+	ax.set_title(r'Gap scaling calculated from $G_d$')
 	ax.legend(fontsize=14,loc='lower right') # add option fontsize = 12 for example
 	# ax.tick_params(which='major', length=7, width=0.8, direction="in", right=True, top=True); 
 	# ax.tick_params(which='minor', length=7, width=0.5, direction="in", right=True, top=True);
@@ -156,12 +156,13 @@ if calc == True:
 	ax2 = fig.add_axes([left, bottom, width, height])
 	#plottable = np.abs(np.real(GDtau))
 	startT, stopT = 0, Nbig//2
-	xaxis = tau[startT:stopT]/beta
+	skip = 50
+	xaxis = tau[startT:stopT:skip]/beta
 	# yaxis = 
-	ax2.semilogy(xaxis, plottable[startT:stopT],'p',label = 'numerics DDtau',markersize=2,c='C2')
+	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'numerics DDtau',markersize=2,c='C2')
 	# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
 	ax2.set_xlabel(r'$\tau/\beta$')
-	ax2.set_ylabel(r'$|D_d(\tau)|$')
+	ax2.set_ylabel(r'$|G_d(\tau)|$')
 	ax2.set_title(titlestring)
 	ax2.axvline(0.1, ls='--')
 	ax2.axvline(0.2, ls='--')
@@ -184,7 +185,7 @@ if calc == True:
 	# print(slope)
 
 
-	plt.savefig('DdGapscaling.pdf',bbox_inches='tight')
+	plt.savefig('GdGapscaling.pdf',bbox_inches='tight')
 	plt.show()
 
 
