@@ -17,7 +17,7 @@ plt.rcParams['legend.fontsize'] = '8'
 plt.rcParams['figure.figsize'] = '8,7'
 
 
-path_to_outfile = '../Dump/RTWHDumpfiles0_05/'
+path_to_outfile = '../Dump/RTWHDumpfiles0_01/'
 # path_to_outfile = './Dump/RTGapscaling/'
 path_to_BH = '../Dump/RTWHDumpfiles0_00/'
 
@@ -45,10 +45,11 @@ T=2**12
 beta = 199
 # betalist = [40,70]
 # betalist = range(109,200,10)
-betalist = [30,40,50,60,70,80,100]
+betalist = [80,100,120,140,160,180,200]
 temp=1./beta
 g = 0.5
-lamb = 0.05
+# lamb = 0.05
+lamb = 0.01
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 omega,t  = RealGridMaker(M,T)
@@ -65,11 +66,13 @@ fig.suptitle(titlestring)
 
 
 for i, beta in enumerate(betalist):
+	beta = 1.0*beta
 	skip = 100
 	col = 'C' + str(i)
-	lab = r'$\beta = $ ' + str(beta)
+	lab = r'$\beta = $ ' + str(int(beta))
 	# savefile = 'RTgap'
-	savefile = 'l_05'
+	# savefile = 'l_05'
+	savefile = 'l_01'
 	savefile += 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
 	# savefile += 'beta' + str((round(beta*100))/100.) 
 	savefile += 'beta' + str(beta) 
@@ -133,21 +136,23 @@ for i, beta in enumerate(betalist):
 	ax[0,1].legend()	
 
 	ax[1,0].plot(omega, rhoDD, c = col, ls='-', label = lab)
-	ax[1,0].set_xlim(-0.1,0.1)
-	ax[1,0].set_ylim(-1.5,1.5)
-	ax[1,0].set_ylabel(r'$-\Im{G^R_{d}(\omega)}$')
+	ax[1,0].set_xlim(-1,1)
+	# ax[1,0].set_ylim(-1.5,1.5)
+	# ax[1,0].set_ylim(-0.5,0.5)
+	ax[1,0].set_ylabel(r'$-\Im{D^R_{d}(\omega)}$')
 	ax[1,0].set_xlabel(r'$\omega$')
 	# ax[1,0].plot(omega, BHrhoDD, c = col, ls = '--')
 	ax[1,0].legend()	
 
 	ax[1,1].plot(omega, rhoDOD, c = col, ls='-', label = lab)
-	ax[1,1].set_xlim(-0.1,0.1)
-	ax[1,1].set_ylim(-1.5,1.5)
-	ax[1,1].set_ylabel(r'$-\Im{G^R_{od}(\omega)}$')
+	ax[1,1].set_xlim(-1,1)
+	ax[1,1].set_ylim(-0.3,0.3)
+	ax[1,1].set_ylabel(r'$-\Im{D^R_{od}(\omega)}$')
 	ax[1,1].set_xlabel(r'$\omega$')
 	# ax[1,1].plot(omega, BHrhoDOD, c = col, ls = '--')
 	ax[1,1].legend()
 
 
-plt.savefig('v2TempEvolnSpectralGapMetalWH.pdf', bbox_inches='tight')
+# plt.savefig('v2TempEvolnSpectralGapMetalWH.pdf', bbox_inches='tight')
+plt.savefig('v3TempEvolnSpectralGapMetalWH.pdf', bbox_inches='tight')
 plt.show()
