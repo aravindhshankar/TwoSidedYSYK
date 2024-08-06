@@ -45,7 +45,8 @@ lamb = 0.05
 #J = 0.0
 J = 0
 
-betalist = [25,]
+# betalist = [25,42,54,80,99]
+betalist = [25,42,54,80,99]
 
 kappa = 1.
 
@@ -79,15 +80,17 @@ figSL.tight_layout(pad=2)
 ############### EVENT LOOP STARTS ##############################
 
 
-for beta in betalist: 
-    Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
-    Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
-    delta = 0.420374134464041
-    omegar2 = ret_omegar2(g,beta)
+for i, beta in enumerate(betalist): 
+    col = 'C'+str(i)
+    lab = f'beta = {beta}'
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
     tau = ImagGridMaker(Nbig,beta,'tau')
 
+    Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
+    Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
+    delta = 0.420374134464041
+    omegar2 = ret_omegar2(g,beta)
 
     ################# LOADING STEP ##########################
     # savefile = 'MET'
@@ -138,27 +141,29 @@ for beta in betalist:
     Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
     FreeDtau = DfreeImagtau(tau,r,beta)
 
-    ax[0].plot(tau/beta, np.real(GDtau), 'r', label = 'numerics Gtau')
-    ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
+    ax[0].plot(tau/beta, np.real(GDtau), c = col, label = lab)
+    ax[0].plot(tau/beta, np.real(Gconftau), c = col, ls='--' )
     ax[0].set_ylim(-1,1)
     ax[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
     ax[0].set_ylabel(r'$\Re{G(\tau)}$')
     ax[0].legend()
 
-    ax[1].plot(tau/beta, np.real(DDtau), 'r', label = 'numerics Dtau')
-    ax[1].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
-    ax[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
+    ax[1].plot(tau/beta, np.real(DDtau), c=col, label = lab)
+    ax[1].plot(tau/beta, np.real(Dconftau), c=col, ls='--' )
+    # ax[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
     #ax[1].set_ylim(0,1)
     ax[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
     ax[1].set_ylabel(r'$\Re{D(\tau)}$')
     ax[1].legend()
 
-    ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
-    ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
+    # ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
+    # ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
+    ax[2].plot(tau/beta, (np.abs(FDtau)), c=col, label = lab)
     #ax[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
     #ax[2].set_ylim(-1,1)
     ax[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    ax[2].set_ylabel(r'$\Re{F(\tau)}$')
+    # ax[2].set_ylabel(r'$\Re{F(\tau)}$')
+    ax[2].set_ylabel(r'$|F(\tau)|$')
     ax[2].legend()
 
     #fig.suptitle(r'$\beta$ = ', beta)
@@ -197,12 +202,13 @@ for beta in betalist:
     print(f'slope of fit = {m:.03f}')
     #print('2 Delta - 1 = ', 2*delta-1)
 
-    ax1.loglog(omega[start:stop]/(g**2), -np.imag(GDomega[start:stop])*(g**2),'p',label = 'numerics')
-    ax1.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
+    ax1.loglog(omega[start:stop]/(g**2), -np.imag(GDomega[start:stop])*(g**2),'p',c=col,label = lab)
+    ax1.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--')
+    # ax1.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
     #ax1.loglog(omega[start:]/(g**2), -np.imag(Gconf[start:])*(g**2),'m.',label = 'ES solution')
     #ax1.loglog(omega[start:]/(g**2), alt_conf_fit_G[start:],'g--', label = 'alt power law')
     #ax1.set_xlim(omega[start]/2,omega[start+15])
-    ax1.loglog(omega[start:stop]/(g**2), np.exp(c)*np.abs(omega[start:stop]/(g**2))**m, label=f'Fit with slope {m:.03f}')
+    ax1.loglog(omega[start:stop]/(g**2), np.exp(c)*np.abs(omega[start:stop]/(g**2))**m, c=col, label=f'Fit with slope {m:.03f}')
     #ax1.set_ylim(1e-1,1e1)
     ax1.set_xlabel(r'$\omega_n/g^2$')
     ax1.set_ylabel(r'$-g^2\,\Im{GD(\omega_n)}$')
@@ -211,8 +217,9 @@ for beta in betalist:
     ax1.legend()
 
 
-    ax2.loglog(nu[startB:stopB]/(g**2), np.real(DDomega[startB:stopB])*(g**2),'p',label='numerics')
-    ax2.loglog(nu[startB:stopB]/(g**2), conf_fit_D,'k--',label = 'ES power law')
+    ax2.loglog(nu[startB:stopB]/(g**2), np.real(DDomega[startB:stopB])*(g**2),'p',c=col,label=lab)
+    ax2.loglog(nu[startB:stopB]/(g**2), conf_fit_D,'k--')
+    # ax2.loglog(nu[startB:stopB]/(g**2), conf_fit_D,'k--',label = 'ES power law')
     #ax2.loglog(nu[startB:]/(g**2), np.real(Dconf[startB:]),'m.',label = 'ES solution')
     #ax2.loglog(nu[startB:]/(g**2), alt_conf_fit_D,'g--', label = 'alt power law')
     #ax2.set_xlim(nu[startB]/2,nu[startB+15])
@@ -223,8 +230,9 @@ for beta in betalist:
     ax2.legend()
 
 
-    ax3.loglog(omega[start:stop]/(g**2), np.abs(np.imag(FDomega[start:stop])*(g**2)),'p',label = 'numerics imag Fomega')
-    ax3.loglog(omega[start:stop]/(g**2), np.abs(np.real(FDomega[start:stop])*(g**2)),'p',label = 'numerics real Fomega')
+    # ax3.loglog(omega[start:stop]/(g**2), np.abs(np.imag(FDomega[start:stop])*(g**2)),'p',label = 'numerics imag Fomega')
+    # ax3.loglog(omega[start:stop]/(g**2), np.abs(np.real(FDomega[start:stop])*(g**2)),'p',label = 'numerics real Fomega')
+    ax3.loglog(omega[start:stop]/(g**2), (np.abs(FDomega[start:stop]))*(g**2),'p',c=col,label = lab)
     #ax3.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
     #ax3.loglog(omega[start:]/(g**2), -np.imag(Gconf[start:])*(g**2),'m.',label = 'ES solution')
     #ax3.loglog(omega[start:]/(g**2), alt_conf_fit_G[start:],'g--', label = 'alt power law')
@@ -232,7 +240,8 @@ for beta in betalist:
     #ax3.loglog(omega[start:stop]/(g**2), np.exp(c)*np.abs(omega[start:stop]/(g**2))**m, label=f'Fit with slope {m:.03f}')
     #ax3.set_ylim(1e-1,1e1)
     ax3.set_xlabel(r'$\omega_n/g^2$')
-    ax3.set_ylabel(r'$-g^2\,-\Im{F(\omega_n)}$')
+    # ax3.set_ylabel(r'$-g^2\,-\Im{F(\omega_n)}$')
+    ax3.set_ylabel(r'$-g^2\,|F(\omega_n)|$')
     #ax3.set_aspect('equal', adjustable='box')
     #ax3.axis('square')
     ax3.legend()
@@ -252,12 +261,12 @@ for beta in betalist:
     print(f'slope of fit = {mT:.03f}')
     # print('2 Delta  = ', 2*delta)
 
-    axSL[0,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GDtau[startT:stopT])),'p',label = 'numerics GDtau')
+    axSL[0,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GDtau[startT:stopT])),'p',c=col,label = lab)
     #axSL[0,0].semilogy(tau[startT:stopT], conf_fit_GD[startT:stopT],'k--',label = 'ES power law')
     #axSL[0,0].semilogy(tau[startT:], -np.imag(Gconf[startT:]),'m.',label = 'ES solution')
     #axSL[0,0].semilogy(tau[startT:], alt_conf_fit_G[startT:],'g--', label = 'alt power law')
     #axSL[0,0].set_xlim(tau[startT]/2,tau[startT+15])
-    axSL[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
+    axSL[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), c=col,label=f'Fit with slope {mT:.03f}')
     #axSL[0,0].set_ylim(1e-1,1e1)
     axSL[0,0].set_xlabel(r'$\tau/\beta$')
     axSL[0,0].set_ylabel(r'$-\Re G(\tau)$')
@@ -267,7 +276,7 @@ for beta in betalist:
     axSL[0,0].set_yscale('log')
 
 
-    axSL[1,0].semilogy(tau[startT:stopT], np.abs(np.real(DDtau[startT:stopT])),'p',label='numerics DDtau')
+    axSL[1,0].semilogy(tau[startT:stopT], np.abs(np.real(DDtau[startT:stopT])),'p',c=col,label=lab)
     #axSL[1,0].semilogy(tau[startB:stopB], conf_fit_DD,'k--',label = 'ES power law')
     #axSL[1,0].semilogy(tau[startB:], np.real(Dconf[startB:]),'m.',label = 'ES solution')
     #axSL[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
