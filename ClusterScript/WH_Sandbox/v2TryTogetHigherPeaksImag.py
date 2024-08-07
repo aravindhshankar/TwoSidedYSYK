@@ -47,13 +47,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
+from scipy.optimize import curve_fit
 #import time
 
 # plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 # plt.rcParams['figure.dpi'] = "120"
 # plt.rcParams['legend.fontsize'] = '14'
 # print(plt.style.available)
-plt.style.use('seaborn-v0_8')
+# plt.style.use('seaborn-v0_8')
 
 # Nbig = int(2**14)
 Nbig = int(2**16)
@@ -75,10 +76,10 @@ r = 1.
 
 kappa = 1.
 # lamb = 0.05
-# lamblist = [0.001,]
-lamblist = [0.003,]
+lamblist = [0.001,]
+# lamblist = [0.003,]
 J = 0
-
+lamb = lamblist[0]
 path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
 
@@ -94,10 +95,10 @@ path_to_dump = path_to_dump_lamb
 
 fig2, ax2 = plt.subplots(1, figsize=(8,7)) 
 titlestring = ''
-# titlestring =  r' $\beta $ = ' + str(beta)
-# titlestring += r' $\lambda$ = ' + f'{lamb:.3}' 
+titlestring =  r' $\beta $ = ' + str(beta)
+titlestring += r' $\lambda$ = ' + f'{lamb:.3}' 
 ax2.set_xlabel(r'$\tau/\beta$')
-ax2.set_ylabel(r'$|G_d(\tau)|$')
+ax2.set_ylabel(r'$|D_d(\tau)|$')
 ax2.set_title(titlestring)
 
 # for i, beta in enumerate(betalist):
@@ -152,7 +153,7 @@ for i, lamb in enumerate(lamblist):
 	skip = 1
 	xaxis = tau[startT:stopT:skip]/beta
 	# yaxis = 
-	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'numerics DDtau',markersize=2,c='C2')
+	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics DDtau',markersize=5,c='C2')
 	# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
 	ax2.axvline(0.1, ls='--')
 	ax2.axvline(0.2, ls='--')
@@ -179,8 +180,8 @@ for i, lamb in enumerate(lamblist):
 	print(f'position of second peak = {c*(1+delta):.4}')
 	print(c*(np.arange(5)+delta))
 
-	remnant1 = plottable[startT:stopT:skip]/(A*np.exp(-slope * xaxis)) - 1 
-	ax2.semilogy(xaxis, remnant1, ls='-.', label = f' First Remnant')
+	remnant1 = plottable[startT:stopT:skip]-(A*np.exp(-slope * xaxis)) 
+	# ax2.semilogy(xaxis, remnant1, ls='-.', label = f' First Remnant')
 
 
 	# sec_peak = c*(2+delta)
@@ -191,33 +192,37 @@ for i, lamb in enumerate(lamblist):
 	#############  SECOND FIT STARTS #######################
 	secstart_idx = np.argmin(np.abs(xaxis-0.015))
 	secstop_idx = np.argmin(np.abs(xaxis-0.035))
+	ax2.semilogy(xaxis[:secstop_idx+200], remnant1[:secstop_idx+200], ls='-', label = f' First Remnant')
+	ax2.axvline(0.015,ls='--',c='C3')
+	ax2.axvline(0.035,ls='--',c='C3')
 	secfitslice = slice(secstart_idx,secstop_idx)
 	print(f'Number of points in second fit slice = {len(xaxis[secfitslice])}')
 
-	sec_slope, logB_A = np.polyfit(xaxis[secfitslice],np.log(remnant1[secfitslice]),1)
-	B  = A * np.exp(logB_A) 
-	zeta = gamma - sec_slope/beta
-	ax2.semilogy(xaxis, (B/A)*np.exp(-(zeta-gamma)* beta * xaxis),ls='-.', label = f' fit with $\\zeta$ calculated to be {zeta:.4}')
+	sec_slope, logB= np.polyfit(xaxis[secfitslice],np.log(remnant1[secfitslice]),1)
+	B  = np.exp(logB) 
+	zeta = - sec_slope/beta
+	ax2.semilogy(xaxis, (B)*np.exp(-(zeta)* beta * xaxis),ls=':', c='C3', label = f' fit with $\\zeta$ calculated to be {zeta:.4}')
 	print(f'A = {A:.4}, B = {B:.4}') 
 	print(f'gamma = {gamma:.4}, zeta = {zeta:.4}')
 
 	first_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis)
-	ax2.semilogy(xaxis, first_approx, label = 'first_approx', ls=':')
-
-	todiv = (B/A) * np.exp(-(zeta-gamma)*beta*xaxis) 
-	remnant2 = remnant1/todiv - 1
-	ax2.semilogy(xaxis, remnant2, ls='-.', label = f' Second Remnant')
+	ax2.semilogy(xaxis, first_approx, label = 'Sum of two exponentials', ls='-.')
+ 
+	remnant2 = remnant1 - B * np.exp(-zeta*beta*xaxis)
 
 	############ THIRD FIT STARTS #############################
 	thistart_idx = np.argmin(np.abs(xaxis-0.004))
 	thistop_idx = np.argmin(np.abs(xaxis-0.014))
+	ax2.semilogy(xaxis[:thistop_idx+100], remnant2[:thistop_idx+100], c='C4', ls='-', label = f' Second Remnant')
+	ax2.axvline(0.004,ls='--',c='C5')
+	ax2.axvline(0.014,ls='--',c='C5')
 	thifitslice = slice(thistart_idx,thistop_idx)
 	print(f'Number of points in third fit slice = {len(xaxis[thifitslice])}')
 
-	thi_slope, logD_B = np.polyfit(xaxis[thifitslice],np.log(remnant2[thifitslice]),1)
-	D  = B * np.exp(logD_B) 
-	xi = zeta - thi_slope/beta
-	ax2.semilogy(xaxis, (D/B)*np.exp(-(xi-zeta)* beta * xaxis),ls='-.', label = f' fit with $\\xi$ calculated to be {xi:.4}')
+	thi_slope, logD = np.polyfit(xaxis[thifitslice],np.log(remnant2[thifitslice]),1)
+	D  = np.exp(logD) 
+	xi =  - thi_slope/beta
+	ax2.semilogy(xaxis, D*np.exp(-xi* beta * xaxis),ls=':', c='C5', label = f' fit with $\\xi$ calculated to be {xi:.4}')
 	print(f'A = {A:.4}, B = {B:.4}, D = {D:.4}') 
 	print(f'gamma = {gamma:.4}, zeta = {zeta:.4}, xi = {xi:.4}')
 	print(f'xi - zeta  = {xi-zeta}')
@@ -225,22 +230,15 @@ for i, lamb in enumerate(lamblist):
 	print(f'c = {c}')
 
 	second_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis) + D * np.exp(-xi * beta * xaxis)
-	ax2.semilogy(xaxis, second_approx, label = 'second_approx', ls=':')
+	ax2.semilogy(xaxis, second_approx, label = 'Sum of 3 exponentials', ls='-.')
 
-	todiv = (D/B) * np.exp(-(xi-zeta)*beta*xaxis) 
-	remnant3 = remnant2/todiv - 1
-	ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
+	remnant3 = remnant2 - D * np.exp(-xi * beta * xaxis)
+	# ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
 
+	ax2.set_xlim(-0.005,0.05)
+	ax2.set_ylim(1e-4,1)
 
-
-
-
-
-
-
-
-
-
+	
 
 
 
@@ -249,7 +247,7 @@ for i, lamb in enumerate(lamblist):
 
 # plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
-#plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
+# plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 ax2.legend()
 
