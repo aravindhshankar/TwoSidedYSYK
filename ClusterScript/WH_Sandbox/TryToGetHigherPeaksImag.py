@@ -178,8 +178,8 @@ for i, lamb in enumerate(lamblist):
 	print(f'position of second peak = {c*(1+delta):.4}')
 	print(c*(np.arange(5)+delta))
 
-	remnant = plottable[startT:stopT:skip]/(A*np.exp(-slope * xaxis)) - 1 
-	ax2.semilogy(xaxis, remnant, ls='-.', label = f' First Remnant')
+	remnant1 = plottable[startT:stopT:skip]/(A*np.exp(-slope * xaxis)) - 1 
+	ax2.semilogy(xaxis, remnant1, ls='-.', label = f' First Remnant')
 
 
 	# sec_peak = c*(2+delta)
@@ -193,7 +193,7 @@ for i, lamb in enumerate(lamblist):
 	secfitslice = slice(secstart_idx,secstop_idx)
 	print(f'Number of points in second fit slice = {len(xaxis[secfitslice])}')
 
-	sec_slope, logB_A = np.polyfit(xaxis[secfitslice],np.log(remnant[secfitslice]),1)
+	sec_slope, logB_A = np.polyfit(xaxis[secfitslice],np.log(remnant1[secfitslice]),1)
 	B  = A * np.exp(logB_A) 
 	zeta = gamma - sec_slope/beta
 	ax2.semilogy(xaxis, (B/A)*np.exp(-(zeta-gamma)* beta * xaxis),ls='-.', label = f' fit with $\zeta$ calculated to be {zeta:.4}')
@@ -202,6 +202,45 @@ for i, lamb in enumerate(lamblist):
 
 	first_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis)
 	ax2.semilogy(xaxis, first_approx, label = 'first_approx', ls=':')
+
+	todiv = (B/A) * np.exp(-(zeta-gamma)*beta*xaxis) 
+	remnant2 = remnant1/todiv - 1
+	ax2.semilogy(xaxis, remnant2, ls='-.', label = f' Second Remnant')
+
+	############# THIRD FIT STARTS #############################
+	thistart_idx = np.argmin(np.abs(xaxis-0.004))
+	thistop_idx = np.argmin(np.abs(xaxis-0.014))
+	thifitslice = slice(thistart_idx,thistop_idx)
+	print(f'Number of points in second fit slice = {len(xaxis[thifitslice])}')
+
+	thi_slope, logD_B = np.polyfit(xaxis[thifitslice],np.log(remnant2[thifitslice]),1)
+	D  = B * np.exp(logD_B) 
+	xi = zeta - thi_slope/beta
+	ax2.semilogy(xaxis, (D/B)*np.exp(-(xi-zeta)* beta * xaxis),ls='-.', label = f' fit with $\zeta$ calculated to be {zeta:.4}')
+	print(f'A = {A:.4}, B = {B:.4}, D = {D:.4}') 
+	print(f'gamma = {gamma:.4}, zeta = {zeta:.4}, xi = {xi:.4}')
+	print(f'xi - beta  = {xi-beta}')
+
+	second_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis) + D * np.exp(-xi * beta * xaxis)
+	ax2.semilogy(xaxis, second_approx, label = 'second_approx', ls=':')
+
+	todiv = (D/B) * np.exp(-(xi-zeta)*beta*xaxis) 
+	remnant3 = remnant2/todiv - 1
+	ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Second Remnant')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
