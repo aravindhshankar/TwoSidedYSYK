@@ -7,7 +7,8 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 # path_to_dump = '../Dump/SupCondWHImagDumpfiles'
-path_to_dump = '../Dump/l_05Sup/'
+# path_to_dump = '../Dump/l_05Sup/'
+path_to_dump = '../Dump/l1Sup/'
 
 if not os.path.exists(path_to_dump):
     print("Error - Path to Dump directory not found")
@@ -40,13 +41,14 @@ mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-lamb = 0.05
+# lamb = 0.05
 # lamb = 0.01
+lamb = 1.0
 #J = 0.0
 J = 0
 
 # betalist = [25,42,54,80,99]
-betalist = [25,42,54,80,99]
+betalist = [25,50,80,190]
 
 kappa = 1.
 
@@ -158,7 +160,7 @@ for i, beta in enumerate(betalist):
 
     # ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
     # ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
-    ax[2].plot(tau/beta, (np.abs(FDtau)), c=col, label = lab)
+    ax[2].plot(tau/beta, (np.abs(FODtau)), c=col, label = lab)
     #ax[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
     #ax[2].set_ylim(-1,1)
     ax[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
@@ -232,7 +234,7 @@ for i, beta in enumerate(betalist):
 
     # ax3.loglog(omega[start:stop]/(g**2), np.abs(np.imag(FDomega[start:stop])*(g**2)),'p',label = 'numerics imag Fomega')
     # ax3.loglog(omega[start:stop]/(g**2), np.abs(np.real(FDomega[start:stop])*(g**2)),'p',label = 'numerics real Fomega')
-    ax3.loglog(omega[start:stop]/(g**2), (np.abs(FDomega[start:stop]))*(g**2),'p',c=col,label = lab)
+    ax3.loglog(omega[start:stop]/(g**2), (np.abs(FODomega[start:stop]))*(g**2),'p',c=col,label = lab)
     #ax3.loglog(omega[start:stop]/(g**2), conf_fit_G[start:stop],'k--',label = 'ES power law')
     #ax3.loglog(omega[start:]/(g**2), -np.imag(Gconf[start:])*(g**2),'m.',label = 'ES solution')
     #ax3.loglog(omega[start:]/(g**2), alt_conf_fit_G[start:],'g--', label = 'alt power law')
