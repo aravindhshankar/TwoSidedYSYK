@@ -281,33 +281,51 @@ for i, lamb in enumerate(lamblist):
 	# print(np.diff(sortedexpos))
 	# print('fitted spacing = ',fitted_c)
 
-	######### PRONY METHOD ###############
-	# midslice = slice(np.argmin(np.abs(xaxis-l4)),np.argmin(np.abs(xaxis-l1)))
-	midslice = slice(np.argmin(np.abs(xaxis-0.001)),np.argmin(np.abs(xaxis-0.3)))
-	m = 3
-	a_est, b_est = prony(beta*xaxis[midslice],plottable[startT:stopT:skip][midslice],m)
+	# ######### PRONY METHOD ###############
+	# # midslice = slice(np.argmin(np.abs(xaxis-l4)),np.argmin(np.abs(xaxis-l1)))
+	# m = 3
+	# a_est, b_est = prony(beta*xaxis[midslice],plottable[startT:stopT:skip][midslice],m)
 
-	print(f'a_est = {a_est}')
-	print(f'b_est = {b_est}')
+	# print(f'a_est = {a_est}')
+	# print(f'b_est = {b_est}')
 
-	c_est = b_est[-1] / delta
-	CUT = 0
-	y_fit = [np.sum([a_est[i+CUT] * np.exp(b_est[i+CUT]*beta*xval) for i in range(len(a_est[CUT:]))]) for xval in xaxis]
-	ax2.semilogy(xaxis, y_fit, label = 'Prony', ls='-.')
-	print(f'c_est = {c_est}')
+	# c_est = b_est[-1] / delta
+	# CUT = 0
+	# y_fit = [np.sum([a_est[i+CUT] * np.exp(b_est[i+CUT]*beta*xval) for i in range(len(a_est[CUT:]))]) for xval in xaxis]
+	# ax2.semilogy(xaxis, y_fit, label = 'Prony', ls='-.')
+	# print(f'c_est = {c_est}')
 
 	########### EDSF METHOD #######################
 	# a,theta,final_err = fitEDSF(beta*xaxis[midslice],plottable[startT:stopT:skip][midslice])
-	skip = 50
-	nlist = np.arange(0,len(xaxis),skip) 
-	print(len(nlist))
-	Gn = plottable[startT:stopT:skip]
-	astar,thetastar,final_err = fitEDSF(plottable[startT:stopT:skip],nlist , epsilon_1 = 1e-5, epsilon_2 = 1e-5)
-	print(astar,thetastar,final_err)
-	print(f'len(a) = {len(a)}')
-	theta = (2 * Nbig / beta ) * thetastar
-	print('theta = ', theta)
+	# skip = 50
+	# nlist = np.arange(0,len(xaxis),skip) 
+	# print(len(nlist))
+	# Gn = plottable[startT:stopT:skip]
+	# astar,thetastar,final_err = fitEDSF(plottable[startT:stopT:skip],nlist , epsilon_1 = 1e-5, epsilon_2 = 1e-5)
+	# print(astar,thetastar,final_err)
+	# print(f'len(a) = {len(a)}')
+	# theta = (2 * Nbig / beta ) * thetastar
+	# print('theta = ', theta)
 
+	startval = np.argmin(np.abs(xaxis-0.005))
+	# startval = 0
+	stopval = np.argmin(np.abs(xaxis-0.4))
+	midslice = slice(startval,stopval)
+	N = 1000
+	rangeys = plottable[startT:stopT:skip][midslice]
+	rangexs = beta*xaxis[midslice] ##units of tau
+	step = len(rangexs)//N
+	selectxs = rangexs[startval:stopval:step] #units of tau
+	selectys = rangeys[startval:stopval:step]
+	print(len(selectxs), len(selectys))
+	nset = np.arange(0,len(selectys))
+	print(len(nset))
+	# fig,ax = plt.subplots(1)
+	# ax.plot(rangexs,rangeys,'.-',markersize=1)
+	# axtw = ax.twiny()
+	# axtw.plot(nset,selectys,'.',markersize=10)
+	astar,thetastar,final_err = fitEDSF(selectys,nset,4)
+	print(np.log(thetastar))
 
 
 # plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')
@@ -315,6 +333,10 @@ for i, lamb in enumerate(lamblist):
 ax2.legend()
 
 plt.show()
+
+
+
+
 
 
 
