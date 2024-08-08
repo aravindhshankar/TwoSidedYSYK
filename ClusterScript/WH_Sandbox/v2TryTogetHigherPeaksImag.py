@@ -49,6 +49,8 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
 from scipy.optimize import curve_fit
+from prony import prony
+from EDSF import fitEDSF
 #import time
 
 # plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
@@ -279,11 +281,30 @@ for i, lamb in enumerate(lamblist):
 	# print(np.diff(sortedexpos))
 	# print('fitted spacing = ',fitted_c)
 
+	######### PRONY METHOD ###############
+	# midslice = slice(np.argmin(np.abs(xaxis-l4)),np.argmin(np.abs(xaxis-l1)))
+	midslice = slice(np.argmin(np.abs(xaxis-0.005)),np.argmin(np.abs(xaxis-0.4)))
+	m = 3
+	a_est, b_est = prony(beta*xaxis[midslice],plottable[startT:stopT:skip][midslice],m)
+	print(f'a_est = {a_est}')
+	print(f'b_est = {b_est}')
 
+	c_est = b_est[-1] / delta
+	print(c_est, b_est[-2]-b_est[-1])
+	CUT = 2 
+	y_fit = [np.sum([a_est[i+CUT] * np.exp(b_est[i+CUT]*beta*xval) for i in range(len(a_est[CUT:]))]) for xval in xaxis]
+	ax2.semilogy(xaxis, y_fit, label = 'Prony', ls='-.')
 
-
-
-
+	########### EDSF METHOD #######################
+	# a,theta,final_err = fitEDSF(beta*xaxis[midslice],plottable[startT:stopT:skip][midslice])
+	ski= 100
+	nlist = np.arange(0,len(xaxis),skip) 
+	Gn = plottable[startT:stopT:skip]
+	astar,thetastar,final_err = fitEDSF(plottable[startT:stopT:skip],nlist , M = 4)
+	print(astar,thetastar,final_err)
+	print(f'len(a) = {len(a)}')
+	theta = (2 * Nbig / beta ) * thetastar
+	print('theta = ', theta)
 
 # plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
