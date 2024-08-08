@@ -189,7 +189,7 @@ for i, lamb in enumerate(lamblist):
 	slope = -1.*slope
 	gamma = slope / beta
 	A = np.exp(logA)
-	ax2.semilogy(xaxis, A*np.exp(-slope * xaxis),ls='-.', label = f' fit with $\gamma$ calculated to be {gamma:.4}')
+	ax2.semilogy(xaxis, A*np.exp(-slope * xaxis),ls='-.', label = f' fit with $\\gamma$ calculated to be {gamma:.4}')
 	c = gamma/delta
 	print(f"position of first peak = {c*delta:.4}")
 	print(f'position of second peak = {c*(1+delta):.4}')
@@ -283,28 +283,32 @@ for i, lamb in enumerate(lamblist):
 
 	######### PRONY METHOD ###############
 	# midslice = slice(np.argmin(np.abs(xaxis-l4)),np.argmin(np.abs(xaxis-l1)))
-	midslice = slice(np.argmin(np.abs(xaxis-0.005)),np.argmin(np.abs(xaxis-0.4)))
+	midslice = slice(np.argmin(np.abs(xaxis-0.001)),np.argmin(np.abs(xaxis-0.3)))
 	m = 3
 	a_est, b_est = prony(beta*xaxis[midslice],plottable[startT:stopT:skip][midslice],m)
+
 	print(f'a_est = {a_est}')
 	print(f'b_est = {b_est}')
 
 	c_est = b_est[-1] / delta
-	print(c_est, b_est[-2]-b_est[-1])
-	CUT = 2 
+	CUT = 0
 	y_fit = [np.sum([a_est[i+CUT] * np.exp(b_est[i+CUT]*beta*xval) for i in range(len(a_est[CUT:]))]) for xval in xaxis]
 	ax2.semilogy(xaxis, y_fit, label = 'Prony', ls='-.')
+	print(f'c_est = {c_est}')
 
 	########### EDSF METHOD #######################
 	# a,theta,final_err = fitEDSF(beta*xaxis[midslice],plottable[startT:stopT:skip][midslice])
-	ski= 100
+	skip = 50
 	nlist = np.arange(0,len(xaxis),skip) 
+	print(len(nlist))
 	Gn = plottable[startT:stopT:skip]
-	astar,thetastar,final_err = fitEDSF(plottable[startT:stopT:skip],nlist , M = 4)
+	astar,thetastar,final_err = fitEDSF(plottable[startT:stopT:skip],nlist , epsilon_1 = 1e-5, epsilon_2 = 1e-5)
 	print(astar,thetastar,final_err)
 	print(f'len(a) = {len(a)}')
 	theta = (2 * Nbig / beta ) * thetastar
 	print('theta = ', theta)
+
+
 
 # plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
