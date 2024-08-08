@@ -192,7 +192,9 @@ for i, lamb in enumerate(lamblist):
 	#############  SECOND FIT STARTS #######################
 	secstart_idx = np.argmin(np.abs(xaxis-0.015))
 	secstop_idx = np.argmin(np.abs(xaxis-0.035))
-	ax2.semilogy(xaxis[:secstop_idx+200], remnant1[:secstop_idx+200], ls='-', label = f' First Remnant')
+	# ax2.semilogy(xaxis[:secstop_idx+5000], remnant1[:secstop_idx+5000], ls='-', label = f' First Remnant')
+	ax2.semilogy(xaxis, remnant1, ls='-', label = f' First Remnant')
+	# ax2.semilogy(xaxis[:secstop_idx], remnant1[:secstop_idx], ls='-', label = f' First Remnant')
 	ax2.axvline(0.015,ls='--',c='C3')
 	ax2.axvline(0.035,ls='--',c='C3')
 	secfitslice = slice(secstart_idx,secstop_idx)
@@ -213,7 +215,9 @@ for i, lamb in enumerate(lamblist):
 	############ THIRD FIT STARTS #############################
 	thistart_idx = np.argmin(np.abs(xaxis-0.004))
 	thistop_idx = np.argmin(np.abs(xaxis-0.014))
-	ax2.semilogy(xaxis[:thistop_idx+100], remnant2[:thistop_idx+100], c='C4', ls='-', label = f' Second Remnant')
+	# ax2.semilogy(xaxis[:thistop_idx+100], remnant2[:thistop_idx+100], c='C4', ls='-', label = f' Second Remnant')
+	# ax2.semilogy(xaxis[:thistop_idx], remnant2[:thistop_idx], c='C4', ls='-', label = f' Second Remnant')
+	ax2.semilogy(xaxis, remnant2, c='C4', ls='-', label = f' Second Remnant')
 	ax2.axvline(0.004,ls='--',c='C5')
 	ax2.axvline(0.014,ls='--',c='C5')
 	thifitslice = slice(thistart_idx,thistop_idx)
@@ -235,8 +239,8 @@ for i, lamb in enumerate(lamblist):
 	remnant3 = remnant2 - D * np.exp(-xi * beta * xaxis)
 	# ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
 
-	ax2.set_xlim(-0.005,0.05)
-	ax2.set_ylim(1e-4,1)
+	# ax2.set_xlim(-0.005,0.5)
+	ax2.set_ylim(1e-7,1)
 
 	
 
