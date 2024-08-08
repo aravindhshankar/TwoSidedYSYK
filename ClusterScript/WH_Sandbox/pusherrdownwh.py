@@ -12,7 +12,8 @@ if not os.path.exists('../Dump/'):
 	raise Exception("Error - Path to Dump directory not found ")
 	exit(1)
 else:
-	path_to_loadfile = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'	
+	# path_to_loadfile = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'	
+	path_to_loadfile = '../Dump/PushErrDownImagWH/'
 	if not os.path.exists(path_to_loadfile):
 		raise Exception('Generate Data first! Path to loadfile not found')
 		exit(1)
@@ -43,7 +44,7 @@ PLOTTING = True
 print("DUMP = ", DUMP)
 
 Nbig = int(2**16)
-err = 1e-10
+err = 1e-15
 
 global beta
 
@@ -76,8 +77,8 @@ GDtau, DDtau = Gfreetau, Dfreetau
 # DODtau = Freq2TimeB(-J/(nu**2 + r)**2 - J**2, Nbig, beta)
 
 
-
-loadfile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+loadfile = 'ERR7'
+loadfile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 loadfile += 'lamb' + str(lamb) + 'J' + str(J)
 loadfile += 'g' + str(g) + 'r' + str(r)
 loadfile = loadfile.replace('.','_') 
@@ -117,7 +118,7 @@ for lamb in lamblist:
         else:
             oldGDomega, oldGODomega = 1.0*GDomega, 1.0*GODomega
             oldDDomega, oldDODomega = 1.0*DDomega, 1.0*DODomega
-        
+
         SigmaDtau = 1.0 * kappa * (g**2) * DDtau * GDtau
         SigmaODtau = 1.0 * kappa * (g**2) * DODtau * GODtau
         PiDtau = 2.0 * g**2 * GDtau * GDtau[::-1] #KMS G(-tau) = -G(beta-tau)
@@ -150,11 +151,11 @@ for lamb in lamblist:
 
 
 
-        if itern % 5000 == 0 :
+        if itern % 1000 == 0 :
             print("itern = ",itern, " , diff = ", diff, " , x = ", x, flush='True')
 
     if DUMP == True and np.isclose(lamb,lamblist).any():
-        savefile = 'ERR40'
+        savefile = 'ERR10'
         savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
         savefile += 'lamb' + str(lamb) + 'J' + str(J)
         savefile += 'g' + str(g) + 'r' + str(r)

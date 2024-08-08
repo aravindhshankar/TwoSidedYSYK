@@ -27,7 +27,8 @@ else:
 	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
 	# path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
 	# path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
-	path_to_dump_lamb = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'
+	# path_to_dump_lamb = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/PushErrDownImagWH/'
 
 	# path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
 
@@ -83,14 +84,17 @@ lamb = lamblist[0]
 path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
 
-
-# fig, ax = plt.subplots(2,2, figsize=(8,7))
-# titlestring = "Imaginary time Green's functions for "
-# titlestring =  r' $\beta $ = ' + str(beta)
-# # titlestring +=  r', $g = $' + str(g)
-# # titlestring += r' $\lambda$ = ' + str(lamb) 
-# fig.suptitle(titlestring)
-# fig.tight_layout(pad=2)
+whichplot = 'GD' #choices GD or DD
+# l0,l1 = 0.35,0.4
+# l2,l3 = 0.15,0.21
+# l4,l5 = 0.04,0.06
+# l4,l5 = 0.005,0.008
+l0,l1 = 0.05,0.38
+l2,l3 = 0.04,0.06
+l4,l5 = 0.038,0.041
+# l0,l1 = 0.39,0.4
+# l2,l3 = 0.15,0.2
+# l4,l5 = 0.1,0.11
 
 
 fig2, ax2 = plt.subplots(1, figsize=(8,7)) 
@@ -98,12 +102,14 @@ titlestring = ''
 titlestring =  r' $\beta $ = ' + str(beta)
 titlestring += r' $\lambda$ = ' + f'{lamb:.3}' 
 ax2.set_xlabel(r'$\tau/\beta$')
-ax2.set_ylabel(r'$|D_d(\tau)|$')
 ax2.set_title(titlestring)
 
 # for i, beta in enumerate(betalist):
 for i, lamb in enumerate(lamblist):
-	savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+	savefile = ''
+	# savefile += 'ERR7'
+	savefile += 'ERR10'
+	savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 	savefile += 'lamb' + str(lamb) + 'J' + str(J)
 	savefile += 'g' + str(g) + 'r' + str(r)
 	savefile = savefile.replace('.','_') 
@@ -146,17 +152,24 @@ for i, lamb in enumerate(lamblist):
 	Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
 	FreeDtau = DfreeImagtau(tau,r,beta)
 
-
-	plottable = np.abs(np.real(DDtau))
+	if whichplot == 'GD':
+		plottable = np.abs(np.real(GDtau))
+		ax2.set_ylabel(r'$|G_d(\tau)|$')
+	elif whichplot == 'DD':
+		plottable = np.abs(np.real(DDtau))
+		ax2.set_ylabel(r'$|D_d(\tau)|$')
+	else:
+		print('INVALID OPTION FOR PLOTTABLE')
+		exit(1)
 	startT, stopT = 0, Nbig//2
 	# skip = 50
 	skip = 1
 	xaxis = tau[startT:stopT:skip]/beta
 	# yaxis = 
-	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics DDtau',markersize=5,c='C2')
+	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics ',markersize=5,c='C2')
 	# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
-	ax2.axvline(0.1, ls='--')
-	ax2.axvline(0.2, ls='--')
+	ax2.axvline(l0, ls='--')
+	ax2.axvline(l1, ls='--')
 	# ax2.axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
 	# ax2.axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
 	#ax2.legend()
@@ -164,8 +177,8 @@ for i, lamb in enumerate(lamblist):
 
 
 	# logder = np.gradient(np.log(plottable),tau)
-	start_idx = np.argmin(np.abs(xaxis-0.1))
-	stop_idx = np.argmin(np.abs(xaxis-0.2))
+	start_idx = np.argmin(np.abs(xaxis-l0))
+	stop_idx = np.argmin(np.abs(xaxis-l1))
 	# print(start_idx,stop_idx)
 	fitslice = slice(start_idx,stop_idx)
 	# slope = -np.mean(logder[startT:stopT][fitslice])
@@ -190,13 +203,13 @@ for i, lamb in enumerate(lamblist):
 
 
 	#############  SECOND FIT STARTS #######################
-	secstart_idx = np.argmin(np.abs(xaxis-0.015))
-	secstop_idx = np.argmin(np.abs(xaxis-0.035))
+	secstart_idx = np.argmin(np.abs(xaxis-l2))
+	secstop_idx = np.argmin(np.abs(xaxis-l3))
 	# ax2.semilogy(xaxis[:secstop_idx+5000], remnant1[:secstop_idx+5000], ls='-', label = f' First Remnant')
 	ax2.semilogy(xaxis, remnant1, ls='-', label = f' First Remnant')
 	# ax2.semilogy(xaxis[:secstop_idx], remnant1[:secstop_idx], ls='-', label = f' First Remnant')
-	ax2.axvline(0.015,ls='--',c='C3')
-	ax2.axvline(0.035,ls='--',c='C3')
+	ax2.axvline(l2,ls='--',c='C3')
+	ax2.axvline(l3,ls='--',c='C3')
 	secfitslice = slice(secstart_idx,secstop_idx)
 	print(f'Number of points in second fit slice = {len(xaxis[secfitslice])}')
 
@@ -213,13 +226,13 @@ for i, lamb in enumerate(lamblist):
 	remnant2 = remnant1 - B * np.exp(-zeta*beta*xaxis)
 
 	############ THIRD FIT STARTS #############################
-	thistart_idx = np.argmin(np.abs(xaxis-0.004))
-	thistop_idx = np.argmin(np.abs(xaxis-0.014))
+	thistart_idx = np.argmin(np.abs(xaxis-l4))
+	thistop_idx = np.argmin(np.abs(xaxis-l5))
 	# ax2.semilogy(xaxis[:thistop_idx+100], remnant2[:thistop_idx+100], c='C4', ls='-', label = f' Second Remnant')
 	# ax2.semilogy(xaxis[:thistop_idx], remnant2[:thistop_idx], c='C4', ls='-', label = f' Second Remnant')
 	ax2.semilogy(xaxis, remnant2, c='C4', ls='-', label = f' Second Remnant')
-	ax2.axvline(0.004,ls='--',c='C5')
-	ax2.axvline(0.014,ls='--',c='C5')
+	ax2.axvline(l4,ls='--',c='C5')
+	ax2.axvline(l5,ls='--',c='C5')
 	thifitslice = slice(thistart_idx,thistop_idx)
 	print(f'Number of points in third fit slice = {len(xaxis[thifitslice])}')
 
@@ -232,6 +245,7 @@ for i, lamb in enumerate(lamblist):
 	print(f'xi - zeta  = {xi-zeta}')
 	print(f'zeta - gamma = {zeta-gamma}')
 	print(f'c = {c}')
+	print(f'expected spacing = c')
 
 	second_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis) + D * np.exp(-xi * beta * xaxis)
 	ax2.semilogy(xaxis, second_approx, label = 'Sum of 3 exponentials', ls='-.')
@@ -244,12 +258,32 @@ for i, lamb in enumerate(lamblist):
 
 	
 
+	########## model fitting #############
+	def model(x,a1,a2,a3,e1,e2,e3):
+		return a1 * np.exp(-e1*x) + a2 * np.exp(-e2*x) + a3 * np.exp(-e3*x)
+
+
+
+
+	# # initials = [0.02173, 0.002086, 0.03204,  0.00456825, 0.01543535, 0.02630245] #just putting the deltas - seems best
+	# initials = [A, B, 0.00001*B,  c*delta, c*(1+delta), c*(2+delta)] 
+	# # initials = [0.02173, 0.002086, 0.03204,  0.004568, 0.005827, 0.01793]
+	# midslice = slice(np.argmin(np.abs(xaxis-l4)),np.argmin(np.abs(xaxis-l1)))
+	# params, covariance = curve_fit(model, xaxis[midslice] * beta, plottable[startT:stopT:skip][midslice],p0=initials)
+
+	# expos = params[-4:-1]
+	# sortedexpos = sorted(expos)
+	# fitted_gamma = sortedexpos[0]
+	# fitted_c = fitted_gamma/delta
+	# print(sortedexpos)
+	# print(np.diff(sortedexpos))
+	# print('fitted spacing = ',fitted_c)
 
 
 
 
 
-# plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
+
 
 # plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
