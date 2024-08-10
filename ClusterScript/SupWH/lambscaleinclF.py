@@ -49,7 +49,7 @@ PLOTTING = False
 
 err = 1e-8
 #err = 1e-2
-ITERMAX = 15000
+ITERMAX = 50000
 
 global beta
 
@@ -68,7 +68,8 @@ omegar2 = ret_omegar2(g,beta)
 beta_step = 1
 # betasavelist = [50,100,500,1000,5000,10000]
 betasavelist = [target_beta,]
-lamblooplist = np.arange(1,0.01 - 1e-10,-0.001)
+# lamblooplist = np.arange(1,0.01 - 1e-10,-0.001)
+lamblooplist = np.arange(0.014,0.001 - 1e-10,-0.001)
 # lambsavelist = [0.1,0.05,0.01,0.005,0.001]
 
 lambsavelist = lamblooplist
