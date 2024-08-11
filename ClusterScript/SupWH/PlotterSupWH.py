@@ -8,7 +8,8 @@ else:
 
 # path_to_dump = '../Dump/SupCondWHImagDumpfiles'
 # path_to_dump = '../Dump/l_05Sup/'
-path_to_dump = '../Dump/l1Sup/'
+# path_to_dump = '../Dump/l1Sup/'
+path_to_dump = '../Dump/lambannealSup'
 
 if not os.path.exists(path_to_dump):
     print("Error - Path to Dump directory not found")
@@ -29,7 +30,7 @@ from ConformalAnalytical import *
 DUMP = False
 PLOTTING = True
 
-# Nbig = int(2**14)
+# Nbig = int(2**16)
 Nbig = int(2**14)
 err = 1e-12
 #err = 1e-2
@@ -41,14 +42,15 @@ mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-# lamb = 0.05
+# lamb = 0.001
 # lamb = 0.01
-lamb = 1.0
+# lamb = 1.0
 #J = 0.0
 J = 0
 
 # betalist = [25,42,54,80,99]
-betalist = [25,50,80,190]
+# betalist = [25,50,80,190]
+betalist = [2000,]
 
 kappa = 1.
 
@@ -160,7 +162,8 @@ for i, beta in enumerate(betalist):
 
     # ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
     # ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
-    ax[2].plot(tau/beta, (np.abs(FODtau)), c=col, label = lab)
+    ax[2].plot(tau/beta, (np.abs(FDtau)), c=col, label = lab)
+    ax[2].plot(tau/beta, (np.abs(FODtau)), ls='--', c=col, label = lab)
     #ax[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
     #ax[2].set_ylim(-1,1)
     ax[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
