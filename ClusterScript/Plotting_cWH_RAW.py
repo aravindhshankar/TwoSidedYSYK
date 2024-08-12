@@ -18,7 +18,8 @@ from scipy.signal import find_peaks
 path_to_loadfile = './DUMP/redoCWH/'
 # path_to_loadfile = './Outputs/'
 # loadfile = 'cSYKbeta200kappa0_05.h5.npy'
-loadfile = 'cSYKbeta1000kappa0_01.npy'
+loadfile = 'cSYKbeta_M18T121000kappa0_01.npy'
+# loadfile = 'cSYKbeta1000kappa0_01.npy'
 
 if not os.path.exists(path_to_loadfile):
 	raise(Exception('Load directory does not exist'))

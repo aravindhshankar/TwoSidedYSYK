@@ -64,15 +64,17 @@ mu = 0.
 kappa = 0.01
 ITERMAX = 10000
 
-M = int(2**16) #number of points in the grid
-T = int(2**12) #upper cut-off fot the time
+# M = int(2**16) #number of points in the grid
+# T = int(2**12) #upper cut-off fot the time
+M = int(2**18) #number of points in the grid
+T = int(2**14) #upper cut-off fot the time
 #M = int(2**16)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
-err = 1e-6
+err = 1e-4
 eta = dw*2.1
 #delta = 0.420374134464041
 
