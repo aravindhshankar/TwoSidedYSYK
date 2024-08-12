@@ -13,6 +13,7 @@ else:
 # path_to_dump = '../Dump/LOWTEMP_lamb_anneal_dumpfiles'
 path_to_loadfile = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
 path_to_dump = '../Dump/l_05Supalpha0_1/'
+# path_to_dump = '../Dump/l_05Supalpha0_2/'
 
 if not os.path.exists(path_to_loadfile):
     print("Error - Path to Dump directory not found")
@@ -44,7 +45,7 @@ Nbig = int(2**14)
 # Nbig = int(2**16)
 err = 1e-12
 #err = 1e-2
-ITERMAX = 15000
+ITERMAX = 50000
 
 global beta
 
@@ -83,6 +84,9 @@ delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
 
+FDtau = (1+1j)*np.ones(Nbig)
+FODtau = (1-1j)*np.ones(Nbig)
+
 
 
 
@@ -117,11 +121,13 @@ for beta in betalooplist:
     assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
     #Include anomalous propagators
-    FDtau = (1+1j)*np.ones_like(GDtau)
-    FODtau = (1-1j)*np.ones_like(GODtau)
+    if np.sum(np.abs(FDtau[:20])) < 1e-2:
+        FDtau = (1+1j)*np.ones_like(GDtau)
+        FODtau = (1-1j)*np.ones_like(GODtau)
     itern = 0
     diff = err*1.1
-    x = 0.01
+    # x = 0.01
+    x = 0.001
 
     beta_step = 1 if (beta>130) else 1
 

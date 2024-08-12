@@ -18,7 +18,7 @@ if not os.path.exists('../Dump/'):
 	raise Exception("Error - Path to Dump directory not found ")
 	exit(1)
 else:
-	path_to_dump = '../Dump/WHYSYKImagDumpfiles/SCWH'
+	# path_to_dump = '../Dump/WHYSYKImagDumpfiles/SCWH'
 	# path_to_dump = '../Dump/lamb_anneal_dumpfiles/'
 	# path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
@@ -26,6 +26,7 @@ else:
 	# path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
 	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
 	# path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
+	path_to_dump = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
 	
 	# if not os.path.exists(path_to_dump_lamb):
 	# 	raise Exception('Generate Data first! Path to lamb dump not found')
@@ -49,21 +50,23 @@ err = 1e-5
 
 global beta
 
-beta = 50.0
+beta = 90
 mu = 0.0
-# g = 0.5
-g = 2.
+g = 0.5
+# g = 2.
 r = 1.
 
 kappa = 1.
 lamb = 0.05
-J = 0.0
+# J = 0.0
+J = 0 
 
 # path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
 
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
+# savefile += 'lamb' + str(lamb) 
 savefile += 'g' + str(g) + 'r' + str(r)
 savefile = savefile.replace('.','_') 
 savefile += '.npy'
@@ -98,6 +101,16 @@ GDomega = Time2FreqF(GDtau, Nbig, beta)
 GODomega = Time2FreqF(GODtau, Nbig, beta)
 DDomega = Time2FreqB(DDtau, Nbig, beta)
 DODomega = Time2FreqB(DODtau, Nbig, beta)
+
+
+SigmaDtau = 1.0 * kappa * (g**2) * DDtau * GDtau
+SigmaODtau = 1.0 * kappa * (g**2) * DODtau * GODtau
+PiDtau = 2.0 * g**2 * GDtau * GDtau[::-1] #KMS G(-tau) = -G(beta-tau)
+PiODtau = 2.0 * g**2 * GODtau * GODtau[::-1] #KMS G(-tau) = -G(beta-tau)
+
+SigmaDomega, SigmaODomega = Time2FreqF(SigmaDtau,Nbig,beta),Time2FreqF(SigmaODtau,Nbig,beta)
+PiDomega, PiODomega =  Time2FreqB(PiDtau,Nbig,beta), Time2FreqB(PiODtau,Nbig,beta)
+
 
 
 ################## PLOTTING ######################
@@ -275,7 +288,22 @@ ax[1,0].legend()
 
 
 
+fig,ax = plt.subplots(1)
+ax.plot(omega,SigmaDomega.real,label = 'ReSigmaD')
+ax.plot(omega,SigmaDomega.imag,label = 'ImSigmaD')
+ax.plot(omega,SigmaODomega.real,label = 'ReSigmaOD')
+ax.plot(omega,SigmaODomega.imag,label = 'ImSigmaOD')
+ax.legend()
 
+theta = np.pi/2
+thetalist = [0,np.pi/6,np.pi/4, np.pi/3,np.pi/2]
+# theta = 0.
+fig,ax=plt.subplots(1)
+for theta in thetalist:
+	FEmetalContr = np.log((lamb**2 + SigmaODomega.real**2 + 2 * lamb * SigmaODomega.real * np.cos(theta) - (omega - SigmaDomega.imag)**2)**2)
+	ax.plot(omega,FEmetalContr)
+	FEsum = np.sum(FEmetalContr)
+	print(f'theta = {theta}, FEsum = {FEsum}')
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 plt.show()

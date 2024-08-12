@@ -11,8 +11,9 @@ from ConformalAnalytical import *
 import testingscripts
 from h5_handler import *
 from scipy.signal import find_peaks
+from scipy.linalg import norm
 from functools import partial
-
+import time
 
 savename = 'default_savename'
 path_to_output = './Outputs'
@@ -106,7 +107,7 @@ ITERMAX = 10000
 
 # M = int(2**16) #number of points in the grid
 # T = int(2**12) #upper cut-off fot the time
-M = int(2**18) #number of points in the grid
+M = int(2**19) #number of points in the grid
 T = int(2**14) #upper cut-off fot the time
 #M = int(2**16)
 #T = int(2**10)
@@ -114,7 +115,7 @@ omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
-err = 1e-3
+err = 1e-2
 eta = dw*2.1
 #delta = 0.420374134464041
 delta = 0.25
@@ -138,56 +139,22 @@ print("######## End of State variables #########")
 
 
 	
-def RE_wormhole_cSYK_iterator(Gomegas,J,mu,kappa,beta,eta=1e-6,verbose=True):
-	itern = 0
-	diff = 1
-	# x = 0.5
-	# x = 0.01
-	x = 0.001
-	diffseries = []
-	# xGD, xGOD = (0.5,0.5)
-	xGD, xGOD = (x,x)
-	diffGD, diffGOD= (1.,1.)
-	conv_flag = True
-	
+def RE_wormhole_cSYK_STEP(Gomegas,J,mu,kappa,beta,eta=1e-6):
+
 	GDRomega, GODRomega = Gomegas
+	rhoGD = -1.0*np.imag(GDRomega)
+	rhoGOD = -1.0*np.imag(GODRomega)
 
-	while (diff>err and itern<ITERMAX and conv_flag): 
-		itern += 1 
-		diffoldGD,diffoldGOD= (diffGD,diffGOD)
-		GDRoldomega,GODRoldomega= (1.0*GDRomega, 1.0*GODRomega)
+	SigmaDomega= rhotosigma(rhoGD,M,dt,t,omega,J,beta,kappa,delta=eta)
+	# SigmaODomega= -1.0*rhotosigma(rhoGOD,M,dt,t,omega,J,beta,kappa,delta=eta)
+	SigmaODomega= 1.0*rhotosigma(rhoGOD,M,dt,t,omega,J,beta,kappa,delta=eta)
 
-		rhoGD = -1.0*np.imag(GDRomega)
-		rhoGOD = -1.0*np.imag(GODRomega)
+	detGmat = (omega+1j*eta - mu - SigmaDomega)**2 - (kappa + SigmaODomega)**2
 
-		SigmaDomega= rhotosigma(rhoGD,M,dt,t,omega,J,beta,kappa,delta=eta)
-		# SigmaODomega= -1.0*rhotosigma(rhoGOD,M,dt,t,omega,J,beta,kappa,delta=eta)
-		SigmaODomega= 1.0*rhotosigma(rhoGOD,M,dt,t,omega,J,beta,kappa,delta=eta)
-		
-		detGmat = (omega+1j*eta - mu - SigmaDomega)**2 - (kappa + SigmaODomega)**2
-	
-		GDRomega = xGD*((omega+1j*eta - mu - SigmaDomega)/detGmat) + (1-xGD)*GDRoldomega
-		GODRomega = xGOD*((kappa + SigmaODomega)/detGmat) + (1-xGOD)*GODRoldomega
+	TGDRomega = (omega+1j*eta - mu - SigmaDomega)/detGmat
+	TGODRomega = (kappa + SigmaODomega)/detGmat
 
-
-		diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
-		diffGOD = np. sqrt(np.sum((np.abs(GODRomega-GODRoldomega))**2)) 
-
-		diff = 0.5*(diffGD+diffGOD)
-		# diffGD,diffGOD = diff,diff
-		# diffseries += [diff]
-
-		# if diffGD>diffoldGD:
-		# 	xGD/=2.
-		# if diffGOD>diffoldGOD:
-		# 	xGOD/=2.
-		if verbose:
-			print("itern = ",itern, " , diff = ", diff , " , x = ", x)
-		# if itern>30:
-		# 	conv_flag = testingscripts.diff_checker(diffseries, tol = 1e-4, periods = 5)
-			
-
-	return (GDRomega,GODRomega)
+	return np.array((TGDRomega,TGODRomega))
 
 
 
@@ -196,13 +163,17 @@ GDRomega = (omega + 1j*eta + mu)/ (omega+1j*eta - mu )**2 - (kappa)**2
 #GODRomega = np.zeros_like(omega)
 # GODRomega = 1j*eta*np.ones_like(omega)
 GODRomega = kappa / (omega+1j*eta - mu )**2 - (kappa)**2
-GFs = [GDRomega,GODRomega]
+GFs = np.array([GDRomega,GODRomega])
 
-T = partial(RE_wormhole_cSYK_iterator, J=J,mu=mu,kappa=kappa,beta=beta,eta=eta,verbose=True)
+T = partial(RE_wormhole_cSYK_STEP, J=J,mu=mu,kappa=kappa,beta=beta,eta=eta)
+
+start_time = time.perf_counter()
 sol = fixed_point_egraal(T, GFs, err, ITERMAX = ITERMAX)
+stop_time = time.perf_counter()
 
 if DUMP == True:
 	np.save(savefile_dump,[GDRomega,GODRomega])
+print(f'Exited from golden ration algorithm in {stop_time-start_time} seconds')
 
 values, GFs, step_list = sol
 
