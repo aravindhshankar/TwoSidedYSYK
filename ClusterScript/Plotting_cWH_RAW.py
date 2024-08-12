@@ -18,7 +18,8 @@ from scipy.signal import find_peaks
 path_to_loadfile = './DUMP/redoCWH/'
 # path_to_loadfile = './Outputs/'
 # loadfile = 'cSYKbeta200kappa0_05.h5.npy'
-loadfile = 'cSYKbeta_M18T121000kappa0_01.npy'
+# loadfile = 'cSYKbeta_M18T121000kappa0_01.npy'
+loadfile = 'cSYK_M18T12beta1000kappa0.01.npy'
 # loadfile = 'cSYKbeta1000kappa0_01.npy'
 
 if not os.path.exists(path_to_loadfile):
@@ -48,8 +49,8 @@ kappa = 0.01
 # kappa = 0.05
 ITERMAX = 10000
 
-M = int(2**16) #number of points in the grid
-T = int(2**12) #upper cut-off fot the time
+M = int(2**18) #number of points in the grid
+T = int(2**14) #upper cut-off fot the time
 #M = int(2**16)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)

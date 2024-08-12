@@ -11,6 +11,7 @@ from ConformalAnalytical import *
 import testingscripts
 from h5_handler import *
 from scipy.signal import find_peaks
+from functools import partial
 
 
 savename = 'default_savename'
@@ -34,7 +35,46 @@ DUMP = True
 PLOTTING = True
 
 ##################
+def fixed_point_egraal(T, x0, err, ITERMAX = 2000, phi=1.5, output=False):
+	"""
+	Golden Ratio Algorithm for the problem x = Tx
 
+	T is the operator
+	x0 is the starting point
+
+	"""
+	
+	JF = lambda x: norm(x)
+	
+	x, x_ = x0.copy(), x0.copy()
+	tau = 1. / phi + 1. / phi**2
+
+	F = lambda x: x - T(x)
+	la = 1
+	step_list = [la]
+	th = 1
+	Fx = F(x0)
+	values = [JF(Fx)]
+	res = 1.
+	itern = 0
+	while res > err and itern < ITERMAX:
+		itern += 1 
+		x1 = x_ - la * Fx
+		Fx1 = F(x1)
+
+		n1 = norm(x1 - x)**2
+		n2 = norm(Fx1 - Fx)**2
+		la1 = min(tau * la, 0.25 * phi * th / la * (n1 / n2))
+		x_ = ((phi - 1) * x1 + x_) / phi
+		th = phi * la1 / la
+		x, la, Fx = x1, la1, Fx1
+		res = JF(Fx)
+		values.append(res)
+		step_list.append(la1)
+
+	return values, x, step_list
+
+#############
 def rhotosigma(rhoG,M,dt,t,omega,J,beta,kappa,delta=1e-6):
 	'''
 	c-SYK rho to sigma
@@ -74,9 +114,10 @@ omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
-err = 1e-4
+err = 1e-3
 eta = dw*2.1
 #delta = 0.420374134464041
+delta = 0.25
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
 print("dw/temp = ", f'{dw*beta:.4f}')
@@ -97,7 +138,7 @@ print("######## End of State variables #########")
 
 
 	
-def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbose=True):
+def RE_wormhole_cSYK_iterator(Gomegas,J,mu,kappa,beta,eta=1e-6,verbose=True):
 	itern = 0
 	diff = 1
 	# x = 0.5
@@ -109,6 +150,8 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbos
 	diffGD, diffGOD= (1.,1.)
 	conv_flag = True
 	
+	GDRomega, GODRomega = Gomegas
+
 	while (diff>err and itern<ITERMAX and conv_flag): 
 		itern += 1 
 		diffoldGD,diffoldGOD= (diffGD,diffGOD)
@@ -148,80 +191,86 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=1e-6,verbos
 
 
 
-#####################
 
-def main():
+GDRomega = (omega + 1j*eta + mu)/ (omega+1j*eta - mu )**2 - (kappa)**2
+#GODRomega = np.zeros_like(omega)
+# GODRomega = 1j*eta*np.ones_like(omega)
+GODRomega = kappa / (omega+1j*eta - mu )**2 - (kappa)**2
+GFs = [GDRomega,GODRomega]
 
-	GDRomega = (omega + 1j*eta + mu)/ (omega+1j*eta - mu )**2 - (kappa)**2
-	#GODRomega = np.zeros_like(omega)
-	# GODRomega = 1j*eta*np.ones_like(omega)
-	GODRomega = kappa / (omega+1j*eta - mu )**2 - (kappa)**2
+T = partial(RE_wormhole_cSYK_iterator, J=J,mu=mu,kappa=kappa,beta=beta,eta=eta,verbose=True)
+sol = fixed_point_egraal(T, GFs, err, ITERMAX = ITERMAX)
 
-	GDRomega,GODRomega = RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,eta=eta,verbose=True)
-	if DUMP == True:
-		np.save(savefile_dump,[GDRomega,GODRomega])
+if DUMP == True:
+	np.save(savefile_dump,[GDRomega,GODRomega])
 
-	#GDRt = (0.5/np.pi) * freq2time(GDRomega,M,dt)
-	#DDRt = (0.5/np.pi) * freq2time(DDRomega,M,dt)
-	#GODRt = (0.5/np.pi) * freq2time(GODRomega,M,dt)
-	#DODRt = (0.5/np.pi) * freq2time(DODRomega,M,dt)
-	# GDRt = (0.5/np.pi) * freq2time(GDRomega - GfreeRealomega(omega,mu,eta),M,dt) + GfreeRealt(t,mu,eta)
-	# DDRt = (0.5/np.pi) * freq2time(DDRomega - DfreeRealomega(omega,r,eta),M,dt) + DfreeRealt(t,r,eta)
-	# GODRt = (0.5/np.pi) * freq2time(GODRomega - GfreeRealomega(omega,mu,eta),M,dt) + GfreeRealt(t,mu,eta)
-	# DODRt = (0.5/np.pi) * freq2time(DODRomega - DfreeRealomega(omega,r,eta),M,dt) + DfreeRealt(t,r,eta)
+values, GFs, step_list = sol
 
-	#################Data Compression################
+if len(step_list) >= ITERMAX-1:
+	print(f"stopped because of ITERMAX = {ITERMAX} reached")
+print(f'total steps = {len(step_list)} with final x  = {step_list[-1]}')
+print(G.shape)
+print(values[-1])
 
-	tot_freq_grid_points = int(2**14)
-	omega_max = 5
-	omega_min = -1*omega_max
-	idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
-	skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
-	comp_omega_slice = slice(idx_min,idx_max,skip)
-	#comp_omega = omega[comp_omega_slice]
+GDRomega, GODRomega = GFs
 
+#GDRt = (0.5/np.pi) * freq2time(GDRomega,M,dt)
+#DDRt = (0.5/np.pi) * freq2time(DDRomega,M,dt)
+#GODRt = (0.5/np.pi) * freq2time(GODRomega,M,dt)
+#DODRt = (0.5/np.pi) * freq2time(DODRomega,M,dt)
+# GDRt = (0.5/np.pi) * freq2time(GDRomega - GfreeRealomega(omega,mu,eta),M,dt) + GfreeRealt(t,mu,eta)
+# DDRt = (0.5/np.pi) * freq2time(DDRomega - DfreeRealomega(omega,r,eta),M,dt) + DfreeRealt(t,r,eta)
+# GODRt = (0.5/np.pi) * freq2time(GODRomega - GfreeRealomega(omega,mu,eta),M,dt) + GfreeRealt(t,mu,eta)
+# DODRt = (0.5/np.pi) * freq2time(DODRomega - DfreeRealomega(omega,r,eta),M,dt) + DfreeRealt(t,r,eta)
 
+#################Data Compression################
 
-	###########Data Writing############ 
-	print("\n###########Data Writing############")
-	dictionary = {
-	   "J": J,
-	   "mu": mu,
-	   "beta": beta,
-	   "kappa": kappa,
-	   "M": M, 
-	   "T": T,
-	   "omega": omega[comp_omega_slice],
-	   "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
-	   "rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
-	   "compressed": True, 
-	   "eta": eta
-	}
-		
-	dict2h5(dictionary, savefile, verbose=True) 
-
-	peak_idxlist = find_peaks(-np.imag(GDRomega)[M:],prominence=0.1)[0]
-	print(omega[M:][peak_idxlist])
-
-	c = omega[M:][peak_idxlist][0] / delta
-	print('predicted peaks = ', c * (np.arange(4) + delta))
-
-	if PLOTTING == True:
-		fig,ax = plt.subplots(1)
-		ax.plot(omega,-np.imag(GDRomega),'.-')
-		ax.set_xlabel(r'$\omega$')
-		ax.set_ylabel(r'$-Im G^R(\omega)$')
-
-		for peak_idx in peak_idxlist:
-			ax.axvline(omega[M:][peak_idx],ls='--')
-		plt.show()
+tot_freq_grid_points = int(2**14)
+omega_max = 5
+omega_min = -1*omega_max
+idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
+skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
+comp_omega_slice = slice(idx_min,idx_max,skip)
+#comp_omega = omega[comp_omega_slice]
 
 
-	print(f"*********Program exited successfully *********")
+
+###########Data Writing############ 
+print("\n###########Data Writing############")
+dictionary = {
+   "J": J,
+   "mu": mu,
+   "beta": beta,
+   "kappa": kappa,
+   "M": M, 
+   "T": T,
+   "omega": omega[comp_omega_slice],
+   "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
+   "rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
+   "compressed": True, 
+   "eta": eta
+}
+	
+dict2h5(dictionary, savefile, verbose=True) 
+
+peak_idxlist = find_peaks(-np.imag(GDRomega)[M:],prominence=0.1)[0]
+print(omega[M:][peak_idxlist])
+
+c = omega[M:][peak_idxlist][0] / delta
+print('predicted peaks = ', c * (np.arange(4) + delta))
+
+if PLOTTING == True:
+	fig,ax = plt.subplots(1)
+	ax.plot(omega,-np.imag(GDRomega),'.-')
+	ax.set_xlabel(r'$\omega$')
+	ax.set_ylabel(r'$-Im G^R(\omega)$')
+
+	for peak_idx in peak_idxlist:
+		ax.axvline(omega[M:][peak_idx],ls='--')
+	plt.show()
 
 
-if __name__ == "__main__":
-	main()
+print(f"*********Program exited successfully *********")
 
 
 
