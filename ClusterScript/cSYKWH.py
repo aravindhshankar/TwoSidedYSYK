@@ -21,6 +21,11 @@ if not os.path.exists(path_to_output):
 	os.makedirs(path_to_output)
 	print("Outputs directory created")
 
+if not os.path.exists(path_to_dump):
+	os.makedirs(path_to_dump)
+	print("Dump directory created, ", path_to_dump)
+
+
 if len(sys.argv) > 1:
 	savename = str(sys.argv[1])
 
@@ -58,7 +63,7 @@ J = 1.
 #beta = 100.
 # beta = 1./(2e-4)
 #beta = 1./(5e-5)
-beta = 1000
+beta = 500
 mu = 0. 
 # kappa = 0.05
 kappa = 0.01
@@ -74,9 +79,10 @@ omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
-err = 1e-4
+err = 1e-2
 eta = dw*2.1
 #delta = 0.420374134464041
+delta = 0.25
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
 print("dw/temp = ", f'{dw*beta:.4f}')

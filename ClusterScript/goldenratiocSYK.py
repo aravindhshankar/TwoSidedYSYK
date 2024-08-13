@@ -23,6 +23,12 @@ if not os.path.exists(path_to_output):
 	os.makedirs(path_to_output)
 	print("Outputs directory created")
 
+if not os.path.exists(path_to_dump):
+	os.makedirs(path_to_dump)
+	print("Dump directory created, ", path_to_dump)
+
+
+
 if len(sys.argv) > 1:
 	savename = str(sys.argv[1])
 
