@@ -13,36 +13,39 @@ import matplotlib.pyplot as plt
 
 
 # path_to_outfile = './Dump/RTWHDumpfiles/'
-path_to_outfile = './Dump/RTWHDumpfiles0_05'
-path_to_BH = './Dump/RTWHDumpfiles0_00'
+# path_to_outfile = './Dump/RTWHDumpfiles0_05'
+path_to_outfile = './Dump/FingersCrossedYSYKWH/'
+# path_to_BH = './Dump/RTWHDumpfiles0_00'
 # path_to_outfile = './Dump/LowTempWH/'
 # path_to_BH = './Dump/LowTempBH/'
 #outfile = 'Y_WH_2153063.h5'
 #path_to_outfile = './Outputs/RTWH/NFLstart'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
 # outfile = 'RTWHlocalM18T15beta20g0_5lamb0_01.npy'
-outfile = 'l_05M16T12beta20g0_5lamb0_05.npy'
-BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
+# outfile = 'l_05M16T12beta20g0_5lamb0_05.npy'
+outfile = 'Y_WH_2717136M18T14beta1000g0_5lamb0_01.npy'
+# BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
 # BH_outfile = 'RTWH_2442159M19T15beta300g0_5lamb0_0.npy'
 # outfile = 'RTWH_2442136M19T15beta300g0_5lamb0_005.npy'
 savepath = os.path.join(path_to_outfile, outfile)
-BHsavepath = os.path.join(path_to_BH, BH_outfile)
+# BHsavepath = os.path.join(path_to_BH, BH_outfile)
 if not os.path.exists(savepath):
 	raise(Exception(f"WH Output file {outfile} not found"))
-if not os.path.exists(BHsavepath):
-	raise(Exception("BH Output file not found"))
+# if not os.path.exists(BHsavepath):
+# 	raise(Exception("BH Output file not found"))
 
 
-M=int(2**16)
-T=2**12
-beta = 40.
+M=int(2**18)
+T=2**14
+# beta = 40.
+beta = 1000
 temp=1./beta
 g = 0.5
-lamb = 0.05
+lamb = 0.01
 J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 loaded = np.array(np.load(savepath))
-loaded_BH = np.array(np.load(BHsavepath))
+# loaded_BH = np.array(np.load(BHsavepath))
 
 
 
@@ -56,10 +59,10 @@ lambexpo = lamb**expo
 omega,t  = RealGridMaker(M,T)
 dt = t[2]-t[1]
 
-idx = 1
+idx = 0
 fig,ax  = plt.subplots(1)
 to_plot = -np.imag(loaded[idx])
-BH_to_plot = -np.imag(loaded_BH[idx])
+# BH_to_plot = -np.imag(loaded_BH[idx])
 
 G_great_om_D = -1j*(1-fermidirac(beta*omega))*loaded[0]
 G_great_D = (0.5/np.pi) * freq2time(G_great_om_D,M,dt)
@@ -73,7 +76,8 @@ trans_am_OD = 2 * np.abs(G_great_OD)
 # BH_to_plot -= min(BH_to_plot)
 
 # deltarho = np.abs(to_plot-BH_to_plot) / BH_to_plot
-deltarho = to_plot/ BH_to_plot
+# deltarho = to_plot/ BH_to_plot
+deltarho = to_plot
 
 # xaxis = omega
 xaxis = omega/lambexpo
@@ -84,7 +88,7 @@ ax.plot(xaxis,deltarho)
 # ax.set_ylim(0,10)
 # ax.set_xlim(-5,5)
 # ax.set_xlim(-20,50)
-print(f'min BH = {min(BH_to_plot)}')
+# print(f'min BH = {min(BH_to_plot)}')
 print(f'min WH = {min(to_plot)}')
 peakpoints = find_peaks(deltarho,prominence=0.1)[0]
 peakvals = [xaxis[peak] for peak in peakpoints if peak>=M]
@@ -119,11 +123,11 @@ rhoDD = -np.imag(DDomega)
 rhoDOD = -np.imag(DODomega)
 
 
-BHGDomega,BHGODomega,BHDDomega,BHDODomega = loaded_BH
-BHrhoGD = -np.imag(BHGDomega)
-BHrhoGOD = -np.imag(BHGODomega)
-BHrhoDD = -np.imag(BHDDomega)
-BHrhoDOD = -np.imag(BHDODomega)
+# BHGDomega,BHGODomega,BHDDomega,BHDODomega = loaded_BH
+# BHrhoGD = -np.imag(BHGDomega)
+# BHrhoGOD = -np.imag(BHGODomega)
+# BHrhoDD = -np.imag(BHDDomega)
+# BHrhoDOD = -np.imag(BHDODomega)
 
 
 
@@ -134,12 +138,12 @@ titlestring += ' g = ' + str(g)
 fig.suptitle(titlestring)
 
 ax[0,0].plot(omega, rhoGD)
-ax[0,0].plot(omega, BHrhoGD, '--', label='BH')
+# ax[0,0].plot(omega, BHrhoGD, '--', label='BH')
 ax[0,0].set_xlim(-5,5)
 ax[0,0].set_title(r'rho GD')
 delta = 0.420374134464041
 ax[0,1].plot(omega, rhoGOD)
-ax[0,1].plot(omega, BHrhoGOD, '--', label='BH')
+# ax[0,1].plot(omega, BHrhoGOD, '--', label='BH')
 
 #ax[0,1].set_xlim(-1,1)
 ax[0,1].set_title(r'rho GOD')
@@ -147,12 +151,12 @@ ax[0,1].set_title(r'rho GOD')
 ax[1,0].plot(omega, rhoDD)
 #ax[1,0].set_xlim(-1,1)
 ax[1,0].set_title(r'rho DD')
-ax[1,0].plot(omega, BHrhoDD, '--', label='BH')
+# ax[1,0].plot(omega, BHrhoDD, '--', label='BH')
 
 ax[1,1].plot(omega, rhoDOD)
 #ax[1,1].set_xlim(-1,1)
 ax[1,1].set_title(r'rho DOD')
-ax[1,1].plot(omega, BHrhoDOD, '--', label='BH')
+# ax[1,1].plot(omega, BHrhoDOD, '--', label='BH')
 
 ############# log log plot ###################
 

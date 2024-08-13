@@ -13,26 +13,28 @@ from ConformalAnalytical import *
 import testingscripts
 from h5_handler import *
 
-path_to_outfile = './Outputs/LOWTEMPWH/'
-path_to_outfile_BH = './Outputs/LOWTEMPBH/'
-path_to_outfile = './Dump/RTWHDumpfiles0_05/'
+# path_to_outfile = './Outputs/LOWTEMPWH/'
+# path_to_outfile_BH = './Outputs/LOWTEMPBH/'
+# path_to_outfile = './Dump/RTWHDumpfiles0_05/'
+path_to_outfile = './Outputs/'
 #outfile = 'Y_WH_2153063.h5'
 #path_to_outfile = './Outputs/RTWH/NFLstart'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
 # outfile = 'RTWH_2442136M19T15beta20g0_5lamb0_005.h5'
-outfile = 'RTWH_2452327M19T15beta1000g0_5lamb0_005.h5'
-outfile_BH = 'RTWH_2452323M19T15beta1000g0_5lamb0_0.h5'
+# outfile = 'RTWH_2452327M19T15beta1000g0_5lamb0_005.h5'
+outfile = 'Y_WH_2717136M18T14beta1000g0_5lamb0_01.h5'
+# outfile_BH = 'RTWH_2452323M19T15beta1000g0_5lamb0_0.h5'
 savepath = os.path.join(path_to_outfile, outfile)
-savepath_BH = os.path.join(path_to_outfile_BH, outfile_BH)
+# savepath_BH = os.path.join(path_to_outfile_BH, outfile_BH)
 
 if not os.path.exists(savepath):
 	raise(Exception("Output file not found"))
-if not os.path.exists(savepath_BH):
-	raise(Exception("BH Output file not found"))
+# if not os.path.exists(savepath_BH):
+# 	raise(Exception("BH Output file not found"))
 
 
 data = h52dict(savepath, verbose = True)
-data_BH = h52dict(savepath_BH, verbose = True)
+# data_BH = h52dict(savepath_BH, verbose = True)
 print(data.keys())
 
 dw = np.pi/data['T']
@@ -98,16 +100,16 @@ ax.set_ylabel(r'$-\Im{GD(\omega)}$')
 ax.legend()
 
 
-######## RATIO ##############
-fig,ax = plt.subplots(1)
-functoplot = data['rhoGD']/ data_BH['rhoGD']
-xaxis = data['omega']
-peakpoints = find_peaks(functoplot,prominence=0.001)[0]
-peakvals = [xaxis[peak] for peak in peakpoints]
-print(f'peakvals  = {peakvals}')
+# ######## RATIO ##############
+# fig,ax = plt.subplots(1)
+# functoplot = data['rhoGD']/ data_BH['rhoGD']
+# xaxis = data['omega']
+# peakpoints = find_peaks(functoplot,prominence=0.001)[0]
+# peakvals = [xaxis[peak] for peak in peakpoints]
+# print(f'peakvals  = {peakvals}')
 
-ax.plot(xaxis,functoplot,'.-')
-for peak in peakvals:
-	ax.axvline(peak,ls='--', c='gray')
+# ax.plot(xaxis,functoplot,'.-')
+# for peak in peakvals:
+# 	ax.axvline(peak,ls='--', c='gray')
 
 plt.show()

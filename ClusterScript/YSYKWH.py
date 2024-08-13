@@ -196,9 +196,10 @@ def main():
 	# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
 	GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,neglamb,J,err=err,x=0.01,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False) 
 
-
 	if DUMP == True:
 		np.save(os.path.join(path_to_dump,savefiledump), GFs)
+
+	GDRomega, GODRomega, DDRomega, DODRomega = GFs
 	#GDRt = (0.5/np.pi) * freq2time(GDRomega,M,dt)
 	#DDRt = (0.5/np.pi) * freq2time(DDRomega,M,dt)
 	#GODRt = (0.5/np.pi) * freq2time(GODRomega,M,dt)
