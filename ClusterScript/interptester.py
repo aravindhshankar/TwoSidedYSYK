@@ -11,7 +11,7 @@ from ConformalAnalytical import *
 import testingscripts
 from h5_handler import *
 from scipy.signal import find_peaks
-
+from scipy.interpolate import CubicSpline, PchipInterpolator, Akima1DInterpolator
 # savename = 'default_savename'
 # path_to_output = './Outputs'
 # path_to_dump  = './Dump/redoCWH'
@@ -84,6 +84,14 @@ GDRomega, GODRomega = np.load(os.path.join(path_to_loadfile,savefiledump))
 
 
 
+newM = int(2**20) #number of points in the grid
+# M = int(2**18) #number of points in the grid
+# T = int(2**15) #upper cut-off fot the time
+newT = int(2**16)
+#T = int(2**10)
+newomega, newt = RealGridMaker(newM,newT)
+newrhoGDRomega = np.interp(newomega,omega,-np.imag(GDRomega))
+
 # peak_idxlist = find_peaks(-np.imag(GDRomega)[M:],prominence=0.1)[0]
 # print(omega[M:][peak_idxlist])
 
@@ -92,10 +100,12 @@ GDRomega, GODRomega = np.load(os.path.join(path_to_loadfile,savefiledump))
 
 if PLOTTING == True:
 	fig,ax = plt.subplots(1)
-	ax.plot(omega[M:M+10000:10],-np.imag(GDRomega[M:M+10000:10]),'.-')
+	# ax.plot(omega[M:M+10000:10],-np.imag(GDRomega[M:M+10000:10]),'.-')
+	ax.plot(omega,-np.imag(GDRomega),'.-')
 	ax.set_xlabel(r'$\omega$')
 	ax.set_ylabel(r'$-Im G^R(\omega)$')
-
+	# ax.plot(newomega,newrhoGDRomega)
+	ax.plot(newomega,-np.imag(PchipInterpolator(omega, GDRomega)(newomega)),'.-',c='k')
 	# for peak_idx in peak_idxlist:
 	# 	ax.axvline(omega[M:][peak_idx],ls='--')
 	plt.show()
