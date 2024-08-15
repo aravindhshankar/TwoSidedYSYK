@@ -45,16 +45,16 @@ J = 1.
 #beta = 1./(5e-5)
 # beta = 200
 # beta = 1000
-beta = 50
+beta = 5000
 mu = 0. 
 kappa = 0.01
 # kappa = 0.05
 ITERMAX = 10000
 
-M = int(2**20) #number of points in the grid
+M = int(2**16) #number of points in the grid
 # M = int(2**18) #number of points in the grid
-T = int(2**15) #upper cut-off fot the time
-#M = int(2**16)
+# T = int(2**15) #upper cut-off fot the time
+T = int(2**12)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
@@ -67,7 +67,8 @@ delta = 0.25
 
 print(f'omega max = {omega[-1]}')
 
-savename = 'GR'
+# savename = 'GR'
+savename = 'cSYKWH'
 savefile = savename
 savefile += 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
 # savefile += 'beta' + str((round(beta*100))/100.) 
@@ -91,7 +92,7 @@ GDRomega, GODRomega = np.load(os.path.join(path_to_loadfile,savefiledump))
 
 if PLOTTING == True:
 	fig,ax = plt.subplots(1)
-	ax.plot(omega[M:M+1000:20],-np.imag(GDRomega[M:M+1000:20]),'.-')
+	ax.plot(omega[M:M+10000:10],-np.imag(GDRomega[M:M+10000:10]),'.-')
 	ax.set_xlabel(r'$\omega$')
 	ax.set_ylabel(r'$-Im G^R(\omega)$')
 

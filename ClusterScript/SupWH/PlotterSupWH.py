@@ -27,12 +27,13 @@ from ConformalAnalytical import *
 #import time
 
 
-# plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
+plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 plt.rcParams['figure.dpi'] = "120"
 # plt.rcParams['legend.fontsize'] = '14'
 plt.rcParams['legend.fontsize'] = '6'
 plt.rcParams['figure.figsize'] = '8,7'
 plt.rcParams['lines.markersize'] = '6'
+plt.rcParams['lines.linewidth'] = '1'
 
 
 
@@ -107,7 +108,10 @@ figSEs.suptitle(r'$\lambda = 0.05$' )
 
 
 figFE, axFE = plt.subplots(1)
+left, bottom, width, height = [0.15, 0.15, 0.1, 0.1]
+axFE2 = figFE.add_axes([left, bottom, width, height])
 figFE.tight_layout(pad=2)
+
 
 ############### EVENT LOOP STARTS ##############################
 
@@ -364,12 +368,16 @@ for i, beta in enumerate(betalist):
     normaln = -np.sum(np.log(omega**4))
     FEsumangle = np.array([retFE(theta) - normaln for theta in thetalist]) 
     FEsumangle -= np.mean(FEsumangle)
-    axFE.plot(thetalist, (1./beta) * FEsumangle, c=col,ls = '--', label=lab)
-    axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col)
+    axFE2.plot(thetalist, (1./beta) * FEsumangle, c=col,ls = '--')
+    axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
     axFE.set_xlabel(r'$\theta$')
-    axFE.set_title(r'phase dependent part of the free energy')
+    axFE2.set_xlabel(r'$\theta$')
+    # axFE.set_title(r'phase dependent part of the free energy')
+    axFE.set_title(r'Josephson Current')
+    axFE2.set_title(r'Phase dependent part of the free energy',fontsize = '8')
     axFE.legend()
     # figFE.savefig('../../KoenraadEmails/FreeEnergyOscillationSUP.pdf', bbox_inches = 'tight')
+    figFE.savefig('../../KoenraadEmails/JosephsonCurrent.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 plt.show()
