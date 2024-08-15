@@ -16,7 +16,7 @@ from functools import partial
 import time
 
 savename = 'default_savename'
-path_to_output = './Outputs'
+path_to_output = './Outputs/redoCWH'
 path_to_dump  = './Dump/redoCWH'
 
 if not os.path.exists(path_to_output):
@@ -32,11 +32,14 @@ if not os.path.exists(path_to_dump):
 if len(sys.argv) > 1:
 	savename = str(sys.argv[1])
 
-savefile = os.path.join(path_to_output, savename+'.h5')
-savefile_dump = os.path.join(path_to_dump, savename+'.npy')
+# savefile = os.path.join(path_to_output, savename+'.h5')
+# savefile_dump = os.path.join(path_to_dump, savename+'.npy')
 
 
 fft_check = testingscripts.realtimeFFT_validator() # Should return True
+assert fft_check , "Something broken with FFT validator"
+
+
 
 DUMP = True
 PLOTTING = True
@@ -105,7 +108,8 @@ J = 1.
 #beta = 100.
 # beta = 1./(2e-4)
 #beta = 1./(5e-5)
-beta = 1000
+# beta = 500
+betaset = [20, 50 ,100, 200, 500, 1000]
 mu = 0. 
 # kappa = 0.05
 kappa = 0.01
@@ -113,8 +117,8 @@ ITERMAX = 10000
 
 # M = int(2**16) #number of points in the grid
 # T = int(2**12) #upper cut-off fot the time
-M = int(2**19) #number of points in the grid
-T = int(2**14) #upper cut-off fot the time
+M = int(2**20) #number of points in the grid
+T = int(2**15) #upper cut-off fot the time
 #M = int(2**16)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
@@ -127,7 +131,6 @@ eta = dw*2.1
 delta = 0.25
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
-print("dw/temp = ", f'{dw*beta:.4f}')
 print("flag fft_check = ", fft_check)
 print("grid_flag = ", grid_flag)
 
@@ -136,12 +139,24 @@ print("######## State Variables ################")
 print("J = ", J)
 print("mu = ", mu)
 print("kappa = ", kappa)
-print("beta = ", beta)
+# print("beta = ", beta)
 print("log_2 M = ", np.log2(M))
 print("eta = ", eta)
 print("T = ", T)
 print("err = ", err)
 print("######## End of State variables #########")
+fig,ax = plt.subplots(1)
+ax.set_xlabel(r'$\omega$')
+ax.set_ylabel(r'$-Im G^R(\omega)$')
+#################Data Compression################
+
+tot_freq_grid_points = int(2**14)
+omega_max = 5
+omega_min = -1*omega_max
+idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
+skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
+comp_omega_slice = slice(idx_min,idx_max,skip)
+#comp_omega = omega[comp_omega_slice]
 
 
 	
@@ -171,25 +186,64 @@ GDRomega = (omega + 1j*eta + mu)/ (omega+1j*eta - mu )**2 - (kappa)**2
 GODRomega = kappa / (omega+1j*eta - mu )**2 - (kappa)**2
 GFs = np.array([GDRomega,GODRomega])
 
-T = partial(RE_wormhole_cSYK_STEP, J=J,mu=mu,kappa=kappa,beta=beta,eta=eta)
 
-start_time = time.perf_counter()
-sol = fixed_point_egraal(T, GFs, err, ITERMAX = ITERMAX)
-stop_time = time.perf_counter()
+for beta in betaset:
+	print("dw/temp = ", f'{dw*beta:.4f}')	
 
-if DUMP == True:
-	np.save(savefile_dump,[GDRomega,GODRomega])
-print(f'Exited from golden ration algorithm in {stop_time-start_time} seconds')
+	savefile = savename
+	savefile += 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
+	# savefile += 'beta' + str((round(beta*100))/100.) 
+	savefile += 'beta' + str(beta) 
+	savefile += 'J' + str(J)
+	savefile += 'kappa' + f'{kappa:.3}'
+	savefile = savefile.replace('.','_') 
+	savefiledump = savefile + '.npy' 
+	savefileoutput = savefile + '.h5'
 
-values, GFs, step_list = sol
+	############ ACTUAL CALCULATION ############
+	err = 1e-4 if beta < 100 else 1e-2
+	TOP = partial(RE_wormhole_cSYK_STEP, J=J,mu=mu,kappa=kappa,beta=beta,eta=eta)
+	start_time = time.perf_counter()
+	sol = fixed_point_egraal(TOP, GFs, err, ITERMAX = ITERMAX)
+	stop_time = time.perf_counter()
 
-if len(step_list) >= ITERMAX-1:
-	print(f"stopped because of ITERMAX = {ITERMAX} reached")
-print(f'total steps = {len(step_list)} with final x  = {step_list[-1]}')
-print(G.shape)
-print(values[-1])
+	values, GFs, step_list = sol
+	GDRomega, GODRomega = GFs
+	############ CALCULATION ENDS###############
 
-GDRomega, GODRomega = GFs
+
+	if DUMP == True:
+		np.save(os.path.join(path_to_dump,savefiledump),GFs)
+	###########Data Writing############ 
+	print("\n###########Data Writing############")
+	dictionary = {
+	"J": J,
+	"mu": mu,
+	"beta": beta,
+	"kappa": kappa,
+	"M": M, 
+	"T": T,
+	"omega": omega[comp_omega_slice],
+	"rhoGD": -np.imag(GDRomega[comp_omega_slice]),
+	"rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
+	"compressed": True, 
+	"eta": eta
+	}
+		
+	dict2h5(dictionary, os.path.join(path_to_output,savefileoutput), verbose=True) 
+	if PLOTTING == True:
+		ax.plot(omega,-np.imag(GDRomega),'.-',label = f'$\\beta = $ {beta}')
+
+		# for peak_idx in peak_idxlist:
+		# 	ax.axvline(omega[M:][peak_idx],ls='--')
+
+	if len(step_list) >= ITERMAX-1:
+		print(f"stopped because of ITERMAX = {ITERMAX} reached")
+	print(f'total steps = {len(step_list)} with final x  = {step_list[-1]}')
+	print(f'last x before stop = {values[-1]}')
+	print(f'Exited from golden ration algorithm for beta = {beta} in {stop_time-start_time} seconds')
+
+
 
 #GDRt = (0.5/np.pi) * freq2time(GDRomega,M,dt)
 #DDRt = (0.5/np.pi) * freq2time(DDRomega,M,dt)
@@ -200,54 +254,20 @@ GDRomega, GODRomega = GFs
 # GODRt = (0.5/np.pi) * freq2time(GODRomega - GfreeRealomega(omega,mu,eta),M,dt) + GfreeRealt(t,mu,eta)
 # DODRt = (0.5/np.pi) * freq2time(DODRomega - DfreeRealomega(omega,r,eta),M,dt) + DfreeRealt(t,r,eta)
 
-#################Data Compression################
-
-tot_freq_grid_points = int(2**14)
-omega_max = 5
-omega_min = -1*omega_max
-idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
-skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
-comp_omega_slice = slice(idx_min,idx_max,skip)
-#comp_omega = omega[comp_omega_slice]
 
 
 
-###########Data Writing############ 
-print("\n###########Data Writing############")
-dictionary = {
-   "J": J,
-   "mu": mu,
-   "beta": beta,
-   "kappa": kappa,
-   "M": M, 
-   "T": T,
-   "omega": omega[comp_omega_slice],
-   "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
-   "rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
-   "compressed": True, 
-   "eta": eta
-}
-	
-dict2h5(dictionary, savefile, verbose=True) 
 
-peak_idxlist = find_peaks(-np.imag(GDRomega)[M:],prominence=0.1)[0]
-print(omega[M:][peak_idxlist])
+# peak_idxlist = find_peaks(-np.imag(GDRomega)[M:],prominence=0.1)[0]
+# print(omega[M:][peak_idxlist])
 
-c = omega[M:][peak_idxlist][0] / delta
-print('predicted peaks = ', c * (np.arange(4) + delta))
+# c = omega[M:][peak_idxlist][0] / delta
+# print('predicted peaks = ', c * (np.arange(4) + delta))
 
-if PLOTTING == True:
-	fig,ax = plt.subplots(1)
-	ax.plot(omega,-np.imag(GDRomega),'.-')
-	ax.set_xlabel(r'$\omega$')
-	ax.set_ylabel(r'$-Im G^R(\omega)$')
-
-	for peak_idx in peak_idxlist:
-		ax.axvline(omega[M:][peak_idx],ls='--')
-	plt.show()
 
 
 print(f"*********Program exited successfully *********")
+plt.show()
 
 
 

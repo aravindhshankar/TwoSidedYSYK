@@ -50,7 +50,7 @@ err = 1e-5
 
 global beta
 
-beta = 90
+beta = 30
 mu = 0.0
 g = 0.5
 # g = 2.
@@ -296,16 +296,24 @@ ax.plot(omega,SigmaODomega.imag,label = 'ImSigmaOD')
 ax.legend()
 
 theta = np.pi/2
-thetalist = [0,np.pi/6,np.pi/4, np.pi/3,np.pi/2]
+# thetalist = [0,np.pi/6,np.pi/4, np.pi/3,np.pi/2]
+thetalist = np.linspace(0,2*np.pi,100)
 # theta = 0.
 fig,ax=plt.subplots(1)
-for theta in thetalist:
-	FEmetalContr = np.log((lamb**2 + SigmaODomega.real**2 + 2 * lamb * SigmaODomega.real * np.cos(theta) - (omega - SigmaDomega.imag)**2)**2)
-	ax.plot(omega,FEmetalContr)
-	FEsum = np.sum(FEmetalContr)
-	print(f'theta = {theta}, FEsum = {FEsum}')
-#plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
+# for theta in thetalist:
+# 	FEmetalContr = np.log((lamb**2 + SigmaODomega.real**2 + 2 * lamb * SigmaODomega.real * np.cos(theta) - (omega - SigmaDomega.imag)**2)**2)
+# 	ax.plot(omega,FEmetalContr)
+# 	FEsum = np.sum(FEmetalContr) + np.sum(np.log(omega**4))
+# 	print(f'theta = {theta}, FEsum = {FEsum}')
+# #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
+
+
+retFE = lambda theta : np.sum(-np.log((lamb**2 + SigmaODomega.real**2 + 2 * lamb * SigmaODomega.real * np.cos(theta) - (omega - SigmaDomega.imag)**2)**2))
+normaln = -np.sum(np.log(omega**4))
+FEsumangle = [retFE(theta) - normaln for theta in thetalist] 
+ax.plot(thetalist, FEsumangle)
+
 plt.show()
 
 

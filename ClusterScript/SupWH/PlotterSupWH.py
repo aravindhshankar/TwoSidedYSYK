@@ -7,9 +7,9 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 # path_to_dump = '../Dump/SupCondWHImagDumpfiles'
-# path_to_dump = '../Dump/l_05Sup/'
+path_to_dump = '../Dump/l_05Sup/'
 # path_to_dump = '../Dump/l1Sup/'
-path_to_dump = '../Dump/lambannealSup'
+# path_to_dump = '../Dump/lambannealSup'
 
 if not os.path.exists(path_to_dump):
     print("Error - Path to Dump directory not found")
@@ -25,6 +25,15 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
 #import time
+
+
+# plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
+plt.rcParams['figure.dpi'] = "120"
+# plt.rcParams['legend.fontsize'] = '14'
+plt.rcParams['legend.fontsize'] = '6'
+plt.rcParams['figure.figsize'] = '8,7'
+plt.rcParams['lines.markersize'] = '6'
+
 
 
 DUMP = False
@@ -43,16 +52,17 @@ g = 0.5
 r = 1.
 alpha = 0.
 # lamb = 0.001
-# lamb = 0.01
+lamb = 0.05
 # lamb = 1.0
 #J = 0.0
 J = 0
 
-# betalist = [25,42,54,80,99]
+betalist = [25,42,54,80,99]
 # betalist = [25,50,80,190]
-betalist = [2000,]
+# betalist = [2000,]
 
 kappa = 1.
+
 
 
 
@@ -79,14 +89,32 @@ figSL,axSL = plt.subplots(2,2)
 figSL.tight_layout(pad=2)
 
 
+figSEs, axSEs = plt.subplots(1,4)
+figSEs.tight_layout(pad=2)
+axSEs[0].set_title(r'Re/Im $\Sigma_d$')
+axSEs[1].set_title(r'Re/Im $\Sigma_{od}$')
+axSEs[2].set_title(r'$|\Phi_{d}|$')
+axSEs[3].set_title(r'$|\Phi_{od}|$')
+axSEs[0].set_xlabel(r'$\omega_n$')
+axSEs[1].set_xlabel(r'$\omega_n$')
+axSEs[2].set_xlabel(r'$\omega_n$')
+axSEs[3].set_xlabel(r'$\omega_n$')
+axSEs[0].set_xlim(-10,10)
+axSEs[1].set_xlim(-10,10)
+axSEs[2].set_xlim(-10,10)
+axSEs[3].set_xlim(-10,10)
+figSEs.suptitle(r'$\lambda = 0.05$' )
 
+
+figFE, axFE = plt.subplots(1)
+figFE.tight_layout(pad=2)
 
 ############### EVENT LOOP STARTS ##############################
 
 
 for i, beta in enumerate(betalist): 
     col = 'C'+str(i)
-    lab = f'beta = {beta}'
+    lab = r'$\beta = $' + f'{beta}'
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
     tau = ImagGridMaker(Nbig,beta,'tau')
@@ -99,7 +127,7 @@ for i, beta in enumerate(betalist):
     ################# LOADING STEP ##########################
     # savefile = 'MET'
     # savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-    # savefile += 'g' + str(g) + 'r' + str(r)
+    # savefile += 'g' + str(g) + 'r' + st$r(r)
     # savefile += 'lamb' + f'{lamb:.3}'
     # savefile = savefile.replace('.','_') 
     # savefile += '.npy'
@@ -134,9 +162,21 @@ for i, beta in enumerate(betalist):
 
 
 
+    SigmaDtau = 1.0 * kappa * (g**2) * DDtau * GDtau
+    #Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
+    PiDtau = -2.0 * g**2 * (-1.* GDtau * GDtau[::-1] - (1-alpha) * np.conj(FDtau) * FDtau)#KMS G(-tau) = -G(beta-tau), me
+    PhiDtau = -1.0 * (1-alpha) * kappa * (g**2) * DDtau * FDtau
+    SigmaODtau = 1.0 * kappa * (g**2) * DODtau * GODtau
+    #Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
+    PiODtau = -2.0 * g**2 * (-1.* GODtau * GODtau[::-1] - (1-alpha) * np.conj(FODtau) * FODtau)#KMS G(-tau) = -G(beta-tau), me
+    PhiODtau = -1.0 * (1-alpha) * kappa * (g**2) * DODtau * FODtau
 
-
-
+    SigmaDomega = Time2FreqF(SigmaDtau,Nbig,beta)
+    PiDomega =  Time2FreqB(PiDtau,Nbig,beta)
+    PhiDomega = Time2FreqF(PhiDtau,Nbig,beta)
+    SigmaODomega = Time2FreqF(SigmaODtau,Nbig,beta)
+    PiODomega =  Time2FreqB(PiODtau,Nbig,beta)
+    PhiODomega = Time2FreqF(PhiODtau,Nbig,beta)   
 
 
 
@@ -163,7 +203,7 @@ for i, beta in enumerate(betalist):
     # ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
     # ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
     ax[2].plot(tau/beta, (np.abs(FDtau)), c=col, label = lab)
-    ax[2].plot(tau/beta, (np.abs(FODtau)), ls='--', c=col, label = lab)
+    ax[2].plot(tau/beta, (np.abs(FODtau)), ls='--', c=col)
     #ax[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
     #ax[2].set_ylim(-1,1)
     ax[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
@@ -309,8 +349,27 @@ for i, beta in enumerate(betalist):
     # BCSphaseangle = np.arctan(BCSgap[Nbig//2].imag / BCSgap[Nbig//2].real) 
     # BCSphaseangle = BCSphaseangle * 180 / np.pi
     # print(f"BCS gap phase angle is = {BCSphaseangle:.4f} degrees")
+    offset = 0.01 * i
+    axSEs[0].plot(omega,SigmaDomega.real + offset, ls = '-', c=col,label=lab)
+    axSEs[0].plot(omega,SigmaDomega.imag + offset , ls = '--', c=col)
+    axSEs[1].plot(omega,SigmaODomega.real + offset, ls = '-', c=col,label=lab)
+    axSEs[1].plot(omega,SigmaODomega.imag + offset, ls = '--', c=col)
+    axSEs[2].plot(omega,np.abs(PhiDomega) + offset, ls = '-', c=col,label=lab)
+    axSEs[3].plot(omega,np.abs(PhiODomega), ls = '-', c=col,label=lab)
+    [axSEsnum.legend() for axSEsnum in axSEs]
+    # figSEs.savefig('../../KoenraadEmails/Magnitude of self energies.pdf', bbox_inches = 'tight')
 
-
+    thetalist = np.linspace(0,2*np.pi,100)
+    retFE = lambda theta : np.sum(-np.log(lamb**4 + ((SigmaDomega + SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega))*((SigmaDomega - SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) + np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega)) - lamb**2*(SigmaDomega**2 - 4j*SigmaDomega*omega - 2*omega**2 + np.conj(SigmaDomega)**2 + 4j*omega*np.real(SigmaDomega) - 4*np.real(SigmaODomega)**2) + 2*lamb*(lamb*(np.abs(SigmaODomega)**2 + np.abs(PhiDomega)**2)*np.cos(2*theta) + np.cos(theta)*(SigmaODomega*np.abs(SigmaODomega)**2 - 2j*SigmaODomega*omega*np.conj(SigmaDomega) - SigmaODomega*np.conj(SigmaDomega)**2 - SigmaDomega*(SigmaDomega - 2j*omega)*np.conj(SigmaODomega) + SigmaODomega*np.conj(SigmaODomega)**2 + 2*(lamb**2 + omega**2 + np.abs(PhiDomega)**2)*np.real(SigmaODomega)))))
+    normaln = -np.sum(np.log(omega**4))
+    FEsumangle = np.array([retFE(theta) - normaln for theta in thetalist]) 
+    FEsumangle -= np.mean(FEsumangle)
+    axFE.plot(thetalist, (1./beta) * FEsumangle, c=col,ls = '--', label=lab)
+    axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col)
+    axFE.set_xlabel(r'$\theta$')
+    axFE.set_title(r'phase dependent part of the free energy')
+    axFE.legend()
+    # figFE.savefig('../../KoenraadEmails/FreeEnergyOscillationSUP.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 plt.show()
