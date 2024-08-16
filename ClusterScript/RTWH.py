@@ -19,7 +19,8 @@ savename = 'default_savename'
 path_to_output = './Outputs/lowertempRTWH/'
 path_to_dump = './Dump/lowertempRTWH/'
 # path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
-path_to_loadfile = './Dump/RTWHDumpfiles0_01/'
+# path_to_loadfile = './Dump/RTWHDumpfiles0_01/'
+path_to_loadfile = './Dump/lowertempRTWH/'
 
 if not os.path.exists(path_to_output):
     os.makedirs(path_to_output)
@@ -42,8 +43,10 @@ PLOTTING = False
 
 # M = int(2**18) #number of points in the grid
 # T = 2**14 #upper cut-off for the time
-M = int(2**16)
-T = 2**12
+# M = int(2**16)
+# T = 2**12
+M = int(2**19)
+T = 2**15
 # err = 1e-8
 err = 1e-3
 
@@ -65,7 +68,9 @@ r = 1.
 kappa = 1.
 eta = dw*2.1
 
-beta_start = 200
+# beta_start = 200
+beta_start = 500
+
 beta = beta_start
 target_beta = 2000
 beta_step = 10
@@ -86,11 +91,12 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 
 # betasavelist = np.array([20,50,100,150,200,300,400,500,700,800,1000,1200,1500,1800,2000,5000])
 betasavelist = np.arange(beta_start,target_beta+beta_step, 10*beta_step)
-print(betasavelist[-1])
+print(f'betasavelist[-1] = {betasavelist[-1]}')
 # betasavelist = np.arange(beta_start,target_beta+1,5) - 1
 
 try:
-    GFs = np.load(os.path.join(path_to_loadfile,'l_01M16T12beta200_0g0_5lamb0_01.npy'))
+    # GFs = np.load(os.path.join(path_to_loadfile,'l_01M16T12beta200_0g0_5lamb0_01.npy'))
+    GFs = np.load(os.path.join(path_to_loadfile,'lowertempM19T15beta500g0_5lamb0_01.npy'))
 except FileNotFoundError:
     print('INPUT FILE NOT FOUND!!!!!!')
     exit(1)

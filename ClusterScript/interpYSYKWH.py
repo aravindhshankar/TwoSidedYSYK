@@ -51,7 +51,8 @@ g = 0.5
 # beta = 1./(2e-4)
 # betalist = [750,750]
 # betalist = [500,500]
-betalist = [200,200]
+# betalist = [200,200]
+betalist = [400,500]
 #beta = 1./(5e-5)
 mu = 0. 
 r = 1.
@@ -61,10 +62,10 @@ r = 1.
 lamb = 0.01
 J = 0
 
-# M = int(2**16) #number of points in the grid
-# T = int(2**12) #upper cut-off fot the time
-M = int(2**19) #number of points in the grid
-T = int(2**15) #upper cut-off fot the time
+M = int(2**16) #number of points in the grid
+T = int(2**12) #upper cut-off fot the time
+# M = int(2**19) #number of points in the grid
+# T = int(2**15) #upper cut-off fot the time
 # M = int(2**18) #number of points in the grid
 # T = int(2**14) #upper cut-off fot the time
 # M = int(2**16)
@@ -134,8 +135,8 @@ def main():
 		else:
 			# GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
 			# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
-			newM = int(2**21) #number of points in the grid
-			newT = int(2**17) #upper cut-off fot the time
+			newM = int(2**19) #number of points in the grid
+			newT = int(2**15) #upper cut-off fot the time
 			newomega, newt = RealGridMaker(newM,newT)
 			newdt = newt[2]-newt[1]
 			newdw = newomega[2]-newomega[1]
