@@ -72,16 +72,15 @@ err = 1e-6
 # eta = dw*10.
 eta = dw*2.1
 #delta = 0.420374134464041
-ITERMAX = 5
+ITERMAX = 10000
 # ITERMAX = 25000
 
 
 
 
-x = 0.01
 
 print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
-print("dw/temp = ", f'{dw*beta:.4f}')
+# print("dw/temp = ", f'{dw*beta:.4f}')
 print("flag fft_check = ", fft_check)
 print("grid_flag = ", grid_flag)
 
@@ -92,7 +91,7 @@ print("mu = ", mu)
 print("r = ", r)
 print("lamb= ", lamb)
 print("J = ", J)
-print("beta = ", beta)
+# print("beta = ", beta)
 print("log_2 M = ", np.log2(M))
 print("eta = ", eta)
 print("T = ", T)
@@ -101,7 +100,7 @@ print("######## End of State variables #########")
 
 
 
-omegar2 = ret_omegar2(g,beta)
+# omegar2 = ret_omegar2(g,beta)
 	
 
 
@@ -148,6 +147,7 @@ def main():
 		savefiledump = savefile + '.npy' 
 		savefileoutput = savefile + '.h5'
 
+		x = 0.01
 
 		if load_flag == True:
 			try:
@@ -158,9 +158,9 @@ def main():
 				print(os.path.join(path_to_dump,savefiledump))
 				exit(1)
 		else:
-			GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
+			# GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
 			# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
-			GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,x=0.01,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False) 
+			GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,x=x,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False) 
 
 			if DUMP == True:
 				np.save(os.path.join(path_to_dump,savefiledump), GFs)
