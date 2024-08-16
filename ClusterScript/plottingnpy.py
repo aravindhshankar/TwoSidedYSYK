@@ -14,7 +14,8 @@ import matplotlib.pyplot as plt
 
 # path_to_outfile = './Dump/RTWHDumpfiles/'
 # path_to_outfile = './Dump/RTWHDumpfiles0_05'
-path_to_outfile = './Dump/FingersCrossedYSYKWH/'
+# path_to_outfile = './Dump/FingersCrossedYSYKWH/'
+path_to_outfile = './Dump/redoYWH/'
 # path_to_BH = './Dump/RTWHDumpfiles0_00'
 # path_to_outfile = './Dump/LowTempWH/'
 # path_to_BH = './Dump/LowTempBH/'
@@ -23,7 +24,7 @@ path_to_outfile = './Dump/FingersCrossedYSYKWH/'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
 # outfile = 'RTWHlocalM18T15beta20g0_5lamb0_01.npy'
 # outfile = 'l_05M16T12beta20g0_5lamb0_05.npy'
-outfile = 'Y_WH_2717136M18T14beta1000g0_5lamb0_01.npy'
+outfile = 'YWHM20T16beta750g0_5lamb0_01.npy'
 # BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
 # BH_outfile = 'RTWH_2442159M19T15beta300g0_5lamb0_0.npy'
 # outfile = 'RTWH_2442136M19T15beta300g0_5lamb0_005.npy'
@@ -35,10 +36,12 @@ if not os.path.exists(savepath):
 # 	raise(Exception("BH Output file not found"))
 
 
-M=int(2**18)
-T=2**14
+# M=int(2**16)
+# T=2**12
+M=int(2**20)
+T = 2**16
 # beta = 40.
-beta = 1000
+beta = 750
 temp=1./beta
 g = 0.5
 lamb = 0.01

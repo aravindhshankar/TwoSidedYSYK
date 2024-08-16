@@ -48,7 +48,8 @@ g = 0.5
 #beta = 100.
 # beta = 1./(2e-4)
 # beta = 200
-betalist = [200,500,1000,2000,5000,6000,10000]
+# betalist = [200,500,1000,2000,5000,6000,10000]
+betalist = [500,500,750,1000,2000,5000,6000,10000]
 #beta = 1./(5e-5)
 mu = 0. 
 r = 1.
@@ -72,7 +73,7 @@ err = 1e-7
 # eta = dw*10.
 eta = dw*2.1
 #delta = 0.420374134464041
-ITERMAX = 10000
+ITERMAX = 20000
 # ITERMAX = 25000
 
 
@@ -153,7 +154,7 @@ def main():
 			try:
 				load_flag = False
 				GFs = np.load(os.path.join(path_to_dump,savefiledump))
-				GFs[1] = -1.0*GFs[1]
+				# GFs[1] = -1.0*GFs[1]
 			except FileNotFoundError:
 				print('INPUT FILE NOT FOUND!!!!!!!!!!')
 				print(os.path.join(path_to_dump,savefiledump))

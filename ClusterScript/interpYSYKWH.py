@@ -12,6 +12,8 @@ import testingscripts
 from h5_handler import *
 
 from YSYK_iterator import RE_WHYSYK_iterator
+from scipy.signal import find_peaks
+from scipy.interpolate import CubicSpline, PchipInterpolator, Akima1DInterpolator 
 
 
 
@@ -20,7 +22,7 @@ PLOTTING = True
 
 
 
-savename = 'default_savename'
+# savename = 'default_savename'
 path_to_output = './Outputs/redoYWH'
 path_to_dump  = './Dump/redoYWH'
 
@@ -34,7 +36,7 @@ if not os.path.exists(path_to_dump):
 if len(sys.argv) > 1:
 	savename = str(sys.argv[1])
 
-savefile = os.path.join(path_to_output, savename+'.h5')
+# savefile = os.path.join(path_to_output, savename+'.h5')
 
 fft_check = testingscripts.realtimeFFT_validator() # Should return True
 
@@ -47,7 +49,7 @@ fft_check = testingscripts.realtimeFFT_validator() # Should return True
 g = 0.5
 #beta = 100.
 # beta = 1./(2e-4)
-beta = 200
+betalist = [750,750]
 #beta = 1./(5e-5)
 mu = 0. 
 r = 1.
@@ -71,179 +73,118 @@ err = 1e-5
 # eta = dw*10.
 eta = dw*2.1
 #delta = 0.420374134464041
-ITERMAX = 5
+ITERMAX = 100
 # ITERMAX = 25000
 
 
-savefile = savename
-savefile += 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
-# savefile += 'beta' + str((round(beta*100))/100.) 
-savefile += 'beta' + str(beta) 
-savefile += 'g' + str(g)
-savefile += 'lamb' + str(lamb)
-savefile = savefile.replace('.','_') 
-savefiledump = savefile + '.npy' 
-savefileoutput = savefile + '.h5'
+# savefile = savename
+# savefile += 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
+# # savefile += 'beta' + str((round(beta*100))/100.) 
+# savefile += 'beta' + str(beta) 
+# savefile += 'g' + str(g)
+# savefile += 'lamb' + str(lamb)
+# savefile = savefile.replace('.','_') 
+# savefiledump = savefile + '.npy' 
+# savefileoutput = savefile + '.h5'
 
 x = 0.01
 
-print("T = ", T, ", dw =  ", f'{dw:.6f}', ", dt = ", f'{dt:.6f}', ', omega_max = ', f'{omega[-1]:.3f}' ) 
-print("dw/temp = ", f'{dw*beta:.4f}')
-print("flag fft_check = ", fft_check)
-print("grid_flag = ", grid_flag)
-
-## State varriables go into .out file
-print("######## State Variables ################")
-print("g = ", g)
-print("mu = ", mu)
-print("r = ", r)
-print("lamb= ", lamb)
-print("J = ", J)
-print("beta = ", beta)
-print("log_2 M = ", np.log2(M))
-print("eta = ", eta)
-print("T = ", T)
-print("err = ", err)
-print("######## End of State variables #########")
 
 
 
-omegar2 = ret_omegar2(g,beta)
+
 	
-# def RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True):
-# 	itern = 0
-# 	diff = 1
-# 	x = 0.5
-# 	diffseries = []
-# 	xGD, xGOD, xDD, xDOD = (0.5,0.5,0.5,0.5)
-# 	diffGD, diffGOD, diffDD, diffDOD = (1.,1.,1.,1.)
-# 	conv_flag = True
-	
-# 	while (diff>err and itern<150 and conv_flag): 
-# 		itern += 1 
-# 		diffoldGD,diffoldDD,diffoldGOD,diffoldDOD = (diffGD,diffDD,diffGOD,diffDOD)
-# 		GDRoldomega,DDRoldomega,GODRoldomega,DODRoldomega = (1.0*GDRomega, 1.0*DDRomega, 1.0*GODRomega, 1.0*DODRomega)
 
-# 		rhoGD = -1.0*np.imag(GDRomega)
-# 		rhoDD = -1.0*np.imag(DDRomega)
-# 		rhoGOD = -1.0*np.imag(GODRomega)
-# 		rhoDOD = -1.0*np.imag(DODRomega)
-
-# 		SigmaDomega,PiDomega = Davrhotosigma(rhoGD,rhoDD,M,dt,t,omega,g,beta,kappa=1,delta=eta)
-# 		SigmaODomega,PiODomega = Davrhotosigma(rhoGOD,rhoDOD,M,dt,t,omega,g,beta,kappa=1,delta=eta)
-# 		####PiDOmega[M] = -1.0*r - omegar2 - eta**2
-
-# 	#   if itern < 10 : 
-# 	#   PiDomega[M] = -1.0*r - omegar2 - eta**2
-# 	#	PiODomega[M] = 0
-		
-# 		detGmat = (omega+1j*eta + mu - SigmaDomega)**2 - (lamb - SigmaODomega)**2
-# 		detDmat = ((omega+1j*eta)**2 - r - PiDomega)**2 - (J - PiODomega)**2
-	
-# 		GDRomega = xGD*((omega+1j*eta + mu - SigmaDomega)/detGmat) + (1-xGD)*GDRoldomega
-# 		GODRomega = xGOD*(-1.0*(lamb - SigmaODomega)/detGmat) + (1-xGOD)*GODRoldomega
-# 		DDRomega = xDD*(((omega+1j*eta)**2 - r - PiDomega)/detDmat) + (1-xDD)*DDRoldomega
-# 		DODRomega = xDOD*(-1.0*(J - PiODomega)/detDmat) + (1-xDOD)*DODRoldomega
-
-# 		if itern > 15 :
-# 		    eta=dw*0.01
-
-# 		diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
-# 		diffDD = np. sqrt(np.sum((np.abs(DDRomega-DDRoldomega))**2))
-# 		diffGOD = np. sqrt(np.sum((np.abs(GODRomega-GODRoldomega))**2)) 
-# 		diffDOD = np. sqrt(np.sum((np.abs(DODRomega-DODRoldomega))**2))
-
-# 		diff = 0.25*(diffGD+diffDD+diffGOD+diffDOD)
-# 		diffGD,diffDD,diffGOD,diffDOD = diff,diff,diff,diff
-# 		diffseries += [diff]
-
-# 		if diffGD>diffoldGD:
-# 			xGD/=2.
-# 		if diffGOD>diffoldGOD:
-# 			xGOD/=2.
-# 		if diffDD>diffoldDD:
-# 			xDD/=2.
-# 		if diffDOD>diffoldDOD:
-# 			xDOD/=2.
-# 		if verbose:
-# 			print("itern = ",itern, " , diff = ", diffGD, diffDOD, " , x = ", xGOD, xDD)
-# 		if itern>30:
-# 			conv_flag = testingscripts.diff_checker(diffseries, tol = 1e-4, periods = 5)
-			
-
-# 	return (GDRomega,GODRomega,DDRomega,DODRomega)
-
-
-
-#####################
 
 def main():
+	load_flag = True
+	########### EVENT LOOP STARTS ##############	
+	print(f'ITERMAX = {ITERMAX}')
+	for beta in betalist:
+		savefile = 'YWH'
+		savefile += 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
+		savefile += 'beta' + str(beta) 
+		savefile += 'g' + str(g)
+		savefile += 'lamb' + str(lamb)
+		savefile = savefile.replace('.','_') 
+		savefiledump = savefile + '.npy' 
+		savefileoutput = savefile + '.h5'
 
-	# GDRomega = 1/(omega + 1j*eta + mu)
-	# GODRomega = np.zeros_like(omega)
-	# DDRomega = -1/(-1.0*(omega + 1j*eta)**2 + r) 
-	# DODRomega = np.zeros_like(omega)
-	neglamb = -1.0 * lamb #this passed to iterators
-	detG0mat = (omega+1j*eta + mu)**2 - (lamb)**2
+		x = 0.01
 
-	GDRomega = (omega+1j*eta + mu)/detG0mat
-	GODRomega = (lamb)/detG0mat
-	DDRomega = 1/(r -1.0*(omega + 1j*eta)**2) 
-	DODRomega = np.zeros_like(DDRomega)
+		if load_flag == True:
+			try:
+				load_flag = False
+				GFs = np.load(os.path.join(path_to_dump,savefiledump))
+				GDRomega, GODRomega, DDRomega, DODRomega = GFs
+				# GFs[1] = -1.0*GFs[1]
+			except FileNotFoundError:
+				print('INPUT FILE NOT FOUND!!!!!!!!!!')
+				print(os.path.join(path_to_dump,savefiledump))
+				exit(1)
+		else:
+			# GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
+			# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
+			newM = int(2**20) #number of points in the grid
+			newT = int(2**16) #upper cut-off fot the time
+			newomega, newt = RealGridMaker(newM,newT)
+			newdt = newt[2]-newt[1]
+			newdw = newomega[2]-newomega[1]
+			neweta = newdw * 2.1
+			newgrid = [newM,newomega,newt]
+			pars = [g,mu,r]
+
+			newGDRomega = PchipInterpolator(omega, GDRomega)(newomega)
+			newGODRomega = PchipInterpolator(omega, GODRomega)(newomega)
+			newDDRomega = PchipInterpolator(omega, DDRomega)(newomega)
+			newDODRomega = PchipInterpolator(omega, DODRomega)(newomega)
+			GDRomega = newGDRomega
+			GODRomega = newGODRomega
+			DDRomega = newDDRomega
+			DODRomega = newDODRomega
+			print(f'new dw = {newdw}')
+			print(f'temp = {1./beta}')
+			print(f'temp/dw = {1./(beta*newdw)}')
+			GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
+			for iters in np.arange(100):
+				GFs, INFO = RE_WHYSYK_iterator(GFs,newgrid,pars,beta,lamb,J,err=err,x=x,ITERMAX=ITERMAX,eta = neweta,verbose=True,diffcheck=False) 
+
+				if DUMP == True:
+					savefile = 'YWH'
+					savefile += 'M' + str(int(np.log2(newM))) + 'T' + str(int(np.log2(newT))) 
+					savefile += 'beta' + str(beta) 
+					savefile += 'g' + str(g)
+					savefile += 'lamb' + str(lamb)
+					savefile = savefile.replace('.','_') 
+					savefiledump = savefile + '.npy' 
+					savefileoutput = savefile + '.h5'
+					np.save(os.path.join(path_to_dump, savefiledump),GFs)
 
 
-	GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
-	grid = [M,omega,t]
-	pars = [g,mu,r]
-	# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
-	GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,neglamb,J,err=err,x=0.01,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False) 
+				GDRomega, GODRomega, DDRomega, DODRomega = GFs
 
-	if DUMP == True:
-		np.save(os.path.join(path_to_dump,savefiledump), GFs)
+			# ###########Data Writing############ 
+			# print("\n###########Data Writing############")
+			# dictionary = {
+			#    "g": g,
+			#    "mu": mu,
+			#    "beta": beta,
+			#    "r": r,
+			#    "lamb": lamb,
+			#    "J": J,
+			#    "M": M, 
+			#    "T": T,
+			#    "omega": omega[comp_omega_slice],
+			#    "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
+			#    "rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
+			#    "rhoDD": -np.imag(DDRomega[comp_omega_slice]),
+			#    "rhoDOD": -np.imag(DODRomega[comp_omega_slice]), 
+			#    "compressed": True, 
+			#    "eta": eta
+			# }
+				
+			# dict2h5(dictionary, savefileoutput, verbose=True)
 
-	GDRomega, GODRomega, DDRomega, DODRomega = GFs
-	#GDRt = (0.5/np.pi) * freq2time(GDRomega,M,dt)
-	#DDRt = (0.5/np.pi) * freq2time(DDRomega,M,dt)
-	#GODRt = (0.5/np.pi) * freq2time(GODRomega,M,dt)
-	#DODRt = (0.5/np.pi) * freq2time(DODRomega,M,dt)
-	# GDRt = (0.5/np.pi) * freq2time(GDRomega - GfreeRealomega(omega,mu,eta),M,dt) + GfreeRealt(t,mu,eta)
-	# DDRt = (0.5/np.pi) * freq2time(DDRomega - DfreeRealomega(omega,r,eta),M,dt) + DfreeRealt(t,r,eta)
-	# GODRt = (0.5/np.pi) * freq2time(GODRomega - GfreeRealomega(omega,mu,eta),M,dt) + GfreeRealt(t,mu,eta)
-	# DODRt = (0.5/np.pi) * freq2time(DODRomega - DfreeRealomega(omega,r,eta),M,dt) + DfreeRealt(t,r,eta)
-
-	#################Data Compression################
-
-	tot_freq_grid_points = int(2**14)
-	omega_max = 5
-	omega_min = -1*omega_max
-	idx_min, idx_max = omega_idx(omega_min,dw,M), omega_idx(omega_max,dw,M)
-	skip = int(np.ceil((omega_max-omega_min)/(dw*tot_freq_grid_points)))
-	comp_omega_slice = slice(idx_min,idx_max,skip)
-	#comp_omega = omega[comp_omega_slice]
-
-
-
-	###########Data Writing############ 
-	print("\n###########Data Writing############")
-	dictionary = {
-	   "g": g,
-	   "mu": mu,
-	   "beta": beta,
-	   "r": r,
-	   "lamb": lamb,
-	   "J": J,
-	   "M": M, 
-	   "T": T,
-	   "omega": omega[comp_omega_slice],
-	   "rhoGD": -np.imag(GDRomega[comp_omega_slice]),
-	   "rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
-	   "rhoDD": -np.imag(DDRomega[comp_omega_slice]),
-	   "rhoDOD": -np.imag(DODRomega[comp_omega_slice]), 
-	   "compressed": True, 
-	   "eta": eta
-	}
-		
-	dict2h5(dictionary, savefileoutput, verbose=True)
 	print(f"*********Program exited successfully *********")
 
 
