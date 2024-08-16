@@ -68,7 +68,7 @@ omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
-err = 1e-6
+err = 1e-7
 # eta = dw*10.
 eta = dw*2.1
 #delta = 0.420374134464041
@@ -147,12 +147,13 @@ def main():
 		savefiledump = savefile + '.npy' 
 		savefileoutput = savefile + '.h5'
 
-		x = 0.01
+		x = 0.001
 
 		if load_flag == True:
 			try:
-				GFs = np.load(os.path.join(path_to_dump,savefiledump))
 				load_flag = False
+				GFs = np.load(os.path.join(path_to_dump,savefiledump))
+				GFs[1] = -1.0*GFs[1]
 			except FileNotFoundError:
 				print('INPUT FILE NOT FOUND!!!!!!!!!!')
 				print(os.path.join(path_to_dump,savefiledump))

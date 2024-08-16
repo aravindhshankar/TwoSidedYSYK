@@ -72,7 +72,7 @@ betalist = [6000,6000]
 mu = 0. 
 # kappa = 0.05
 kappa = 0.01
-ITERMAX = 10000
+ITERMAX = 1000
 # ITERMAX = 5
 
 M = int(2**16) #number of points in the grid
@@ -208,8 +208,8 @@ def main():
 			GDRomega,GODRomega = np.load(os.path.join(path_to_dump,savefiledump))
 			load_flag = False
 		else:
-			newM = int(2**23) #number of points in the grid
-			newT = int(2**19) #upper cut-off fot the time
+			newM = int(2**22) #number of points in the grid
+			newT = int(2**18) #upper cut-off fot the time
 			newomega, newt = RealGridMaker(newM,newT)
 			newdt = newt[2]-newt[1]
 			newdw = newomega[2]-newomega[1]
