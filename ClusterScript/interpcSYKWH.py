@@ -87,6 +87,7 @@ dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
 # err = 1e-5
 err = 1e-6
+# err = 1e-7
 eta = dw*2.1
 #delta = 0.420374134464041
 delta = 0.25
@@ -166,10 +167,10 @@ def RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,omega,t,M,dt,IT
 
 def main():
 
-	fig,ax = plt.subplots(1)
-	ax.set_xlabel(r'$\omega$')
-	ax.set_ylabel(r'$-Im G^R(\omega)$')
-	ax.set_xlim(-5,5)
+	# fig,ax = plt.subplots(1)
+	# ax.set_xlabel(r'$\omega$')
+	# ax.set_ylabel(r'$-Im G^R(\omega)$')
+	# ax.set_xlim(-5,5)
 
 	load_flag = True
 	#################Data Compression################
@@ -216,56 +217,60 @@ def main():
 			neweta = newdw * 2.1
 			newGDRomega = PchipInterpolator(omega, GDRomega)(newomega)
 			newGODRomega = PchipInterpolator(omega, GODRomega)(newomega)
+			GDRomega = newGDRomega
+			GODRomega = newGODRomega
 			print(f'new dw = {newdw}')
 			print(f'temp = {1./beta}')
 			print(f'temp/dw = {1./(beta*newdw)}')
-			GDRomega,GODRomega = RE_wormhole_cSYK_iterator(newGDRomega,newGODRomega,J,mu,kappa,beta,newomega,newt,newM,newdt,ITERMAX = ITERMAX, eta=neweta,verbose=True)
-			if DUMP == True:
-				newsavefile = 'INTERPcSYKWH'
-				newsavefile += 'M' + str(int(np.log2(newM))) + 'T' + str(int(np.log2(newT))) 
-				# savefile += 'beta' + str((round(beta*100))/100.) 
-				newsavefile += 'beta' + str(beta) 
-				newsavefile += 'J' + str(J)
-				newsavefile += 'kappa' + f'{kappa:.3}'
-				newsavefile = newsavefile.replace('.','_') 
-				newsavefiledump = newsavefile + '.npy' 
-				newsavefileoutput = newsavefile + '.h5'
-				np.save(os.path.join(path_to_dump, newsavefiledump),[newGDRomega,newGODRomega])
+			for iters in np.arange(10):
+				# GDRomega,GODRomega = RE_wormhole_cSYK_iterator(newGDRomega,newGODRomega,J,mu,kappa,beta,newomega,newt,newM,newdt,ITERMAX = ITERMAX, eta=neweta,verbose=True)
+				GDRomega,GODRomega = RE_wormhole_cSYK_iterator(GDRomega,GODRomega,J,mu,kappa,beta,newomega,newt,newM,newdt,ITERMAX = ITERMAX, eta=neweta,verbose=True)
+				if DUMP == True:
+					newsavefile = 'INTERPcSYKWH'
+					newsavefile += 'M' + str(int(np.log2(newM))) + 'T' + str(int(np.log2(newT))) 
+					# savefile += 'beta' + str((round(beta*100))/100.) 
+					newsavefile += 'beta' + str(beta) 
+					newsavefile += 'J' + str(J)
+					newsavefile += 'kappa' + f'{kappa:.3}'
+					newsavefile = newsavefile.replace('.','_') 
+					newsavefiledump = newsavefile + '.npy' 
+					newsavefileoutput = newsavefile + '.h5'
+					np.save(os.path.join(path_to_dump, newsavefiledump),[GDRomega,GODRomega])
 
-		
-
-
-
-			###########Data Writing############ 
-			print("\n###########Data Writing############")
-			dictionary = {
-			"J": J,
-			"mu": mu,
-			"beta": beta,
-			"kappa": kappa,
-			"M": newM, 
-			"T": newT,
-			"omega": newomega[comp_omega_slice],
-			"rhoGD": -np.imag(GDRomega[comp_omega_slice]),
-			"rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
-			"compressed": True, 
-			"eta": eta
-			}
 			
-			dict2h5(dictionary, os.path.join(path_to_output, newsavefileoutput), verbose=True) 
 
-			# peak_idxlist = find_peaks(-np.imag(GDRomega)[M:],prominence=0.1)[0]
-			# print(omega[M:][peak_idxlist])
 
-			# c = omega[M:][peak_idxlist][0] / delta
-			# print('predicted peaks = ', c * (np.arange(4) + delta))
 
-			if PLOTTING == True:
-				ax.plot(newomega,-np.imag(newGDRomega),'.-',label=f'$\beta = $ {beta}')
-				# for peak_idx in peak_idxlist:
-				# 	ax.axvline(omega[M:][peak_idx],ls='--')
+				###########Data Writing############ 
+				print("\n###########Data Writing############")
+				dictionary = {
+				"J": J,
+				"mu": mu,
+				"beta": beta,
+				"kappa": kappa,
+				"M": newM, 
+				"T": newT,
+				"omega": newomega[comp_omega_slice],
+				"rhoGD": -np.imag(GDRomega[comp_omega_slice]),
+				"rhoGOD": -np.imag(GODRomega[comp_omega_slice]),
+				"compressed": True, 
+				"eta": eta
+				}
+				
+				dict2h5(dictionary, os.path.join(path_to_output, newsavefileoutput), verbose=True) 
 
-	plt.show()
+				# peak_idxlist = find_peaks(-np.imag(GDRomega)[M:],prominence=0.1)[0]
+				# print(omega[M:][peak_idxlist])
+
+				# c = omega[M:][peak_idxlist][0] / delta
+				# print('predicted peaks = ', c * (np.arange(4) + delta))
+
+			# if PLOTTING == True:
+			# 	ax.plot(newomega,-np.imag(newGDRomega),'.-',label=f'$\beta = $ {beta}')
+			# 	# for peak_idx in peak_idxlist:
+			# 	# 	ax.axvline(omega[M:][peak_idx],ls='--')
+
+	# plt.show()
 
 
 	print(f"*********Program exited successfully *********")
