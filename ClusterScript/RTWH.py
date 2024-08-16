@@ -16,10 +16,10 @@ from YSYK_iterator import RE_WHYSYK_iterator
 savename = 'default_savename'
 # path_to_output = './Outputs/RTWH/NFLstart/'
 # path_to_dump = './Dump/RTWHDumpfiles/NFLstart'
-path_to_output = './Outputs/RTWHDumpfiles0_01/'
-path_to_dump = './Dump/RTWHDumpfiles0_01/'
+path_to_output = './Outputs/lowertempRTWH/'
+path_to_dump = './Dump/lowertempRTWH/'
 # path_to_loadfile = './Dump/ProgRT_YSYK_Dumpfiles/'
-path_to_loadfile = './Dump/RTGapscaling/'
+path_to_loadfile = './Dump/RTWHDumpfiles0_01/'
 
 if not os.path.exists(path_to_output):
     os.makedirs(path_to_output)
@@ -45,7 +45,7 @@ PLOTTING = False
 M = int(2**16)
 T = 2**12
 # err = 1e-8
-err = 1e-6
+err = 1e-3
 
 omega,t  = RealGridMaker(M,T)
 dw = omega[2] - omega[1]
@@ -67,9 +67,9 @@ eta = dw*2.1
 
 beta_start = 200
 beta = beta_start
-target_beta = 10.
-beta_step = -1
-betalooplist = np.arange(beta_start,target_beta+beta_step, beta_step)
+target_beta = 2000
+beta_step = 10
+betalooplist = np.arange(beta_start,target_beta+beta_step+beta_step, beta_step)
 lamb = 0.01
 J = 0
 print("T Target = ", 1/target_beta)
@@ -85,11 +85,12 @@ comp_omega_slice = slice(idx_min,idx_max,skip)
 #############################
 
 # betasavelist = np.array([20,50,100,150,200,300,400,500,700,800,1000,1200,1500,1800,2000,5000])
-betasavelist = np.arange(beta_start,target_beta+beta_step, 5*beta_step)
+betasavelist = np.arange(beta_start,target_beta+beta_step, 10*beta_step)
+print(betasavelist[-1])
 # betasavelist = np.arange(beta_start,target_beta+1,5) - 1
 
 try:
-    GFs = np.load(os.path.join(path_to_loadfile,'RTgapM16T12beta200g0_5lamb0_01.npy'))
+    GFs = np.load(os.path.join(path_to_loadfile,'l_01M16T12beta200_0g0_5lamb0_01.npy'))
 except FileNotFoundError:
     print('INPUT FILE NOT FOUND!!!!!!')
     exit(1)
@@ -107,10 +108,11 @@ except FileNotFoundError:
 # GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
 grid = [M,omega,t]
 pars = [g,mu,r]
+x=0.1
 # while(beta < target_beta):
 for beta in betalooplist:
     #beta_step = 0.01 if (beta<1) else 1
-    GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,x=0.01,ITERMAX=ITERMAX,eta = eta,verbose=False,diffcheck=False) 
+    GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,x=x,ITERMAX=ITERMAX,eta = eta,verbose=False,diffcheck=False) 
     # itern, diff, x = INFO
     if beta in betasavelist:
         savefile = savename

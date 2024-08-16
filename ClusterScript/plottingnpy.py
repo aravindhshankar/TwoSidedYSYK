@@ -27,9 +27,14 @@ path_to_outfile = './Dump/redoYWH/'
 
 
 # outfile = 'YWHM20T16beta750g0_5lamb0_01.npy'
+# outfile = 'YWHM20T16beta200g0_5lamb0_01.npy'
+# outfile = 'YWHM20T16beta500g0_5lamb0_01.npy'
+# outfile = 'YWHM21T15beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM19T15beta500g0_5lamb0_01.npy'
+# outfile = 'YWHM19T15beta200g0_5lamb0_01.npy'
+outfile = 'YWHM21T17beta200g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta500g0_5lamb0_01.npy'
-outfile = 'YWHM18T14beta200g0_5lamb0_01.npy'
+# outfile = 'YWHM18T14beta200g0_5lamb0_01.npy'
 
 
 
@@ -50,8 +55,10 @@ if not os.path.exists(savepath):
 # T = 2**16
 # M=int(2**19)
 # T = 2**15
-M=int(2**18)
-T = 2**14
+# M=int(2**18)
+# T = 2**14
+M=int(2**21)
+T = 2**17
 # beta = 40.
 # beta = 750
 # beta = 500

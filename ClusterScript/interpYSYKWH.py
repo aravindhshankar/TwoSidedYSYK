@@ -63,20 +63,23 @@ J = 0
 
 # M = int(2**16) #number of points in the grid
 # T = int(2**12) #upper cut-off fot the time
-M = int(2**16) #number of points in the grid
-T = int(2**12) #upper cut-off fot the time
-#M = int(2**16)
+M = int(2**19) #number of points in the grid
+T = int(2**15) #upper cut-off fot the time
+# M = int(2**18) #number of points in the grid
+# T = int(2**14) #upper cut-off fot the time
+# M = int(2**16)
 #T = int(2**10)
 omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
 # err = 1e-5
-err = 1e-7
+err = 1e-2
+# err = 1e-7
 # eta = dw*10.
 eta = dw*2.1
 #delta = 0.420374134464041
-ITERMAX = 1000
+ITERMAX = 10
 # ITERMAX = 25000
 
 
@@ -113,12 +116,14 @@ def main():
 		savefiledump = savefile + '.npy' 
 		savefileoutput = savefile + '.h5'
 
-		x = 0.001
+		# x = 0.01
+		x = 0.1
 
 		if load_flag == True:
 			try:
 				load_flag = False
 				GFs = np.load(os.path.join(path_to_dump,savefiledump))
+				GFs = np.array(GFs, dtype=np.complex128)
 				GDRomega, GODRomega, DDRomega, DODRomega = GFs
 				# GFs[1] = -1.0*GFs[1]
 				# GODRomega = -1.0*GODRomega
@@ -129,8 +134,8 @@ def main():
 		else:
 			# GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
 			# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
-			newM = int(2**18) #number of points in the grid
-			newT = int(2**14) #upper cut-off fot the time
+			newM = int(2**21) #number of points in the grid
+			newT = int(2**17) #upper cut-off fot the time
 			newomega, newt = RealGridMaker(newM,newT)
 			newdt = newt[2]-newt[1]
 			newdw = newomega[2]-newomega[1]
