@@ -49,7 +49,9 @@ fft_check = testingscripts.realtimeFFT_validator() # Should return True
 g = 0.5
 #beta = 100.
 # beta = 1./(2e-4)
-betalist = [750,750]
+# betalist = [750,750]
+# betalist = [500,500]
+betalist = [200,200]
 #beta = 1./(5e-5)
 mu = 0. 
 r = 1.
@@ -69,11 +71,12 @@ omega, t = RealGridMaker(M,T)
 dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
-err = 1e-5
+# err = 1e-5
+err = 1e-7
 # eta = dw*10.
 eta = dw*2.1
 #delta = 0.420374134464041
-ITERMAX = 100
+ITERMAX = 1000
 # ITERMAX = 25000
 
 
@@ -87,7 +90,7 @@ ITERMAX = 100
 # savefiledump = savefile + '.npy' 
 # savefileoutput = savefile + '.h5'
 
-x = 0.01
+# x = 0.001
 
 
 
@@ -110,7 +113,7 @@ def main():
 		savefiledump = savefile + '.npy' 
 		savefileoutput = savefile + '.h5'
 
-		x = 0.01
+		x = 0.001
 
 		if load_flag == True:
 			try:
@@ -118,6 +121,7 @@ def main():
 				GFs = np.load(os.path.join(path_to_dump,savefiledump))
 				GDRomega, GODRomega, DDRomega, DODRomega = GFs
 				# GFs[1] = -1.0*GFs[1]
+				# GODRomega = -1.0*GODRomega
 			except FileNotFoundError:
 				print('INPUT FILE NOT FOUND!!!!!!!!!!')
 				print(os.path.join(path_to_dump,savefiledump))
@@ -125,8 +129,8 @@ def main():
 		else:
 			# GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
 			# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
-			newM = int(2**20) #number of points in the grid
-			newT = int(2**16) #upper cut-off fot the time
+			newM = int(2**18) #number of points in the grid
+			newT = int(2**14) #upper cut-off fot the time
 			newomega, newt = RealGridMaker(newM,newT)
 			newdt = newt[2]-newt[1]
 			newdw = newomega[2]-newomega[1]

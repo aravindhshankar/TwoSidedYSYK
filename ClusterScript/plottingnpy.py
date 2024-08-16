@@ -24,7 +24,15 @@ path_to_outfile = './Dump/redoYWH/'
 #outfile = 'NFL10M16T12beta1000g0_5lamb0_01.h5'
 # outfile = 'RTWHlocalM18T15beta20g0_5lamb0_01.npy'
 # outfile = 'l_05M16T12beta20g0_5lamb0_05.npy'
-outfile = 'YWHM20T16beta750g0_5lamb0_01.npy'
+
+
+# outfile = 'YWHM20T16beta750g0_5lamb0_01.npy'
+# outfile = 'YWHM19T15beta500g0_5lamb0_01.npy'
+# outfile = 'YWHM18T14beta500g0_5lamb0_01.npy'
+outfile = 'YWHM18T14beta200g0_5lamb0_01.npy'
+
+
+
 # BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
 # BH_outfile = 'RTWH_2442159M19T15beta300g0_5lamb0_0.npy'
 # outfile = 'RTWH_2442136M19T15beta300g0_5lamb0_005.npy'
@@ -38,10 +46,16 @@ if not os.path.exists(savepath):
 
 # M=int(2**16)
 # T=2**12
-M=int(2**20)
-T = 2**16
+# M=int(2**20)
+# T = 2**16
+# M=int(2**19)
+# T = 2**15
+M=int(2**18)
+T = 2**14
 # beta = 40.
-beta = 750
+# beta = 750
+# beta = 500
+beta = 200
 temp=1./beta
 g = 0.5
 lamb = 0.01
@@ -63,7 +77,7 @@ omega,t  = RealGridMaker(M,T)
 dt = t[2]-t[1]
 
 idx = 0
-fig,ax  = plt.subplots(1)
+# fig,ax  = plt.subplots(1)
 to_plot = -np.imag(loaded[idx])
 # BH_to_plot = -np.imag(loaded_BH[idx])
 
@@ -83,27 +97,27 @@ trans_am_OD = 2 * np.abs(G_great_OD)
 deltarho = to_plot
 
 # xaxis = omega
-xaxis = omega/lambexpo
-ax.set_xlabel(r'$\frac{\omega}{\lambda^{1/(2-2\Delta)}}$')
+# xaxis = omega/lambexpo
+# ax.set_xlabel(r'$\frac{\omega}{\lambda^{1/(2-2\Delta)}}$')
 # ax.plot(xaxis,to_plot)
 # ax.plot(xaxis,BH_to_plot,'--')
-ax.plot(xaxis,deltarho)
+# ax.plot(xaxis,deltarho)
 # ax.set_ylim(0,10)
 # ax.set_xlim(-5,5)
 # ax.set_xlim(-20,50)
 # print(f'min BH = {min(BH_to_plot)}')
-print(f'min WH = {min(to_plot)}')
-peakpoints = find_peaks(deltarho,prominence=0.1)[0]
-peakvals = [xaxis[peak] for peak in peakpoints if peak>=M]
-print(f'peakvals = {peakvals}')
-print(f'diffs = {np.diff(peakvals)}')
+# print(f'min WH = {min(to_plot)}')
+# peakpoints = find_peaks(deltarho,prominence=0.1)[0]
+# peakvals = [xaxis[peak] for peak in peakpoints if peak>=M]
+# print(f'peakvals = {peakvals}')
+# print(f'diffs = {np.diff(peakvals)}')
 # ax.axvline(g**(2./3), ls= '--',c='blue',label=r'$g^{2/3}$')
 # ax.axvline(1./beta,ls='--',c='magenta',label=r'temperature')
-ax.axvline(g**(2./3)/lambexpo, ls= '--',c='blue',label=r'$g^{2/3}$')
-ax.axvline(temp/lambexpo,ls='--',c='magenta',label=r'temperature')
-for peak in peakvals:
-    ax.axvline(peak,ls='--',c='gray')
-ax.legend()
+# ax.axvline(g**(2./3)/lambexpo, ls= '--',c='blue',label=r'$g^{2/3}$')
+# ax.axvline(temp/lambexpo,ls='--',c='magenta',label=r'temperature')
+# for peak in peakvals:
+#     ax.axvline(peak,ls='--',c='gray')
+# ax.legend()
 # ax.set_xticks(np.arange(-20,50,1))
 
 
@@ -114,6 +128,9 @@ ax.plot(t,trans_am_OD,'.-',label='Off-Diagonal')
 ax.set_xlabel('t')
 ax.set_xlim(-10,100)
 ax.legend()
+
+
+
 
 
 
@@ -140,23 +157,42 @@ titlestring += ' Log2M = ' + str(np.log2(M))
 titlestring += ' g = ' + str(g)
 fig.suptitle(titlestring)
 
-ax[0,0].plot(omega, rhoGD)
+plotslice = slice(M,M+1000)
+PEAKFINDING = True
+
+ax[0,0].plot(omega[plotslice], rhoGD[plotslice],'.-')
 # ax[0,0].plot(omega, BHrhoGD, '--', label='BH')
-ax[0,0].set_xlim(-5,5)
+# ax[0,0].set_xlim(-5,5)
 ax[0,0].set_title(r'rho GD')
 delta = 0.420374134464041
-ax[0,1].plot(omega, rhoGOD)
-# ax[0,1].plot(omega, BHrhoGOD, '--', label='BH')
+if PEAKFINDING == True:
+	peakidxs = find_peaks(rhoGD[plotslice],prominence = 10)[0]
+	# print(peakidxs, np.diff(peakidxs))
+	# print(omega[plotslice][peakidxs][0:5], np.diff(omega[plotslice][peakidxs]))
+	# ax[0,1].plot(omega, BHrhoGOD, '--', label='BH')
+	for peakidx in peakidxs:
+		ax[0,0].axvline(omega[plotslice][peakidx],ls='--',c='gray')
+	c = omega[plotslice][peakidxs[0]] / delta
+	spacing = c
+	print('c from first peak = ', c)
+	print('first few peaks = ', omega[plotslice][peakidxs][0:30])
+	print('diffs = ', np.diff(omega[plotslice][peakidxs][0:30]))
+	predicted = c*(np.arange(5) + delta)
+	print('predicted = ', )
+	for pred in predicted :
+		ax[0,0]. axvline(pred, ls='--', c='r')
+
 
 #ax[0,1].set_xlim(-1,1)
+ax[0,1].plot(omega[plotslice], rhoGOD[plotslice])
 ax[0,1].set_title(r'rho GOD')
 
-ax[1,0].plot(omega, rhoDD)
+ax[1,0].plot(omega[plotslice], rhoDD[plotslice])
 #ax[1,0].set_xlim(-1,1)
 ax[1,0].set_title(r'rho DD')
 # ax[1,0].plot(omega, BHrhoDD, '--', label='BH')
 
-ax[1,1].plot(omega, rhoDOD)
+ax[1,1].plot(omega[plotslice], rhoDOD[plotslice])
 #ax[1,1].set_xlim(-1,1)
 ax[1,1].set_title(r'rho DOD')
 # ax[1,1].plot(omega, BHrhoDOD, '--', label='BH')
