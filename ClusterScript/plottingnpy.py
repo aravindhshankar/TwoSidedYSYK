@@ -15,7 +15,8 @@ import matplotlib.pyplot as plt
 # path_to_outfile = './Dump/RTWHDumpfiles/'
 # path_to_outfile = './Dump/RTWHDumpfiles0_05'
 # path_to_outfile = './Dump/FingersCrossedYSYKWH/'
-path_to_outfile = './Dump/redoYWH/'
+# path_to_outfile = './Dump/redoYWH/'
+path_to_outfile = './Dump/lowertempRTWH/'
 # path_to_BH = './Dump/RTWHDumpfiles0_00'
 # path_to_outfile = './Dump/LowTempWH/'
 # path_to_BH = './Dump/LowTempBH/'
@@ -36,6 +37,7 @@ outfile = 'YWHM19T15beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta200g0_5lamb0_01.npy'
 
+outfile = 'lowertempM19T15beta500g0_5lamb0_01.npy'
 
 
 # BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
@@ -63,6 +65,7 @@ T = 2**15
 # beta = 750
 # beta = 500
 beta = 500
+beta = 900
 temp=1./beta
 g = 0.5
 lamb = 0.01

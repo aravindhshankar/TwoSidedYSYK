@@ -3,6 +3,7 @@ import os
 if not os.path.exists('./Sources'):
     print("Error - Path to Sources directory not found ")
 sys.path.insert(1,'./Sources')
+import gc
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -11,7 +12,7 @@ from ConformalAnalytical import *
 import testingscripts
 from h5_handler import *
 from YSYK_iterator import RE_WHYSYK_iterator 
-
+from scipy.interpolate import PchipInterpolator
 
 savename = 'default_savename'
 # path_to_output = './Outputs/RTWH/NFLstart/'
@@ -45,8 +46,10 @@ PLOTTING = False
 # T = 2**14 #upper cut-off for the time
 # M = int(2**16)
 # T = 2**12
-M = int(2**19)
-T = 2**15
+# M = int(2**19)
+# T = 2**15
+M = int(2**21)
+T = 2**17
 # err = 1e-8
 err = 1e-3
 
@@ -69,7 +72,8 @@ kappa = 1.
 eta = dw*2.1
 
 # beta_start = 200
-beta_start = 500
+# beta_start = 500
+beta_start = 900
 
 beta = beta_start
 target_beta = 2000
@@ -96,7 +100,22 @@ print(f'betasavelist[-1] = {betasavelist[-1]}')
 
 try:
     # GFs = np.load(os.path.join(path_to_loadfile,'l_01M16T12beta200_0g0_5lamb0_01.npy'))
-    GFs = np.load(os.path.join(path_to_loadfile,'lowertempM19T15beta500g0_5lamb0_01.npy'))
+    # GFs = np.load(os.path.join(path_to_loadfile,'lowertempM19T15beta500g0_5lamb0_01.npy'))
+    GFs = np.load(os.path.join(path_to_loadfile,'lowertempM19T15beta900g0_5lamb0_01.npy'))
+    oldomega, oldt = RealGridMaker(2**19,2**15)
+    np.testing.assert_equal(len(oldomega),len(GFs[0]), "Incorrect Load Specification")
+    print(len(GFs[0]),len(oldomega))
+    interp0 = PchipInterpolator(oldomega, GFs[0])(omega)
+    interp1 = PchipInterpolator(oldomega, GFs[1])(omega)
+    interp2 = PchipInterpolator(oldomega, GFs[2])(omega)
+    interp3 = PchipInterpolator(oldomega, GFs[3])(omega)
+    GFs = np.array([interp0, interp1, interp2, interp3])
+    del interp0
+    del interp1
+    del interp2
+    del interp3
+    gc.collect()
+    np.testing.assert_equal(len(omega),len(GFs[2]), "INTERPOLATION ERROR")    
 except FileNotFoundError:
     print('INPUT FILE NOT FOUND!!!!!!')
     exit(1)
@@ -116,8 +135,10 @@ grid = [M,omega,t]
 pars = [g,mu,r]
 x=0.1
 # while(beta < target_beta):
+print('ENTERING EVENT LOOP')
 for beta in betalooplist:
     #beta_step = 0.01 if (beta<1) else 1
+    np.testing.assert_equal(len(GFs[0]), len(omega), "ERROR CARRIED OVER FROM LOADING STEP")
     GFs, INFO = RE_WHYSYK_iterator(GFs,grid,pars,beta,lamb,J,err=err,x=x,ITERMAX=ITERMAX,eta = eta,verbose=False,diffcheck=False) 
     # itern, diff, x = INFO
     if beta in betasavelist:
