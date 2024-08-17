@@ -37,7 +37,7 @@ outfile = 'YWHM19T15beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta200g0_5lamb0_01.npy'
 
-outfile = 'lowertempM19T15beta500g0_5lamb0_01.npy'
+outfile = 'lowertempM21T17beta1100g0_5lamb0_01.npy'
 
 
 # BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
@@ -55,17 +55,17 @@ if not os.path.exists(savepath):
 # T=2**12
 # M=int(2**20)
 # T = 2**16
-M=int(2**19)
-T = 2**15
+# M=int(2**19)
+# T = 2**15
 # M=int(2**18)
 # T = 2**14
-# M=int(2**21)
-# T = 2**17
+M=int(2**21)
+T = 2**17
 # beta = 40.
 # beta = 750
 # beta = 500
-beta = 500
-beta = 900
+# beta = 500
+beta = 1100
 temp=1./beta
 g = 0.5
 lamb = 0.01
@@ -73,7 +73,6 @@ J = 0.
 # GDomega,GODomega,DDomega,DODomega = np.load(savepath)
 loaded = np.array(np.load(savepath))
 # loaded_BH = np.array(np.load(BHsavepath))
-
 
 
 # print(len(loaded))
@@ -85,6 +84,8 @@ lambexpo = lamb**expo
 
 omega,t  = RealGridMaker(M,T)
 dt = t[2]-t[1]
+dw = omega[2] - omega[1]
+print(f'dw/temp = {1./(beta*dw)}')
 
 idx = 0
 # fig,ax  = plt.subplots(1)
