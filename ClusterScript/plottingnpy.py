@@ -15,8 +15,8 @@ import matplotlib.pyplot as plt
 # path_to_outfile = './Dump/RTWHDumpfiles/'
 # path_to_outfile = './Dump/RTWHDumpfiles0_05'
 # path_to_outfile = './Dump/FingersCrossedYSYKWH/'
-# path_to_outfile = './Dump/redoYWH/'
-path_to_outfile = './Dump/lowertempRTWH/'
+path_to_outfile = './Dump/redoYWH/'
+# path_to_outfile = './Dump/lowertempRTWH/'
 # path_to_BH = './Dump/RTWHDumpfiles0_00'
 # path_to_outfile = './Dump/LowTempWH/'
 # path_to_BH = './Dump/LowTempBH/'
@@ -31,13 +31,14 @@ path_to_outfile = './Dump/lowertempRTWH/'
 # outfile = 'YWHM20T16beta200g0_5lamb0_01.npy'
 # outfile = 'YWHM20T16beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM21T15beta500g0_5lamb0_01.npy'
-outfile = 'YWHM19T15beta500g0_5lamb0_01.npy'
+# outfile = 'YWHM19T15beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM19T15beta200g0_5lamb0_01.npy'
 # outfile = 'YWHM21T17beta200g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta200g0_5lamb0_01.npy'
+outfile = 'YWHM22T18beta1200g0_5lamb0_01.npy'
 
-outfile = 'lowertempM21T17beta1100g0_5lamb0_01.npy'
+# outfile = 'lowertempM22T18beta1200g0_5lamb0_01.npy'
 
 
 # BH_outfile = 'l_00M16T12beta20g0_5lamb0_0.npy'
@@ -59,13 +60,16 @@ if not os.path.exists(savepath):
 # T = 2**15
 # M=int(2**18)
 # T = 2**14
-M=int(2**21)
-T = 2**17
+# M=int(2**21)
+# T = 2**17
+M=int(2**22)
+T = 2**18
+
 # beta = 40.
 # beta = 750
 # beta = 500
 # beta = 500
-beta = 1100
+beta = 1600
 temp=1./beta
 g = 0.5
 lamb = 0.01
@@ -168,7 +172,7 @@ titlestring += ' Log2M = ' + str(np.log2(M))
 titlestring += ' g = ' + str(g)
 fig.suptitle(titlestring)
 
-plotslice = slice(M,M+1000)
+plotslice = slice(M-1,M+1000)
 PEAKFINDING = True
 
 ax[0,0].plot(omega[plotslice], rhoGD[plotslice],'.-')

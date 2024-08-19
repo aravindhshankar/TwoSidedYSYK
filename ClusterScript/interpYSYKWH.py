@@ -52,7 +52,8 @@ g = 0.5
 # betalist = [750,750]
 # betalist = [500,500]
 # betalist = [200,200]
-betalist = [400,500]
+# betalist = [400,500]
+betalist = [1200,1200]
 #beta = 1./(5e-5)
 mu = 0. 
 r = 1.
@@ -62,8 +63,8 @@ r = 1.
 lamb = 0.01
 J = 0
 
-M = int(2**16) #number of points in the grid
-T = int(2**12) #upper cut-off fot the time
+M = int(2**21) #number of points in the grid
+T = int(2**17) #upper cut-off fot the time
 # M = int(2**19) #number of points in the grid
 # T = int(2**15) #upper cut-off fot the time
 # M = int(2**18) #number of points in the grid
@@ -75,12 +76,13 @@ dw = omega[2]-omega[1]
 dt = t[2] - t[1]
 grid_flag = testingscripts.RealGridValidator(omega,t, M, T, dt, dw)
 # err = 1e-5
-err = 1e-2
+# err = 1e-2
+err = 1e-8
 # err = 1e-7
 # eta = dw*10.
 eta = dw*2.1
 #delta = 0.420374134464041
-ITERMAX = 10
+ITERMAX = 1000
 # ITERMAX = 25000
 
 
@@ -94,7 +96,6 @@ ITERMAX = 10
 # savefiledump = savefile + '.npy' 
 # savefileoutput = savefile + '.h5'
 
-# x = 0.001
 
 
 
@@ -117,8 +118,8 @@ def main():
 		savefiledump = savefile + '.npy' 
 		savefileoutput = savefile + '.h5'
 
-		# x = 0.01
-		x = 0.1
+		x = 0.01
+		# x = 0.1
 
 		if load_flag == True:
 			try:
@@ -135,8 +136,8 @@ def main():
 		else:
 			# GFs = [GDRomega, GODRomega, DDRomega, DODRomega]
 			# GDRomega,GODRomega,DDRomega,DODRomega = RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True)
-			newM = int(2**19) #number of points in the grid
-			newT = int(2**15) #upper cut-off fot the time
+			newM = int(2**22) #number of points in the grid
+			newT = int(2**18) #upper cut-off fot the time
 			newomega, newt = RealGridMaker(newM,newT)
 			newdt = newt[2]-newt[1]
 			newdw = newomega[2]-newomega[1]
@@ -156,7 +157,7 @@ def main():
 			print(f'temp = {1./beta}')
 			print(f'temp/dw = {1./(beta*newdw)}')
 			GFs = [GDRomega,GODRomega,DDRomega,DODRomega]
-			for iters in np.arange(100):
+			for iters in np.arange(10):
 				GFs, INFO = RE_WHYSYK_iterator(GFs,newgrid,pars,beta,lamb,J,err=err,x=x,ITERMAX=ITERMAX,eta = neweta,verbose=True,diffcheck=False) 
 
 				if DUMP == True:
