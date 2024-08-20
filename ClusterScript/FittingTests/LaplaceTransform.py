@@ -5,7 +5,7 @@ from scipy.interpolate import Akima1DInterpolator, PchipInterpolator
 import time 
 
 
-NO_OF_SAMPLES = 10000
+NO_OF_SAMPLES = 100
 t = np.linspace(0,100,NO_OF_SAMPLES)
 alist = np.array([0.1,0.02])
 blist = np.array([1,2])
@@ -37,7 +37,7 @@ def manual():
 	loglinfit = c * np.exp(m * t)
 
 	remnant1 = ft - loglinfit
-	linfitslice2 = slice(50,100)
+	linfitslice2 = slice(5,20)
 	m2,logc2 = np.polyfit(t[linfitslice2],np.log(remnant1[linfitslice2]),1)
 	c2 = np.exp(logc2)
 	loglinfit2 = c2 * np.exp(m2 * t)
@@ -55,10 +55,10 @@ def manual():
 	# plt.show()
 
 
-def main():
+def testing_laplace():
 	# s = np.linspace(0.01,5,100)
 
-	manual()
+	# manual()
 	s = np.linspace(-2,10,1000)
 	start = time.perf_counter()
 	FsQUAD = laplace(t,ft,s, INTEGRATOR = 'quad')
@@ -89,6 +89,9 @@ def main():
 	axgrad.set_title('Gradient of the laplace transform')
 	axgrad.set_yscale('log')
 	axgrad.legend()
+
+def main():
+	testing_laplace()
 	plt.show()
 
 
