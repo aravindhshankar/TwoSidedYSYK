@@ -5,10 +5,11 @@ from scipy.interpolate import Akima1DInterpolator, PchipInterpolator
 import time 
 
 
-NO_OF_SAMPLES = 100
-t = np.linspace(0,100,NO_OF_SAMPLES)
+NO_OF_SAMPLES = 2**14
+t = np.linspace(0,5000,NO_OF_SAMPLES)
 alist = np.array([0.1,0.02])
-blist = np.array([1,2])
+# blist = np.array([1,2])
+blist = np.array([0.00461,0.01559])
 ft = np.array([np.sum(alist * np.exp(-1.0*blist*tval)) for tval in t])
 
 
@@ -59,7 +60,7 @@ def testing_laplace():
 	# s = np.linspace(0.01,5,100)
 
 	# manual()
-	s = np.linspace(-2,10,1000)
+	s = np.linspace(0,10,1000)
 	start = time.perf_counter()
 	FsQUAD = laplace(t,ft,s, INTEGRATOR = 'quad')
 	print(f'TypeFsQUAD = {type(FsQUAD)}')
@@ -90,8 +91,88 @@ def testing_laplace():
 	axgrad.set_yscale('log')
 	axgrad.legend()
 
+def PadeLaplacematrixsolver(d,n,s0):
+	'''
+	d is the list of derivatives, appropriately normalized by factorials
+	n is the order 
+	'''
+	assert len(d) >= 2 * n, "Not enough derivatives" 
+	dmat = np.zeros((n,n))
+	dvec = np.zeros(n)
+
+	for i in np.arange(n):
+		dvec[i] = -1.0 * d[n+i]
+		for j in np.arange(n):
+			dmat[i,j] = d[n+i-j-1]
+
+	#now solve for the b list 
+	blist = np.linalg.solve(dmat,dvec) #### solves a x = b
+
+	#blist contains now b1, b2 ......
+	polycoeffs = np.append(blist[::-1],[1.,])
+
+	#numpy roots needs the polynomial coeffs in descending order
+	np.testing.assert_equal(len(polycoeffs), n+1)
+
+	pminuss0 = np.roots(polycoeffs)
+
+	exponents = pminuss0 + s0
+	return exponents
+
+def testingExponentsPade():
+	# s = np.linspace(0.01,5,100)
+
+	manual()
+	s = np.linspace(0,10,1000)
+	start = time.perf_counter()
+	FsQUAD = laplace(t,ft,s, INTEGRATOR = 'quad')
+	print(f'TypeFsQUAD = {type(FsQUAD)}')
+	stop = time.perf_counter()
+	print(f'Finished quad integrator in {stop - start} seconds')
+
+	start = time.perf_counter()
+	FsSIMPS = laplace(t,ft,s, INTEGRATOR = 'simpson')
+	print(f'TypeFsSimps = {type(FsSIMPS)}')
+	stop = time.perf_counter()
+	print(f'Finished Simpson integrator in {stop-start} seconds')
+	figL, (axL,axgrad) = plt.subplots(2)
+	axL.set_xlabel('s')
+	axL.set_ylabel(r'$F(s)$')
+	# axL.set_ylim(-5,5)
+	axL.plot(s,FsQUAD, '.-', label = 'quad')
+	axL.plot(s,FsSIMPS,':', label = 'simpson')
+	axL.set_yscale('log')
+	axL.legend()
+
+	gradlaplace = np.gradient(FsQUAD, s)
+	gradlaplace2 = (1./2.) * np.gradient(gradlaplace, s)
+	gradlaplace3 = (1./3.) * np.gradient(gradlaplace2, s)
+	gradlaplace4 = (1./4.) * np.gradient(gradlaplace3, s)
+	axgrad.plot(s,np.abs(gradlaplace),label ='first derivative')
+	axgrad.plot(s,np.abs(gradlaplace2),label ='second derivative')
+	axgrad.plot(s,np.abs(gradlaplace3),label ='third derivative')
+	axgrad.plot(s,np.abs(gradlaplace4),label ='fourth derivative')
+	axgrad.set_xlabel('s')
+	axgrad.set_ylabel('|grad F(s)|')
+	axgrad.set_title('Gradient of the laplace transform')
+	axgrad.set_yscale('log')
+	axgrad.legend()
+
+	N = 2 # we need at least 2n-1 derivatives
+	s0 = 1.6
+	s0idx = np.argmin(np.abs(s-s0))
+	assert s0idx < len(s) , "pick a valid s0 ya DOLT!"
+
+	d_arr = np.array((FsQUAD[s0idx], gradlaplace[s0idx], gradlaplace2[s0idx], gradlaplace3[s0idx],gradlaplace4[s0idx]))
+
+	exponents = PadeLaplacematrixsolver(d_arr,N,s0)
+	print(f's0 = {s0}')
+	print('Found Exponents are ', exponents)
+
+
 def main():
-	testing_laplace()
+	# testing_laplace()
+	testingExponentsPade()
 	plt.show()
 
 
