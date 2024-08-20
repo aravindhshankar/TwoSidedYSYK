@@ -69,7 +69,7 @@ T = 2**18
 # beta = 750
 # beta = 500
 # beta = 500
-beta = 1600
+beta = 1200
 temp=1./beta
 g = 0.5
 lamb = 0.01
@@ -172,7 +172,7 @@ titlestring += ' Log2M = ' + str(np.log2(M))
 titlestring += ' g = ' + str(g)
 fig.suptitle(titlestring)
 
-plotslice = slice(M-1,M+1000)
+plotslice = slice(M-1,M+100000,100)
 PEAKFINDING = True
 
 ax[0,0].plot(omega[plotslice], rhoGD[plotslice],'.-')
@@ -216,7 +216,7 @@ ax[1,1].set_title(r'rho DOD')
 
 fig, ax = plt.subplots(1)
 start = len(omega)//2 + 1 
-stop = start + 500
+stop = start + 5000
 temp_idx = np.argmin(np.abs(temp - omega))
 fitslice = slice(temp_idx+40, temp_idx + 50)
 #fitslice = slice(start+25, start + 35)
