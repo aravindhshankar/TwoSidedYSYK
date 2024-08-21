@@ -113,6 +113,7 @@ def PadeLaplacematrixsolver(d,n,s0):
 	'''
 	d is the list of derivatives, appropriately normalized by factorials
 	n is the order 
+	Algo based on : https://physics.uncg.edu/hellen/pade_laplace/HellenAJPSept05.pdf
 	'''
 	assert len(d) >= 2 * n, "Not enough derivatives" 
 	dmat = np.zeros((n,n))
