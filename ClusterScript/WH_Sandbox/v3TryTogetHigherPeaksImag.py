@@ -6,12 +6,6 @@ if not os.path.exists('../Sources'):
 else:	
 	sys.path.insert(1,'../Sources')	
 
-if not os.path.exists('../FittingTests'):
-	print("Error - Path to FittingTests directory not found ")
-	raise Exception("Error - Path to FittingTests directory not found ")
-else:	
-	sys.path.insert(1,'../FittingTests')	
-
 
 # if not os.path.exists('../Dump/WHYSYKImagDumpfiles'):
 #     print("Error - Path to Dump directory not found ")
@@ -24,8 +18,20 @@ if not os.path.exists('../Dump/'):
 	raise Exception("Error - Path to Dump directory not found ")
 	exit(1)
 else:
-
+	# path_to_dump = '../Dump/WHYSYKImagDumpfiles/SCWH'
+	# path_to_dump = '../Dump/lamb_anneal_dumpfiles/'
+	# path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
+	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
+	# path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
+	# path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
+	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
+	# path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
+	# path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
+	# path_to_dump_lamb = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'
 	path_to_dump_lamb = '../Dump/PushErrDownImagWH/'
+
+	# path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
+
 
 	
 	if not os.path.exists(path_to_dump_lamb):
@@ -45,7 +51,6 @@ from ConformalAnalytical import *
 from scipy.optimize import curve_fit
 from prony import prony
 from EDSF import fitEDSF
-from LaplaceTransform import laplace, PadeLaplacematrixsolver
 #import time
 
 # plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
@@ -81,7 +86,7 @@ lamb = lamblist[0]
 path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
 
-whichplot = 'DD' #choices GD or DD
+whichplot = 'GD' #choices GD or DD
 # l0,l1 = 0.35,0.4
 # l2,l3 = 0.15,0.21
 # l4,l5 = 0.04,0.06
@@ -199,51 +204,101 @@ for i, lamb in enumerate(lamblist):
 	# sec_peak = c*(2+delta)
 	# ax2.semilogy(xaxis, A*np.exp(-sec_peak *beta * xaxis),ls='-.', label = f' second slope {sec_peak:.4}')
 	# # ax2.semilogy(xaxis, A*np.exp(-lamb *beta * xaxis),ls='-.', label = f' second slope {lamb:.4}')
-	l0idx = np.argmin(np.abs(l0-xaxis))
-	l1idx = np.argmin(np.abs(l1-xaxis))
-	s = np.linspace(0, 10, 1000)
-	# Fs = laplace(tau[startT:stopT:skip],plottable[startT:stopT:skip],s)
-	# Fs = laplace(tau[startT:stopT:skip],plottable[startT:stopT:skip],s,INTEGRATOR = 'simpson')
-	Fs = laplace(tau[startT:l1idx:skip],plottable[startT:l1idx:skip],s,INTEGRATOR = 'simpson')
-	print(len(plottable[l0idx:l1idx]))
-	figS, (axS,axgrad) = plt.subplots(2)
-	axS.plot(s,np.abs(Fs))
-	axS.set_yscale('log')
-	axS.set_xlabel('s')
-	axS.set_ylabel('F[s]')
 
-	gradlaplace = np.gradient(Fs, s)
-	gradlaplace2 = (1./2.) * np.gradient(gradlaplace, s)
-	gradlaplace3 = (1./3.) * np.gradient(gradlaplace2, s)
-	gradlaplace4 = (1./4.) * np.gradient(gradlaplace3, s)
-	gradlaplace5 = (1./5.) * np.gradient(gradlaplace4, s)
-	axgrad.plot(s,np.abs(gradlaplace),label ='first derivative')
-	axgrad.plot(s,np.abs(gradlaplace2),label ='second derivative')
-	axgrad.plot(s,np.abs(gradlaplace3),label ='third derivative')
-	axgrad.plot(s,np.abs(gradlaplace4),label ='fourth derivative')
-	axgrad.plot(s,np.abs(gradlaplace5),label ='fifth derivative')
-	axgrad.set_xlabel('s')
-	axgrad.set_ylabel('|grad F(s)|')
-	axgrad.set_title('Gradient of the laplace transform')
-	axgrad.set_yscale('log')
-	axgrad.legend()
 
-	N = 3 # we need at least 2n-1 derivatives
-	s0 = 3
-	# s0 = 1.2
-	# s0 = 6
-	s0idx = np.argmin(np.abs(s-s0))
-	assert s0idx < len(s) , "pick a valid s0 ya DOLT!"
+	#############  SECOND FIT STARTS #######################
+	secstart_idx = np.argmin(np.abs(xaxis-l2))
+	secstop_idx = np.argmin(np.abs(xaxis-l3))
+	# ax2.semilogy(xaxis[:secstop_idx+5000], remnant1[:secstop_idx+5000], ls='-', label = f' First Remnant')
+	ax2.semilogy(xaxis, remnant1, ls='-', label = f' First Remnant')
+	# ax2.semilogy(xaxis[:secstop_idx], remnant1[:secstop_idx], ls='-', label = f' First Remnant')
+	ax2.axvline(l2,ls='--',c='C3')
+	ax2.axvline(l3,ls='--',c='C3')
+	secfitslice = slice(secstart_idx,secstop_idx)
+	print(f'Number of points in second fit slice = {len(xaxis[secfitslice])}')
 
-	d_arr = np.array((Fs[s0idx], gradlaplace[s0idx], gradlaplace2[s0idx], gradlaplace3[s0idx],gradlaplace4[s0idx],gradlaplace5[s0idx]))
+	sec_slope, logB= np.polyfit(xaxis[secfitslice],np.log(remnant1[secfitslice]),1)
+	B  = np.exp(logB) 
+	zeta = - sec_slope/beta
+	ax2.semilogy(xaxis, (B)*np.exp(-(zeta)* beta * xaxis),ls=':', c='C3', label = f' fit with $\\zeta$ calculated to be {zeta:.4}')
+	print(f'A = {A:.4}, B = {B:.4}') 
+	print(f'gamma = {gamma:.4}, zeta = {zeta:.4}')
 
-	exponents = PadeLaplacematrixsolver(d_arr,N,s0)
-	print(f's0 = {s0}')
-	print('Found Exponents are ', exponents)
-	########## BOTTOM LINE : WE CAN SAFELY PICK s=3 , the first 4 derivatives are converged at that point ##################
+	first_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis)
+	ax2.semilogy(xaxis, first_approx, label = 'Sum of two exponentials', ls='-.')
+ 
+	remnant2 = remnant1 - B * np.exp(-zeta*beta*xaxis)
 
-	####### Completely hopeless :( ##############
+	############ THIRD FIT STARTS #############################
+	thistart_idx = np.argmin(np.abs(xaxis-l4))
+	thistop_idx = np.argmin(np.abs(xaxis-l5))
+	# ax2.semilogy(xaxis[:thistop_idx+100], remnant2[:thistop_idx+100], c='C4', ls='-', label = f' Second Remnant')
+	# ax2.semilogy(xaxis[:thistop_idx], remnant2[:thistop_idx], c='C4', ls='-', label = f' Second Remnant')
+	ax2.semilogy(xaxis, remnant2, c='C4', ls='-', label = f' Second Remnant')
+	ax2.axvline(l4,ls='--',c='C5')
+	ax2.axvline(l5,ls='--',c='C5')
+	thifitslice = slice(thistart_idx,thistop_idx)
+	print(f'Number of points in third fit slice = {len(xaxis[thifitslice])}')
 
+	thi_slope, logD = np.polyfit(xaxis[thifitslice],np.log(remnant2[thifitslice]),1)
+	D  = np.exp(logD) 
+	xi =  - thi_slope/beta
+	ax2.semilogy(xaxis, D*np.exp(-xi* beta * xaxis),ls=':', c='C5', label = f' fit with $\\xi$ calculated to be {xi:.4}')
+	print(f'A = {A:.4}, B = {B:.4}, D = {D:.4}') 
+	print(f'gamma = {gamma:.4}, zeta = {zeta:.4}, xi = {xi:.4}')
+	print(f'xi - zeta  = {xi-zeta}')
+	print(f'zeta - gamma = {zeta-gamma}')
+	print(f'c = {c}')
+	print(f'expected spacing = c')
+
+	second_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis) + D * np.exp(-xi * beta * xaxis)
+	ax2.semilogy(xaxis, second_approx, label = 'Sum of 3 exponentials', ls='-.')
+
+	remnant3 = remnant2 - D * np.exp(-xi * beta * xaxis)
+	# ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
+
+	# ax2.set_xlim(-0.005,0.5)
+	ax2.set_ylim(1e-7,1)
+
+	
+
+	########## model fitting #############
+	def model(x,a1,a2,a3,b1,b2,b3):
+		return a1 * np.exp(-b1*x) + a2 * np.exp(-b2*x) + a3 * np.exp(-b3*x)
+
+
+
+
+	initials = [1,1,1,  0.00456825, 0.01543535, 0.02630245] #just putting the deltas - seems best
+	upperbounds = [np.inf,np.inf,np.inf,1,1,1]
+	# initials = [A, B, 0.00001*B,  c*delta, c*(1+delta), c*(2+delta)] 
+	# # initials = [0.02173, 0.002086, 0.03204,  0.004568, 0.005827, 0.01793]
+	# midslice = slice(np.argmin(np.abs(xaxis-l4)),np.argmin(np.abs(xaxis-l1)))
+
+	startrange_curvefit_idx = np.argmin(np.abs(xaxis - 0.1))
+	stoprange_curvefit_idx = np.argmin(np.abs(xaxis - 0.4))
+	curvefitskip = 1
+	curvefitslice = slice(startrange_curvefit_idx,stoprange_curvefit_idx,curvefitskip)
+	curvefitX = tau[curvefitslice]
+	curvefitY = plottable[curvefitslice]
+
+	popt,pcov = curve_fit(model,curvefitX,curvefitY,bounds=(0,upperbounds),p0=initials,jac='3-point',ftol=1e-14)
+	perr = np.sqrt(np.diag(pcov))
+	print('popt = ', popt)
+	print('One std dev error = ', perr)
+	foundexpos = popt[-3:]
+	print('diffs = ', np.diff(foundexpos))
+	# params, covariance = curve_fit(model, xaxis[midslice] * beta, plottable[startT:stopT:skip][midslice],p0=initials)
+
+	# expos = params[-4:-1]
+	# sortedexpos = sorted(expos)
+	# fitted_gamma = sortedexpos[0]
+	# fitted_c = fitted_gamma/delta
+	# print(sortedexpos)
+	# print(np.diff(sortedexpos))
+	# print('fitted spacing = ',fitted_c)
+
+	
 
 # plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')

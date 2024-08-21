@@ -36,7 +36,8 @@ path_to_outfile = './Dump/redoYWH/'
 # outfile = 'YWHM21T17beta200g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta500g0_5lamb0_01.npy'
 # outfile = 'YWHM18T14beta200g0_5lamb0_01.npy'
-outfile = 'YWHM22T18beta1200g0_5lamb0_01.npy'
+# outfile = 'YWHM22T18beta1200g0_5lamb0_01.npy'
+outfile = 'YWHM22T18beta1200g0_5lamb0_05.npy'
 
 # outfile = 'lowertempM22T18beta1200g0_5lamb0_01.npy'
 
