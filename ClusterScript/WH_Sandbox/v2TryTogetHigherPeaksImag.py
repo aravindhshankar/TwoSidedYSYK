@@ -93,11 +93,13 @@ whichplot = 'GD' #choices GD or DD
 # l4,l5 = 0.005,0.008
 l0,l1 = 0.05,0.38
 l2,l3 = 0.04,0.06
-l4,l5 = 0.038,0.041
+l4,l5 = 0.038,0.04
 # l0,l1 = 0.39,0.4
 # l2,l3 = 0.15,0.2
 # l4,l5 = 0.1,0.11
-
+# l0,l1 = 0.02,0.42
+# l2,l3 = 0.04,0.06
+# l4,l5 = 0.038,0.04
 
 fig2, ax2 = plt.subplots(1, figsize=(8,7)) 
 titlestring = ''
@@ -307,25 +309,25 @@ for i, lamb in enumerate(lamblist):
 	# theta = (2 * Nbig / beta ) * thetastar
 	# print('theta = ', theta)
 
-	startval = np.argmin(np.abs(xaxis-0.005))
-	# startval = 0
-	stopval = np.argmin(np.abs(xaxis-0.4))
-	midslice = slice(startval,stopval)
-	N = 1000
-	rangeys = plottable[startT:stopT:skip][midslice]
-	rangexs = beta*xaxis[midslice] ##units of tau
-	step = len(rangexs)//N
-	selectxs = rangexs[startval:stopval:step] #units of tau
-	selectys = rangeys[startval:stopval:step]
-	print(len(selectxs), len(selectys))
-	nset = np.arange(0,len(selectys))
-	print(len(nset))
-	# fig,ax = plt.subplots(1)
-	# ax.plot(rangexs,rangeys,'.-',markersize=1)
-	# axtw = ax.twiny()
-	# axtw.plot(nset,selectys,'.',markersize=10)
-	astar,thetastar,final_err = fitEDSF(selectys,nset,4)
-	print(np.log(thetastar))
+	# startval = np.argmin(np.abs(xaxis-0.005))
+	# # startval = 0
+	# stopval = np.argmin(np.abs(xaxis-0.4))
+	# midslice = slice(startval,stopval)
+	# N = 1000
+	# rangeys = plottable[startT:stopT:skip][midslice]
+	# rangexs = beta*xaxis[midslice] ##units of tau
+	# step = len(rangexs)//N
+	# selectxs = rangexs[startval:stopval:step] #units of tau
+	# selectys = rangeys[startval:stopval:step]
+	# print(len(selectxs), len(selectys))
+	# nset = np.arange(0,len(selectys))
+	# print(len(nset))
+	# # fig,ax = plt.subplots(1)
+	# # ax.plot(rangexs,rangeys,'.-',markersize=1)
+	# # axtw = ax.twiny()
+	# # axtw.plot(nset,selectys,'.',markersize=10)
+	# astar,thetastar,final_err = fitEDSF(selectys,nset,4)
+	# print(np.log(thetastar))
 
 
 # plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')

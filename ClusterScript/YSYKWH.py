@@ -108,72 +108,7 @@ print("######## End of State variables #########")
 
 omegar2 = ret_omegar2(g,beta)
 	
-# def RE_wormhole_YSYK_iterator(GDRomega,GODRomega,DDRomega,DODRomega,g,lamb,J,beta,eta=1e-6,verbose=True):
-# 	itern = 0
-# 	diff = 1
-# 	x = 0.5
-# 	diffseries = []
-# 	xGD, xGOD, xDD, xDOD = (0.5,0.5,0.5,0.5)
-# 	diffGD, diffGOD, diffDD, diffDOD = (1.,1.,1.,1.)
-# 	conv_flag = True
-	
-# 	while (diff>err and itern<150 and conv_flag): 
-# 		itern += 1 
-# 		diffoldGD,diffoldDD,diffoldGOD,diffoldDOD = (diffGD,diffDD,diffGOD,diffDOD)
-# 		GDRoldomega,DDRoldomega,GODRoldomega,DODRoldomega = (1.0*GDRomega, 1.0*DDRomega, 1.0*GODRomega, 1.0*DODRomega)
 
-# 		rhoGD = -1.0*np.imag(GDRomega)
-# 		rhoDD = -1.0*np.imag(DDRomega)
-# 		rhoGOD = -1.0*np.imag(GODRomega)
-# 		rhoDOD = -1.0*np.imag(DODRomega)
-
-# 		SigmaDomega,PiDomega = Davrhotosigma(rhoGD,rhoDD,M,dt,t,omega,g,beta,kappa=1,delta=eta)
-# 		SigmaODomega,PiODomega = Davrhotosigma(rhoGOD,rhoDOD,M,dt,t,omega,g,beta,kappa=1,delta=eta)
-# 		####PiDOmega[M] = -1.0*r - omegar2 - eta**2
-
-# 	#   if itern < 10 : 
-# 	#   PiDomega[M] = -1.0*r - omegar2 - eta**2
-# 	#	PiODomega[M] = 0
-		
-# 		detGmat = (omega+1j*eta + mu - SigmaDomega)**2 - (lamb - SigmaODomega)**2
-# 		detDmat = ((omega+1j*eta)**2 - r - PiDomega)**2 - (J - PiODomega)**2
-	
-# 		GDRomega = xGD*((omega+1j*eta + mu - SigmaDomega)/detGmat) + (1-xGD)*GDRoldomega
-# 		GODRomega = xGOD*(-1.0*(lamb - SigmaODomega)/detGmat) + (1-xGOD)*GODRoldomega
-# 		DDRomega = xDD*(((omega+1j*eta)**2 - r - PiDomega)/detDmat) + (1-xDD)*DDRoldomega
-# 		DODRomega = xDOD*(-1.0*(J - PiODomega)/detDmat) + (1-xDOD)*DODRoldomega
-
-# 		if itern > 15 :
-# 		    eta=dw*0.01
-
-# 		diffGD = np. sqrt(np.sum((np.abs(GDRomega-GDRoldomega))**2)) #changed
-# 		diffDD = np. sqrt(np.sum((np.abs(DDRomega-DDRoldomega))**2))
-# 		diffGOD = np. sqrt(np.sum((np.abs(GODRomega-GODRoldomega))**2)) 
-# 		diffDOD = np. sqrt(np.sum((np.abs(DODRomega-DODRoldomega))**2))
-
-# 		diff = 0.25*(diffGD+diffDD+diffGOD+diffDOD)
-# 		diffGD,diffDD,diffGOD,diffDOD = diff,diff,diff,diff
-# 		diffseries += [diff]
-
-# 		if diffGD>diffoldGD:
-# 			xGD/=2.
-# 		if diffGOD>diffoldGOD:
-# 			xGOD/=2.
-# 		if diffDD>diffoldDD:
-# 			xDD/=2.
-# 		if diffDOD>diffoldDOD:
-# 			xDOD/=2.
-# 		if verbose:
-# 			print("itern = ",itern, " , diff = ", diffGD, diffDOD, " , x = ", xGOD, xDD)
-# 		if itern>30:
-# 			conv_flag = testingscripts.diff_checker(diffseries, tol = 1e-4, periods = 5)
-			
-
-# 	return (GDRomega,GODRomega,DDRomega,DODRomega)
-
-
-
-#####################
 
 def main():
 
