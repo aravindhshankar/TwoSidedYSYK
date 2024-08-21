@@ -3,13 +3,15 @@ from scipy.integrate import simpson, quad
 from matplotlib import pyplot as plt
 from scipy.interpolate import Akima1DInterpolator, PchipInterpolator
 import time 
+from scipy.optimize import curve_fit
+
 
 
 NO_OF_SAMPLES = 2**14
-t = np.linspace(0,5000,NO_OF_SAMPLES)
-alist = np.array([0.1,0.02])
+t = np.linspace(10,5000,NO_OF_SAMPLES)
+alist = np.array([0.1,0.002,0.00012, 0.001,0.0003 ])
 # blist = np.array([1,2])
-blist = np.array([0.00461,0.01559])
+blist = np.array([0.00461,0.01559,0.022,0.033,0.044])
 ft = np.array([np.sum(alist * np.exp(-1.0*blist*tval)) for tval in t])
 
 
@@ -32,7 +34,7 @@ def laplace(t,f,s, INTEGRATOR = 'quad'):
 
 
 def manual():
-	linfitslice = slice(-10,-1)
+	linfitslice = slice(0,-1)
 	m,logc = np.polyfit(t[linfitslice],np.log(ft[linfitslice]),1)
 	c = np.exp(logc)
 	loglinfit = c * np.exp(m * t)
@@ -53,6 +55,22 @@ def manual():
 	ax.set_xlabel('t')
 	ax.set_ylabel(r'$f(t)$')
 	ax.legend()
+
+
+	# def model(x, *alist,*blist):
+	# 	return np.array([np.sum(alist * np.exp(-1.0*blist*tval)) for tval in t])
+
+	def model(x, a1,a2,a3,b1,b2,b3):
+		return a1*np.exp(-b1*x)+a2*np.exp(-b2*x)+a3*np.exp(-b3*x)
+
+	print('Actual data exponents', blist)
+	popt,pcov = curve_fit(model,t,ft,bounds=(0,[np.inf,np.inf,np.inf,1,1,1]),p0=(1,1,1,0.01,0.02,0.02)
+							, jac = '3-point',ftol=1e-14)
+	print('popt = ', popt)
+	# print('pcov = ', pcov)
+	perr = np.sqrt(np.diag(pcov))
+	print('One std dev error', perr)
+
 	# plt.show()
 
 
@@ -172,7 +190,8 @@ def testingExponentsPade():
 
 def main():
 	# testing_laplace()
-	testingExponentsPade()
+	# testingExponentsPade()
+	manual()
 	plt.show()
 
 
