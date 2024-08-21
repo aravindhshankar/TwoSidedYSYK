@@ -14,6 +14,7 @@ if not os.path.exists('../Dump/'):
     exit(1)
 else:
 	path_to_dump_lamb = '../Dump/v2LOWTEMP_lamb_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev'
 	if not os.path.exists(path_to_dump_lamb):
 		# print("Making directory for lamb dump")
@@ -47,6 +48,7 @@ if calc == True:
 	Nbig = int(2**16)
 	beta_start = 1 
 	target_beta = 2000
+	target_beta = 5000
 	beta = target_beta
 	mu = 0.0
 	g = 0.5
@@ -67,11 +69,11 @@ if calc == True:
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
 	# lambval = savelist[np.isclose(savelist,lamb)][0]
-	lambval = 0.01
+	lambval = 0.002
 	startT, stopT = 0, Nbig//2
 
-	# for lambval in (lambval,):
-	for lambval in lambsavelist:
+	for lambval in (lambval,):
+	# for lambval in lambsavelist:
 		savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 		savefile += 'lamb' + f'{lambval:.3}' + 'J' + str(J)
 		savefile += 'g' + str(g) + 'r' + str(r)
@@ -82,7 +84,7 @@ if calc == True:
 		except FileNotFoundError: 
 			print(f"InputFile not found for lamb = {lambval:.3}")
 
-		plottable = np.abs(np.real(DDtau))
+		plottable = np.abs(np.real(GDtau))
 		lambinv = 1./(lambval*beta)
 		xaxis = tau[startT:stopT]/beta
 		logder = np.gradient(np.log(plottable))
@@ -91,7 +93,7 @@ if calc == True:
 		# start_idx = np.argmin(np.abs(xaxis-0.1))
 		# stop_idx = np.argmin(np.abs(xaxis-0.13))
 		start_idx = np.argmin(np.abs(xaxis-0.1))
-		stop_idx = np.argmin(np.abs(xaxis-0.13))
+		stop_idx = np.argmin(np.abs(xaxis-0.2))
 		
 
 		fitslice = slice(start_idx,stop_idx)
@@ -99,20 +101,22 @@ if calc == True:
 		slope = -np.mean(logder[startT:stopT][fitslice])
 		gaplist += [slope]
 
-	# titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
-	# titlestring += r' $\lambda$ = ' + f'{lambval:.3}' + r' J = ' + str(J)
-	# #plottable = np.abs(np.real(GDtau))
-	# fig,ax = plt.subplots(2)
-	# fig.suptitle(titlestring)
-	# startT, stopT = 0, Nbig//2
-	# xaxis = tau[startT:stopT]/beta
-	# # yaxis = 
-	# ax[0].semilogy(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau')
-	# ax[0].set_xlabel(r'$\tau/\beta$')
-	# ax[0].set_ylabel(r'$-\Re G(\tau)$')
-	# ax[0].axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
-	# ax[0].axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
-	# ax[0].legend()
+	titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+	titlestring += r' $\lambda$ = ' + f'{lambval:.3}' + r' J = ' + str(J)
+	#plottable = np.abs(np.real(GDtau))
+	fig,ax = plt.subplots(2)
+	fig.suptitle(titlestring)
+	ax[0].axvline(0.2,ls='--',c='gray')
+	ax[0].axvline(0.3,ls='--',c='gray')
+	startT, stopT = 0, Nbig//2
+	xaxis = tau[startT:stopT]/beta
+	# yaxis = 
+	ax[0].semilogy(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau')
+	ax[0].set_xlabel(r'$\tau/\beta$')
+	ax[0].set_ylabel(r'$-\Re G(\tau)$')
+	ax[0].axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
+	ax[0].axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
+	ax[0].legend()
 
 
 
@@ -129,18 +133,18 @@ if calc == True:
 	# print(slope)
 
 
-	slope_expect = 1./(2-2*delta)
-	fig,ax = plt.subplots(1)
-	ax.loglog(lambsavelist,gaplist,'.')
-	m,c = np.polyfit(np.log(lambsavelist),np.log(gaplist),1)
-	# m,c = np.polyfit(np.log(lambsavelist[-10:-1]),np.log(gaplist[-10:-1]),1)
-	ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'fit with slope {m:.4}')
-	print(f'dimensional analysis scaling = {slope_expect:.4}')
-	print(f'calculated scaling = {m:.4}')
-	ax.set_xlabel(r'$\lambda$')
-	ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
-	ax.set_title(f'$\\beta $ = {beta}')
-	ax.legend()
+	# slope_expect = 1./(2-2*delta)
+	# fig,ax = plt.subplots(1)
+	# ax.loglog(lambsavelist,gaplist,'.')
+	# m,c = np.polyfit(np.log(lambsavelist),np.log(gaplist),1)
+	# # m,c = np.polyfit(np.log(lambsavelist[-10:-1]),np.log(gaplist[-10:-1]),1)
+	# ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'fit with slope {m:.4}')
+	# print(f'dimensional analysis scaling = {slope_expect:.4}')
+	# print(f'calculated scaling = {m:.4}')
+	# ax.set_xlabel(r'$\lambda$')
+	# ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
+	# ax.set_title(f'$\\beta $ = {beta}')
+	# ax.legend()
 
 
 	plt.show()
