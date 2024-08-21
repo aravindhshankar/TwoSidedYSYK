@@ -103,6 +103,14 @@ l0,l1 = 0.11,0.38
 l2,l3 = 0.04,0.09
 l4,l5 = 0.038,0.04
 
+l0,l1 = 0.10,0.38
+l2,l3 = 0.04,0.09
+l4,l5 = 0.038,0.04
+
+l0,l1 = 0.10,0.38
+l2,l3 = 0.05,0.09
+l4,l5 = 0.038,0.04
+
 # l0,l1 = 0.39,0.4
 # l2,l3 = 0.15,0.2
 # l4,l5 = 0.1,0.11
@@ -179,7 +187,7 @@ for i, lamb in enumerate(lamblist):
 	skip = 1
 	xaxis = tau[startT:stopT:skip]/beta
 	# yaxis = 
-	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics ',markersize=2,c='C0')
+	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics ',markersize=1.6,c='C0')
 	# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
 	ax2.axvline(l0, ls='--')
 	ax2.axvline(l1, ls='--')
@@ -247,15 +255,15 @@ for i, lamb in enumerate(lamblist):
 	# ax2.semilogy(xaxis[:thistop_idx+100], remnant2[:thistop_idx+100], c='C4', ls='-', label = f' Second Remnant')
 	# ax2.semilogy(xaxis[:thistop_idx], remnant2[:thistop_idx], c='C4', ls='-', label = f' Second Remnant')
 	ax2.semilogy(xaxis, remnant2, c='C4', ls='-', label = f' Second Remnant')
-	ax2.axvline(l4,ls='--',c='C5')
-	ax2.axvline(l5,ls='--',c='C5')
+	# ax2.axvline(l4,ls='--',c='C5')
+	# ax2.axvline(l5,ls='--',c='C5')
 	thifitslice = slice(thistart_idx,thistop_idx)
 	print(f'Number of points in third fit slice = {len(xaxis[thifitslice])}')
 
 	thi_slope, logD = np.polyfit(xaxis[thifitslice],np.log(remnant2[thifitslice]),1)
 	D  = np.exp(logD) 
 	xi =  - thi_slope/beta
-	ax2.semilogy(xaxis, D*np.exp(-xi* beta * xaxis),ls=':', c='C5', label = f' fit with $\\xi$ calculated to be {xi:.4}')
+	# ax2.semilogy(xaxis, D*np.exp(-xi* beta * xaxis),ls=':', c='C5', label = f' fit with $\\xi$ calculated to be {xi:.4}')
 	D,xi = 0., 0.
 	print(f'A = {A:.4}, B = {B:.4}, D = {D:.4}') 
 	print(f'gamma = {gamma:.4}, zeta = {zeta:.4}, xi = {xi:.4}')
@@ -265,10 +273,10 @@ for i, lamb in enumerate(lamblist):
 	print(f'expected spacing = c')
 
 	second_approx = A * np.exp(-gamma*beta*xaxis) + B * np.exp(-zeta*beta*xaxis) + D * np.exp(-xi * beta * xaxis)
-	ax2.semilogy(xaxis, second_approx, label = 'Sum of 3 exponentials', ls='-.')
+	# ax2.semilogy(xaxis, second_approx, label = 'Sum of 3 exponentials', ls='-.')
 
 	remnant3 = remnant2 - D * np.exp(-xi * beta * xaxis)
-	ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
+	# ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
 
 	# ax2.set_xlim(-0.005,0.5)
 	ax2.set_ylim(1e-7,1)
