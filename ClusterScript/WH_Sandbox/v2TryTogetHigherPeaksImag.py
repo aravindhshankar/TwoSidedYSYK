@@ -53,8 +53,12 @@ from prony import prony
 from EDSF import fitEDSF
 #import time
 
-# plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
-# plt.rcParams['figure.dpi'] = "120"
+plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
+plt.rcParams['figure.dpi'] = "120"
+plt.rcParams['figure.figsize'] = '8,7'
+plt.rcParams['lines.markersize'] = '6'
+plt.rcParams['lines.linewidth'] = '1.6'
+
 # plt.rcParams['legend.fontsize'] = '14'
 # print(plt.style.available)
 # plt.style.use('seaborn-v0_8')
@@ -91,9 +95,14 @@ whichplot = 'GD' #choices GD or DD
 # l2,l3 = 0.15,0.21
 # l4,l5 = 0.04,0.06
 # l4,l5 = 0.005,0.008
-l0,l1 = 0.05,0.38
-l2,l3 = 0.04,0.06
+# l0,l1 = 0.05,0.38 ## These three are the best ones so far
+# l2,l3 = 0.04,0.06 ## 
+# l4,l5 = 0.038,0.04 ##
+
+l0,l1 = 0.11,0.38
+l2,l3 = 0.04,0.09
 l4,l5 = 0.038,0.04
+
 # l0,l1 = 0.39,0.4
 # l2,l3 = 0.15,0.2
 # l4,l5 = 0.1,0.11
@@ -170,10 +179,13 @@ for i, lamb in enumerate(lamblist):
 	skip = 1
 	xaxis = tau[startT:stopT:skip]/beta
 	# yaxis = 
-	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics ',markersize=5,c='C2')
+	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics ',markersize=2,c='C0')
 	# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
 	ax2.axvline(l0, ls='--')
 	ax2.axvline(l1, ls='--')
+
+
+
 	# ax2.axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
 	# ax2.axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
 	#ax2.legend()
@@ -193,9 +205,9 @@ for i, lamb in enumerate(lamblist):
 	A = np.exp(logA)
 	ax2.semilogy(xaxis, A*np.exp(-slope * xaxis),ls='-.', label = f' fit with $\\gamma$ calculated to be {gamma:.4}')
 	c = gamma/delta
-	print(f"position of first peak = {c*delta:.4}")
-	print(f'position of second peak = {c*(1+delta):.4}')
-	print(c*(np.arange(5)+delta))
+	# print(f"position of first peak = {c*delta:.4}")
+	# print(f'position of second peak = {c*(1+delta):.4}')
+	print('Theoretical En = c(n + deleta) = ', c*(np.arange(5)+delta))
 
 	remnant1 = plottable[startT:stopT:skip]-(A*np.exp(-slope * xaxis)) 
 	# ax2.semilogy(xaxis, remnant1, ls='-.', label = f' First Remnant')
@@ -244,10 +256,11 @@ for i, lamb in enumerate(lamblist):
 	D  = np.exp(logD) 
 	xi =  - thi_slope/beta
 	ax2.semilogy(xaxis, D*np.exp(-xi* beta * xaxis),ls=':', c='C5', label = f' fit with $\\xi$ calculated to be {xi:.4}')
+	D,xi = 0., 0.
 	print(f'A = {A:.4}, B = {B:.4}, D = {D:.4}') 
 	print(f'gamma = {gamma:.4}, zeta = {zeta:.4}, xi = {xi:.4}')
-	print(f'xi - zeta  = {xi-zeta}')
-	print(f'zeta - gamma = {zeta-gamma}')
+	# print(f'xi - zeta  = {xi-zeta}')
+	print(f'zeta - gamma = {zeta-gamma}') 
 	print(f'c = {c}')
 	print(f'expected spacing = c')
 
@@ -255,12 +268,22 @@ for i, lamb in enumerate(lamblist):
 	ax2.semilogy(xaxis, second_approx, label = 'Sum of 3 exponentials', ls='-.')
 
 	remnant3 = remnant2 - D * np.exp(-xi * beta * xaxis)
-	# ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
+	ax2.semilogy(xaxis, remnant3, ls='-.', label = f' Third Remnant')
 
 	# ax2.set_xlim(-0.005,0.5)
 	ax2.set_ylim(1e-7,1)
 
-	
+	textstr = ''
+	textstr += f'First slope $\\gamma =  $ {gamma:.4} \n'
+	textstr += f'calculated c = $\\gamma/\\Delta = $ {c:.4} \n'
+	textstr += f' predicted next slope at $c(1+\\Delta ) = $ {c*(1+delta):.4} \n'
+	textstr += f' Fit second slope from remnant = {zeta:.4}'
+	# textstr = f'expected spacing {c} \n' + 
+	ax2.text(0.19, 0.9, textstr, transform=ax2.transAxes, fontsize=14,
+        verticalalignment='top')
+
+	percentageerror = 100 * np.abs(zeta - c*(1+delta)) / (c*(1+delta)) 
+	print(percentageerror)
 
 	########## model fitting #############
 	def model(x,a1,a2,a3,e1,e2,e3):

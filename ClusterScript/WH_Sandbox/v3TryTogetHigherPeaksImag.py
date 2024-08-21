@@ -197,6 +197,9 @@ for i, lamb in enumerate(lamblist):
 	print(f'position of second peak = {c*(1+delta):.4}')
 	print(c*(np.arange(5)+delta))
 
+	# newslope = 0.01095569 * (delta) * beta
+	# newslope = 0.0110069 * (delta) * beta
+	# remnant1 = plottable[startT:stopT:skip]-(A*np.exp(-newslope * xaxis)) 
 	remnant1 = plottable[startT:stopT:skip]-(A*np.exp(-slope * xaxis)) 
 	# ax2.semilogy(xaxis, remnant1, ls='-.', label = f' First Remnant')
 
@@ -266,11 +269,16 @@ for i, lamb in enumerate(lamblist):
 	def model(x,a1,a2,a3,b1,b2,b3):
 		return a1 * np.exp(-b1*x) + a2 * np.exp(-b2*x) + a3 * np.exp(-b3*x)
 
+	def constrmodel(x,a1,a2,a3,c):
+		return a1 * np.exp(-c*delta*x) + a2 * np.exp(-c*(1+delta)*x) + a3 * np.exp(-c*(2+delta)*x)
 
 
 
 	initials = [1,1,1,  0.00456825, 0.01543535, 0.02630245] #just putting the deltas - seems best
+	# constrinitials = [1,1,1, 0.010977792168262588]
+	constrinitials = [1,1,1, 0.05]
 	upperbounds = [np.inf,np.inf,np.inf,1,1,1]
+	construpperbounds = [np.inf,np.inf,np.inf,0.5]
 	# initials = [A, B, 0.00001*B,  c*delta, c*(1+delta), c*(2+delta)] 
 	# # initials = [0.02173, 0.002086, 0.03204,  0.004568, 0.005827, 0.01793]
 	# midslice = slice(np.argmin(np.abs(xaxis-l4)),np.argmin(np.abs(xaxis-l1)))
@@ -282,7 +290,9 @@ for i, lamb in enumerate(lamblist):
 	curvefitX = tau[curvefitslice]
 	curvefitY = plottable[curvefitslice]
 
-	popt,pcov = curve_fit(model,curvefitX,curvefitY,bounds=(0,upperbounds),p0=initials,jac='3-point',ftol=1e-14)
+	# popt,pcov = curve_fit(model,curvefitX,curvefitY,bounds=(0,upperbounds),p0=initials,jac='3-point',ftol=1e-14)
+	# perr = np.sqrt(np.diag(pcov))
+	popt,pcov = curve_fit(constrmodel,curvefitX,curvefitY,bounds=(0,construpperbounds),p0=constrinitials,jac='3-point',ftol=1e-15)
 	perr = np.sqrt(np.diag(pcov))
 	print('popt = ', popt)
 	print('One std dev error = ', perr)
@@ -290,6 +300,10 @@ for i, lamb in enumerate(lamblist):
 	print('diffs = ', np.diff(foundexpos))
 	# params, covariance = curve_fit(model, xaxis[midslice] * beta, plottable[startT:stopT:skip][midslice],p0=initials)
 
+
+	# fittedY = [model(tauval, *popt) for tauval in curvefitX]
+	fittedY = [constrmodel(tauval, *popt) for tauval in curvefitX]
+	ax2.plot(curvefitX/beta, fittedY,label='NLSTSQ')
 	# expos = params[-4:-1]
 	# sortedexpos = sorted(expos)
 	# fitted_gamma = sortedexpos[0]
