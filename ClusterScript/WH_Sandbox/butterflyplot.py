@@ -73,6 +73,7 @@ for i, beta in enumerate(betasavelist):
 			#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
 			plotfiletempfwd = os.path.join(path_to_dump_temp_fwd, savefile)
 			GFstempfwd = np.load(plotfiletempfwd)
+			GFstempfwd[1] = -1.0*GFstempfwd[1]
 		except FileNotFoundError: 
 			print("TEMP FWD ANNEAL INPUT FILE NOT FOUND")
 			print(f'lamb = {lamb}, beta = {beta}')
@@ -81,6 +82,7 @@ for i, beta in enumerate(betasavelist):
 			#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
 			plotfiletemprev = os.path.join(path_to_dump_temp_rev, savefile)
 			GFstemprev = np.load(plotfiletemprev)
+			GFstemprev[1] = -GFstemprev[1]
 		except FileNotFoundError: 
 			print("TEMP REV ANNEAL INPUT FILE NOT FOUND")
 			print(f'lamb = {lamb}, beta = {beta}')
@@ -98,7 +100,8 @@ residuals = FEstempfwd-FEstemprev
 
 ############# Fit of FE in different phases #################
 # F0 = 40
-F0 = 0
+F0 = 0 
+# F0 = np.min(FEstempfwd)
 nflslice = slice(48,58)
 whslice = slice(90,99)
 mbh, cbh = np.polyfit(1./betasavelist[nflslice], FEstempfwd[nflslice] + F0 , 1)
@@ -116,8 +119,8 @@ xaxis = 1./betasavelist
 lambi = 0
 lamb = lambsavelist[lambi]
 fig, ax = plt.subplots(1)
-ax.plot(1./betasavelist, FEstempfwd + F0,'.--', label='temp annealed fwd')
-ax.plot(1./betasavelist, FEstemprev+F0,'.--', label='lamb annealed rev' )
+ax.plot(1./betasavelist, FEstempfwd - F0,'.--', label='temp annealed fwd')
+ax.plot(1./betasavelist, FEstemprev - F0,'.--', label='temp annealed rev' )
 ax.axvline(lamb,ls='--')
 ax.axvline(1/62, ls = '--', c='grey')
 
@@ -128,6 +131,8 @@ ax.axvline(1/62, ls = '--', c='grey')
 ax.legend()
 ax.set_xlabel('temperature T')
 ax.set_ylabel('Free energy')
+# ax.set_yscale('log')
+# ax.set_xscale('log')
 ax.set_title(r'$\lambda$ = ' + str(lamb))
 # ax.set_xscale('log')
 # ax2 = ax.twiny()
@@ -135,7 +140,8 @@ ax.set_title(r'$\lambda$ = ' + str(lamb))
 # ax2 = ax.secondary_xaxis('top', functions =(lambda x: 1/x, lambda x : 1/x))
 # ax2.set_xlabel('Inverse temperature $\\beta$')
 # ax2.set_ticks(betasavelist)
-
+# ax.set_xlim(0.005,0.03)
+# ax.set_ylim(-0.01,0.06)
 
 # ax3 = ax.twinx()
 # ax3.plot(1./betasavelist, -1.*(betasavelist**2) * np.gradient(FEstempfwd,betasavelist), '.-', c = 'k', label=r'Gradient $\frac{dF}{dT}$')

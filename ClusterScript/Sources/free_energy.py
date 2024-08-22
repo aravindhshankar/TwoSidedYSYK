@@ -38,19 +38,24 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa, lamb, J, im
 	else: 
 		SigmaDomega = Time2FreqF(g**2 * kappa* GDtau * DDtau, Nbig,beta)
 		SigmaODomega = Time2FreqF(g**2 * kappa * GODtau * DODtau, Nbig, beta)
-		detGinv = (1j*omega+mu-SigmaDomega)**2 - (lamb-SigmaODomega)**2
+		# detGinv = (1j*omega+mu-SigmaDomega)**2 - (lamb-SigmaODomega)**2
+		detGinv = (1j*omega+mu-SigmaDomega)**2 - (lamb+SigmaODomega)**2
 		detDinv = (nu**2+r-PiDomega)**2 - (J - PiODomega)**2
 
-	detG0inv = (1j*omega+mu)**2 - (lamb)**2
-	detD0inv = (nu**2+r)**2 - (J)**2
+	# detG0inv = (1j*omega+mu)**2 - (lamb)**2
+	# detD0inv = (nu**2+r)**2 - (J)**2
+	detG0inv = (1j*omega+mu)**2 
+	detD0inv = (nu**2+ r)**2 
 	detGinv = detGinv/detG0inv
 	detDinv = detDinv/detD0inv
-	free_energy = 2*np.log(2)-np.sum(np.log(detGinv))
+	# free_energy = 2*np.log(2)-np.sum(np.log(detGinv))
+	free_energy = -2*np.log(2)-np.sum(np.log(detGinv))
 	free_energy += 0.5*kappa*np.sum(np.log(detDinv)) 
 	free_energy += 1.0*kappa*(np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)) #changed
-	free_energy += -2*(beta**2)*kappa*(g**2)/Nbig * (np.sum(DDtau*GDtau*GDtau[::-1])+np.sum(DODtau*GODtau*GODtau[::-1]))
-	free_energy += -2*(np.sum(GDomega*SigmaDomega) + np.sum(GODomega*SigmaODomega))
+	# free_energy += -2*(beta**2)*kappa*(g**2)/Nbig * (np.sum(DDtau*GDtau*GDtau[::-1])+np.sum(DODtau*GODtau*GODtau[::-1]))
+	# free_energy += -2*(np.sum(GDomega*SigmaDomega) + np.sum(GODomega*SigmaODomega))
 	free_energy = free_energy.real / beta
+	# free_energy = free_energy.real 
 
 	return free_energy
 

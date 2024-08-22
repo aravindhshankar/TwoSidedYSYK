@@ -71,7 +71,7 @@ lamb = lamblist[0]
 path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
 
-whichplot = 'DD' #choices GD or DD
+whichplot = 'GD' #choices GD or DD
 
 
 l0,l1 = 0.11,0.38
@@ -153,9 +153,9 @@ for i, lamb in enumerate(lamblist):
 		exit(1)
 	startT, stopT = 0, Nbig//2
 	# skip = 50
-	skip = 1
+	skip = 50
 	xaxis = tau[startT:stopT:skip]/beta
-	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics ',markersize=1.6,c='C0')
+	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'Exact numerics ',markersize=1.4,c='C0')
 	# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
 	ax2.axvline(l0, ls=':',c='C1')
 	ax2.axvline(l1, ls=':',c='C1')
@@ -214,8 +214,10 @@ for i, lamb in enumerate(lamblist):
 
 
 	# ax2.set_xlim(-0.005,0.5)
-	# ax2.set_ylim(1e-7,1)
-	ax2.set_ylim(1e-5,1)
+	if whichplot == 'GD':
+		ax2.set_ylim(1e-7,1)
+	elif whichplot == 'DD': 
+		ax2.set_ylim(1e-5,1)
 
 	textstr = ''
 	textstr += f'First slope $\\gamma =  $ {gamma:.4} \n'
@@ -233,8 +235,10 @@ for i, lamb in enumerate(lamblist):
 # plt.savefig('../../KoenraadEmails/Fitting Higher exponentials.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 ax2.legend(fontsize=8)
-# plt.savefig('ExponentsGD.pdf',bbox_inches='tight')
-plt.savefig('ExponentsDD.pdf',bbox_inches='tight')
+if whichplot == 'GD':
+	plt.savefig('ExponentsGD.pdf',bbox_inches='tight')
+elif whichplot == 'DD':
+	plt.savefig('ExponentsDD.pdf',bbox_inches='tight')
 
 plt.show()
 

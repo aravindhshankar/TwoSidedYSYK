@@ -173,7 +173,7 @@ titlestring += ' Log2M = ' + str(np.log2(M))
 titlestring += ' g = ' + str(g)
 fig.suptitle(titlestring)
 
-plotslice = slice(M-1,M+100000,100)
+plotslice = slice(M-1,M+1000,1)
 PEAKFINDING = True
 
 ax[0,0].plot(omega[plotslice], rhoGD[plotslice],'.-')
