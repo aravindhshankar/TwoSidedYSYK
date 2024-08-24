@@ -35,10 +35,23 @@ from free_energy import free_energy_YSYKWH
 from annealers import anneal_temp, anneal_lamb
 
 
+plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
+plt.rcParams['figure.dpi'] = "120"
+plt.rcParams['figure.figsize'] = '8 ,7'
+plt.rcParams['lines.markersize'] = '6'
+plt.rcParams['lines.linewidth'] = '1.6'
+plt.rcParams['axes.labelsize'] = '16'
+plt.rcParams['axes.titlesize'] = '16'
+
+plt.rcParams['legend.fontsize'] = '12'
+
+
+
+
 PLOTTING = False
 Nbig = int(2**14)
 
-beta_start = 2 
+beta_start = 20
 # target_beta = 2001
 target_beta = 101
 beta = beta_start
@@ -101,11 +114,11 @@ residuals = FEstempfwd-FEstemprev
 ############# Fit of FE in different phases #################
 # F0 = 40
 F0 = 0 
-# F0 = np.min(FEstempfwd)
-nflslice = slice(48,58)
-whslice = slice(90,99)
+# # F0 = np.min(FEstempfwd)
+nflslice = slice(15,20)
+# whslice = slice(90,99)
 mbh, cbh = np.polyfit(1./betasavelist[nflslice], FEstempfwd[nflslice] + F0 , 1)
-mwh, cwh = np.polyfit(1./betasavelist[whslice], FEstempfwd[whslice] + F0 , 1)
+# mwh, cwh = np.polyfit(1./betasavelist[whslice], FEstempfwd[whslice] + F0 , 1)
 
 pbh,qbh,rbh = np.polyfit(1./betasavelist[nflslice], FEstempfwd[nflslice] + F0 , 2)
 
@@ -119,16 +132,18 @@ xaxis = 1./betasavelist
 lambi = 0
 lamb = lambsavelist[lambi]
 fig, ax = plt.subplots(1)
-ax.plot(1./betasavelist, FEstempfwd - F0,'.--', label='temp annealed fwd')
-ax.plot(1./betasavelist, FEstemprev - F0,'.--', label='temp annealed rev' )
-ax.axvline(lamb,ls='--')
+# ax.plot(1./betasavelist, FEstempfwd - F0,'.--', label='temp annealed fwd')
+# ax.plot(1./betasavelist, FEstemprev - F0,'.--', label='temp annealed rev' )
+ax.plot(1./betasavelist, FEstempfwd - F0,'.--', label='Annealing from high to low temperature')
+ax.plot(1./betasavelist, FEstemprev - F0,'.--', label='Annealing from low to high temperature' )
+# ax.axvline(lamb,ls='--')
 ax.axvline(1/62, ls = '--', c='grey')
 
 # ax.plot(xaxis, mbh*xaxis + cbh, ls = '--', label = f'nflFit with intercept {cbh:.6}')
 # ax.plot(xaxis, pbh*xaxis**2 + qbh*xaxis + rbh, ls = '--', label = f'nfl parabolic Fit with intercept {rbh:.6}')
 # ax.plot(xaxis, mwh*xaxis + cwh, ls = '--', label = f'whFit with intercept {cwh:.6}')
 
-ax.legend()
+ax.legend(loc='upper right')
 ax.set_xlabel('temperature T')
 ax.set_ylabel('Free energy')
 # ax.set_yscale('log')
@@ -150,6 +165,7 @@ ax.set_title(r'$\lambda$ = ' + str(lamb))
 
 
 fig.tight_layout()
+# plt.savefig('../Figuremaker/butterflyplotmetal.pdf',bbox_inches='tight')
 
 
 plt.show()
