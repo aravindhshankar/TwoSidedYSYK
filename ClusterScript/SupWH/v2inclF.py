@@ -28,27 +28,27 @@ from ConformalAnalytical import *
 DUMP = False
 PLOTTING = True
 
-# Nbig = int(2**14)
-Nbig = int(2**16)
+Nbig = int(2**14)
+# Nbig = int(2**16)
 err = 1e-12
 #err = 1e-2
 ITERMAX = 8000
 
 global beta
 
-beta_start = 5000
+beta_start = 1
 beta = beta_start
 mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-# lamb = 0.05
-lamb = 0.01
+lamb = 0.05
+# lamb = 0.01
 #J = 0.0
 J = 0
 
 # target_beta = 40.
-target_beta = beta_start
+target_beta = 101
 
 kappa = 1.
 beta_step = 1
@@ -85,6 +85,7 @@ savefile += '.npy'
 try:
     # GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
     GDtau,GODtau,DDtau,DODtau = np.load(os.path.join(path_to_dump, savefile)) 
+    GODtau = -GODtau
 except FileNotFoundError:
     print(savefile, " not found")
     exit(1)

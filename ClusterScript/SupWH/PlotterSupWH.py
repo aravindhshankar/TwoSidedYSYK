@@ -8,8 +8,9 @@ else:
 
 # path_to_dump = '../Dump/SupCondWHImagDumpfiles'
 path_to_dump = '../Dump/l_05Sup/'
+# path_to_dump = '../Dump/l_05Supalpha0_1/'
 # path_to_dump = '../Dump/l1Sup/'
-# path_to_dump = '../Dump/lambannealSup'
+path_to_dump = '../Dump/lambannealSup'
 
 if not os.path.exists(path_to_dump):
     print("Error - Path to Dump directory not found")
@@ -40,8 +41,8 @@ plt.rcParams['lines.linewidth'] = '1'
 DUMP = False
 PLOTTING = True
 
-# Nbig = int(2**16)
-Nbig = int(2**14)
+Nbig = int(2**16)
+# Nbig = int(2**14)
 err = 1e-12
 #err = 1e-2
 ITERMAX = 15000
@@ -52,15 +53,17 @@ mu = 0.0
 g = 0.5
 r = 1.
 alpha = 0.
-# lamb = 0.001
-lamb = 0.05
+# alpha = 0.1
+lamb = 0.002
+# lamb = 0.05
 # lamb = 1.0
 #J = 0.0
 J = 0
 
-betalist = [25,42,54,80,99]
+# betalist = [25,42,54,80,99]
+# betalist = [25,42,54,73,80,99]
 # betalist = [25,50,80,190]
-# betalist = [2000,]
+betalist = [2000,]
 
 kappa = 1.
 
@@ -300,7 +303,8 @@ for i, beta in enumerate(betalist):
 
 
 
-    startT, stopT  = 0, 5000
+    # startT, stopT  = 0, 5000
+    startT, stopT  = 0, Nbig//2 - 1
 
     fitsliceT = slice(startT+4500, startT + 4600)
     #fitslice = slice(start+25, start + 35)
@@ -325,13 +329,13 @@ for i, beta in enumerate(betalist):
     axSL[0,0].set_yscale('log')
 
 
-    axSL[1,0].semilogy(tau[startT:stopT], np.abs(np.real(DDtau[startT:stopT])),'p',c=col,label=lab)
+    axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DDtau[startT:stopT])),'p',c=col,label=lab)
     #axSL[1,0].semilogy(tau[startB:stopB], conf_fit_DD,'k--',label = 'ES power law')
     #axSL[1,0].semilogy(tau[startB:], np.real(Dconf[startB:]),'m.',label = 'ES solution')
     #axSL[1,0].semilogy(tau[startB:], alt_conf_fit_D,'g--', label = 'alt power law')
     #axSL[1,0].set_xlim(tau[startB]/2,tau[startB+15])
     #axSL[1,0].set_ylim(5e-1,100)
-    axSL[1,0].set_xlabel(r'$\tau$')
+    axSL[1,0].set_xlabel(r'$\tau/beta$')
     axSL[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
     #axSL[1,0].set_aspect('equal', adjustable='box')
     axSL[1,0].legend()

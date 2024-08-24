@@ -1,7 +1,7 @@
 import re
+import numpy as np
 
-
-def ret_converged_betas(filename='OutputForalphazeroSupCondlamb0_05.out'):
+def ret_converged_betas(filename='OutputForalphazeroSupCondlamb0_05.out',ITERMAX=15000):
     # Step 1: Read the file
     with open(filename, 'r') as file:
         lines = file.readlines()
@@ -23,11 +23,11 @@ def ret_converged_betas(filename='OutputForalphazeroSupCondlamb0_05.out'):
             # Extract the 'end itern' value
             end_line = lines[i + 3].strip(' \n')
             end_itern = int(end_line.split()[-1]) #found end itern
-            if end_itern < 15000:
+            if end_itern < ITERMAX:
                 beta_values.append(beta)
 
         except (ValueError, AttributeError):
             continue
 
     # Step 4: Output the result
-    return beta_values
+    return np.array(beta_values)

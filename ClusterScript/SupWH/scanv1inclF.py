@@ -12,7 +12,7 @@ else:
 # path_to_dump = '../Dump/SupCondWHImagDumpfiles'
 # path_to_dump = '../Dump/LOWTEMP_lamb_anneal_dumpfiles'
 path_to_loadfile = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd/'
-path_to_dump = '../Dump/l_05Sup/'
+path_to_dump = '../Dump/l_05SupHIGH/'
 
 if not os.path.exists(path_to_loadfile):
     print("Error - Path to Dump directory not found")
@@ -82,7 +82,8 @@ Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
 omegar2 = ret_omegar2(g,beta)
 
-
+FDtau = (1+1j)*np.ones(Nbig)
+FODtau = (1+1j)*np.ones(Nbig)
 
 
 
@@ -108,6 +109,7 @@ for beta in betalooplist:
     try:
         # GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
         GDtau,GODtau,DDtau,DODtau = np.load(os.path.join(path_to_loadfile, savefile)) 
+        GODtau = -GODtau
     except FileNotFoundError:
         print(savefile, " not found")
         exit(1)
@@ -117,8 +119,9 @@ for beta in betalooplist:
     assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
 
     #Include anomalous propagators
-    FDtau = (1+1j)*np.ones_like(GDtau)
-    FODtau = (1-1j)*np.ones_like(GODtau)
+    if np.sum(np.abs(FDtau[:10])) < 1e-3:
+        FDtau = (1+1j)*np.ones_like(GDtau)
+        FODtau = (1-1j)*np.ones_like(GODtau)
     itern = 0
     diff = err*1.1
     x = 0.01
@@ -196,7 +199,11 @@ for beta in betalooplist:
         diffDD = np.sum((np.abs(DDtau-oldDDtau))**2)
         diffFD = np.sum((np.abs(FDtau-oldFDtau))**2)
 
-        diff = 0.33*(diffGD+diffDD+diffFD)
+        diffGOD = np.sum((np.abs(GODtau-oldGODtau))**2)#changed
+        diffDOD = np.sum((np.abs(DODtau-oldDODtau))**2)
+        diffFOD = np.sum((np.abs(FODtau-oldFODtau))**2)
+
+        diff = (1./6.)*(diffGD+diffDD+diffFD+diffGOD+diffDOD+diffFOD)
 
     if DUMP == True and np.isclose(betasavelist,beta).any() :
         betaval = betasavelist[np.isclose(betasavelist,beta)][0]
@@ -210,7 +217,7 @@ for beta in betalooplist:
         print(savefile)
     print("##### Finished beta = ", beta, "############")
     print(f"FD(tau = 0+) = {FDtau[0]:.4}")
-    print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n')
+    print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n',flush=True)
 
 # np.testing.assert_almost_equal(beta,target_beta)
 
