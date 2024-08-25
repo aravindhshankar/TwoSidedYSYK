@@ -52,6 +52,7 @@ PLOTTING = False
 Nbig = int(2**14)
 
 beta_start = 20
+beta_start = 2
 # target_beta = 2001
 target_beta = 101
 beta = beta_start

@@ -64,9 +64,11 @@ lamb = 0.05
 J = 0
 
 # betalist = [25,42,54,80,99]
-betalist = ret_converged_betas(filename='NEWsupl05.out',ITERMAX=10000) #filename already the default one
+man_exclude = np.array([10,22,24,27,30,31])
+betalist = ret_converged_betas(filename='NEWsupl05.out',ITERMAX=10000,man_exclude=man_exclude) #filename already the default one
 # betalist = ret_converged_betas(filename='alpha0_1.out',ITERMAX=50000) 
-CritCurrlist = np.zeros_like(betalist, dtype=np.float64)
+# CritCurrlist = np.zeros_like(betalist, dtype=np.float64)
+FElist = np.zeros_like(betalist, dtype=np.float64)
 # betalist = [25,50,80,190]
 # betalist = [2000,]
 
@@ -133,21 +135,32 @@ for i, beta in enumerate(betalist):
 
     retFE = lambda theta : np.sum(-np.log(lamb**4 + ((SigmaDomega + SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega))*((SigmaDomega - SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) + np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega)) - lamb**2*(SigmaDomega**2 - 4j*SigmaDomega*omega - 2*omega**2 + np.conj(SigmaDomega)**2 + 4j*omega*np.real(SigmaDomega) - 4*np.real(SigmaODomega)**2) + 2*lamb*(lamb*(np.abs(SigmaODomega)**2 + np.abs(PhiDomega)**2)*np.cos(2*theta) + np.cos(theta)*(SigmaODomega*np.abs(SigmaODomega)**2 - 2j*SigmaODomega*omega*np.conj(SigmaDomega) - SigmaODomega*np.conj(SigmaDomega)**2 - SigmaDomega*(SigmaDomega - 2j*omega)*np.conj(SigmaODomega) + SigmaODomega*np.conj(SigmaODomega)**2 + 2*(lamb**2 + omega**2 + np.abs(PhiDomega)**2)*np.real(SigmaODomega)))))
 
-    normaln = -np.sum(np.log(omega**4))
-    FEsumangle = np.array([retFE(theta) - normaln for theta in thetalist]) 
-    FEsumangle -= np.mean(FEsumangle)
-    FEsumangle = np.real(FEsumangle)
-    JosephsonCurrent = (1./beta) * np.gradient(FEsumangle,thetalist)
-    CritCurrent = np.max(JosephsonCurrent)
-    CritCurrlist[i] = CritCurrent
+    # normaln = -np.sum(np.log(omega**4))
+    # FEsumangle = np.array([retFE(theta) - normaln for theta in thetalist]) 
+    # FEsumangle -= np.mean(FEsumangle)
+    # FEsumangle = np.real(FEsumangle)
+    # JosephsonCurrent = (1./beta) * np.gradient(FEsumangle,thetalist)
+    # CritCurrent = np.max(JosephsonCurrent)
+    # CritCurrlist[i] = CritCurrent
+    detD0inv = (nu**2+ r)**2 
+    Sf = retFE(0) + np.sum(np.log(omega**4)) - 4*np.log(2) #ret FE is - ln det 
+    Sd = 0.5*kappa*np.sum(np.log(((nu**2+r-PiDomega)**2 - (J-PiODomega)**2)/(detD0inv)))
+    Slm = kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
+    Sb0 = 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
+    Fe = np.real(Sf + Sd + Slm + Sb0)/beta
+    FElist[i] = Fe
+    
+
 
 
 
 
 # axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
 # ax.plot(1./betalist, CritCurrlist)
-ax.plot(betalist, CritCurrlist)
+ax.axvline(1./62,ls='--')
+ax.axvline(1./33,ls='--')
+ax.plot(1./betalist, FElist,'.-')
 ax.set_xlabel(r'$\beta$')
-# ax.set_xlabel(r'$T$')
-ax.set_ylabel(r'$I_c$')
+ax.set_xlabel(r'$T$')
+# ax.set_ylabel(r'$FE$')
 plt.show()
