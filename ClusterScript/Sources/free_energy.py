@@ -51,7 +51,7 @@ def free_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa, lamb, J, im
 	# free_energy = 2*np.log(2)-np.sum(np.log(detGinv))
 	free_energy = -2*np.log(2)-np.sum(np.log(detGinv))
 	free_energy += 0.5*kappa*np.sum(np.log(detDinv)) 
-	free_energy += 2.0*kappa*(np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)) #changed
+	free_energy += 1.0*kappa*(np.sum(DDomega*PiDomega) + np.sum(DODomega*PiODomega)) #changed
 	free_energy += 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
 	# free_energy += -2*(beta**2)*kappa*(g**2)/Nbig * (np.sum(DDtau*GDtau*GDtau[::-1])+np.sum(DODtau*GODtau*GODtau[::-1]))
 	# free_energy += -2*(np.sum(GDomega*SigmaDomega) + np.sum(GODomega*SigmaODomega))

@@ -13,6 +13,14 @@ path_to_dump = '../Dump/l_05SupHIGH/'
 # path_to_dump = '../Dump/l1Sup/'
 # path_to_dump = '../Dump/lambannealSup'
 
+path_to_oneside = '../Dump/OnesideInclSup'
+
+if not os.path.exists(path_to_oneside):
+    print(f'path to onside {path_to_oneside} not found!')
+    exit(1)
+
+
+
 if not os.path.exists(path_to_dump):
     print("Error - Path to Dump directory not found")
     print("expected path: ", path_to_dump)
@@ -157,6 +165,12 @@ for i, beta in enumerate(betalist):
     savefile = savefile.replace('.','_') 
     savefile += '.npy'
 
+    onesidefile = 'OnesideSUP'
+    onesidefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+    onesidefile += 'g' + str(g) + 'r' + str(r)
+    onesidefile = onesidefile.replace('.','_') 
+    onesidefile += '.npy'
+
     try:
         # GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
         GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
@@ -164,6 +178,13 @@ for i, beta in enumerate(betalist):
         print(savefile, " not found")
         exit(1)
 
+
+    try:
+        # GDtau,DDtau,FDtau,GODtau,DODtau,FODtau = np.load(os.path.join(path_to_dump, savefile)) 
+        Gtau,Dtau,Ftau= np.load(os.path.join(path_to_oneside, onesidefile)) 
+    except FileNotFoundError:
+        print(onesidefile, " not found")
+        exit(1)
     ##########################################################
 
     assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
@@ -184,8 +205,10 @@ for i, beta in enumerate(betalist):
     FreeDtau = DfreeImagtau(tau,r,beta)
 
     ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),c=col,label=lab)
+    ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c=col,ls='--')
     axinset0.plot(tau[llplotslice]/beta, np.real(GDtau[llplotslice]), c = col, label = lab)
-    axinset0.plot(tau[llplotslice]/beta, np.real(Gconftau[llplotslice]), c = col, ls='--' )
+    axinset0.plot(tau[llplotslice]/beta, np.real(Gtau[llplotslice]), c = col, ls='--' )
+    # axinset0.plot(tau[llplotslice]/beta, np.real(Gconftau[llplotslice]), c = col, ls='--' )
     # ax[0].set_ylim(-1,1)
     ax[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
     ax[0].set_ylabel(r'$|\Re{G_{d}(\tau)}|$')
@@ -193,8 +216,10 @@ for i, beta in enumerate(betalist):
 
 
     axinset1.plot(tau[llplotslice]/beta, np.real(DDtau[llplotslice]), c=col, label = lab)
-    axinset1.plot(tau[llplotslice]/beta, np.real(Dconftau[llplotslice]), c=col, ls='--' )
+    axinset1.plot(tau[llplotslice]/beta, np.real(Dtau[llplotslice]), c=col, ls='--' )
+    # axinset1.plot(tau[llplotslice]/beta, np.real(Dconftau[llplotslice]), c=col, ls='--' )
     ax[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(DDtau[llplotslice])),c=col,label=lab)
+    ax[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(Dtau[llplotslice])),c=col,ls='--')
 
     # axinset[1].semilogy(tau/beta, np.real(Dconftau), c=col, ls='--' )
     # ax[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
@@ -207,8 +232,10 @@ for i, beta in enumerate(betalist):
     # ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
     # ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
     axinset2.plot(tau[llplotslice]/beta, (np.abs(FDtau[llplotslice])), c=col, label = lab)
-    axinset2.plot(tau[llplotslice]/beta, (np.abs(FODtau[llplotslice])), ls='--', c=col)
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(FODtau[llplotslice])), ls='--', c=col)
+    axinset2.plot(tau[llplotslice]/beta, (np.abs(Ftau[llplotslice])), ls='--', c=col)
     ax[2].semilogy(tau[llplotslice]/beta, np.abs(FDtau[llplotslice]),c=col,label=lab)
+    ax[2].semilogy(tau[llplotslice]/beta, np.abs(Ftau[llplotslice]),c=col,ls='--')
 
     #ax[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
     #ax[2].set_ylim(-1,1)
@@ -262,7 +289,9 @@ for i, beta in enumerate(betalist):
 
     # figFE.savefig('../../KoenraadEmails/FreeEnergyOscillationSUP.pdf', bbox_inches = 'tight')
     # figFE.savefig('../../KoenraadEmails/JosephsonCurrent.pdf', bbox_inches = 'tight')
-fig.savefig('insetsSupGFs.pdf',bbox_inches='tight')
+
+# fig.savefig('insetsSupGFs.pdf',bbox_inches='tight')
+
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 plt.show()

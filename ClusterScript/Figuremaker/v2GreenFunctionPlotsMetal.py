@@ -37,6 +37,11 @@ else:
 		exit(1)
 
 
+path_to_oneside = '../Dump/OnesideMET'
+if not os.path.exists(path_to_oneside):
+	print('Path to oneside', path_to_oneside, 'does not exist')
+	exit(1)
+
 
 from SYK_fft import *
 import numpy as np
@@ -109,6 +114,10 @@ for i, beta in enumerate(betalist):
 	savefile = savefile.replace('.','_') 
 	savefile += '.npy'
 
+	onesidefile = 'OnesideMET'
+	onesidefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+	onesidefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
+
 	try :
 		#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
 		plotfile = os.path.join(path_to_dump, savefile)
@@ -119,6 +128,13 @@ for i, beta in enumerate(betalist):
 		print("INPUT FILE NOT FOUND") 
 		exit(1)
 	print('savefile = ', savefile)
+
+	try :
+		Gtau,Dtau = np.load(os.path.join(path_to_oneside,onesidefile))
+	except FileNotFoundError:
+		print('Filename : ', onesidefile)
+		print("INPUT FILE NOT FOUND") 
+		exit(1)
 
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
@@ -153,7 +169,8 @@ for i, beta in enumerate(betalist):
 
 
 	ax[0,0].plot(tau/beta, np.real(GDtau), c='C'+str(i), ls = '-', label =   r'$\beta$ = ' + str(beta))
-	ax[0,0].plot(tau/beta, np.real(Gconftau), c='C'+str(i), ls='--' )
+	# ax[0,0].plot(tau/beta, np.real(Gconftau), c='C'+str(i), ls='--' )
+	ax[0,0].plot(tau/beta, np.real(Gtau), c='C'+str(i), ls='--' )
 	#ax[0,0].set_ylim(-1,1)
 	ax[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 	ax[0,0].set_ylabel(r'$\Re{G_{d}(\tau)}$')
@@ -168,7 +185,8 @@ for i, beta in enumerate(betalist):
 	ax[0,1].legend()
 
 	ax[1,0].plot(tau/beta, np.real(DDtau), c='C'+str(i), ls='-', label =  r'$\beta$ = ' + str(beta))
-	ax[1,0].plot(tau/beta, np.real(Dconftau), c='C'+str(i), ls= '--')
+	ax[1,0].plot(tau/beta, np.real(Dtau), c='C'+str(i), ls= '--')
+	# ax[1,0].plot(tau/beta, np.real(Dconftau), c='C'+str(i), ls= '--')
 	# ax[1,0].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
 	#ax[1,0].set_ylim(0,1)
 	ax[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
