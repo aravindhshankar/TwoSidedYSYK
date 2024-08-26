@@ -123,17 +123,17 @@ fig.tight_layout(pad=2.5)
 
 
 
-# figOD, axOD = plt.subplots(1,3)
-# # left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
-# # axinset = fig.add_axes([left, bottom, width, height])
-# rect = [0.2,0.2,0.7,0.7]
-# rect = [0.2,0.6,0.3,0.3]
-# # axinset0 = add_subplot_axes(axOD[0],[0,0.1,0.2,0.2])
-# # axinset1 = add_subplot_axes(axOD[1],[0,0,0.2,0.2])
-# # axinset2 = add_subplot_axes(axOD[2],[0.6,0.1,0.2,0.2])
-# # titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
-# # fig.suptitle(titlestring)
-# fig.tight_layout(pad=2.5)
+figOD, axOD = plt.subplots(1,3)
+# left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
+# axinset = fig.add_axes([left, bottom, width, height])
+rect = [0.2,0.2,0.7,0.7]
+rect = [0.2,0.6,0.3,0.3]
+# axinset0 = add_subplot_axes(axOD[0],[0,0.1,0.2,0.2])
+# axinset1 = add_subplot_axes(axOD[1],[0,0,0.2,0.2])
+# axinset2 = add_subplot_axes(axOD[2],[0.6,0.1,0.2,0.2])
+# titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+# fig.suptitle(titlestring)
+fig.tight_layout(pad=2.5)
 
 
 figmet, axmet = plt.subplots(2,2)
@@ -295,9 +295,42 @@ for i, beta in enumerate(betalist):
     # #fig.suptitle(r'$\beta$ = ', beta)
     # #plt.savefig('../../KoenraadEmails/Withx0_01constImagTime.pdf',bbox_inches='tight')
 
+    ################################# OFF DIAGONALS ##################################################
+
+    axOD[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GODtau[llplotslice])),c=col,label=lab)
+    axOD[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    axOD[0].set_ylabel(r'$|\Re{G_{od}(\tau)}|$')
+    axOD[0].legend()
 
 
+    # axinset1.plot(tau[llplotslice]/beta, np.real(DDtau[llplotslice]), c=col, label = lab)
+    # axinset1.plot(tau[llplotslice]/beta, np.real(Dtau[llplotslice]), c=col, ls='--' )
+    # axinset1.plot(tau[llplotslice]/beta, np.real(Dconftau[llplotslice]), c=col, ls='--' )
+    axOD[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(DODtau[llplotslice])),c=col,label=lab)
+    # axOD[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(Dtau[llplotslice])),c=col,ls='--')
 
+    # axinset[1].semilogy(tau/beta, np.real(Dconftau), c=col, ls='--' )
+    # axOD[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
+    #axOD[1].set_ylim(0,1)
+    axOD[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    axOD[1].set_ylabel(r'$|\Re{D_{od}(\tau)}|$')
+    axOD[1].legend()
+
+
+    # axOD[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
+    # axOD[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(FDtau[llplotslice])), c=col, label = lab)
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(FODtau[llplotslice])), ls='--', c=col)
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(Ftau[llplotslice])), ls='--', c=col)
+    axOD[2].semilogy(tau[llplotslice]/beta, np.abs(FODtau[llplotslice]),c=col,label=lab)
+    # axOD[2].semilogy(tau[llplotslice]/beta, np.abs(Ftau[llplotslice]),c=col,ls='--')
+
+    #axOD[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
+    #axOD[2].set_ylim(-1,1)
+    axOD[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    # axOD[2].set_ylabel(r'$\Re{F(\tau)}$')
+    axOD[2].set_ylabel(r'$|F_{od}(\tau)|$')
+    axOD[2].legend()
 
 
     
