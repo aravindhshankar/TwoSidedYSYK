@@ -14,6 +14,7 @@ path_to_dump = '../Dump/l_05SupHIGH/'
 # path_to_dump = '../Dump/lambannealSup'
 
 path_to_oneside = '../Dump/OnesideInclSup'
+path_to_metal = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
 
 if not os.path.exists(path_to_oneside):
     print(f'path to onside {path_to_oneside} not found!')
@@ -42,7 +43,7 @@ plt.rcParams['figure.dpi'] = "120"
 # plt.rcParams['legend.fontsize'] = '14'
 plt.rcParams['legend.fontsize'] = '11'
 plt.rcParams['figure.figsize'] = '8,7'
-plt.rcParams['lines.markersize'] = '6'
+plt.rcParams['lines.markersize'] = '2'
 plt.rcParams['lines.linewidth'] = '1'
 plt.rcParams['axes.labelsize'] = '13'
 
@@ -120,13 +121,25 @@ axinset2 = add_subplot_axes(ax[2],[0.6,0.1,0.2,0.2])
 # fig.suptitle(titlestring)
 fig.tight_layout(pad=2.5)
 
-figSL,axSL = plt.subplots(2,2)
-#figSL.set_figwidth(10)
-#titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
-# figSL.suptitle(titlestring)
-figSL.tight_layout(pad=2)
 
 
+# figOD, axOD = plt.subplots(1,3)
+# # left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
+# # axinset = fig.add_axes([left, bottom, width, height])
+# rect = [0.2,0.2,0.7,0.7]
+# rect = [0.2,0.6,0.3,0.3]
+# # axinset0 = add_subplot_axes(axOD[0],[0,0.1,0.2,0.2])
+# # axinset1 = add_subplot_axes(axOD[1],[0,0,0.2,0.2])
+# # axinset2 = add_subplot_axes(axOD[2],[0.6,0.1,0.2,0.2])
+# # titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
+# # fig.suptitle(titlestring)
+# fig.tight_layout(pad=2.5)
+
+
+figmet, axmet = plt.subplots(2,2)
+
+
+figdiff, axdiff = plt.subplots(1,3)
 
 ############### EVENT LOOP STARTS ##############################
 for i, beta in enumerate(betalist): 
@@ -196,7 +209,7 @@ for i, beta in enumerate(betalist):
     DDomega = Time2FreqB(DDtau,Nbig,beta)
     DODomega = Time2FreqB(DODtau,Nbig,beta)
 
-    
+
     skip = 10
     startT, stopT  = 0, Nbig//2 - 1
     llplotslice = slice(startT,stopT,skip)
@@ -204,6 +217,41 @@ for i, beta in enumerate(betalist):
     Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
     FreeDtau = DfreeImagtau(tau,r,beta)
 
+
+    ################## NON SUPERCONDUCTING STATE #################
+    try :
+        metfile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+        metfile += 'lamb' + str(lamb) + 'J' + str(J)
+        metfile += 'g' + str(g) + 'r' + str(r)
+        metfile = metfile.replace('.','_') 
+        metfile += '.npy'
+        metGDtau, metGDtau, metDDtau, metDODtau = np.load(os.path.join(path_to_metal, metfile))
+        metGDtau = -metGDtau
+    except FileNotFoundError: 
+        print('Filename : ', savefile)
+        print("INPUT FILE NOT FOUND") 
+        exit(1)
+    axmet[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau[llplotslice])),'p',c = col, label = lab)
+    # axmet[0,0].semilogy(tau[llplotslice]/beta, np.exp(mT*tau[llplotslice] + cT), label=f'Fit with slope {mT:.03f}')
+    axmet[0,0].set_xlabel(r'$\tau/\beta$')
+    axmet[0,0].set_ylabel(r'$-\Re G_{d}(\tau)$')
+    axmet[0,0].set_yscale('log')
+
+
+    axmet[0,1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau[llplotslice])),'p',c = col, label = lab)
+    axmet[0,1].set_xlabel(r'$\tau/\beta$')
+    axmet[0,1].set_ylabel(r'$-\Re G_{od}(\tau)$')
+    axmet[0,1].set_yscale('log')
+
+    axmet[1,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(metDDtau[llplotslice])),'p',c=col,label=lab)
+    axmet[1,0].set_xlabel(r'$\tau/\beta$')
+    axmet[1,0].set_ylabel(r'$g^2\,\Re{D_{d}(\nu_n)}$',labelpad = None)
+
+    axmet[1,1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metDODtau[llplotslice])),'p',c=col,label=lab)
+    axmet[1,1].set_xlabel(r'$\tau/\beta$')
+    axmet[1,1].set_ylabel(r'$g^2\,\Re{D_{od}(\nu_n)}$',labelpad = None)
+
+    #################### Superconducting state diagonals ###########
     ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),c=col,label=lab)
     ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c=col,ls='--')
     axinset0.plot(tau[llplotslice]/beta, np.real(GDtau[llplotslice]), c = col, label = lab)
@@ -244,8 +292,8 @@ for i, beta in enumerate(betalist):
     ax[2].set_ylabel(r'$|F_{d}(\tau)|$')
     ax[2].legend()
 
-    #fig.suptitle(r'$\beta$ = ', beta)
-    #plt.savefig('../../KoenraadEmails/Withx0_01constImagTime.pdf',bbox_inches='tight')
+    # #fig.suptitle(r'$\beta$ = ', beta)
+    # #plt.savefig('../../KoenraadEmails/Withx0_01constImagTime.pdf',bbox_inches='tight')
 
 
 
@@ -253,36 +301,85 @@ for i, beta in enumerate(betalist):
 
 
     
-    ###################### Log-Linear Plot ###############################
+   
+
+    ##### DIFFS ########
+    diffsG = np.abs(np.real(GDtau-Gtau))
+    if beta > 62:
+        fitslice0 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.4)))
+        m0,logc0 = np.polyfit(tau[fitslice0]/beta,np.log(diffsG[fitslice0]),1)
+        c0 = np.exp(logc0)
+        axdiff[0].semilogy(tau[llplotslice]/beta, c0*np.exp(m0*tau[llplotslice]/beta),c=col,label = f'fit with slope {m0/beta:.4}',ls='--')
+
+        metm0,metlogc0 = np.polyfit(tau[fitslice0]/beta,np.log(np.abs(np.real(metGDtau))[fitslice0]),1)
+        metc0 = np.exp(metlogc0)
+        axmet[0,0].semilogy(tau[llplotslice]/beta, metc0*np.exp(metm0*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm0/beta:.4}',ls='--')
+
+    # axdiff[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c=col,ls='--')
+    # axinset0.plot(tau[llplotslice]/beta, np.real(GDtau[llplotslice]), c = col, label = lab)
+    # axinset0.plot(tau[llplotslice]/beta, np.real(Gtau[llplotslice]), c = col, ls='--' )
+    # axinset0.plot(tau[llplotslice]/beta, np.real(Gconftau[llplotslice]), c = col, ls='--' )
+    axdiff[0].semilogy(tau[llplotslice]/beta, diffsG[llplotslice],c=col,label=lab)
+    # axdiff[0].set_ylim(-1,1)
+    axdiff[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    axdiff[0].set_ylabel(r'$|\Re{G_{d}(\tau)}|$')
+    axdiff[0].legend(framealpha = 0.0)
+
+    # axinset1.plot(tau[llplotslice]/beta, np.real(DDtau[llplotslice]-Dtau[llplotslice]), c=col, label = lab)
+    # axinset1.plot(tau[llplotslice]/beta, np.real(Dtau[llplotslice]), c=col, ls='--' )
+    # axinset1.plot(tau[llplotslice]/beta, np.real(Dconftau[llplotslice]), c=col, ls='--' )
+    # axdiff[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(DDtau[llplotslice])),c=col,label=lab)
+    diffsD = np.abs(np.real(DDtau-Dtau))
+    if beta > 62:
+        fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.2)),np.argmin(np.abs(tau/beta - 0.3)))
+        m1,logc1 = np.polyfit(tau[fitslice1]/beta,np.log(diffsD[fitslice1]),1)
+        c1 = np.exp(logc1)
+        axdiff[1].semilogy(tau[llplotslice]/beta, c1*np.exp(m1*tau[llplotslice]/beta),c=col,label=f'fit with slope {m1/beta:.4}',ls='--')
+
+        metm1,metlogc1 = np.polyfit(tau[fitslice1]/beta,np.log(np.abs(np.real(metDDtau))[fitslice1]),1)
+        metc1 = np.exp(metlogc1)
+        axmet[1,0].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm1/beta:.4}',ls='--')
+
+    axdiff[1].semilogy(tau[llplotslice]/beta, diffsD[llplotslice],c=col,label=lab)
+
+    # axinset[1].semilogy(tau/beta, np.real(Dconftau), c=col, ls='--' )
+    # axdiff[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
+    #axdiff[1].set_ylim(0,1)
+    axdiff[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    axdiff[1].set_ylabel(r'$|\Re{D_{d}(\tau)}|$')
+    axdiff[1].legend(framealpha=0.0)
+
+
+    # axdiff[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
+    # axdiff[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(FDtau[llplotslice]-Ftau[llplotslice])), c=col, label = lab)
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(FODtau[llplotslice])), ls='--', c=col)
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(Ftau[llplotslice])), ls='--', c=col)
+    diffsF = np.abs(FDtau-Ftau)
+    if beta > 62:
+        fitslice2 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.4)))
+        m2,logc2 = np.polyfit(tau[fitslice2]/beta,np.log(diffsF[fitslice2]),1)
+        c2 = np.exp(logc2)
+        axdiff[2].semilogy(tau[llplotslice]/beta, c2*np.exp(m2*tau[llplotslice]/beta),c=col,label=f'fit with slope {m2/beta:.4}',ls='--')
+
+    axdiff[2].semilogy(tau[llplotslice]/beta, np.abs(FDtau[llplotslice]-Ftau[llplotslice]),c=col,label=lab)
+    # axdiff[2].semilogy(tau[llplotslice]/beta, np.abs(Ftau[llplotslice]),c=col,ls='--')
+    #axdiff[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
+    #axdiff[2].set_ylim(-1,1)
+    axdiff[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    # axdiff[2].set_ylabel(r'$\Re{F(\tau)}$')
+    axdiff[2].set_ylabel(r'$|F_{d}(\tau)|$')
+    axdiff[2].legend(framealpha=0.0)
+
+    axmet[1,1].legend()
+    axmet[1,0].legend()
+    axmet[0,0].legend()
+    axmet[0,1].legend()
 
 
 
-    # startT, stopT  = 0, 5000
-
-    # fitsliceT = slice(startT+4500, startT + 4600)
-    # #fitslice = slice(start+25, start + 35)
-    # functoplotT = np.abs(np.real(GDtau))
-    # mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
-    # print(f'tau/beta at start of fit = {(tau[fitsliceT][0]/beta):.3f}')
-    # print(f'slope of fit = {mT:.03f}')
-    # # print('2 Delta  = ', 2*delta)
-
-    axSL[0,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GDtau[startT:stopT])),'p',c=col,label = lab)
-    # axSL[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), c=col,label=f'Fit with slope {mT:.03f}')
-    #axSL[0,0].set_ylim(1e-1,1e1)
-    axSL[0,0].set_xlabel(r'$\tau/\beta$')
-    axSL[0,0].set_ylabel(r'$-\Re G(\tau)$')
-    #axSL[0,0].set_aspect('equal', adjustable='box')
-    #axSL[0,0].axis('square')
-    axSL[0,0].legend()
-    axSL[0,0].set_yscale('log')
 
 
-    axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DDtau[startT:stopT])),'p',c=col,label=lab)
-    axSL[1,0].set_xlabel(r'$\tau/beta$')
-    axSL[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
-    #axSL[1,0].set_aspect('equal', adjustable='box')
-    axSL[1,0].legend()
 
 
 
