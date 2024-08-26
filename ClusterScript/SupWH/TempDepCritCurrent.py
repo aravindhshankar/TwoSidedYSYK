@@ -63,8 +63,9 @@ lamb = 0.05
 #J = 0.0
 J = 0
 
+man_exclude = np.array([10,22,24,27,30,31])
 # betalist = [25,42,54,80,99]
-betalist = ret_converged_betas(filename='NEWsupl05.out',ITERMAX=10000) #filename already the default one
+betalist = ret_converged_betas(filename='NEWsupl05.out',ITERMAX=10000,man_exclude = man_exclude) #filename already the default one
 # betalist = ret_converged_betas(filename='alpha0_1.out',ITERMAX=50000) 
 CritCurrlist = np.zeros_like(betalist, dtype=np.float64)
 # betalist = [25,50,80,190]
@@ -145,9 +146,11 @@ for i, beta in enumerate(betalist):
 
 
 # axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
-# ax.plot(1./betalist, CritCurrlist)
-ax.plot(betalist, CritCurrlist)
-ax.set_xlabel(r'$\beta$')
-# ax.set_xlabel(r'$T$')
+ax.plot(1./betalist, CritCurrlist, '.-')
+ax.axvline(1./62,ls='--',label ='Expected WH transition')
+ax.axvline(1./32,ls='--',label = 'Tc')
+# ax.plot(betalist, CritCurrlist,'.-')
+# ax.set_xlabel(r'$\beta$')
+ax.set_xlabel(r'$T$')
 ax.set_ylabel(r'$I_c$')
 plt.show()
