@@ -28,8 +28,11 @@ from ConformalAnalytical import *
 #import time
 
 
-DUMP = False
+DUMP = True
+PLOTTING = True
 print("Here")
+print("Here")
+print("Here") #Junk for clearance
 
 Nbig = int(2**14)
 err = 1e-12
@@ -57,14 +60,15 @@ Ftau = (1+1j)*np.ones(Nbig)
 for beta in betalooplist:
     loadfile = 'OnesideMET'
     loadfile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-    loadfile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-    loadfile = loadfile.replace('.','_') 
+    # loadfile += 'g' + str(g) + 'r' + str(r)  
+    loadfile += 'g' + str(g).replace('.','_') + 'r' + str(r)  
+    # loadfile = loadfile.replace('.','_') 
     loadfile += '.npy'
 
     try:
         Gtau,Dtau = np.load(os.path.join(path_to_loadfile,loadfile))
     except FileNotFoundError:
-        print("Filename: ", savefile)
+        print("Filename: ", loadfile)
         print("Input File not found!!! Exiting.......")
         exit(1)
 
@@ -86,74 +90,75 @@ for beta in betalooplist:
     #Gtau,Dtau = np.load('temp.npy')
     assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 
-        itern = 0
-        diff = err*1.1
-        x = 0.01
+    itern = 0
+    diff = err*1.1
+    x = 0.01
 
-        beta_step = 1 if (beta>130) else 1
+    beta_step = 1 if (beta>130) else 1
 
-        omega = ImagGridMaker(Nbig,beta,'fermion')
-        nu = ImagGridMaker(Nbig,beta,'boson')
-        tau = ImagGridMaker(Nbig,beta,'tau')
-        diff = 1.
-        iterni=0
-        while(diff>err and itern < ITERMAX):
-            itern+=1
-            iterni += 1 
-            diffold = 1.0*diff
-            
-            oldGtau = 1.0*Gtau
-            oldDtau = 1.0*Dtau
-            oldFtau = 1.0*Ftau
-            
-            if iterni == 1:
-                oldGomega = Time2FreqF(oldGtau,Nbig,beta)
-                oldDomega = Time2FreqB(oldDtau,Nbig,beta)
-                oldFomega = Time2FreqF(oldFtau,Nbig,beta)
-            else:
-                oldGomega = 1.0*Gomega
-                oldDomega = 1.0*Domega
-                oldFomega = 1.0*Fomega
-            
-            Sigmatau = 1.0 * kappa * (g**2) * Dtau * Gtau
-            #Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
-            Pitau = -2.0 * g**2 * (-1.* Gtau * Gtau[::-1] - np.conj(Ftau) * Ftau)#KMS G(-tau) = -G(beta-tau), me
-            Phitau = -1.0 * kappa * (g**2) * Dtau * Ftau
-            
-            Sigmaomega = Time2FreqF(Sigmatau,Nbig,beta)
-            Piomega =  Time2FreqB(Pitau,Nbig,beta)
-            Phiomega = Time2FreqF(Phitau,Nbig,beta)
-            
-            detGmat = (1j*omega + mu - Sigmaomega) * (1j*omega - mu + np.conj(Sigmaomega)) - (np.abs(Phiomega))**2
-            
-            Gomega = x*((1j*omega - mu +np.conj(Sigmaomega))/(detGmat)) + (1-x)*oldGomega
-            Fomega = x*((Phiomega)/(detGmat)) + (1-x)*oldFomega
-            Domega = x*(1./(nu**2 + r - Piomega)) + (1-x)*oldDomega
+    omega = ImagGridMaker(Nbig,beta,'fermion')
+    nu = ImagGridMaker(Nbig,beta,'boson')
+    tau = ImagGridMaker(Nbig,beta,'tau')
+    diff = 1.
+    iterni=0
+    while(diff>err and itern < ITERMAX):
+        itern+=1
+        iterni += 1 
+        diffold = 1.0*diff
+        
+        oldGtau = 1.0*Gtau
+        oldDtau = 1.0*Dtau
+        oldFtau = 1.0*Ftau
+        
+        if iterni == 1:
+            oldGomega = Time2FreqF(oldGtau,Nbig,beta)
+            oldDomega = Time2FreqB(oldDtau,Nbig,beta)
+            oldFomega = Time2FreqF(oldFtau,Nbig,beta)
+        else:
+            oldGomega = 1.0*Gomega
+            oldDomega = 1.0*Domega
+            oldFomega = 1.0*Fomega
+        
+        Sigmatau = 1.0 * kappa * (g**2) * Dtau * Gtau
+        #Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
+        Pitau = -2.0 * g**2 * (-1.* Gtau * Gtau[::-1] - np.conj(Ftau) * Ftau)#KMS G(-tau) = -G(beta-tau), me
+        Phitau = -1.0 * kappa * (g**2) * Dtau * Ftau
+        
+        Sigmaomega = Time2FreqF(Sigmatau,Nbig,beta)
+        Piomega =  Time2FreqB(Pitau,Nbig,beta)
+        Phiomega = Time2FreqF(Phitau,Nbig,beta)
+        
+        detGmat = (1j*omega + mu - Sigmaomega) * (1j*omega - mu + np.conj(Sigmaomega)) - (np.abs(Phiomega))**2
+        
+        Gomega = x*((1j*omega - mu +np.conj(Sigmaomega))/(detGmat)) + (1-x)*oldGomega
+        Fomega = x*((Phiomega)/(detGmat)) + (1-x)*oldFomega
+        Domega = x*(1./(nu**2 + r - Piomega)) + (1-x)*oldDomega
 
-            Gtau = Freq2TimeF(Gomega,Nbig,beta)
-            Dtau = Freq2TimeB(Domega,Nbig,beta)
-            Ftau = Freq2TimeF(Fomega,Nbig,beta)
+        Gtau = Freq2TimeF(Gomega,Nbig,beta)
+        Dtau = Freq2TimeB(Domega,Nbig,beta)
+        Ftau = Freq2TimeF(Fomega,Nbig,beta)
 
-            
-            if iterni>0:
-                # diffG = np.sqrt(np.sum((np.abs(Gtau-oldGtau))**2)) #changed
-                # diffD = np.sqrt(np.sum((np.abs(Dtau-oldDtau))**2))
-                diffG = np.sum((np.abs(Gtau-oldGtau))**2)#changed
-                diffD = np.sum((np.abs(Dtau-oldDtau))**2)
-                diffF = np.sum((np.abs(Ftau-oldFtau))**2)
+        
+        if iterni>0:
+            # diffG = np.sqrt(np.sum((np.abs(Gtau-oldGtau))**2)) #changed
+            # diffD = np.sqrt(np.sum((np.abs(Dtau-oldDtau))**2))
+            diffG = np.sum((np.abs(Gtau-oldGtau))**2)#changed
+            diffD = np.sum((np.abs(Dtau-oldDtau))**2)
+            diffF = np.sum((np.abs(Ftau-oldFtau))**2)
 
-                diff = 0.33*(diffG+diffD+diffF)
+            diff = 0.33*(diffG+diffD+diffF)
 
-        if DUMP == True:
-            savefile = 'OnesideSUP'
-            savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-            savefile += 'g' + str(g) + 'r' + str(r)
-            savefile = savefile.replace('.','_') 
-            savefile += '.npy'
-            np.save(os.path.join(path_to_dump, savefile), np.array([Gtau,Dtau,Ftau])) 
-        print("##### Finished beta = ", beta, "############")
-        print(f"F(tau = 0+) = {Ftau[0]:.4}")
-        print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n',flush=True)
+    if DUMP == True:
+        savefile = 'OnesideSUP'
+        savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+        savefile += 'g' + str(g) + 'r' + str(r)
+        savefile = savefile.replace('.','_') 
+        savefile += '.npy'
+        print(savefile) #Needed for junk clearance
+        np.save(os.path.join(path_to_dump, savefile), np.array([Gtau,Dtau,Ftau])) 
+    print("##### Finished beta = ", beta, "############")
+    print(f"F(tau = 0+) = {Ftau[0]:.4}")
+    print("end x = ", x, " , end diff = ", diff,' , end itern = ',itern, '\n',flush=True)
 
 
 ################## PLOTTING ######################
