@@ -25,7 +25,7 @@ def SupDav_rhotosigma(rhoG,rhoD,rhoF,M,t,g,beta,BMf,kappa=1,alpha=0.):
     argPhi = (ADt * aFt - AFt * np.conj(aDt)) * np.heaviside(t,0)
     Phi = 1j*(1.-alpha)*(g**2)*kappa* time2freq(argPhi,M,dt)
 
-    argPi = ((AGt * np.conj(aGt) - np.conj(AGt) * (aGt)) + (1-alpha)*(AFt * np.conj(aft) - np.conj(AFt) * (aft))) * np.heaviside(t,0)
+    argPi = ((AGt * np.conj(aGt) - np.conj(AGt) * (aGt)) + (1-alpha)*(AFt * np.conj(aFt) - np.conj(AFt) * (aFt))) * np.heaviside(t,0)
     Pi = 2j*(g**2)*kappa* time2freq(argPi,M,dt)
 
     return [Sigma,Pi,Phi]
@@ -73,7 +73,7 @@ def RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=1e-5,ITERMAX=150,
         rhoF = -1.0*np.imag(FRomega)
 
         #SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
-        SigmaOmega,PiOmega,Phiomega = SupDav_rhotosigma(rhoG,rhoD,rhoF,M,t,g,beta,BMf,kappa=1,delta=eta)
+        SigmaOmega,PiOmega,Phiomega = SupDav_rhotosigma(rhoG,rhoD,rhoF,M,t,g,beta,BMf,kappa=1,alpha=alpha)
         #SigmaOmega,PiOmega = newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
         if np.imag(SigmaOmega[M] > 0) :
             warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
@@ -95,7 +95,7 @@ def RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=1e-5,ITERMAX=150,
             flag = testingscripts.diff_checker(diffseries, tol = 1e-3, periods = 5)
         
         if verbose:
-            print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
+            print("itern = ",itern, " , diff = ", diff, " , x = ", x)
 
     INFO = (itern, diff)
     return (GRomega,DRomega,FRomega, INFO)

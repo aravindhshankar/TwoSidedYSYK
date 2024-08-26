@@ -395,7 +395,7 @@ for i, beta in enumerate(betalist):
         c2 = np.exp(logc2)
         axdiff[2].semilogy(tau[llplotslice]/beta, c2*np.exp(m2*tau[llplotslice]/beta),c=col,label=f'fit with slope {m2/beta:.4}',ls='--')
 
-    axdiff[2].semilogy(tau[llplotslice]/beta, np.abs(FDtau[llplotslice]-Ftau[llplotslice]),c=col,label=lab)
+    axdiff[2].semilogy(tau[llplotslice]/beta, np.abs(FDtau[llplotslice])-np.abs(Ftau[llplotslice]),c=col,label=lab)
     # axdiff[2].semilogy(tau[llplotslice]/beta, np.abs(Ftau[llplotslice]),c=col,ls='--')
     #axdiff[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
     #axdiff[2].set_ylim(-1,1)

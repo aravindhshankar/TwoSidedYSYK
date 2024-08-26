@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
 #import time
-from YSYK_iterator import RE_SUP_iterator
+from SUP_iterator import RE_SUP_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
@@ -61,11 +61,11 @@ FRomega = (DELTA)/((omega+1j*eta)**2 - DELTA**2)
 DRomega = 1/(-1.0*(omega + 1j*eta)**2 + r)
 grid = [M,omega,t]
 pars = [g,mu,r]
-for beta in betalooplist
+for beta in betalooplist:
     #beta_step = 0.01 if (beta<1) else 1
     if np.sum(np.abs(FRomega[M+1:M+10])) < 1e-2:
         FRomega = (DELTA)/((omega+1j*eta)**2 - DELTA**2)
-    GRomega, DRomega, FRomega, INFO = RE_YSYK_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False,diffcheck=False,alpha=alpha) 
+    GRomega, DRomega, FRomega, INFO = RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False,diffcheck=False,alpha=alpha) 
     itern, diff = INFO
     if DUMP == True :
         savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
@@ -74,9 +74,9 @@ for beta in betalooplist
         savefile = savefile.replace('.','_') 
         savefile +=  '.npy' 
         print(savefile) 
-        np.save(os.path.join(path_to_dump,savefile), np.array([GRomega,DRomega])) 
+        np.save(os.path.join(path_to_dump,savefile), np.array([GRomega,DRomega,FRomega])) 
+    print(f'End F[0] = {FRomega[M+1]}')
     print("##### Finished beta = ", beta," in ", itern, " iterations with diff = ", diff, " ############")
-    beta = beta + beta_step
 
 
 
