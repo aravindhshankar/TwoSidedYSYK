@@ -7,6 +7,11 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 
+path_to_dump = '../Dump/OnesideMET'
+if not os.path.exists(path_to_dump):
+    print(f'path to Dump {path_to_dump} does not exist, making it now ....')
+    os.makedirs(path_to_dump)
+
 from SYK_fft import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,13 +20,13 @@ from ConformalAnalytical import *
 #import time
 
 
-DUMP = False
-print("Here")
+DUMP = True
+PLOTTING = True
 
 Nbig = int(2**14)
-err = 1e-5
+err = 1e-12
 #err = 1e-2
-ITERMAX = 500
+ITERMAX = 15000
 
 global beta
 
@@ -31,16 +36,17 @@ mu = 0.0
 g = 0.5
 r = 1.
 
-target_beta = 10000
+# target_beta = 500
 
 # g = np.sqrt(10**3)
 # r = (10)**2
 
 kappa = 1.
-beta_step = 1
+# beta_step = 1
 
 num = 1.1 
-
+betalooplist = np.arange(1,501,1) #last beta is 500
+beta = betalooplist[0]
 
 omega = ImagGridMaker(Nbig,beta,'fermion')
 nu = ImagGridMaker(Nbig,beta,'boson')
@@ -64,7 +70,8 @@ Dtau = Dfreetau
 #Gtau,Dtau = np.load('temp.npy')
 assert len(Gtau) == Nbig, 'Improperly loaded starting guess'
 
-while(beta < target_beta):
+print('Event loop starting')
+for beta in betalooplist:
     # Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
     # Gfreebetaplus = Freq2TimeF(1./(1j*omega + mu),Nbig,beta-beta_step)
     # err  = 0.1*np.sum(np.abs(Gfreetau - Gfreebetaplus)**2)
@@ -73,9 +80,7 @@ while(beta < target_beta):
     diffG = 1.
     diffD = 1.
     x = 0.01
-    xG = 0.01
-    xD = 0.01
-    beta_step = 1 if (beta>130) else 1
+    # beta_step = 1 if (beta>130) else 1
 
     omega = ImagGridMaker(Nbig,beta,'fermion')
     nu = ImagGridMaker(Nbig,beta,'boson')
@@ -104,9 +109,6 @@ while(beta < target_beta):
         
         Sigmaomega = Time2FreqF(Sigmatau,Nbig,beta)
         Piomega =  Time2FreqB(Pitau,Nbig,beta)
-        # if itern < 15 : 
-        #     Piomega[Nbig//2] = 1.0*r - omegar2
-        #Piomega[Nbig//2] = 1.0*r - omegar2
         
         
         Gomega = x*(1./(1j*omega + mu - Sigmaomega)) + (1-x)*oldGomega
@@ -124,29 +126,27 @@ while(beta < target_beta):
             #diff = np.max([diffG,diffD])
             diff = 0.5*(diffG+diffD)
             diffG, diffD = diff, diff
-            
-            # if diffG<diffoldG and xG < 1./num:
-            #     xG *= num
-            # if diffD<diffoldD and xD < 1./num:
-            #     xD *= num
-            # if diffG>diffoldG and xG > num * err :
-            #     xG /= num
-            # if diffD>diffoldD and xD > num * err :
-            #     xD /= num
-
 
             #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD)
-    # if DUMP == True and beta % 10 == 0 :
-    #     savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-    #     savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-    #     np.save(savefile, np.array([Gtau,Dtau])) 
-    #     print(savefile)
+    if DUMP == True:
+        savefile = 'OnesideMET'
+        savefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+        savefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
+        np.save(os.path.join(path_to_dump,savefile), np.array([Gtau,Dtau])) 
+        # print(savefile)
     print("##### Finished beta = ", beta, "############")
-    print("end x = ", x, " , end diff = ", diffG,' , end itern = ',itern, '\n')
-    beta = beta + beta_step
+    print("end x = ", x, " , end diff = ", diffG,' , end itern = ',itern, flush=True)
+
+
+if PLOTTING == False:
+    print('finished without plotting.. exiting now....')
+    exit(0)
+
+
+
 
 ################## PLOTTING ######################
-np.save('beta10kN14g0_5r1x0_01.npy', np.array([Gtau,Dtau])) 
+# np.save('beta10kN14g0_5r1x0_01.npy', np.array([Gtau,Dtau])) 
 print(beta), print(tau[-1])
 Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)

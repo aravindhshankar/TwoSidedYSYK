@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from scipy.interpolate import Akima1DInterpolator, PchipInterpolator
 import time 
 from scipy.optimize import curve_fit
+from functools import partial
 
 
 
@@ -34,7 +35,7 @@ def laplace(t,f,s, INTEGRATOR = 'quad'):
 
 
 def manual():
-	linfitslice = slice(0,-1)
+	linfitslice = slice(-100,-1)
 	m,logc = np.polyfit(t[linfitslice],np.log(ft[linfitslice]),1)
 	c = np.exp(logc)
 	loglinfit = c * np.exp(m * t)
@@ -56,9 +57,8 @@ def manual():
 	ax.set_ylabel(r'$f(t)$')
 	ax.legend()
 
-
-	# def model(x, *alist,*blist):
-	# 	return np.array([np.sum(alist * np.exp(-1.0*blist*tval)) for tval in t])
+	# def model(x, alist, blist):
+	# 	return np.sum([np.sum(alist * np.exp(-1.0*blist*tval)) for tval in t])
 
 	def model(x, a1,a2,a3,b1,b2,b3):
 		return a1*np.exp(-b1*x)+a2*np.exp(-b2*x)+a3*np.exp(-b3*x)
