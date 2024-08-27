@@ -97,8 +97,8 @@ for axi in ax:
 	for axj in axi:
 		axj.tick_params(labelsize=7)
 
-GDinsetax = add_subplot_axes(ax[0,0], [0,0,0.2,0.2])
-DDinsetax = add_subplot_axes(ax[1,0], [0,0,0.2,0.2])
+# GDinsetax = add_subplot_axes(ax[0,0], [0,0,0.2,0.2])
+# DDinsetax = add_subplot_axes(ax[1,0], [0,0,0.2,0.2])
 
 figSL,axSL = plt.subplots(2,2)
 figSL.suptitle(titlestring)
@@ -269,10 +269,12 @@ for i, beta in enumerate(betalist):
 	fitsliceT = slice(startT+4500, startT + 4600)
 	functoplotT = np.abs(np.real(GDtau))
 	mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
-	print(f'tau/beta at start of fit = {(tau[fitsliceT][0]/beta):.3f}')
-	print(f'slope of fit = {mT:.03f}')
+	# print(f'tau/beta at start of fit = {(tau[fitsliceT][0]/beta):.3f}')
+	# print(f'slope of fit = {mT:.03f}')
 
-	axSL[0,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GDtau[startT:stopT])),'p',c = col, label = lab)
+	# llplotslice = slice(np.argmin(np.abs(tau/beta - 0.)),np.argmin(np.abs(tau/beta - 0.5)))
+	llplotslice = slice(0,Nbig//2,10)
+	axSL[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),'p',c = col, label = lab)
 	# axSL[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
 	axSL[0,0].set_xlabel(r'$\tau/\beta$')
 	axSL[0,0].set_ylabel(r'$-\Re G_{d}(\tau)$')
@@ -297,7 +299,7 @@ for i, beta in enumerate(betalist):
 	axSL[1,1].legend()
 
 
-fig.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
+# fig.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
 # plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
