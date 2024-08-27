@@ -7,31 +7,15 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 
-# if not os.path.exists('../Dump/WHYSYKImagDumpfiles'):
-#     print("Error - Path to Dump directory not found ")
-#     raise Exception("Error - Path to Dump directory not found ")
-# else:
-#     path_to_dump = '../Dump/WHYSYKImagDumpfiles'
-
 if not os.path.exists('../Dump/'):
 	print("Error - Path to Dump directory not found ")
 	raise Exception("Error - Path to Dump directory not found ")
 	exit(1)
 else:
-	# path_to_dump = '../Dump/WHYSYKImagDumpfiles/SCWH'
-	# path_to_dump = '../Dump/lamb_anneal_dumpfiles/'
-	# path_to_dump_lamb = '../Dump/xshift_lamb_anneal_dumpfiles/'
-	# path_to_dump_temp = '../Dump/temp_anneal_dumpfiles/'
-	# path_to_dump_temp = '../Dump/xshift_temp_anneal_dumpfiles/'
-	# path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
-	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
-	# path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
-	# path_to_dump_lamb = '../Dump/lamb_anneal_dumpfiles/'
+
 	path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
 	
-	# if not os.path.exists(path_to_dump_lamb):
-	# 	raise Exception('Generate Data first! Path to lamb dump not found')
-	# 	exit(1)
+
 	if not os.path.exists(path_to_dump_temp):
 		raise Exception('Generate Data first! Path to temp dump not found')
 		exit(1)
@@ -73,8 +57,7 @@ betaBH = 42
 betaWH = 80
 betaWH = 99
 betalist = [betaBH,betaWH]
-# betalist = [60,61,62,63,64,65,66,67,68,59,70]
-# betalist = range(10,90)
+
 mu = 0.0
 g = 0.5
 # g = 2.
@@ -97,12 +80,33 @@ for axi in ax:
 	for axj in axi:
 		axj.tick_params(labelsize=7)
 
-# GDinsetax = add_subplot_axes(ax[0,0], [0,0,0.2,0.2])
-# DDinsetax = add_subplot_axes(ax[1,0], [0,0,0.2,0.2])
+# GDinsetax.set_xlabel(r'$\tau/\beta$',labelpad = 0, fontsize=8)
+# GDinsetax.tick_params(axis='both', labelsize=4,pad=0.5)
+
 
 figSL,axSL = plt.subplots(2,2)
 figSL.suptitle(titlestring)
 figSL.tight_layout(pad=2)
+axSL[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+axSL[0,0].set_ylabel(r'$|\Re{G_{d}(\tau)}|$',labelpad = 0)
+
+axSL[0,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+axSL[0,1].set_ylabel(r'$|\Re{G_{od}(\tau)}|$',labelpad = 0)
+
+axSL[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+axSL[1,0].set_ylabel(r'$|\Re{D_{d}(\tau)}|$',labelpad = 0)
+
+axSL[1,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
+axSL[1,1].set_ylabel(r'$|\Re{D_{od}(\tau)}|$',labelpad = -20)
+
+GDinsetax = add_subplot_axes(axSL[0,0], [0.1,0.1,0.3,0.3])
+DDinsetax = add_subplot_axes(axSL[1,0], [0.05,0.09,0.25,0.25])
+GODinsetax = add_subplot_axes(axSL[0,1], [0.1,0.4,0.3,0.3])
+DODinsetax = add_subplot_axes(axSL[1,1], [0.1,0.3,0.25,0.25])
+
+for axi in axSL:
+	for axj in axi:
+		axj.tick_params(axis='both', labelsize=7,pad=0.5)
 
 
 figLL,axLL = plt.subplots(2,2)
@@ -112,7 +116,7 @@ figLL.tight_layout(pad=2)
 
 
 for i, beta in enumerate(betalist):
-	col = 'C'+str(i)
+	col = 'C'+str(i+1) #to have same color scheme as superconductor
 	lab = r'$\beta = $ ' + str(beta) + (' (BH)' if beta < 63 else ' (WH)' )
 	savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 	savefile += 'lamb' + str(lamb) + 'J' + str(J)
@@ -269,37 +273,59 @@ for i, beta in enumerate(betalist):
 	fitsliceT = slice(startT+4500, startT + 4600)
 	functoplotT = np.abs(np.real(GDtau))
 	mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
-	# print(f'tau/beta at start of fit = {(tau[fitsliceT][0]/beta):.3f}')
-	# print(f'slope of fit = {mT:.03f}')
+
 
 	# llplotslice = slice(np.argmin(np.abs(tau/beta - 0.)),np.argmin(np.abs(tau/beta - 0.5)))
 	llplotslice = slice(0,Nbig//2,10)
-	axSL[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),'p',c = col, label = lab)
+	axSL[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),c = col, label = lab)
+	axSL[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c = col, ls='--')
 	# axSL[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
-	axSL[0,0].set_xlabel(r'$\tau/\beta$')
-	axSL[0,0].set_ylabel(r'$-\Re G_{d}(\tau)$')
-	axSL[0,0].legend()
-	axSL[0,0].set_yscale('log')
+	axSL[0,0].legend(framealpha=0)
 
 
-	axSL[0,1].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GODtau[startT:stopT])),'p',c = col, label = lab)
-	axSL[0,1].set_xlabel(r'$\tau/\beta$')
-	axSL[0,1].set_ylabel(r'$-\Re G_{od}(\tau)$')
-	axSL[0,1].legend()
-	axSL[0,1].set_yscale('log')
 
-	axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DDtau[startT:stopT])),'p',c=col,label=lab)
-	axSL[1,0].set_xlabel(r'$\tau/\beta$')
-	axSL[1,0].set_ylabel(r'$g^2\,\Re{D_{d}(\nu_n)}$',labelpad = None)
-	axSL[1,0].legend()
+	axSL[0,1].semilogy(tau[startT:stopT]/beta, np.abs(np.real(GODtau[startT:stopT])),c = col, label = lab)
+	axSL[0,1].legend(framealpha=0)
 
-	axSL[1,1].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DODtau[startT:stopT])),'p',c=col,label=lab)
-	axSL[1,1].set_xlabel(r'$\tau/\beta$')
-	axSL[1,1].set_ylabel(r'$g^2\,\Re{D_{od}(\nu_n)}$',labelpad = None)
-	axSL[1,1].legend()
+	axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DDtau[startT:stopT])),c=col,label=lab)
+	axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(Dtau[startT:stopT])),c=col,ls='--')
+	axSL[1,0].legend(framealpha=0)
 
+	axSL[1,1].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DODtau[startT:stopT])),c=col,label=lab)
+	axSL[1,1].legend(framealpha=0)
+	axSL[1,1].tick_params(axis='both', labelsize=8,pad=0)
+
+
+	GDinsetax.plot(tau/beta, np.real(GDtau), c=col, ls = '-',linewidth=0.8)
+	GDinsetax.plot(tau/beta, np.real(Gtau), c=col, ls='--',linewidth=0.8)
+	GDinsetax.set_xlabel(r'$\tau/\beta$',labelpad = 0, fontsize=8)
+	GDinsetax.tick_params(axis='both', labelsize=4,pad=0.5)
+	# GDinsetax.set_ylabel(r'$|\Re{G_{d}(\tau)}|$')
+	# GDinsetax.legend()
+
+	GODinsetax.plot(tau/beta, np.real(GODtau), c = col, ls='-', linewidth=0.8)
+	GODinsetax.plot(tau/beta, np.zeros_like(GODtau), c= col, ls = '--', linewidth=0.8)
+	GODinsetax.set_xlabel(r'$\tau/\beta$',labelpad = 0, fontsize=8)
+	GODinsetax.tick_params(axis='both', labelsize=4,pad=0.5)
+	# GODinsetax.set_ylabel(r'$|\Re{G_{od}(\tau)}$|')
+	# GODinsetax.legend()
+
+	DDinsetax.plot(tau/beta, np.real(DDtau), c = col, ls='-', linewidth=0.8)
+	DDinsetax.plot(tau/beta, np.real(Dtau), c = col, ls= '--', linewidth=0.8)
+	DDinsetax.set_xlabel(r'$\tau/\beta$',labelpad = 0, fontsize=8)
+	DDinsetax.tick_params(axis='both', labelsize=4,pad=0.5)
+	# DDinsetax.set_ylabel(r'$|\Re{D_{d}(\tau)}|$')
+	# DDinsetax.legend()
+
+	DODinsetax.plot(tau/beta, np.real(DODtau), c = col, ls='-', linewidth=0.8)
+	DODinsetax.plot(tau/beta, np.zeros_like(DODtau), c = col, ls='--', linewidth=0.8)
+	DODinsetax.set_xlabel(r'$\tau/\beta$',labelpad = 0, fontsize=8)
+	DODinsetax.tick_params(axis='both', labelsize=4,pad=0.5)
+	# DODinsetax.set_ylabel(r'$|\Re{D_{od}(\tau)}|$')
+	# DODinsetax.legend()
 
 # fig.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
+figSL.savefig('INSETGreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
 # plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
