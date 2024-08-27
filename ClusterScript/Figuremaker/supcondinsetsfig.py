@@ -36,6 +36,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
 #import time
+from Insethelpers import add_subplot_axes
 
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
@@ -79,34 +80,6 @@ betalist = [25,42,99]
 # betalist = [2000,]
 
 kappa = 1.
-
-# def add_subplot_axes(ax,rect,axisbg='w'):
-def add_subplot_axes(ax,rect,facecolor='w'): # matplotlib 2.0+
-    fig = plt.gcf()
-    box = ax.get_position()
-    width = box.width
-    height = box.height
-    inax_position  = ax.transAxes.transform(rect[0:2])
-    transFigure = fig.transFigure.inverted()
-    infig_position = transFigure.transform(inax_position)    
-    x = infig_position[0]
-    y = infig_position[1]
-    width *= rect[2]
-    height *= rect[3]  # <= Typo was here
-    subax = fig.add_axes([x,y,width,height],facecolor=facecolor)  # matplotlib 2.0+
-    # subax = fig.add_axes([x,y,width,height],axisbg=axisbg)
-    x_labelsize = subax.get_xticklabels()[0].get_size()
-    y_labelsize = subax.get_yticklabels()[0].get_size()
-    x_labelsize *= rect[2]**0.5
-    y_labelsize *= rect[3]**0.5
-    subax.xaxis.set_tick_params(labelsize=x_labelsize)
-    subax.yaxis.set_tick_params(labelsize=y_labelsize)
-    return subax
-
-
-
-
-
 
 ############## CREATING FIGS ######################################
 fig, ax = plt.subplots(1,3)

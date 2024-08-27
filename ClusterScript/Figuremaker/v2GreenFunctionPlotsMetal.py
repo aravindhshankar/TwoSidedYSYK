@@ -48,6 +48,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
+from Insethelpers import add_subplot_axes
 #import time
 
 plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
@@ -56,9 +57,11 @@ plt.rcParams['figure.figsize'] = '8 ,7'
 plt.rcParams['lines.markersize'] = '6'
 plt.rcParams['lines.linewidth'] = '1.6'
 plt.rcParams['axes.labelsize'] = '16'
-plt.rcParams['axes.titlesize'] = '16'
+plt.rcParams['axes.titlesize'] = '18'
+plt.rcParams['figure.titlesize'] = '20'
 
 plt.rcParams['legend.fontsize'] = '12'
+# print(plt.rcParams.keys())
 
 Nbig = int(2**14)
 err = 1e-5
@@ -66,7 +69,9 @@ err = 1e-5
 global beta
 
 betaBH = 50
+betaBH = 42
 betaWH = 80
+betaWH = 99
 betalist = [betaBH,betaWH]
 # betalist = [60,61,62,63,64,65,66,67,68,59,70]
 # betalist = range(10,90)
@@ -79,7 +84,6 @@ kappa = 1.
 lamb = 0.05
 J = 0
 
-# path_to_dump = path_to_dump_lamb
 path_to_dump = path_to_dump_temp
 
 
@@ -88,18 +92,20 @@ titlestring = "Imaginary time Green's functions for "
 # titlestring +=  r', $g = $' + str(g)
 titlestring += r' $\lambda$ = ' + str(lamb) 
 fig.suptitle(titlestring)
-fig.tight_layout(pad=2)
+fig.tight_layout(pad=3)
+for axi in ax:
+	for axj in axi:
+		axj.tick_params(labelsize=7)
+
+GDinsetax = add_subplot_axes(ax[0,0], [0,0,0.2,0.2])
+DDinsetax = add_subplot_axes(ax[1,0], [0,0,0.2,0.2])
 
 figSL,axSL = plt.subplots(2,2)
-#fig.set_figwidth(10)
-#titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
 figSL.suptitle(titlestring)
 figSL.tight_layout(pad=2)
 
 
 figLL,axLL = plt.subplots(2,2)
-#fig.set_figwidth(10)
-#titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
 figLL.suptitle(titlestring)
 figLL.tight_layout(pad=2)
 
@@ -107,7 +113,7 @@ figLL.tight_layout(pad=2)
 
 for i, beta in enumerate(betalist):
 	col = 'C'+str(i)
-	lab = r'$\beta = $ ' + str(beta) + ' (2BH)' if beta < 63 else ' (WH)'
+	lab = r'$\beta = $ ' + str(beta) + (' (BH)' if beta < 63 else ' (WH)' )
 	savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 	savefile += 'lamb' + str(lamb) + 'J' + str(J)
 	savefile += 'g' + str(g) + 'r' + str(r)
@@ -119,7 +125,6 @@ for i, beta in enumerate(betalist):
 	onesidefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
 
 	try :
-		#plotfile = os.path.join(path_to_dump, 'Nbig14beta100_0lamb0_05J0_05g0_5r1_0.npy')
 		plotfile = os.path.join(path_to_dump, savefile)
 		GDtau, GODtau, DDtau, DODtau = np.load(plotfile)
 		GODtau = -GODtau
@@ -127,7 +132,6 @@ for i, beta in enumerate(betalist):
 		print('Filename : ', savefile)
 		print("INPUT FILE NOT FOUND") 
 		exit(1)
-	print('savefile = ', savefile)
 
 	try :
 		Gtau,Dtau = np.load(os.path.join(path_to_oneside,onesidefile))
@@ -146,8 +150,6 @@ for i, beta in enumerate(betalist):
 	delta = 0.420374134464041
 	omegar2 = ret_omegar2(g,beta)
 
-	#Gtau = Gfreetau
-	#Dtau = Dfreetau
 
 
 	
@@ -167,37 +169,28 @@ for i, beta in enumerate(betalist):
 
 
 
-
-	ax[0,0].plot(tau/beta, np.real(GDtau), c='C'+str(i), ls = '-', label =   r'$\beta$ = ' + str(beta))
-	# ax[0,0].plot(tau/beta, np.real(Gconftau), c='C'+str(i), ls='--' )
-	ax[0,0].plot(tau/beta, np.real(Gtau), c='C'+str(i), ls='--' )
-	#ax[0,0].set_ylim(-1,1)
+	ax[0,0].plot(tau/beta, np.real(GDtau), c=col, ls = '-', label = lab)
+	ax[0,0].plot(tau/beta, np.real(Gtau), c=col, ls='--' )
 	ax[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 	ax[0,0].set_ylabel(r'$\Re{G_{d}(\tau)}$')
 	ax[0,0].legend()
 
-	ax[0,1].plot(tau/beta, np.real(GODtau), c='C'+str(i), ls='-',  label =  r'$\beta$ = ' + str(beta))
-	# ax[0,1].plot(tau/beta, np.imag(GODtau), label = 'numerics imag GODtau' + r'$\beta$ = ' + str(beta))
-	#ax[0,1].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
-	#ax[0,1].set_ylim(-1,1)
+	ax[0,1].plot(tau/beta, np.real(GODtau), c = col, ls='-',  label = lab)
+	ax[0,1].plot(tau/beta, np.zeros_like(GODtau), c= col, ls = '--')
+
 	ax[0,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 	ax[0,1].set_ylabel(r'$\Re{G_{od}(\tau)}$')
 	ax[0,1].legend()
 
-	ax[1,0].plot(tau/beta, np.real(DDtau), c='C'+str(i), ls='-', label =  r'$\beta$ = ' + str(beta))
-	ax[1,0].plot(tau/beta, np.real(Dtau), c='C'+str(i), ls= '--')
-	# ax[1,0].plot(tau/beta, np.real(Dconftau), c='C'+str(i), ls= '--')
-	# ax[1,0].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
-	#ax[1,0].set_ylim(0,1)
+	ax[1,0].plot(tau/beta, np.real(DDtau), c = col, ls='-', label = lab)
+	ax[1,0].plot(tau/beta, np.real(Dtau), c = col, ls= '--')
+
 	ax[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 	ax[1,0].set_ylabel(r'$\Re{D_{d}(\tau)}$')
 	ax[1,0].legend()
 
-	ax[1,1].plot(tau/beta, np.real(DODtau), c='C'+str(i), ls='-', label = r'$\beta$ = ' + str(beta))
-	# ax[1,1].plot(tau/beta, np.imag(DODtau), label = 'numerics imag DODtau' + r'$\beta$ = ' + str(beta))
-	#ax[1,1].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
-	#ax[1,1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
-	#ax[1,1].set_ylim(0,1)
+	ax[1,1].plot(tau/beta, np.real(DODtau), c = col, ls='-', label = lab)
+	ax[1,1].plot(tau/beta, np.zeros_like(DODtau), c = col, ls='--')
 	ax[1,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 	ax[1,1].set_ylabel(r'$\Re{D_{od}(\tau)}$')
 	ax[1,1].legend()
@@ -304,6 +297,7 @@ for i, beta in enumerate(betalist):
 	axSL[1,1].legend()
 
 
+fig.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
 # plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
