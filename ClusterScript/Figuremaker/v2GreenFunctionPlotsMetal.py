@@ -325,7 +325,8 @@ for i, beta in enumerate(betalist):
 	# DODinsetax.legend()
 
 # fig.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
-figSL.savefig('INSETGreenFunctionPlotsMetal.pdf', bbox_inches='tight')
+
+# figSL.savefig('INSETGreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
 # plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 

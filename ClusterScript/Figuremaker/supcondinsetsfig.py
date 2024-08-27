@@ -40,15 +40,14 @@ from Insethelpers import add_subplot_axes
 
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
-plt.rcParams['figure.dpi'] = "120"
-# plt.rcParams['legend.fontsize'] = '14'
-plt.rcParams['legend.fontsize'] = '11'
+# plt.rcParams['figure.dpi'] = "120"
+# # plt.rcParams['legend.fontsize'] = '14'
+# plt.rcParams['legend.fontsize'] = '11'
+# plt.rcParams['lines.markersize'] = '2'
+# plt.rcParams['lines.linewidth'] = '1'
+# plt.rcParams['axes.labelsize'] = '13'
+
 plt.rcParams['figure.figsize'] = '8,7'
-plt.rcParams['lines.markersize'] = '2'
-plt.rcParams['lines.linewidth'] = '1'
-plt.rcParams['axes.labelsize'] = '13'
-
-
 
 DUMP = False
 PLOTTING = True
