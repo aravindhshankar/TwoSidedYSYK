@@ -35,14 +35,13 @@ plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.m
 # plt.rcParams['figure.dpi'] = "120"
 # # plt.rcParams['legend.fontsize'] = '14'
 plt.rcParams['legend.fontsize'] = '8'
-plt.rcParams['figure.titlesize'] = '8'
-plt.rcParams['axes.titlesize'] = '8'
-plt.rcParams['axes.labelsize'] = '8'
-plt.rcParams['figure.figsize'] = f'{3.25*2/3},{3.25*2/3}'
+plt.rcParams['figure.titlesize'] = '10'
+plt.rcParams['axes.titlesize'] = '10'
+plt.rcParams['axes.labelsize'] = '10'
+# plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
 # plt.rcParams['lines.markersize'] = '6'
-plt.rcParams['lines.linewidth'] = '1'
-plt.rcParams['lines.linewidth'] = '1'
-
+plt.rcParams['lines.linewidth'] = '0.5'
+plt.rcParams['axes.formatter.limits'] = '-2,2'
 
 
 DUMP = False
@@ -82,23 +81,25 @@ kappa = 1.
 
 
 
-
-figFE, axFEs = plt.subplots(nrows=1,ncols=2)
+figFE, axFEs = plt.subplots(nrows=1,ncols=2,constrained_layout = True)
+figFE.set_figwidth(3.25*2*2/3)
 axFE, axFE2 = axFEs
-axFE.set_aspect('equal',adjustable='box')
-axFE2.set_aspect('equal', adjustable='box')
+axFE.set_box_aspect(aspect=1)
+axFE2.set_box_aspect(aspect=1)
+#('equal',adjustable='box')
+# axFE2.set_aspect('equal', adjustable='box')
 # left, bottom, width, height = [0.15, 0.15, 0.1, 0.1]
 # axFE2 = figFE.add_axes([left, bottom, width, height])
 # figFE2, axFE2 = plt.subplots(1)
 # figFE2.tight_layout(pad=2)
 
-axFE.tick_params(axis='x',  pad=0)
-axFE2.tick_params(axis='x', pad=0)
+axFE.tick_params(axis='x',  pad=1)
+axFE2.tick_params(axis='x', pad=1)
 
 ############### EVENT LOOP STARTS ##############################
 for i, beta in enumerate(betalist): 
     col = 'C'+str(i)
-    lab = r'$\beta = $' + f'{beta} ('
+    lab = r'\small$\beta = $' + f'{beta} ('
     if beta > 32:
         lab += 'SC'
     if beta > 62: 
@@ -188,8 +189,9 @@ for i, beta in enumerate(betalist):
 
 
     # axFE.set_title(r'phase dependent part of the free energy')
-    axFE2.set_title(r'Phase dependent part of the free energy')
-    axFE.set_title(r'Josephson Current')
+    # axFE2.set_title(r'Phase dependent part of the free energy')
+    axFE2.set_title(r'$F(\theta)$', pad=2, loc='right')
+    axFE.set_title(r'Josephson Current', pad=-8, loc='right')
     axFE.set_xlabel(r'$\theta$')
     axFE2.set_xlabel(r'$\theta$')
     # axFE2.legend()
@@ -204,10 +206,28 @@ for i, beta in enumerate(betalist):
 
 
 handles, labels = axFE.get_legend_handles_labels()
-# figFE.legend(handles, labels, ncol=len(labels))
+lgd = figFE.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(1,-0.35),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=axFE.transAxes)
+# lgd = figFE.legend(handles, labels, ncol=len(labels)//2+1, loc=(0.5,0.5), bbox_to_anchor=(0.5,-1e-20),frameon=True,fancybox=True)
 
-figFE.tight_layout()
-# figFE.savefig('../Figuremaker/JosephsonCurrent.pdf',bbox_inches='tight')
+
+
+
+# lgd.set_in_layout(False)
+# # trigger a draw so that constrained layout is executed once
+# # before we turn it off when printing....
+# figFE.canvas.draw()
+# # we want the legend included in the bbox_inches='tight' calcs.
+# lgd.set_in_layout(True)
+# # we don't want the layout to change at this point.
+# figFE.set_layout_engine('none')
+
+for ax in [axFE, axFE2]:
+    ax.tick_params(axis='both', labelsize=7)
+    ax.tick_params(axis='y', pad=2)
+
+# figFE.tight_layout()
+print(figFE.get_size_inches())
+figFE.savefig('../Figuremaker/JosephsonCurrent.pdf',bbox_inches='tight')
 # figFE2.savefig('../Figuremaker/PhaseDepFreeEnergy.pdf',bbox_inches='tight')
 
 

@@ -31,10 +31,19 @@ from scipy.interpolate import Akima1DInterpolator,CubicSpline,PchipInterpolator
 #import time
 
 
-plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
-plt.rcParams['figure.dpi'] = "120"
+plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
+# plt.rcParams['figure.dpi'] = "120"
+# # plt.rcParams['legend.fontsize'] = '14'
+plt.rcParams['legend.fontsize'] = '8'
+plt.rcParams['figure.titlesize'] = '10'
+plt.rcParams['axes.titlesize'] = '10'
+plt.rcParams['axes.labelsize'] = '10'
+# plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
+# plt.rcParams['lines.markersize'] = '6'
+plt.rcParams['lines.linewidth'] = '0.5'
+plt.rcParams['axes.formatter.limits'] = '-2,2'
 
-plt.rcParams['figure.figsize'] = '8,7'
+# plt.rcParams['figure.figsize'] = '8,7'
 
 
 
@@ -64,14 +73,20 @@ J = 0
 
 man_exclude = np.array([10,22,24,27,30,31])
 # betalist = [25,42,54,80,99]
-betalist = ret_converged_betas(filename='NEWsupl05.out',ITERMAX=10000,man_exclude = man_exclude) #filename already the default one
+betalist = ret_converged_betas(filename='../SupWH/NEWsupl05.out',ITERMAX=10000,man_exclude = man_exclude) #filename already the default one
 # betalist = ret_converged_betas(filename='alpha0_1.out',ITERMAX=50000) 
 CritCurrlist = np.zeros_like(betalist, dtype=np.float64)
 # betalist = [25,50,80,190]
 # betalist = [2000,]
 
 kappa = 1.
-fig, ax = plt.subplots(1)
+fig, ax = plt.subplots(1,constrained_layout=True)
+fig.set_figwidth(3.25*1*2/3)
+ax.set_box_aspect(aspect=1)
+ax.tick_params(axis='both', labelsize=7)
+ax.tick_params(axis='y', pad=2)
+ax.tick_params(axis='x',  pad=1)
+ax.tick_params(axis='x', pad=1)
 
 thetalist = np.linspace(0,2*np.pi,100)
 for i, beta in enumerate(betalist): 
@@ -144,10 +159,10 @@ for i, beta in enumerate(betalist):
 
 
 
-# axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
+# ax.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
 ax.plot(1./betalist, CritCurrlist, '.-')
-ax.axvline(1./62,ls='--',c='C1',label ='WH transition in metallic state')
-ax.axvline(1./32,ls='--',c='C2',label = r'Superconducting $T_c$')
+ax.axvline(1./62,ls='--',c='C1',label =r'$T_{WH}$')
+ax.axvline(1./32,ls='--',c='C2',label = r'$T_c$')
 ax.plot(1./betalist, np.zeros_like(CritCurrlist), ls='--', c='gray')
 # ax.plot(betalist, CritCurrlist,'.-')
 # ax.set_xlabel(r'$\beta$')
@@ -164,13 +179,21 @@ print(Tlist[interslice], list[interslice])
 interpol = CubicSpline(x=Tlist[interslice],y=CritCurrlist[interslice],extrapolate=True)
 
 # ax.plot(Tlist[interslice], interpol(Tlist[interslice]),ls='--',c='gray')
-ax.plot(Tlist[predictslice], interpol(Tlist[predictslice]),ls='--',c='C3',label='Cubic spline extrapolant')
+ax.plot(Tlist[predictslice], interpol(Tlist[predictslice]),ls='--',c='C3',label='extrapolation')
 print(interpol(Tlist[predictslice]))
 ax.set_xlabel(r'$T$')
 ax.set_ylabel(r'$I_c$')
 ax.set_xlim(0,0.121)
 ax.set_ylim(0,)
-ax.set_title(r'Temperature dependence of the critical current')
-ax.legend(fontsize=16)
-fig.savefig('../Figuremaker/TempDepCritCurrent.pdf', bbox_inches='tight')
+ax.set_title(r'Critical current',pad=-8,loc='right')
+# ax.legend(fontsize=16)
+
+handles, labels = ax.get_legend_handles_labels()
+lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(0.5,-0.6),frameon=True,fancybox=True,borderaxespad=4, bbox_transform=ax.transAxes)
+
+
+# fig.tight_layout()
+
+print(fig.get_size_inches())
+fig.savefig('TempDepCritCurrent.pdf', bbox_inches='tight')
 plt.show()

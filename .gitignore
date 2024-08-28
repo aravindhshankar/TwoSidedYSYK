@@ -9,3 +9,4 @@
 *.pyc
 .DS_Store
 *.pyc
+.env/

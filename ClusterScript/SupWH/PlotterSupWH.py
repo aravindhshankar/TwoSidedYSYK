@@ -425,6 +425,7 @@ for i, beta in enumerate(betalist):
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 
 
+
 handles, labels = axFE.get_legend_handles_labels()
 # figFE.legend(handles, labels, ncol=len(labels))
 

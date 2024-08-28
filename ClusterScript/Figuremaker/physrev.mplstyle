@@ -77,10 +77,10 @@ legend.framealpha: 0
 legend.title_fontsize: 8
 
 ### Figure size
-figure.figsize: 3.25, 2.0
+#figure.figsize: 3.25, 2.0
 #figure.figsize: 8, 7
 
-figure.dpi : 120
+figure.dpi : 300
 figure.subplot.left: 0.125
 figure.subplot.bottom: 0.175
 figure.subplot.top: 0.95
@@ -96,8 +96,8 @@ font.serif: cmr10
 
 ### Saving figures
 path.simplify : True
-savefig.bbox : tight
-savefig.pad_inches : 0.1
+#savefig.bbox : tight
+#savefig.pad_inches : 0.1
 
 
 
