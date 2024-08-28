@@ -82,6 +82,7 @@ CritCurrlist = np.zeros_like(betalist, dtype=np.float64)
 kappa = 1.
 fig, ax = plt.subplots(1,constrained_layout=True)
 fig.set_figwidth(3.25*1*2/3)
+fig.tight_layout()
 ax.set_box_aspect(aspect=1)
 ax.tick_params(axis='both', labelsize=7)
 ax.tick_params(axis='y', pad=2)
@@ -189,7 +190,7 @@ ax.set_title(r'Critical current',pad=-8,loc='right')
 # ax.legend(fontsize=16)
 
 handles, labels = ax.get_legend_handles_labels()
-lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(0.5,-0.6),frameon=True,fancybox=True,borderaxespad=4, bbox_transform=ax.transAxes)
+lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(0.5,-0.6),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=ax.transAxes)
 
 
 # fig.tight_layout()
