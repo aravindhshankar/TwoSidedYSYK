@@ -353,9 +353,9 @@ for i, beta in enumerate(betalist):
 
 
 ###########SAVING###########################
-fig.savefig('SupCondLinear.pdf')
-figLL.savefig('SupCondLL.pdf')
-figSL.savefig('SupCondSL.pdf')
+# fig.savefig('SupCondLinear.pdf')
+# figLL.savefig('SupCondLL.pdf')
+# figSL.savefig('SupCondSL.pdf')
 
 plt.show()
 

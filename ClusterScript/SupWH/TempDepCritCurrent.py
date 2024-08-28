@@ -27,16 +27,15 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
 from collectconvergedbetas import ret_converged_betas
+from scipy.interpolate import Akima1DInterpolator,CubicSpline,PchipInterpolator
 #import time
 
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 plt.rcParams['figure.dpi'] = "120"
-# plt.rcParams['legend.fontsize'] = '14'
-plt.rcParams['legend.fontsize'] = '6'
+
 plt.rcParams['figure.figsize'] = '8,7'
-plt.rcParams['lines.markersize'] = '6'
-plt.rcParams['lines.linewidth'] = '1'
+
 
 
 
@@ -147,10 +146,31 @@ for i, beta in enumerate(betalist):
 
 # axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
 ax.plot(1./betalist, CritCurrlist, '.-')
-ax.axvline(1./62,ls='--',label ='Expected WH transition')
-ax.axvline(1./32,ls='--',label = 'Tc')
+ax.axvline(1./62,ls='--',c='C1',label ='WH transition in metallic state')
+ax.axvline(1./32,ls='--',c='C2',label = r'Superconducting $T_c$')
+ax.plot(1./betalist, np.zeros_like(CritCurrlist), ls='--', c='gray')
 # ax.plot(betalist, CritCurrlist,'.-')
 # ax.set_xlabel(r'$\beta$')
+
+stopidx = np.argmin(np.abs(betalist - 46))
+startidx = np.argmin(np.abs(betalist - 34))
+interslice = slice(stopidx,startidx,-1) #strictly increasing order
+predictslice = slice(stopidx, startidx-3, -1 )
+Tlist = 1./betalist
+print(Tlist[interslice], list[interslice])
+
+# interpol = Akima1DInterpolator(x=Tlist[interslice],y=CritCurrlist[interslice],method='makima',extrapolate=True)
+# interpol = PchipInterpolator(x=Tlist[interslice],y=CritCurrlist[interslice],extrapolate=True)
+interpol = CubicSpline(x=Tlist[interslice],y=CritCurrlist[interslice],extrapolate=True)
+
+# ax.plot(Tlist[interslice], interpol(Tlist[interslice]),ls='--',c='gray')
+ax.plot(Tlist[predictslice], interpol(Tlist[predictslice]),ls='--',c='C3',label='Cubic spline extrapolant')
+print(interpol(Tlist[predictslice]))
 ax.set_xlabel(r'$T$')
 ax.set_ylabel(r'$I_c$')
+ax.set_xlim(0,0.121)
+ax.set_ylim(0,)
+ax.set_title(r'Temperature dependence of the critical current')
+ax.legend(fontsize=16)
+fig.savefig('../Figuremaker/TempDepCritCurrent.pdf', bbox_inches='tight')
 plt.show()
