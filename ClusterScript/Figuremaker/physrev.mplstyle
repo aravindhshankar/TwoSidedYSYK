@@ -96,7 +96,8 @@ font.serif: cmr10
 
 ### Saving figures
 path.simplify : True
-#savefig.bbox : tight
+savefig.bbox : tight
+savefig.dpi : 300
 #savefig.pad_inches : 0.1
 
 
