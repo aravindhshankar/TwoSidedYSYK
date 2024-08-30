@@ -202,8 +202,8 @@ for i, beta in enumerate(betalist):
         metfile += 'g' + str(g) + 'r' + str(r)
         metfile = metfile.replace('.','_') 
         metfile += '.npy'
-        metGDtau, metGDtau, metDDtau, metDODtau = np.load(os.path.join(path_to_metal, metfile))
-        metGDtau = -metGDtau
+        metGDtau, metGODtau, metDDtau, metDODtau = np.load(os.path.join(path_to_metal, metfile))
+        metGDtau = -metGODtau
     except FileNotFoundError: 
         print('Filename : ', savefile)
         print("INPUT FILE NOT FOUND") 

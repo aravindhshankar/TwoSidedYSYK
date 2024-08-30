@@ -42,15 +42,15 @@ from Insethelpers import add_subplot_axes
 plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 # plt.rcParams['figure.dpi'] = "120"
 # # plt.rcParams['legend.fontsize'] = '14'
-plt.rcParams['legend.fontsize'] = '8'
-plt.rcParams['figure.titlesize'] = '10'
-plt.rcParams['axes.titlesize'] = '10'
-plt.rcParams['axes.labelsize'] = '10'
+plt.rcParams['legend.fontsize'] = '6'
+plt.rcParams['figure.titlesize'] = '8'
+plt.rcParams['axes.titlesize'] = '8'
+plt.rcParams['axes.labelsize'] = '8'
 # plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
 plt.rcParams['lines.markersize'] = '2'
 plt.rcParams['lines.linewidth'] = '0.5'
 plt.rcParams['axes.formatter.limits'] = '-2,2'
-
+# plt.tick_params(axis='both', labelsize=5)
 # plt.rcParams['figure.figsize'] = '8,7'
 
 DUMP = False
@@ -78,7 +78,7 @@ J = 0
 # betalist = [25,42,54,80,99]
 betalist = [25,42,99]
 # betalist = [25,42,54,73,80,99]
-# betalist = [20,25,31,42,54,73,80,84,99]
+# betalist = [20,25,31,42,54,73,80,99]
 # betalist = [25,50,80,190]
 # betalist = [2000,]
 
@@ -90,6 +90,33 @@ kappa = 1.
 
 figdiffG, axdiffG = plt.subplots(1,2)
 figdiffD, axdiffD = plt.subplots(1,2)
+# figdiffF, axdiffF = plt.subplots(1)
+figdiffG.set_figwidth(3.25)
+figdiffD.set_figwidth(3.25)
+# figdiffF.set_figwidth(3.25)
+figdiffG.tight_layout()
+# figdiffF.tight_layout()
+figdiffD.tight_layout()
+
+for axi in axdiffG:
+    axi.tick_params(axis='both', labelsize=5,pad=0.0)
+for axj in axdiffD:
+    axj.tick_params(axis='both', labelsize=5,pad=0.0)
+# axdiffF.tick_params(axis='both', labelsize=5,pad=0.0)
+axdiffD[0].set_xlabel(r'$\tau/\beta$',labelpad = -2)
+axdiffD[0].set_ylabel(r'$|\Delta D_d|$',labelpad=-2)
+
+axdiffD[1].set_xlabel(r'$\tau/\beta$',labelpad = -2)
+axdiffD[1].set_ylabel(r'$|\Re{D^{met}_d(\tau)}|$',labelpad=-5,)
+axdiffG[0].set_xlabel(r'$\tau/\beta$',labelpad = -3)
+axdiffG[0].set_ylabel(r'$|\Delta G_d|$',labelpad=-4)
+axdiffG[1].set_xlabel(r'$\tau/\beta$',labelpad = -3)
+axdiffG[1].set_ylabel(r'$|\Re{G^{met}_{d}(\tau)}|$',labelpad=-4)
+axdiffD[0].yaxis.set_label_coords(-0.1, 0.6)
+axdiffD[1].yaxis.set_label_coords(-0.1, 0.6)
+axdiffG[0].yaxis.set_label_coords(-0.1, 0.55)
+axdiffG[1].yaxis.set_label_coords(-0.1, 0.5)
+
 
 ############### EVENT LOOP STARTS ##############################
 for i, beta in enumerate(betalist): 
@@ -175,8 +202,8 @@ for i, beta in enumerate(betalist):
         metfile += 'g' + str(g) + 'r' + str(r)
         metfile = metfile.replace('.','_') 
         metfile += '.npy'
-        metGDtau, metGDtau, metDDtau, metDODtau = np.load(os.path.join(path_to_metal, metfile))
-        metGDtau = -metGDtau
+        metGDtau, metGODtau, metDDtau, metDODtau = np.load(os.path.join(path_to_metal, metfile))
+        metGODtau = -metGODtau
     except FileNotFoundError: 
         print('Filename : ', savefile)
         print("INPUT FILE NOT FOUND") 
@@ -209,6 +236,7 @@ for i, beta in enumerate(betalist):
     diffsG = np.abs(np.real(GDtau-Gtau))
     if beta > 62:
         fitslice0 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.4)))
+        fitslice0 = slice(np.argmin(np.abs(tau/beta - 0.2)),np.argmin(np.abs(tau/beta - 0.4)))
         m0,logc0 = np.polyfit(tau[fitslice0]/beta,np.log(diffsG[fitslice0]),1)
         c0 = np.exp(logc0)
         axdiffG[0].semilogy(tau[llplotslice]/beta, c0*np.exp(m0*tau[llplotslice]/beta),c=col,label = f'fit with slope {m0/beta:.4}',ls='--')
@@ -218,67 +246,66 @@ for i, beta in enumerate(betalist):
         axdiffG[1].semilogy(tau[llplotslice]/beta, metc0*np.exp(metm0*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm0/beta:.4}',ls='--')
 
     axdiffG[0].semilogy(tau[llplotslice]/beta, diffsG[llplotslice],c=col,label=lab)
-    axdiffG[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    axdiffG[0].set_ylabel(r'$|\Re{G_{d}(\tau)}|$')
-    axdiffG[0].legend(framealpha = 0.0)
+    # axdiffG[0].legend(framealpha = 0.0)
 
-    axdiffG[1].semilogy(tau[llplotslice]/beta, metGDtau[llplotslice],c=col,label=lab)
-    axdiffG[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    axdiffG[1].set_ylabel(r'$|\Re{G_{d}(\tau)}|$')
-    axdiffG[1].legend(framealpha = 0.0)
+    axdiffG[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau))[llplotslice],c=col,label=lab)
+    # axdiffG[1].legend(framealpha = 0.0)
 
     diffsD = np.abs(np.real(DDtau-Dtau))
+    # diffsD = np.abs(np.real(GODtau))
     if beta > 62:
         fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.2)),np.argmin(np.abs(tau/beta - 0.3)))
         fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.35)))
+        fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.4)))
+        # fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.1)),np.argmin(np.abs(tau/beta - 0.2)))
+        # fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.25)),np.argmin(np.abs(tau/beta - 0.35)))
+        fitslicemet1 = slice(np.argmin(np.abs(tau/beta - 0.1)),np.argmin(np.abs(tau/beta - 0.3)))
+        # fitslicemet1 = fitslice1
         m1,logc1 = np.polyfit(tau[fitslice1]/beta,np.log(diffsD[fitslice1]),1)
         c1 = np.exp(logc1)
         axdiffD[0].semilogy(tau[llplotslice]/beta, c1*np.exp(m1*tau[llplotslice]/beta),c=col,label=f'fit with slope {m1/beta:.4}',ls='--')
 
-        metm1,metlogc1 = np.polyfit(tau[fitslice1]/beta,np.log(np.abs(np.real(metDDtau))[fitslice1]),1)
+        # metm1,metlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(metGODtau))[fitslicemet1]),1)
+        metm1,metlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(metDDtau))[fitslicemet1]),1)
         metc1 = np.exp(metlogc1)
         axdiffD[1].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm1/beta:.4}',ls='--')
+        # metm1,metlogc1 = np.polyfit(tau[fitslice1]/beta,np.log(np.abs(np.real(metDDtau))[fitslice1]),1)
+        # metc1 = np.exp(metlogc1)
+        # axdiffD[1].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm1/beta:.4}',ls='--')
 
     axdiffD[0].semilogy(tau[llplotslice]/beta, diffsD[llplotslice],c=col,label=lab)
-    axdiffD[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    axdiffD[0].set_ylabel(r'$|\Delta D|}|$')
-    axdiffD[0].legend(framealpha=0.0)
+    # axdiffD[0].legend(framealpha=0.0)
 
-    axdiffD[1].semilogy(tau[llplotslice]/beta, metDDtau[llplotslice],c=col,label=lab)
-    axdiffD[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    axdiffD[1].set_ylabel(r'$|\Re{D^{\text{met}}_{d}(\tau)}|$')
-    axdiffD[1].legend(framealpha=0.0)
+    axdiffD[1].semilogy(tau[llplotslice]/beta, np.real(metDDtau)[llplotslice],c=col,label=lab)
+    # axdiffD[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGODtau))[llplotslice],c=col,label=lab)
+    # axdiffD[1].legend(framealpha=0.0)
 
 
 
-    # diffsF = np.abs(FDtau-Ftau)
-    # if beta > 62:
-    #     fitslice2 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.4)))
-    #     m2,logc2 = np.polyfit(tau[fitslice2]/beta,np.log(diffsF[fitslice2]),1)
-    #     c2 = np.exp(logc2)
-    #     axdiff[2].semilogy(tau[llplotslice]/beta, c2*np.exp(m2*tau[llplotslice]/beta),c=col,label=f'fit with slope {m2/beta:.4}',ls='--')
-
-    # axdiff[2].semilogy(tau[llplotslice]/beta, np.abs(FDtau[llplotslice])-np.abs(Ftau[llplotslice]),c=col,label=lab)
-    # # axdiff[2].semilogy(tau[llplotslice]/beta, np.abs(Ftau[llplotslice]),c=col,ls='--')
-    # #axdiff[2].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
-    # #axdiff[2].set_ylim(-1,1)
-    # axdiff[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    # # axdiff[2].set_ylabel(r'$\Re{F(\tau)}$')
-    # axdiff[2].set_ylabel(r'$|F_{d}(\tau)|$')
-    # axdiff[2].legend(framealpha=0.0)
+    # diffsF = np.abs(FDtau)-np.abs(Ftau)
+    # axdiffF.semilogy(tau[llplotslice]/beta, np.abs(np.abs(FDtau[llplotslice])-np.abs(Ftau[llplotslice])),c=col,label=lab)
+    # axdiffF.set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    # axdiffF.set_ylabel(r'$||F(tau)| -|F_{\mathrm{one side}}(\tau)||$')
+    # axdiffF.legend(framealpha=0.0)
 
 
 
+handles, labels = axdiffG[0].get_legend_handles_labels() + 
+lgd = figdiffG.legend(handles, labels, ncol=len(labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.15),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffG[0].transAxes)
+handles, labels = axdiffD[0].get_legend_handles_labels()
+lgd = figdiffD.legend(handles, labels, ncol=len(labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.15),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffD[0].transAxes)
+
+list(set(x).symmetric_difference(set(f)))
+
+figdiffG.savefig('diffG.pdf',bbox_inches='tight')
+figdiffD.savefig('diffD.pdf',bbox_inches='tight')
 
 
-
-# handles, labels = ax[0].get_legend_handles_labels()
-# lgd = fig.legend(handles, labels, ncol=len(labels), loc="lower center", bbox_to_anchor=(0.5,-0.25),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=ax[1].transAxes)
 # fig.suptitle(r"Superconducting Green's functions for $\lambda=0.05$")
 # fig.savefig('SupCondFigs.pdf', bbox_inches='tight')
 
 
 
-plt.show()
+# plt.show()
 
 
