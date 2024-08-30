@@ -239,11 +239,11 @@ for i, beta in enumerate(betalist):
         fitslice0 = slice(np.argmin(np.abs(tau/beta - 0.2)),np.argmin(np.abs(tau/beta - 0.4)))
         m0,logc0 = np.polyfit(tau[fitslice0]/beta,np.log(diffsG[fitslice0]),1)
         c0 = np.exp(logc0)
-        axdiffG[0].semilogy(tau[llplotslice]/beta, c0*np.exp(m0*tau[llplotslice]/beta),c=col,label = f'fit with slope {m0/beta:.4}',ls='--')
+        axdiffG[0].semilogy(tau[llplotslice]/beta, c0*np.exp(m0*tau[llplotslice]/beta),c='r',label = f'fit with slope {m0/beta:.4}',ls='--')
 
         metm0,metlogc0 = np.polyfit(tau[fitslice0]/beta,np.log(np.abs(np.real(metGDtau))[fitslice0]),1)
         metc0 = np.exp(metlogc0)
-        axdiffG[1].semilogy(tau[llplotslice]/beta, metc0*np.exp(metm0*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm0/beta:.4}',ls='--')
+        axdiffG[1].semilogy(tau[llplotslice]/beta, metc0*np.exp(metm0*tau[llplotslice]/beta),c='b',label = f'fit with slope {metm0/beta:.4}',ls='--')
 
     axdiffG[0].semilogy(tau[llplotslice]/beta, diffsG[llplotslice],c=col,label=lab)
     # axdiffG[0].legend(framealpha = 0.0)
@@ -263,15 +263,15 @@ for i, beta in enumerate(betalist):
         # fitslicemet1 = fitslice1
         m1,logc1 = np.polyfit(tau[fitslice1]/beta,np.log(diffsD[fitslice1]),1)
         c1 = np.exp(logc1)
-        axdiffD[0].semilogy(tau[llplotslice]/beta, c1*np.exp(m1*tau[llplotslice]/beta),c=col,label=f'fit with slope {m1/beta:.4}',ls='--')
 
         # metm1,metlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(metGODtau))[fitslicemet1]),1)
         metm1,metlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(metDDtau))[fitslicemet1]),1)
         metc1 = np.exp(metlogc1)
-        axdiffD[1].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm1/beta:.4}',ls='--')
         # metm1,metlogc1 = np.polyfit(tau[fitslice1]/beta,np.log(np.abs(np.real(metDDtau))[fitslice1]),1)
         # metc1 = np.exp(metlogc1)
         # axdiffD[1].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm1/beta:.4}',ls='--')
+        axdiffD[0].semilogy(tau[llplotslice]/beta, c1*np.exp(m1*tau[llplotslice]/beta),c='r',label=f'fit with slope {m1/beta:.4}',ls='--')
+        axdiffD[1].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c='b',label = f'fit with slope {metm1/beta:.4}',ls='--')
 
     axdiffD[0].semilogy(tau[llplotslice]/beta, diffsD[llplotslice],c=col,label=lab)
     # axdiffD[0].legend(framealpha=0.0)
@@ -290,12 +290,29 @@ for i, beta in enumerate(betalist):
 
 
 
-handles, labels = axdiffG[0].get_legend_handles_labels() + 
-lgd = figdiffG.legend(handles, labels, ncol=len(labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.15),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffG[0].transAxes)
-handles, labels = axdiffD[0].get_legend_handles_labels()
-lgd = figdiffD.legend(handles, labels, ncol=len(labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.15),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffD[0].transAxes)
+handles, labels = axdiffG[0].get_legend_handles_labels()
+handles1, labels1 = axdiffG[1].get_legend_handles_labels()
+joined_handles = handles.copy()
+joined_labels = labels.copy()
+for i,label in enumerate(labels1):
+    if label not in joined_labels:
+        joined_labels.append(label)
+        joined_handles.append(handles1[i])
 
-list(set(x).symmetric_difference(set(f)))
+lgd = figdiffG.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.15),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffG[0].transAxes)
+
+
+handles, labels = axdiffD[0].get_legend_handles_labels()
+handles1, labels1 = axdiffD[1].get_legend_handles_labels()
+joined_handles = handles.copy()
+joined_labels = labels.copy()
+for i,label in enumerate(labels1):
+    if label not in joined_labels:
+        joined_labels.append(label)
+        joined_handles.append(handles1[i])
+lgd = figdiffD.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.17),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffD[0].transAxes)
+
+# list(set(x).symmetric_difference(set(f)))
 
 figdiffG.savefig('diffG.pdf',bbox_inches='tight')
 figdiffD.savefig('diffD.pdf',bbox_inches='tight')
