@@ -39,15 +39,19 @@ from ConformalAnalytical import *
 from Insethelpers import add_subplot_axes
 
 
-plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
+plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 # plt.rcParams['figure.dpi'] = "120"
 # # plt.rcParams['legend.fontsize'] = '14'
-# plt.rcParams['legend.fontsize'] = '11'
-# plt.rcParams['lines.markersize'] = '2'
-# plt.rcParams['lines.linewidth'] = '1'
-# plt.rcParams['axes.labelsize'] = '13'
+plt.rcParams['legend.fontsize'] = '8'
+plt.rcParams['figure.titlesize'] = '10'
+plt.rcParams['axes.titlesize'] = '10'
+plt.rcParams['axes.labelsize'] = '10'
+# plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
+plt.rcParams['lines.markersize'] = '2'
+plt.rcParams['lines.linewidth'] = '0.5'
+plt.rcParams['axes.formatter.limits'] = '-2,2'
 
-plt.rcParams['figure.figsize'] = '8,7'
+# plt.rcParams['figure.figsize'] = '8,7'
 
 DUMP = False
 PLOTTING = True
@@ -82,13 +86,14 @@ kappa = 1.
 
 ############## CREATING FIGS ######################################
 fig, ax = plt.subplots(1,3)
+fig.set_figwidth(3.25*2)
 # left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
 # axinset = fig.add_axes([left, bottom, width, height])
 rect = [0.2,0.2,0.7,0.7]
 rect = [0.2,0.6,0.3,0.3]
-axinset0 = add_subplot_axes(ax[0],[0,0.1,0.2,0.2])
-axinset1 = add_subplot_axes(ax[1],[0,0,0.2,0.2])
-axinset2 = add_subplot_axes(ax[2],[0.6,0.1,0.2,0.2])
+# axinset0 = add_subplot_axes(ax[0],[0.1,0.1,0.2,0.2])
+# axinset1 = add_subplot_axes(ax[1],[0,0,0.2,0.2])
+# axinset2 = add_subplot_axes(ax[2],[0.6,0.1,0.2,0.2])
 # titlestring = r'$\beta$ = ' + str(beta) + r', $\log_2{N}$ = ' + str(np.log2(Nbig)) + r', $g = $' + str(g)
 # fig.suptitle(titlestring)
 fig.tight_layout(pad=2.5)
@@ -203,40 +208,40 @@ for i, beta in enumerate(betalist):
         print('Filename : ', savefile)
         print("INPUT FILE NOT FOUND") 
         exit(1)
-    axmet[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau[llplotslice])),'p',c = col, label = lab)
+    axmet[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau[llplotslice])),'.',c = col, label = lab)
     # axmet[0,0].semilogy(tau[llplotslice]/beta, np.exp(mT*tau[llplotslice] + cT), label=f'Fit with slope {mT:.03f}')
     axmet[0,0].set_xlabel(r'$\tau/\beta$')
     axmet[0,0].set_ylabel(r'$-\Re G_{d}(\tau)$')
     axmet[0,0].set_yscale('log')
 
 
-    axmet[0,1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau[llplotslice])),'p',c = col, label = lab)
+    axmet[0,1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau[llplotslice])),'.',c = col, label = lab)
     axmet[0,1].set_xlabel(r'$\tau/\beta$')
     axmet[0,1].set_ylabel(r'$-\Re G_{od}(\tau)$')
     axmet[0,1].set_yscale('log')
 
-    axmet[1,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(metDDtau[llplotslice])),'p',c=col,label=lab)
+    axmet[1,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(metDDtau[llplotslice])),'.',c=col,label=lab)
     axmet[1,0].set_xlabel(r'$\tau/\beta$')
     axmet[1,0].set_ylabel(r'$g^2\,\Re{D_{d}(\nu_n)}$',labelpad = None)
 
-    axmet[1,1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metDODtau[llplotslice])),'p',c=col,label=lab)
+    axmet[1,1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metDODtau[llplotslice])),'.',c=col,label=lab)
     axmet[1,1].set_xlabel(r'$\tau/\beta$')
     axmet[1,1].set_ylabel(r'$g^2\,\Re{D_{od}(\nu_n)}$',labelpad = None)
 
     #################### Superconducting state diagonals ###########
     ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),c=col,label=lab)
     ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c=col,ls='--')
-    axinset0.plot(tau[llplotslice]/beta, np.real(GDtau[llplotslice]), c = col, label = lab)
-    axinset0.plot(tau[llplotslice]/beta, np.real(Gtau[llplotslice]), c = col, ls='--' )
+    # axinset0.plot(tau[llplotslice]/beta, np.real(GDtau[llplotslice]), c = col, label = lab)
+    # axinset0.plot(tau[llplotslice]/beta, np.real(Gtau[llplotslice]), c = col, ls='--' )
     # axinset0.plot(tau[llplotslice]/beta, np.real(Gconftau[llplotslice]), c = col, ls='--' )
     # ax[0].set_ylim(-1,1)
     ax[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
     ax[0].set_ylabel(r'$|\Re{G_{d}(\tau)}|$')
-    ax[0].legend(framealpha = 0.0)
+    # ax[0].legend(framealpha = 0.0)
 
 
-    axinset1.plot(tau[llplotslice]/beta, np.real(DDtau[llplotslice]), c=col, label = lab)
-    axinset1.plot(tau[llplotslice]/beta, np.real(Dtau[llplotslice]), c=col, ls='--' )
+    # axinset1.plot(tau[llplotslice]/beta, np.real(DDtau[llplotslice]), c=col, label = lab)
+    # axinset1.plot(tau[llplotslice]/beta, np.real(Dtau[llplotslice]), c=col, ls='--' )
     # axinset1.plot(tau[llplotslice]/beta, np.real(Dconftau[llplotslice]), c=col, ls='--' )
     ax[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(DDtau[llplotslice])),c=col,label=lab)
     ax[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(Dtau[llplotslice])),c=col,ls='--')
@@ -246,14 +251,14 @@ for i, beta in enumerate(betalist):
     #ax[1].set_ylim(0,1)
     ax[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
     ax[1].set_ylabel(r'$|\Re{D_{d}(\tau)}|$')
-    ax[1].legend()
+    # ax[1].legend()
 
 
     # ax[2].plot(tau/beta, np.real(FDtau), 'r--', label = 'numerics Real Ftau')
     # ax[2].plot(tau/beta, np.imag(FDtau), 'b', label = 'numerics Imag Ftau')
-    axinset2.plot(tau[llplotslice]/beta, (np.abs(FDtau[llplotslice])), c=col, label = lab)
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(FDtau[llplotslice])), c=col, label = lab)
     # axinset2.plot(tau[llplotslice]/beta, (np.abs(FODtau[llplotslice])), ls='--', c=col)
-    axinset2.plot(tau[llplotslice]/beta, (np.abs(Ftau[llplotslice])), ls='--', c=col)
+    # axinset2.plot(tau[llplotslice]/beta, (np.abs(Ftau[llplotslice])), ls='--', c=col)
     ax[2].semilogy(tau[llplotslice]/beta, np.abs(FDtau[llplotslice]),c=col,label=lab)
     ax[2].semilogy(tau[llplotslice]/beta, np.abs(Ftau[llplotslice]),c=col,ls='--')
 
@@ -262,7 +267,7 @@ for i, beta in enumerate(betalist):
     ax[2].set_xlabel(r'$\tau/\beta$',labelpad = 0)
     # ax[2].set_ylabel(r'$\Re{F(\tau)}$')
     ax[2].set_ylabel(r'$|F_{d}(\tau)|$')
-    ax[2].legend()
+    # ax[2].legend()
 
     # #fig.suptitle(r'$\beta$ = ', beta)
     # #plt.savefig('../../KoenraadEmails/Withx0_01constImagTime.pdf',bbox_inches='tight')
@@ -337,6 +342,7 @@ for i, beta in enumerate(betalist):
     diffsD = np.abs(np.real(DDtau-Dtau))
     if beta > 62:
         fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.2)),np.argmin(np.abs(tau/beta - 0.3)))
+        fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.35)))
         m1,logc1 = np.polyfit(tau[fitslice1]/beta,np.log(diffsD[fitslice1]),1)
         c1 = np.exp(logc1)
         axdiff[1].semilogy(tau[llplotslice]/beta, c1*np.exp(m1*tau[llplotslice]/beta),c=col,label=f'fit with slope {m1/beta:.4}',ls='--')
@@ -382,6 +388,14 @@ for i, beta in enumerate(betalist):
     axmet[0,1].legend()
 
 
+
+
+
+
+handles, labels = ax[0].get_legend_handles_labels()
+lgd = fig.legend(handles, labels, ncol=len(labels), loc="lower center", bbox_to_anchor=(0.5,-0.25),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=ax[1].transAxes)
+fig.suptitle(r"Superconducting Green's functions for $\lambda=0.05$")
+# fig.savefig('SupCondFigs.pdf', bbox_inches='tight')
 
 
 
