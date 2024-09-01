@@ -173,7 +173,9 @@ for i, beta in enumerate(betalist):
 
 
     thetalist = np.linspace(0,2*np.pi,100)
-    retFE = lambda theta : np.sum(-np.log(lamb**4 + ((SigmaDomega + SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega))*((SigmaDomega - SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) + np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega)) - lamb**2*(SigmaDomega**2 - 4j*SigmaDomega*omega - 2*omega**2 + np.conj(SigmaDomega)**2 + 4j*omega*np.real(SigmaDomega) - 4*np.real(SigmaODomega)**2) + 2*lamb*(lamb*(np.abs(SigmaODomega)**2 + np.abs(PhiDomega)**2)*np.cos(2*theta) + np.cos(theta)*(SigmaODomega*np.abs(SigmaODomega)**2 - 2j*SigmaODomega*omega*np.conj(SigmaDomega) - SigmaODomega*np.conj(SigmaDomega)**2 - SigmaDomega*(SigmaDomega - 2j*omega)*np.conj(SigmaODomega) + SigmaODomega*np.conj(SigmaODomega)**2 + 2*(lamb**2 + omega**2 + np.abs(PhiDomega)**2)*np.real(SigmaODomega)))))
+    #old with 4pi retFE = lambda theta : np.sum(-np.log(lamb**4 + ((SigmaDomega + SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega))*((SigmaDomega - SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) + np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega)) - lamb**2*(SigmaDomega**2 - 4j*SigmaDomega*omega - 2*omega**2 + np.conj(SigmaDomega)**2 + 4j*omega*np.real(SigmaDomega) - 4*np.real(SigmaODomega)**2) + 2*lamb*(lamb*(np.abs(SigmaODomega)**2 + np.abs(PhiDomega)**2)*np.cos(2*theta) + np.cos(theta)*(SigmaODomega*np.abs(SigmaODomega)**2 - 2j*SigmaODomega*omega*np.conj(SigmaDomega) - SigmaODomega*np.conj(SigmaDomega)**2 - SigmaDomega*(SigmaDomega - 2j*omega)*np.conj(SigmaODomega) + SigmaODomega*np.conj(SigmaODomega)**2 + 2*(lamb**2 + omega**2 + np.abs(PhiDomega)**2)*np.real(SigmaODomega)))))
+    retFE = lambda theta : np.sum(-np.log((lamb + SigmaDomega + SigmaODomega - 1j*omega)*(lamb - SigmaDomega + SigmaODomega + 1j*omega)*(lamb**2 + omega**2) + 2j*SigmaDomega*omega*np.abs(SigmaDomega)**2 + np.abs(SigmaDomega)**4 + 2*lamb*SigmaODomega*np.abs(SigmaODomega)**2 + np.abs(SigmaODomega)**4 + np.abs(PhiDomega)**4 - ((lamb + SigmaODomega)**2 + 2j*SigmaDomega*omega + omega**2)*np.conj(SigmaDomega)**2 + (lamb**2 + 2*lamb*SigmaODomega - (SigmaDomega - 1j*omega)**2)*np.conj(SigmaODomega)**2 + 2*np.conj(SigmaDomega)*(-1j*omega*((lamb + SigmaODomega)**2 + 2j*SigmaDomega*omega + omega**2) + SigmaDomega*PhiDomega*np.conj(PhiDomega)) + 2*np.conj(SigmaODomega)*(lamb*(lamb**2 + 2*lamb*SigmaODomega - (SigmaDomega - 1j*omega)**2) + SigmaODomega*PhiDomega*np.conj(PhiDomega)*np.cos(2*theta)) + 2*PhiDomega*np.conj(PhiDomega)*(lamb*(lamb + SigmaODomega + np.conj(SigmaODomega))*np.cos(2*theta) + omega*(2j*SigmaDomega + omega - 2j*np.real(SigmaDomega)))))
+
     normaln = -np.sum(np.log(omega**4))
     FEsumangle = np.array([retFE(theta) - normaln for theta in thetalist]) 
     FEsumangle -= np.mean(FEsumangle)
@@ -192,8 +194,8 @@ for i, beta in enumerate(betalist):
     # axFE2.set_title(r'Phase dependent part of the free energy')
     axFE2.set_title(r'$F(\theta)$', pad=2, loc='right')
     axFE.set_title(r'Josephson Current', pad=-8, loc='right')
-    axFE.set_xlabel(r'$\theta$')
-    axFE2.set_xlabel(r'$\theta$')
+    axFE.set_xlabel(r'$\theta$', labelpad=1)
+    axFE2.set_xlabel(r'$\theta$', labelpad=1)
     # axFE2.legend()
     axFE.xaxis.set_major_locator(MultiplePi(2).locator())
     axFE.xaxis.set_major_formatter(MultiplePi(2).formatter())
@@ -222,7 +224,7 @@ lgd = figFE.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", b
 # figFE.set_layout_engine('none')
 
 for ax in [axFE, axFE2]:
-    ax.tick_params(axis='both', labelsize=7)
+    ax.tick_params(axis='both', labelsize=8)
     ax.tick_params(axis='y', pad=2)
 
 # figFE.tight_layout()

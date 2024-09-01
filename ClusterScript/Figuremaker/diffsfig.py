@@ -90,19 +90,15 @@ kappa = 1.
 
 figdiffG, axdiffG = plt.subplots(1,2)
 figdiffD, axdiffD = plt.subplots(1,2)
-# figdiffF, axdiffF = plt.subplots(1)
 figdiffG.set_figwidth(3.25)
 figdiffD.set_figwidth(3.25)
-# figdiffF.set_figwidth(3.25)
 figdiffG.tight_layout()
-# figdiffF.tight_layout()
 figdiffD.tight_layout()
 
 for axi in axdiffG:
     axi.tick_params(axis='both', labelsize=5,pad=0.0)
 for axj in axdiffD:
     axj.tick_params(axis='both', labelsize=5,pad=0.0)
-# axdiffF.tick_params(axis='both', labelsize=5,pad=0.0)
 axdiffD[0].set_xlabel(r'$\tau/\beta$',labelpad = -2)
 axdiffD[0].set_ylabel(r'$|\Delta D_d|$',labelpad=-2)
 
@@ -117,6 +113,10 @@ axdiffD[1].yaxis.set_label_coords(-0.1, 0.6)
 axdiffG[0].yaxis.set_label_coords(-0.1, 0.55)
 axdiffG[1].yaxis.set_label_coords(-0.1, 0.5)
 
+figdiffF, axdiffF = plt.subplots(1)
+figdiffF.set_figwidth(3.25)
+figdiffF.tight_layout()
+axdiffF.tick_params(axis='both', labelsize=5,pad=0.0)
 
 ############### EVENT LOOP STARTS ##############################
 for i, beta in enumerate(betalist): 
@@ -282,11 +282,12 @@ for i, beta in enumerate(betalist):
 
 
 
-    # diffsF = np.abs(FDtau)-np.abs(Ftau)
-    # axdiffF.semilogy(tau[llplotslice]/beta, np.abs(np.abs(FDtau[llplotslice])-np.abs(Ftau[llplotslice])),c=col,label=lab)
-    # axdiffF.set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    # axdiffF.set_ylabel(r'$||F(tau)| -|F_{\mathrm{one side}}(\tau)||$')
-    # axdiffF.legend(framealpha=0.0)
+    diffsF = np.abs(np.abs(FDtau)-np.abs(Ftau))
+    Fratio = diffsF/np.abs(Ftau)
+    axdiffF.semilogy(tau[llplotslice]/beta, Fratio[llplotslice],c=col,label=lab)
+    axdiffF.set_xlabel(r'$\tau/\beta$',labelpad = 0)
+    axdiffF.set_ylabel(r'$||F(\tau)| -|F_{\mathrm{one side}}(\tau)||/|F_{\mathrm{one side}}(\tau)|$')
+    axdiffF.legend(framealpha=0.0)
 
 
 
@@ -314,15 +315,15 @@ lgd = figdiffD.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 
 
 # list(set(x).symmetric_difference(set(f)))
 
-figdiffG.savefig('diffG.pdf',bbox_inches='tight')
-figdiffD.savefig('diffD.pdf',bbox_inches='tight')
+# figdiffG.savefig('diffG.pdf',bbox_inches='tight')
+# figdiffD.savefig('diffD.pdf',bbox_inches='tight')
 
 
 # fig.suptitle(r"Superconducting Green's functions for $\lambda=0.05$")
 # fig.savefig('SupCondFigs.pdf', bbox_inches='tight')
 
+# figdiffF.savefig('ratioFs.pdf')
 
-
-# plt.show()
+plt.show()
 
 

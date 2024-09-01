@@ -147,7 +147,9 @@ for i, beta in enumerate(betalist):
     PhiODomega = Time2FreqF(PhiODtau,Nbig,beta)   
 
 
-    retFE = lambda theta : np.sum(-np.log(lamb**4 + ((SigmaDomega + SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega))*((SigmaDomega - SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) + np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega)) - lamb**2*(SigmaDomega**2 - 4j*SigmaDomega*omega - 2*omega**2 + np.conj(SigmaDomega)**2 + 4j*omega*np.real(SigmaDomega) - 4*np.real(SigmaODomega)**2) + 2*lamb*(lamb*(np.abs(SigmaODomega)**2 + np.abs(PhiDomega)**2)*np.cos(2*theta) + np.cos(theta)*(SigmaODomega*np.abs(SigmaODomega)**2 - 2j*SigmaODomega*omega*np.conj(SigmaDomega) - SigmaODomega*np.conj(SigmaDomega)**2 - SigmaDomega*(SigmaDomega - 2j*omega)*np.conj(SigmaODomega) + SigmaODomega*np.conj(SigmaODomega)**2 + 2*(lamb**2 + omega**2 + np.abs(PhiDomega)**2)*np.real(SigmaODomega)))))
+    # retFE = lambda theta : np.sum(-np.log(lamb**4 + ((SigmaDomega + SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega))*((SigmaDomega - SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) + np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega)) - lamb**2*(SigmaDomega**2 - 4j*SigmaDomega*omega - 2*omega**2 + np.conj(SigmaDomega)**2 + 4j*omega*np.real(SigmaDomega) - 4*np.real(SigmaODomega)**2) + 2*lamb*(lamb*(np.abs(SigmaODomega)**2 + np.abs(PhiDomega)**2)*np.cos(2*theta) + np.cos(theta)*(SigmaODomega*np.abs(SigmaODomega)**2 - 2j*SigmaODomega*omega*np.conj(SigmaDomega) - SigmaODomega*np.conj(SigmaDomega)**2 - SigmaDomega*(SigmaDomega - 2j*omega)*np.conj(SigmaODomega) + SigmaODomega*np.conj(SigmaODomega)**2 + 2*(lamb**2 + omega**2 + np.abs(PhiDomega)**2)*np.real(SigmaODomega)))))
+
+    retFE = lambda theta : np.sum(-np.log((lamb + SigmaDomega + SigmaODomega - 1j*omega)*(lamb - SigmaDomega + SigmaODomega + 1j*omega)*(lamb**2 + omega**2) + 2j*SigmaDomega*omega*np.abs(SigmaDomega)**2 + np.abs(SigmaDomega)**4 + 2*lamb*SigmaODomega*np.abs(SigmaODomega)**2 + np.abs(SigmaODomega)**4 + np.abs(PhiDomega)**4 - ((lamb + SigmaODomega)**2 + 2j*SigmaDomega*omega + omega**2)*np.conj(SigmaDomega)**2 + (lamb**2 + 2*lamb*SigmaODomega - (SigmaDomega - 1j*omega)**2)*np.conj(SigmaODomega)**2 + 2*np.conj(SigmaDomega)*(-1j*omega*((lamb + SigmaODomega)**2 + 2j*SigmaDomega*omega + omega**2) + SigmaDomega*PhiDomega*np.conj(PhiDomega)) + 2*np.conj(SigmaODomega)*(lamb*(lamb**2 + 2*lamb*SigmaODomega - (SigmaDomega - 1j*omega)**2) + SigmaODomega*PhiDomega*np.conj(PhiDomega)*np.cos(2*theta)) + 2*PhiDomega*np.conj(PhiDomega)*(lamb*(lamb + SigmaODomega + np.conj(SigmaODomega))*np.cos(2*theta) + omega*(2j*SigmaDomega + omega - 2j*np.real(SigmaDomega)))))
 
     normaln = -np.sum(np.log(omega**4))
     FEsumangle = np.array([retFE(theta) - normaln for theta in thetalist]) 
@@ -163,7 +165,8 @@ for i, beta in enumerate(betalist):
 # ax.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
 ax.plot(1./betalist, CritCurrlist, '.-')
 ax.axvline(1./62,ls='--',c='C1',label =r'$T_{WH}$')
-ax.axvline(1./32,ls='--',c='C2',label = r'$T_c$')
+# ax.axvline(1./32,ls='--',c='C2',label = r'$T_c$')
+ax.axvline(1./33,ls='--',c='C2',label = r'$T_c$')
 ax.plot(1./betalist, np.zeros_like(CritCurrlist), ls='--', c='gray')
 # ax.plot(betalist, CritCurrlist,'.-')
 # ax.set_xlabel(r'$\beta$')
@@ -180,21 +183,21 @@ print(Tlist[interslice], list[interslice])
 interpol = CubicSpline(x=Tlist[interslice],y=CritCurrlist[interslice],extrapolate=True)
 
 # ax.plot(Tlist[interslice], interpol(Tlist[interslice]),ls='--',c='gray')
-ax.plot(Tlist[predictslice], interpol(Tlist[predictslice]),ls='--',c='C3',label='extrapolation')
+# ax.plot(Tlist[predictslice], interpol(Tlist[predictslice]),ls='--',c='C3',label='extrapolation')
 print(interpol(Tlist[predictslice]))
 ax.set_xlabel(r'$T$')
 ax.set_ylabel(r'$I_c$')
 ax.set_xlim(0,0.121)
-ax.set_ylim(0,)
+ax.set_ylim(-1e-4,)
 ax.set_title(r'Critical current',pad=-8,loc='right')
 # ax.legend(fontsize=16)
 
 handles, labels = ax.get_legend_handles_labels()
-lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(0.5,-0.6),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=ax.transAxes)
+lgd = fig.legend(handles, labels, ncol=len(labels)//2 + 1 , loc="lower center", bbox_to_anchor=(0.5,-0.5),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=ax.transAxes)
 
 
 # fig.tight_layout()
 
 print(fig.get_size_inches())
-fig.savefig('TempDepCritCurrent.pdf', bbox_inches='tight')
+# fig.savefig('TempDepCritCurrent.pdf', bbox_inches='tight')
 plt.show()
