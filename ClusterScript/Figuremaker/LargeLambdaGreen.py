@@ -13,7 +13,8 @@ if not os.path.exists('../Dump/'):
 	exit(1)
 else:
 
-	path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
+	# path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
+	path_to_dump_temp = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'
 	
 
 	if not os.path.exists(path_to_dump_temp):
@@ -60,6 +61,7 @@ plt.rcParams['axes.formatter.limits'] = '-2,2'
 # print(plt.rcParams.keys())
 
 Nbig = int(2**14)
+Nbig = int(2**16)
 err = 1e-5
 
 global beta
@@ -69,6 +71,7 @@ betaBH = 42
 betaWH = 80
 betaWH = 99
 betalist = [betaBH,betaWH]
+betalist = [5000,]
 
 mu = 0.0
 g = 0.5
@@ -76,7 +79,7 @@ g = 0.5
 r = 1.
 
 kappa = 1.
-lamb = 0.05
+lamb = 0.9
 J = 0
 
 path_to_dump = path_to_dump_temp
@@ -118,11 +121,11 @@ axSL[1,1].set_ylabel(r'$|\Re{D_{od}(\tau)}|$',labelpad = 1)
 # DDinsetax = add_subplot_axes(axSL[1,0], [0.05,0.09,0.5,0.5])
 # DODinsetax = add_subplot_axes(axSL[1,1], [0.1,0.3,0.5,0.5])
 
-GDinsetax = add_subplot_axes(axSL[0,0], [-0.08,-0.064,0.4,0.4])
-GODinsetax = add_subplot_axes(axSL[0,1], [0.1,0.0,0.4,0.4])
-DDinsetax = add_subplot_axes(axSL[1,0], [0.5,0.35,0.4,0.4])
-DODinsetax = add_subplot_axes(axSL[1,1], [0.6,0.25,0.4,0.4])
-insetaxes = [GDinsetax,GODinsetax,DDinsetax,DODinsetax]
+# GDinsetax = add_subplot_axes(axSL[0,0], [-0.08,-0.064,0.4,0.4])
+# GODinsetax = add_subplot_axes(axSL[0,1], [0.1,0.0,0.4,0.4])
+# DDinsetax = add_subplot_axes(axSL[1,0], [0.5,0.35,0.4,0.4])
+# DODinsetax = add_subplot_axes(axSL[1,1], [0.6,0.25,0.4,0.4])
+# insetaxes = [GDinsetax,GODinsetax,DDinsetax,DODinsetax]
 
 
 
@@ -130,15 +133,15 @@ insetaxes = [GDinsetax,GODinsetax,DDinsetax,DODinsetax]
 # 	insetax.set_xlabel('')
 insetfontsize = 7
 insetlabelpad = -5
-GDinsetax.set_xlabel(r'$\omega_n$',fontsize=insetfontsize,labelpad=-5)
-GDinsetax.set_ylabel(r'$-\Im{G_d}(\omega_n)$',fontsize=insetfontsize,labelpad=-4)
-GODinsetax.set_xlabel(r'$\omega_n$',fontsize=insetfontsize,labelpad=-4)
-GODinsetax.set_ylabel(r'$G_{od}(\omega_n)$',fontsize=insetfontsize,labelpad=-3)
-DODinsetax.set_xlabel(r'$\nu_n$',fontsize=insetfontsize,labelpad=-3)
-DODinsetax.set_ylabel(r'$D_{od}(\nu_n)$',labelpad = 1,fontsize=insetfontsize)
-DDinsetax.set_xlabel(r'$\nu_n$',fontsize=insetfontsize,labelpad=-3)
-DDinsetax.set_ylabel(r'$\Re{D_d}(\nu_n)$',labelpad = -1,fontsize=insetfontsize)
-# DODinsetax.set_ylabel(r'$|\Re{D_{od}(\tau)}|$')
+# GDinsetax.set_xlabel(r'$\omega_n$',fontsize=insetfontsize,labelpad=-5)
+# GDinsetax.set_ylabel(r'$-\Im{G_d}(\omega_n)$',fontsize=insetfontsize,labelpad=-4)
+# GODinsetax.set_xlabel(r'$\omega_n$',fontsize=insetfontsize,labelpad=-4)
+# GODinsetax.set_ylabel(r'$G_{od}(\omega_n)$',fontsize=insetfontsize,labelpad=-3)
+# DODinsetax.set_xlabel(r'$\nu_n$',fontsize=insetfontsize,labelpad=-3)
+# DODinsetax.set_ylabel(r'$D_{od}(\nu_n)$',labelpad = 1,fontsize=insetfontsize)
+# DDinsetax.set_xlabel(r'$\nu_n$',fontsize=insetfontsize,labelpad=-3)
+# DDinsetax.set_ylabel(r'$\Re{D_d}(\nu_n)$',labelpad = -1,fontsize=insetfontsize)
+
 
 for axi in axSL:
 	for axj in axi:
@@ -160,23 +163,12 @@ for i, beta in enumerate(betalist):
 	savefile = savefile.replace('.','_') 
 	savefile += '.npy'
 
-	onesidefile = 'OnesideMET'
-	onesidefile += 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
-	onesidefile += 'g' + str(g).replace('.','_') + 'r' + str(r) + '.npy'  
-
 	try :
 		plotfile = os.path.join(path_to_dump, savefile)
 		GDtau, GODtau, DDtau, DODtau = np.load(plotfile)
 		GODtau = -GODtau
 	except FileNotFoundError: 
 		print('Filename : ', savefile)
-		print("INPUT FILE NOT FOUND") 
-		exit(1)
-
-	try :
-		Gtau,Dtau = np.load(os.path.join(path_to_oneside,onesidefile))
-	except FileNotFoundError:
-		print('Filename : ', onesidefile)
 		print("INPUT FILE NOT FOUND") 
 		exit(1)
 
@@ -199,8 +191,6 @@ for i, beta in enumerate(betalist):
 	GODomega = Time2FreqF(GODtau, Nbig, beta)
 	DDomega = Time2FreqB(DDtau, Nbig, beta)
 	DODomega = Time2FreqB(DODtau, Nbig, beta)
-	Gomega = Time2FreqF(Gtau, Nbig, beta)
-	Domega = Time2FreqB(Dtau, Nbig, beta)
 
 
 	# ################## PLOTTING ######################
@@ -257,17 +247,19 @@ for i, beta in enumerate(betalist):
 
 	
 
-	fitsliceT = slice(startT+4500, startT + 4600)
+	# fitsliceT = slice(startT+4500, startT + 4600)
+	fitsliceT = slice(np.argmin(np.abs(tau/beta - 0.005)), np.argmin(np.abs(tau/beta - 0.01)))
 	functoplotT = np.abs(np.real(GDtau))
 	mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
 
 
 	# llplotslice = slice(np.argmin(np.abs(tau/beta - 0.)),np.argmin(np.abs(tau/beta - 0.5)))
-	llplotslice = slice(0,Nbig//2,10)
+	# llplotslice = slice(0,Nbig//2,10)
+	llplotslice = slice(0,np.argmin(np.abs(tau/beta - 0.1)),1)
 	axSL[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),c = col, label = lab)
-	axSL[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c = col, ls='--')
-	# axSL[0,0].semilogy(tau[startT:stopT]/beta, np.exp(mT*tau[startT:stopT] + cT), label=f'Fit with slope {mT:.03f}')
-	# axSL[0,0].legend(framealpha=0)
+	# axSL[0,0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c = col, ls='--')
+	axSL[0,0].semilogy(tau[llplotslice]/beta, np.exp(mT*tau[llplotslice] + cT), label=f'Fit with slope {mT:.03f}')
+	axSL[0,0].legend(framealpha=0)
 
 
 
@@ -275,8 +267,11 @@ for i, beta in enumerate(betalist):
 	# axSL[0,1].legend(framealpha=0)
 
 	axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DDtau[startT:stopT])),c=col,label=lab)
-	axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(Dtau[startT:stopT])),c=col,ls='--')
-	# axSL[1,0].legend(framealpha=0)
+	functoplotT = np.abs(np.real(DDtau))
+	mT,cT = np.polyfit(np.abs(tau[fitsliceT]), np.log(functoplotT[fitsliceT]),1)
+	axSL[1,0].semilogy(tau[llplotslice]/beta, np.exp(mT*tau[llplotslice] + cT), label=f'Fit with slope {mT:.03f}')
+	# axSL[1,0].semilogy(tau[startT:stopT]/beta, np.abs(np.real(Dtau[startT:stopT])),c=col,ls='--')
+	axSL[1,0].legend(framealpha=0)
 
 	axSL[1,1].semilogy(tau[startT:stopT]/beta, np.abs(np.real(DODtau[startT:stopT])),c=col,label=lab)
 	# axSL[1,1].legend(framealpha=0)
@@ -288,24 +283,24 @@ for i, beta in enumerate(betalist):
 	# DDinsetax.tick_params(axis='both', labelsize=6,pad=0.5)
 	# DODinsetax.tick_params(axis='both', labelsize=6,pad=0.5)
 
-	GDinsetax.loglog(omega[start:stop]/(g**2), -np.imag(GDomega[start:stop])*(g**2),'.',c=col, label = lab)
+	# GDinsetax.loglog(omega[start:stop]/(g**2), -np.imag(GDomega[start:stop])*(g**2),'.',c=col, label = lab)
 	# GDinsetax.loglog(omega[start:stop]/(g**2), conf_fit_GD[start:stop],'k--',label = 'ES power law')
-	GDinsetax.loglog(omega[start:stop]/(g**2), -np.imag(Gomega[start:stop])*(g**2),':',c='b',linewidth=0.8)
+	# GDinsetax.loglog(omega[start:stop]/(g**2), -np.imag(Gomega[start:stop])*(g**2),':',c='b',linewidth=0.8)
 
 	# GDinsetax.loglog(omega[start:stop]/(g**2), np.exp(c)*np.abs(omega[start:stop]/(g**2))**m, label=f'Fit with slope {m:.03f}')
 
 
 	# axLL[0,1].loglog(omega[start:stop]/(g**2), np.imag(GODomega[start:stop])*(g**2),'p',label = 'numerics Im GODomega')
-	GODinsetax.loglog(omega[start:stop]/(g**2), np.abs(GODomega[start:stop])*(g**2),'.',c=col,label = lab)
+	# GODinsetax.loglog(omega[start:stop]/(g**2), np.abs(GODomega[start:stop])*(g**2),'.',c=col,label = lab)
 	# GODinsetax.legend()
 
-	DDinsetax.loglog(nu[startB:stopB]/(g**2), np.real(DDomega[startB:stopB])*(g**2),'.',c=col,label=lab)
-	DDinsetax.loglog(nu[startB:stopB]/(g**2), np.real(Domega[startB:stopB])*(g**2),':',c='b',linewidth=0.8)
+	# DDinsetax.loglog(nu[startB:stopB]/(g**2), np.real(DDomega[startB:stopB])*(g**2),'.',c=col,label=lab)
+	# DDinsetax.loglog(nu[startB:stopB]/(g**2), np.real(Domega[startB:stopB])*(g**2),':',c='b',linewidth=0.8)
 	# DDinsetax.loglog(nu[startB:stopB]/(g**2), conf_fit_DD,'k--',label = 'ES power law')
 	# DDinsetax.legend()
 
 
-	DODinsetax.loglog(nu[startB:stopB]/(g**2), -np.real(DODomega[startB:stopB])*(g**2),'.',c=col,label=lab)
+	# DODinsetax.loglog(nu[startB:stopB]/(g**2), -np.real(DODomega[startB:stopB])*(g**2),'.',c=col,label=lab)
 	# DODinsetax.legend()
 
 	
@@ -318,17 +313,16 @@ axSL[1,1].yaxis.set_minor_formatter(NullFormatter())
 # axSL[1,1].tick_params('y',labelsize=2)
 handles, labels = axSL[0,0].get_legend_handles_labels()
 lgd = figSL.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(1,-0.35),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=axSL[1,0].transAxes)
-for insetax in insetaxes:
-	insetax.set_xticks([],labels=[])
-	insetax.set_yticks([],labels=[])
+# for insetax in insetaxes:
+# 	insetax.set_xticks([],labels=[])
+# 	insetax.set_yticks([],labels=[])
 
-# figSL.savefig('LLINSETGreenFunctionPlotsMetal.pdf', bbox_inches='tight')
+# figSL.savefig('showlargelambda', bbox_inches='tight')
 # plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 plt.show()
-
 
 
 

@@ -47,8 +47,10 @@ plt.rcParams['axes.titlesize'] = '10'
 plt.rcParams['axes.labelsize'] = '10'
 # plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
 # plt.rcParams['lines.markersize'] = '6'
-plt.rcParams['lines.linewidth'] = '0.5'
-plt.rcParams['axes.formatter.limits'] = '-2,2'
+plt.rcParams['lines.linewidth'] = '0.8'
+plt.rcParams['lines.markersize'] = '1.2'
+# plt.rcParams['axes.formatter.limits'] = '-2,2'
+plt.rcParams['text.usetex'] = 'False'
 
 # plt.rcParams['figure.figsize'] = '8,7'
 
@@ -101,15 +103,30 @@ if calc == True:
 	# lambsavelist = [0.1,0.05,0.01,0.005,0.001]
 
 	lambsavelist = np.arange(0.009,0.002 - 1e-10,-0.001)
+	lambsavelist = np.arange(0.6,0.5 - 1e-10,-0.001)
+	lambsavelist = np.arange(1.,0.5 - 1e-10,-0.005)
+	# lambsavelist = np.arange(0.99,0.01 - 1e-10,-0.001)
 	# lambsavelist = np.arange(0.006,0.001 - 1e-10,-0.001)
 	# lambsavelist = np.arange(0.035,0.005 - 1e-10,-0.001)
+
+	fig,ax = plt.subplots(1)
+	fig.set_figwidth(3.25)
+	fig.tight_layout()
+	ax.set_box_aspect(aspect=1)
+	ax.tick_params(axis='both', labelsize=8)
+	ax.tick_params(axis='y', pad=1)
+	ax.tick_params(axis='x',  pad=1)
+	ax.tick_params(axis='x', pad=1)
+
 
 	omega = ImagGridMaker(Nbig,beta,'fermion')
 	nu = ImagGridMaker(Nbig,beta,'boson')
 	tau = ImagGridMaker(Nbig,beta,'tau')
 	# lambval = savelist[np.isclose(savelist,lamb)][0]
 	lambinset = 0.005
+	lambinset = 0.9
 	startT, stopT = 0, Nbig//2
+	startT, stopT = 0, np.argmin(np.abs(tau/beta - 0.01))
 
 	# for lambval in (lambval,):
 	for lambval in lambsavelist:
@@ -134,58 +151,62 @@ if calc == True:
 		# stop_idx = np.argmin(np.abs(xaxis-0.13))
 		# start_idx = np.argmin(np.abs(xaxis-0.1))
 		# stop_idx = np.argmin(np.abs(xaxis-0.2))
-		start_idx = np.argmin(np.abs(xaxis-0.3))
-		stop_idx = np.argmin(np.abs(xaxis-0.35))
+		# start_idx = np.argmin(np.abs(xaxis-0.3))
+		# stop_idx = np.argmin(np.abs(xaxis-0.35))
+		# start_idx = np.argmin(np.abs(xaxis-0.003))
+		# stop_idx = np.argmin(np.abs(xaxis-0.004))
+		start_idx = np.argmin(np.abs(xaxis-0.001))
+		stop_idx = np.argmin(np.abs(xaxis-0.002))
 		
 
 		fitslice = slice(start_idx,stop_idx)
 		print(f'lambval = {lambval:.3}, points in fit = {stop_idx-start_idx}, fitscale = {tau[start_idx]/beta:.2}, {tau[stop_idx]/beta :.2}')
 		slope = -np.mean(logder[startT:stopT][fitslice])
 		gaplist += [slope]
+		################## INSET #############################
+		if np.isclose(lambval,lambinset):
+			titlestring =  r' $\beta $ = ' + str(beta)
+			titlestring += r', $\lambda$ = ' + f'{lambval:.3}' 
+			# left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
+			left, bottom, width, height = [0.25, 0.52, 0.2, 0.2]
+			ax2 = fig.add_axes([left, bottom, width, height])
+			#plottable = np.abs(np.real(GDtau))
+			# startT, stopT = 0, Nbig//2
+			skip = 1
+			xaxis = tau[startT:stopT:skip]/beta
+			# yaxis = 
+			ax2.semilogy(xaxis, plottable[startT:stopT:skip],'.',label = 'numerics GDtau')
+			# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
+			ax2.set_xlabel(r'$\tau/\beta$',fontsize=6)
+			ax2.set_ylabel(r'$|G_d(\tau)|$',fontsize=6)
+			ax2.tick_params(which='major', length=1.5, width=0.4, direction="in", right=True, top=True,labelsize=6,pad=0.1)
+			ax2.tick_params(which='minor', length=1, width=0.2, direction="in", right=True, top=True,labelsize=6,pad=0.1)
+			ax2.set_title(titlestring,fontsize=6)
+			ax2.axvline(xaxis[start_idx], ls='--')
+			ax2.axvline(xaxis[stop_idx], ls='--')
+			# ax2.axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
+			# ax2.axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
+			#ax2.legend()
 
 
 
 
 	################## MAIN FIGURE ###################
 	slope_expect = 1./(2-2*delta)
-	fig,ax = plt.subplots(1,figsize=(8,7))
 	ax.loglog(lambsavelist,gaplist,'.')
 	m,c = np.polyfit(np.log(lambsavelist),np.log(gaplist),1)
 	# m,c = np.polyfit(np.log(lambsavelist[-10:-1]),np.log(gaplist[-10:-1]),1)
-	ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'calculated scaling from fit with slope {m:.4}')
-	ax.loglog([],[],ls='None',label = f'Expected scaling with slope {slope_expect:.4}')
+	ax.loglog(lambsavelist, np.exp(c) * lambsavelist**m, label = f'fit slope {m:.4}')
+	# ax.loglog([],[],ls='None',label = f'Expected scaling with slope {slope_expect:.4}')
 	print(f'dimensional analysis scaling = {slope_expect:.4}')
 	print(f'calculated scaling = {m:.4}')
 	ax.set_xlabel(r'$\lambda$')
-	ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
-	ax.set_title(r'Gap scaling calculated from $G_d$')
-	ax.legend(fontsize=14,loc='lower right') # add option fontsize = 12 for example
-	# ax.tick_params(which='major', length=7, width=0.8, direction="in", right=True, top=True); 
-	# ax.tick_params(which='minor', length=7, width=0.5, direction="in", right=True, top=True);
-
-
-
-	################## INSET #############################
-	titlestring =  r' $\beta $ = ' + str(beta)
-	titlestring += r' $\lambda$ = ' + f'{lambval:.3}' 
-	left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
-	ax2 = fig.add_axes([left, bottom, width, height])
-	#plottable = np.abs(np.real(GDtau))
-	startT, stopT = 0, Nbig//2
-	skip = 50
-	xaxis = tau[startT:stopT:skip]/beta
-	# yaxis = 
-	ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'numerics DDtau',markersize=2,c='C2')
-	# ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
-	ax2.set_xlabel(r'$\tau/\beta$')
-	ax2.set_ylabel(r'$|G_d(\tau)|$')
-	ax2.set_title(titlestring)
-	ax2.axvline(0.1, ls='--')
-	ax2.axvline(0.2, ls='--')
-	# ax2.axvline(1./(beta**2),ls='--', c='gray', label = 'Temperature')
-	# ax2.axvline(1./(lambval*beta), ls='--', c='green',label=r'$\lambda^{-1}$')
-	#ax2.legend()
-
+	ax.set_ylabel(r'$\gamma\left[\lambda\right]$',rotation=0)
+	ax.set_title(r'$G_d \sim e^{-\lambda \tau}$ at large $\lambda$',fontsize=12)
+	ax.legend(fontsize=10,loc='lower right') # add option fontsize = 12 for example
+	ax.tick_params(which='major', length=4, width=0.8, direction="in", right=True, top=True,labelsize=8,pad=0.4)
+	ax.tick_params(which='minor', length=4, width=0.5, direction="in", right=True, top=True,labelsize=8,pad=0.4)
+	ax.yaxis.set_label_coords(-0.06,1)
 
 
 	# logder = np.gradient(np.log(plottable))
@@ -201,8 +222,8 @@ if calc == True:
 	# print(slope)
 
 
-	# plt.savefig('GdGapscaling.pdf',bbox_inches='tight')
-	plt.show()
+	fig.savefig('LARGElambdalinearscaling.pdf',bbox_inches='tight')
+	# plt.show()
 
 
 
