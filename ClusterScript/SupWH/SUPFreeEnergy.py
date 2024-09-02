@@ -31,12 +31,18 @@ from collectconvergedbetas import ret_converged_betas
 
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
-plt.rcParams['figure.dpi'] = "120"
-# plt.rcParams['legend.fontsize'] = '14'
-plt.rcParams['legend.fontsize'] = '6'
-plt.rcParams['figure.figsize'] = '8,7'
-plt.rcParams['lines.markersize'] = '6'
-plt.rcParams['lines.linewidth'] = '1'
+# plt.rcParams['figure.dpi'] = "120"
+# # plt.rcParams['legend.fontsize'] = '14'
+plt.rcParams['legend.fontsize'] = '8'
+plt.rcParams['figure.titlesize'] = '10'
+plt.rcParams['axes.titlesize'] = '10'
+plt.rcParams['axes.labelsize'] = '10'
+# plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
+# plt.rcParams['lines.markersize'] = '6'
+plt.rcParams['lines.linewidth'] = '0.8'
+plt.rcParams['lines.markersize'] = '3'
+# plt.rcParams['axes.formatter.limits'] = '-2,2'
+# plt.rcParams['text.usetex'] = 'False'
 
 
 
@@ -74,6 +80,13 @@ FElist = np.zeros_like(betalist, dtype=np.float64)
 
 kappa = 1.
 fig, ax = plt.subplots(1)
+fig.set_figwidth(3.25*2/3)
+fig.tight_layout()
+ax.set_box_aspect(aspect=1)
+ax.tick_params(axis='both', labelsize=8)
+ax.tick_params(axis='y', pad=1)
+ax.tick_params(axis='x',  pad=1)
+ax.tick_params(axis='x', pad=1)
 
 thetalist = np.linspace(0,2*np.pi,100)
 for i, beta in enumerate(betalist): 
@@ -145,8 +158,9 @@ for i, beta in enumerate(betalist):
     detD0inv = (nu**2+ r)**2 
     Sf = retFE(0) + np.sum(np.log(omega**4)) - 4*np.log(2) #ret FE is - ln det 
     Sd = 0.5*kappa*np.sum(np.log(((nu**2+r-PiDomega)**2 - (J-PiODomega)**2)/(detD0inv)))
-    Slm = kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
-    Sb0 = 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
+    Slm = 2*kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
+    # Sb0 = 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
+    Sb0 = -(0.5*np.sqrt(r)*beta - np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
     Fe = np.real(Sf + Sd + Slm + Sb0)/beta
     FElist[i] = Fe
     
@@ -157,11 +171,18 @@ for i, beta in enumerate(betalist):
 
 # axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
 # ax.plot(1./betalist, CritCurrlist)
-ax.axvline(1./62,ls='--')
-ax.axvline(1./33,ls='--')
+ax.axvline(1./62,ls='--',label=r'$T_{WH}$',c='C4')
+# ax.axvline(1./33,ls='--',label=r'$T_{c}')
+ax.axvline(1./35,ls='--',label=r'$T_{c}$',c='C3')
 ax.plot(1./betalist, FElist,'.-')
-ax.set_xlabel(r'$\beta$')
-ax.set_xlabel(r'$T$')
-ax.set_ylabel(r'Free Energy')
+# ax.set_xlabel(r'$\beta$')
+ax.set_xlabel(r'$T$',labelpad=-1)
+ax.set_title(r'Free Energy',loc='right',pad=-2)
+ax.set_xscale('log')
+ax.xaxis.set_label_coords(0.5,-0.01)
+ax.set_xlim(1./108,0.21)
+ax.set_ylim(-1.22,-0.8)
 # ax.set_ylabel(r'$FE$')
+ax.legend(loc=(0.5,0.1))
+# fig.savefig('../Figuremaker/SUP_free_energy.pdf',bbox_inches='tight')
 plt.show()
