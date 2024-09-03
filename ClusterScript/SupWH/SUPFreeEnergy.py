@@ -214,5 +214,29 @@ ax2.plot(Tlist,gradTF,'.-')
 ax2.axvline(1./62,ls='--',label=r'$T_{WH}$',c='C4')
 ax2.axvline(1./35,ls='--',label=r'$T_{c}$',c='C3')
 ax2.legend(framealpha=0)
+
+
+
+# left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
+left, bottom, width, height = [0.50, 0.32, 0.3, 0.3]
+ax2inset = fig2.add_axes([left, bottom, width, height])
+
+ax2inset.set_box_aspect(aspect=1)
+ax2inset.plot(Tlist,gradTF,'.-')
+ax2inset.set_xlim(1./75,1./55)
+ax2inset.set_ylim(-0.1,0)
+ax2inset.set_xscale('log')
+# ax2inset.set_xlabel(r'$\tau/\beta$',fontsize=7)
+# ax2inset.set_ylabel(r'$|G_d(\tau)|$',fontsize=7)
+# ax2inset.yaxis.set_label_coords(-0.3,0.5)
+ax2inset.tick_params(which='major', length=1.5, width=0.4, direction="in", right=True, top=True,labelsize=0,pad=0.1)
+ax2inset.tick_params(which='minor', length=1, width=0.2, direction="in", right=True, top=True,labelsize=0,pad=0.1)
+# ax2inset.set_title(titlestring,fontsize=7)
+ax2inset.axvline(1./62,ls='--',label=r'$T_{WH}$',c='C4')
+ax2inset.axvline(1./35,ls='--',label=r'$T_{c}$',c='C3')
+ax2inset.text(1./72, -0.02, r'$T_{WH}$',fontsize=7,c='C4',alpha=1)
+
+
+
 fig2.savefig('partialTFSUP.pdf',bbox_inches='tight')
-plt.show()
+# plt.show()
