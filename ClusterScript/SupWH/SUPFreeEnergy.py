@@ -168,6 +168,8 @@ for i, beta in enumerate(betalist):
 
 
 
+Tlist = 1./betalist
+gradTF = np.gradient(FElist,Tlist)
 
 # axFE.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
 # ax.plot(1./betalist, CritCurrlist)
@@ -175,6 +177,7 @@ ax.axvline(1./62,ls='--',label=r'$T_{WH}$',c='C4')
 # ax.axvline(1./33,ls='--',label=r'$T_{c}')
 ax.axvline(1./35,ls='--',label=r'$T_{c}$',c='C3')
 ax.plot(1./betalist, FElist,'.-')
+# ax.plot(Tlist,gradTF,'.-')
 # ax.set_xlabel(r'$\beta$')
 ax.set_xlabel(r'$T$',labelpad=-1)
 ax.set_title(r'Free Energy',loc='right',pad=-2)
@@ -185,4 +188,31 @@ ax.set_ylim(-1.22,-0.8)
 # ax.set_ylabel(r'$FE$')
 ax.legend(loc=(0.5,0.1))
 # fig.savefig('../Figuremaker/SUP_free_energy.pdf',bbox_inches='tight')
+
+
+fig2,ax2 = plt.subplots(1)
+fig2.set_figwidth(3.25*2/3)
+fig2.tight_layout()
+ax2.set_box_aspect(aspect=1)
+ax2.tick_params(axis='both', labelsize=8)
+ax2.tick_params(axis='y', pad=1)
+ax2.tick_params(axis='x',  pad=1)
+ax2.tick_params(axis='x', pad=1)
+
+ax2.set_xlabel(r'$T$',labelpad=-1)
+ax2.set_title(r'$\partial_T F$',loc='right',pad=-1.8)
+ax2.set_xscale('log')
+ax2.xaxis.set_label_coords(0.5,-0.01)
+ax2.set_xlim(1./108,0.21)
+ax2.set_ylim(-1.49,0)
+
+gradTfrombeta = -1.0 * betalist**2 * np.gradient(FElist,betalist)
+
+
+ax2.plot(Tlist,gradTF,'.-')
+# ax2.plot(Tlist,gradTfrombeta,':')
+ax2.axvline(1./62,ls='--',label=r'$T_{WH}$',c='C4')
+ax2.axvline(1./35,ls='--',label=r'$T_{c}$',c='C3')
+ax2.legend(framealpha=0)
+fig2.savefig('partialTFSUP.pdf',bbox_inches='tight')
 plt.show()
