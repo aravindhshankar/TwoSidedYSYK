@@ -159,6 +159,7 @@ for i, beta in enumerate(betalist):
     Sf = retFE(0) + np.sum(np.log(omega**4)) - 4*np.log(2) #ret FE is - ln det 
     Sd = 0.5*kappa*np.sum(np.log(((nu**2+r-PiDomega)**2 - (J-PiODomega)**2)/(detD0inv)))
     Slm = 2*kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
+    # Slm = 1*kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
     # Sb0 = 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
     Sb0 = -(0.5*np.sqrt(r)*beta - np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
     Fe = np.real(Sf + Sd + Slm + Sb0)/beta
@@ -238,5 +239,33 @@ ax2inset.text(1./72, -0.02, r'$T_{WH}$',fontsize=7,c='C4',alpha=1)
 
 
 
-fig2.savefig('partialTFSUP.pdf',bbox_inches='tight')
-# plt.show()
+
+### second derivative
+secondder = np.gradient(gradTF,Tlist)
+fig3,ax3 = plt.subplots(1)
+fig3.set_figwidth(3.25*2/3)
+fig3.tight_layout()
+ax3.set_box_aspect(aspect=1)
+ax3.tick_params(axis='both', labelsize=8)
+ax3.tick_params(axis='y', pad=1)
+ax3.tick_params(axis='x',  pad=1)
+ax3.tick_params(axis='x', pad=1)
+
+ax3.set_xlabel(r'$T$',labelpad=-1)
+ax3.set_title(r'$\partial^2_T F$',loc='right',pad=-1.8)
+ax3.set_xscale('log')
+# ax3.xaxis.set_label_coords(0.5,-0.01)
+# ax3.set_xlim(1./108,0.21)
+# ax3.set_ylim(-1.49,0)
+
+# gradTfrombeta = -1.0 * betalist**2 * np.gradient(FElist,betalist)
+
+
+ax3.plot(Tlist,gradTF,'.-')
+# ax3.plot(Tlist,gradTfrombeta,':')
+ax3.axvline(1./62,ls='--',label=r'$T_{WH}$',c='C4')
+ax3.axvline(1./35,ls='--',label=r'$T_{c}$',c='C3')
+ax3.legend(framealpha=0)
+
+# fig3.savefig('partialTFSUP.pdf',bbox_inches='tight')
+plt.show()
