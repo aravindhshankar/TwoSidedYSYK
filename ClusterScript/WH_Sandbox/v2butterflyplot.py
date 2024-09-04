@@ -97,7 +97,7 @@ def calcFE_met(GFs, freq_grids, Nbig, beta, g=0.5, r=1., mu=0,lamb=0.,kappa=1.,J
 	detD0inv = (nu**2+ r)**2 
 	Sf = retFE(0) + np.sum(np.log(omega**4)) - 4*np.log(2) #ret FE is - ln det 
 	Sd = 0.5*kappa*np.sum(np.log(((nu**2+r-PiDomega)**2 - (J-PiODomega)**2)/(detD0inv)))
-	Slm = 2*kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
+	Slm = 1*kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
 	# Sb0 = 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
 	Sb0 = -(0.5*np.sqrt(r)*beta - np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
 	Fe = np.real(Sf + Sd + Slm + Sb0)/beta
@@ -111,7 +111,8 @@ PLOTTING = False
 Nbig = int(2**14)
 
 beta_start = 20
-beta_start = 2
+beta_start = 40
+# beta_start = 2
 # target_beta = 2001
 target_beta = 101
 beta = beta_start
@@ -216,11 +217,11 @@ ax.set_title(r'$\lambda$ = ' + str(lamb))
 # ax.set_xlim(0.005,0.03)
 # ax.set_ylim(-0.01,0.06)
 Tlist = 1./betasavelist
-# ax3 = ax.twinx()
-# # ax3.plot(1./betasavelist, -1.*(betasavelist**2) * np.gradient(FEstempfwd,betasavelist), '.-', c = 'k', label=r'Gradient $\frac{dF}{dT}$')
-# ax3.plot(Tlist, np.gradient(FEstempfwd,Tlist), '.-', c = 'k', label=r'Gradient $\frac{dF}{dT}$')
-# ax3.set_ylabel(r'$\frac{dF}{dT}$')
-# ax3.legend()
+ax3 = ax.twinx()
+ax3.plot(1./betasavelist, -1.*(betasavelist**2) * np.gradient(FEstempfwd,betasavelist), '.', c = 'k', label=r'Gradient $\frac{dF}{dT}$')
+ax3.plot(Tlist, np.gradient(FEstempfwd,Tlist), ':', c = 'k', label=r'Gradient $\frac{dF}{dT}$')
+ax3.set_ylabel(r'$\frac{dF}{dT}$')
+ax3.legend()
 
 
 fig.tight_layout()

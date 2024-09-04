@@ -29,7 +29,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from ConformalAnalytical import *
-from free_energy import free_energy_YSYKWH 
+from free_energy import free_energy_YSYKWH, calcFE_met
 from annealers import anneal_temp, anneal_lamb
 
 
@@ -88,8 +88,10 @@ for i, beta in enumerate(betasavelist):
 		GFslamb = np.load(plotfilelamb)
 		GFslamb[1] = -GFslamb[1]
 		impose_saddle = False
-		FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = impose_saddle)
-		FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = impose_saddle )
+		# FEslamb[i,j] = free_energy_YSYKWH(GFslamb, freq_grids, Nbig, beta, g, r, mu, kappa,lamb,J,impose_saddle = impose_saddle)
+		# FEstemp[i,j] = free_energy_YSYKWH(GFstemp, freq_grids, Nbig, beta, g, r, mu, kappa, lamb,J,impose_saddle = impose_saddle )
+		FEslamb[i,j] = calcFE_met(GFslamb, freq_grids, Nbig, beta, g=g, r=r, mu=mu, lamb=lamb, kappa=1,J=J)
+		FEstemp[i,j] = calcFE_met(GFstemp, freq_grids, Nbig, beta, g=g, r=r, mu=mu, lamb=lamb, kappa=1,J=J)
 
 
 residuals = FEstemp-FEslamb

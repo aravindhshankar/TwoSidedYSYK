@@ -135,7 +135,59 @@ def FUNCTIONALfree_energy_YSYKWH(GFs, freq_grids, Nbig, beta, g, r, mu, kappa, l
 
 
 
+def calcFE_met(GFs, freq_grids, Nbig, beta, g=0.5, r=1., mu=0,lamb=0.,kappa=1.,J=0,alpha=1):
+	GDtau, GODtau, DDtau, DODtau = GFs
+	FDtau = np.zeros_like(GDtau)
+	FODtau = np.zeros_like(GDtau)
+	omega,nu = freq_grids
 
+	np.testing.assert_almost_equal(omega[2] - omega[1], 2*np.pi/beta)
+	np.testing.assert_almost_equal(nu[2] - nu[1], 2*np.pi/beta)
+	np.testing.assert_equal(Nbig, len(DDtau))
+	assert len(GDtau) == Nbig, 'Improperly loaded starting guess'
+
+	GDomega = Time2FreqF(GDtau,Nbig,beta)
+	FDomega = Time2FreqF(FDtau,Nbig,beta)
+	GODomega = Time2FreqF(GODtau,Nbig,beta)
+	FODomega = Time2FreqF(FODtau,Nbig,beta)
+	DDomega = Time2FreqB(DDtau,Nbig,beta)
+	DODomega = Time2FreqB(DODtau,Nbig,beta)
+
+	SigmaDtau = 1.0 * kappa * (g**2) * DDtau * GDtau
+	#Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
+	PiDtau = -2.0 * g**2 * (-1.* GDtau * GDtau[::-1] - (1-alpha) * np.conj(FDtau) * FDtau)#KMS G(-tau) = -G(beta-tau), me
+	PhiDtau = -1.0 * (1-alpha) * kappa * (g**2) * DDtau * FDtau
+	SigmaODtau = 1.0 * kappa * (g**2) * DODtau * GODtau
+	#Pitau = 2.0 * g**2 * (Gtau * Gtau[::-1] - Ftau * Ftau[::-1]) #KMS G(-tau) = -G(beta-tau) , VIS
+	PiODtau = -2.0 * g**2 * (-1.* GODtau * GODtau[::-1] - (1-alpha) * np.conj(FODtau) * FODtau)#KMS G(-tau) = -G(beta-tau), me
+	PhiODtau = -1.0 * (1-alpha) * kappa * (g**2) * DODtau * FODtau
+
+	SigmaDomega = Time2FreqF(SigmaDtau,Nbig,beta)
+	PiDomega =  Time2FreqB(PiDtau,Nbig,beta)
+	PhiDomega = Time2FreqF(PhiDtau,Nbig,beta)
+	SigmaODomega = Time2FreqF(SigmaODtau,Nbig,beta)
+	PiODomega =  Time2FreqB(PiODtau,Nbig,beta)
+	PhiODomega = Time2FreqF(PhiODtau,Nbig,beta)   
+
+	PhiDomega = np.zeros_like(SigmaDomega)
+	PhiODomega = np.zeros_like(SigmaODomega)
+	retFE = lambda theta : np.sum(-np.log(lamb**4 + ((SigmaDomega + SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) - np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega))*((SigmaDomega - SigmaODomega - 1j*omega)*(-1j*omega - np.conj(SigmaDomega) + np.conj(SigmaODomega)) - PhiDomega*np.conj(PhiDomega)) - lamb**2*(SigmaDomega**2 - 4j*SigmaDomega*omega - 2*omega**2 + np.conj(SigmaDomega)**2 + 4j*omega*np.real(SigmaDomega) - 4*np.real(SigmaODomega)**2) + 2*lamb*(lamb*(np.abs(SigmaODomega)**2 + np.abs(PhiDomega)**2)*np.cos(2*theta) + np.cos(theta)*(SigmaODomega*np.abs(SigmaODomega)**2 - 2j*SigmaODomega*omega*np.conj(SigmaDomega) - SigmaODomega*np.conj(SigmaDomega)**2 - SigmaDomega*(SigmaDomega - 2j*omega)*np.conj(SigmaODomega) + SigmaODomega*np.conj(SigmaODomega)**2 + 2*(lamb**2 + omega**2 + np.abs(PhiDomega)**2)*np.real(SigmaODomega)))))
+
+	# normaln = -np.sum(np.log(omega**4))
+	# FEsumangle = np.array([retFE(theta) - normaln for theta in thetalist]) 
+	# FEsumangle -= np.mean(FEsumangle)
+	# FEsumangle = np.real(FEsumangle)
+	# JosephsonCurrent = (1./beta) * np.gradient(FEsumangle,thetalist)
+	# CritCurrent = np.max(JosephsonCurrent)
+	# CritCurrlist[i] = CritCurrent
+	detD0inv = (nu**2+ r)**2 
+	Sf = retFE(0) + np.sum(np.log(omega**4)) - 4*np.log(2) #ret FE is - ln det 
+	Sd = 0.5*kappa*np.sum(np.log(((nu**2+r-PiDomega)**2 - (J-PiODomega)**2)/(detD0inv)))
+	Slm = 2*kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
+	# Sb0 = 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
+	Sb0 = -(0.5*np.sqrt(r)*beta - np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
+	Fe = np.real(Sf + Sd + Slm + Sb0)/beta
+	return Fe
 
 
 
