@@ -162,6 +162,7 @@ for i, beta in enumerate(betalist):
     # Slm = 1*kappa*np.sum(DDomega*PiDomega + DODomega*PiODomega)
     # Sb0 = 0.5*(np.sqrt(r)*beta + 2*np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
     Sb0 = -(0.5*np.sqrt(r)*beta - np.log(1- np.exp(-1.0*beta*np.sqrt(r)))) #From Valentinis, Inkof, Schmalian
+    # Sb0 = 0
     Fe = np.real(Sf + Sd + Slm + Sb0)/beta
     FElist[i] = Fe
     
@@ -266,6 +267,8 @@ ax3.plot(Tlist,gradTF,'.-')
 ax3.axvline(1./62,ls='--',label=r'$T_{WH}$',c='C4')
 ax3.axvline(1./35,ls='--',label=r'$T_{c}$',c='C3')
 ax3.legend(framealpha=0)
+
+
 
 # fig3.savefig('partialTFSUP.pdf',bbox_inches='tight')
 plt.show()

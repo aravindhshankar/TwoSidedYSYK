@@ -11,11 +11,14 @@ from SYK_fft import *
 import h5py
 import matplotlib.pyplot as plt
 plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
-plt.rcParams['figure.dpi'] = "120"
-plt.rcParams['legend.fontsize'] = '14'
 plt.rcParams['legend.fontsize'] = '8'
-plt.rcParams['figure.figsize'] = '8,7'
-
+plt.rcParams['figure.titlesize'] = '10'
+plt.rcParams['axes.titlesize'] = '10'
+plt.rcParams['axes.labelsize'] = '10'
+# plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
+# plt.rcParams['lines.markersize'] = '6'
+plt.rcParams['lines.linewidth'] = '0.6'
+# plt.rcParams['axes.formatter.limits'] = '-2,2'
 
 path_to_outfile = '../Dump/RTWHDumpfiles0_01/'
 # path_to_outfile = './Dump/RTGapscaling/'
@@ -56,9 +59,10 @@ omega,t  = RealGridMaker(M,T)
 dt = t[2]-t[1]
 dw = omega[2] - omega[1]
 fig, ax = plt.subplots(2,2)
+fig.set_figwidth(3.25*2)
 titlestring = 'Spectral functions for  ' + r'$\lambda = $ ' + str(lamb) 
 # titlestring += ' g = ' + str(g)
-fig.suptitle(titlestring)
+fig.suptitle(titlestring,y=1)
 
 
 
@@ -95,6 +99,7 @@ for i, beta in enumerate(betalist):
 	loaded_BH = np.array(np.load(BHsavepath))
 
 	GDomega,GODomega,DDomega,DODomega = loaded
+	GODomega = -1.0 * GODomega
 	rhoGD = -np.imag(GDomega)
 	rhoGOD = -np.imag(GODomega)
 	rhoDD = -np.imag(DDomega)
@@ -125,7 +130,7 @@ for i, beta in enumerate(betalist):
 	# ax[0,0].set_xlim(-0.1,0.1)
 	ax[0,0].set_ylabel(r'$-\Im{G^R_{d}(\omega)}$')
 	ax[0,0].set_xlabel(r'$\omega$')
-	ax[0,0].legend()
+	# ax[0,0].legend()
 
 
 
@@ -135,7 +140,7 @@ for i, beta in enumerate(betalist):
 	# ax[0,1].set_xlim(-0.1,0.1)
 	ax[0,1].set_ylabel(r'$-\Im{G^R_{od}(\omega)}$')
 	ax[0,1].set_xlabel(r'$\omega$')
-	ax[0,1].legend()	
+	# ax[0,1].legend()	
 
 	ax[1,0].plot(omega, rhoDD, c = col, ls='-', label = lab)
 	ax[1,0].set_xlim(-1,1)
@@ -144,7 +149,7 @@ for i, beta in enumerate(betalist):
 	ax[1,0].set_ylabel(r'$-\Im{D^R_{d}(\omega)}$')
 	ax[1,0].set_xlabel(r'$\omega$')
 	# ax[1,0].plot(omega, BHrhoDD, c = col, ls = '--')
-	ax[1,0].legend()	
+	# ax[1,0].legend()	
 
 	ax[1,1].plot(omega, rhoDOD, c = col, ls='-', label = lab)
 	ax[1,1].set_xlim(-1,1)
@@ -152,9 +157,27 @@ for i, beta in enumerate(betalist):
 	ax[1,1].set_ylabel(r'$-\Im{D^R_{od}(\omega)}$')
 	ax[1,1].set_xlabel(r'$\omega$')
 	# ax[1,1].plot(omega, BHrhoDOD, c = col, ls = '--')
-	ax[1,1].legend()
+	# ax[1,1].legend()
+
+ax[1,1].yaxis.set_label_coords(-0.12,0.5)
+ax[0,1].yaxis.set_label_coords(-0.12,0.5)
 
 
+ax[0,0].xaxis.set_label_coords(0.5,-0.12)
+ax[1,0].xaxis.set_label_coords(0.5,-0.12)
+ax[0,1].xaxis.set_label_coords(0.5,-0.12)
+ax[1,1].xaxis.set_label_coords(0.5,-0.12)
 # plt.savefig('v2TempEvolnSpectralGapMetalWH.pdf', bbox_inches='tight')
+
+for i in [0,1]:
+	for j in [0,1]:
+		ax[i,j].tick_params(axis='both', labelsize=8)
+		ax[i,j].tick_params(axis='y', pad=2)
+
+handles, labels = ax[0,0].get_legend_handles_labels()
+lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(1,-0.5),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=ax[1,0].transAxes)
+
+
+
 plt.savefig('v3TempEvolnSpectralGapMetalWH.pdf', bbox_inches='tight')
 plt.show()

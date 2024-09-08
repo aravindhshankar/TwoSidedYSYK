@@ -229,7 +229,7 @@ for ax in [axFE, axFE2]:
 
 # figFE.tight_layout()
 print(figFE.get_size_inches())
-figFE.savefig('../Figuremaker/JosephsonCurrent.pdf',bbox_inches='tight')
+# figFE.savefig('../Figuremaker/JosephsonCurrent.pdf',bbox_inches='tight')
 # figFE2.savefig('../Figuremaker/PhaseDepFreeEnergy.pdf',bbox_inches='tight')
 
 

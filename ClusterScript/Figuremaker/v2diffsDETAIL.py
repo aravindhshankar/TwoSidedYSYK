@@ -42,7 +42,7 @@ from Insethelpers import add_subplot_axes
 plt.style.use('physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 # plt.rcParams['figure.dpi'] = "120"
 # # plt.rcParams['legend.fontsize'] = '14'
-plt.rcParams['legend.fontsize'] = '6'
+plt.rcParams['legend.fontsize'] = '8'
 plt.rcParams['figure.titlesize'] = '8'
 plt.rcParams['axes.titlesize'] = '8'
 plt.rcParams['axes.labelsize'] = '8'
@@ -90,31 +90,27 @@ figSUP, axSUP = plt.subplots(1,3, tight_layout=True)
 
 
 figdiffG, axdiffG = plt.subplots(1,2,tight_layout=True)
-figdiffD, axdiffD = plt.subplots(1,2,tight_layout=True)
-# figdiffG.set_figwidth(3.25)
+axdiffG[0].set_box_aspect(aspect=1)
+axdiffG[1].set_box_aspect(aspect=1)
+figdiffG.set_figwidth(3.25)
 # figdiffD.set_figwidth(3.25)
 figdiffG.tight_layout()
-figdiffD.tight_layout()
+
 
 for axi in axdiffG:
     axi.tick_params(axis='both', labelsize=5,pad=0.0)
-for axj in axdiffD:
-    axj.tick_params(axis='both', labelsize=5,pad=0.0)
-axdiffD[0].set_xlabel(r'$\tau/\beta$',labelpad = -2)
-axdiffD[0].set_ylabel(r'$|\Delta D_d|$',labelpad=-2)
 
-axdiffD[1].set_xlabel(r'$\tau/\beta$',labelpad = -2)
-axdiffD[1].set_ylabel(r'$|\Re{D^{met}_d(\tau)}|$',labelpad=-5,)
+
 axdiffG[0].set_xlabel(r'$\tau/\beta$',labelpad = -3)
 # axdiffG[0].set_ylabel(r'$|\Delta G_d|$',labelpad=-4)
-axdiffG[0].set_ylabel(r'$|\Re G^{\mathrm{sup}}_d - \Re G^{\mathrm{sup}}_{\mathrm{one-side}}|$',labelpad=-10)
-figdiffG.suptitle('Subtracting two sided and one sided superconducting solutions compared to two sided metallic solution',y=1.001)
+# axdiffG[0].set_ylabel(r'$|\Re G^{\mathrm{sup}}_d - \Re G^{\mathrm{sup}}_{\mathrm{one-side}}|$',labelpad=-10)
+axdiffG[0].set_title(r'$|\Re G^{\mathrm{sup}}_d - \Re G^{\mathrm{sup}}_{\mathrm{one-side}}|$')
+# figdiffG.suptitle('Subtracting two sided and one sided superconducting solutions compared to two sided metallic solution',y=1.001)
 axdiffG[1].set_xlabel(r'$\tau/\beta$',labelpad = -3)
-axdiffG[1].set_ylabel(r'$|\Re{G^{\mathrm{met}}_{d}(\tau)}|$',labelpad=-4)
-axdiffD[0].yaxis.set_label_coords(-0.1, 0.6)
-axdiffD[1].yaxis.set_label_coords(-0.1, 0.6)
-axdiffG[0].yaxis.set_label_coords(-0.1, 0.55)
-axdiffG[1].yaxis.set_label_coords(-0.1, 0.5)
+# axdiffG[1].set_ylabel(r'$|\Re{G^{\mathrm{met}}_{d}(\tau)}|$',labelpad=-4)
+axdiffG[1].set_title(r'$|\Re{G^{\mathrm{met}}_{d}(\tau)}|$')
+# axdiffG[0].yaxis.set_label_coords(-0.1, 0.55)
+# axdiffG[1].yaxis.set_label_coords(-0.1, 0.5)
 
 
 figdiffF, axdiffF = plt.subplots(1)
@@ -279,41 +275,6 @@ for i, beta in enumerate(betalist):
     axdiffG[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGDtau))[llplotslice],c=col,label=lab)
     # axdiffG[1].legend(framealpha = 0.0)
 
-    diffsD = np.abs(np.real(DDtau-Dtau))
-    # diffsD = np.abs(np.real(GODtau))
-    if beta > 62:
-        fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.2)),np.argmin(np.abs(tau/beta - 0.3)))
-        fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.35)))
-        fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.4)))
-        # fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.1)),np.argmin(np.abs(tau/beta - 0.2)))
-        # fitslice1 = slice(np.argmin(np.abs(tau/beta - 0.25)),np.argmin(np.abs(tau/beta - 0.35)))
-        fitslicemet1 = slice(np.argmin(np.abs(tau/beta - 0.1)),np.argmin(np.abs(tau/beta - 0.3)))
-        # fitslicemet1 = fitslice1
-        m1,logc1 = np.polyfit(tau[fitslice1]/beta,np.log(diffsD[fitslice1]),1)
-        c1 = np.exp(logc1)
-
-        # metm1,metlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(metGODtau))[fitslicemet1]),1)
-        metm1,metlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(metDDtau))[fitslicemet1]),1)
-        metc1 = np.exp(metlogc1)
-
-        SUPm1,SUPlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(Dtau))[fitslicemet1]),1)
-        Supc1 = np.exp(SUPlogc1)
-        axSUP[1].semilogy(tau[llplotslice]/beta, Supc1*np.exp(SUPm1*tau[llplotslice]/beta),c='b',label = f'fit with slope {SUPm1/beta:.4}',ls='--')
-
-        # metm1,metlogc1 = np.polyfit(tau[fitslice1]/beta,np.log(np.abs(np.real(metDDtau))[fitslice1]),1)
-        # metc1 = np.exp(metlogc1)
-        # axdiffD[1].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c=col,label = f'fit with slope {metm1/beta:.4}',ls='--')
-        axdiffD[0].semilogy(tau[llplotslice]/beta, c1*np.exp(m1*tau[llplotslice]/beta),c='r',label=f'fit with slope {m1/beta:.4}',ls='--')
-        axdiffD[1].semilogy(tau[llplotslice]/beta, metc1*np.exp(metm1*tau[llplotslice]/beta),c='b',label = f'fit with slope {metm1/beta:.4}',ls='--')
-
-    axdiffD[0].semilogy(tau[llplotslice]/beta, diffsD[llplotslice],c=col,label=lab)
-    # axdiffD[0].legend(framealpha=0.0)
-
-    axdiffD[1].semilogy(tau[llplotslice]/beta, np.real(metDDtau)[llplotslice],c=col,label=lab)
-    # axdiffD[1].semilogy(tau[llplotslice]/beta, np.abs(np.real(metGODtau))[llplotslice],c=col,label=lab)
-    # axdiffD[1].legend(framealpha=0.0)
-
-
 
     diffsF = np.abs(np.abs(FDtau)-np.abs(Ftau))
     Fratio = diffsF/np.abs(Ftau)
@@ -325,11 +286,8 @@ for i, beta in enumerate(betalist):
 for axi in axSUP:
     axi.legend(framealpha=0.0)
 
-for axi in axdiffD:
-    axi.legend(framealpha=0.0)
-
-for axi in axdiffG:
-    axi.legend(framealpha=0.0)
+# for axi in axdiffG:
+#     axi.legend(framealpha=0.0)
 
 # for axi in axdiffD:
 #     axi.legend(framealpha=0.0)
@@ -346,8 +304,8 @@ figSUP.suptitle('One sided Greens functions Including superconductivity')
 
 axGratio.set_xlabel(r'$\tau/\beta$',labelpad = 0)
 # Gratio = (np.abs(np.real(GDtau-Gtau)))/(np.abs(np.real(Gtau)))
-axGratio.set_ylabel(r'$|\Re G^{\mathrm{sup}}_d(\tau) - \Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|/|\Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|$')
-axGratio.legend(framealpha=0.0)
+axGratio.set_title(r'$|\Re G^{\mathrm{sup}}_d(\tau) - \Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|/|\Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|$')
+# axGratio.legend(framealpha=0.0)
 
 figGratio.suptitle('Comparison of relative magnitudes of one and two side superconducting Greens functions',y=1.001)
 # figGratio.savefig('diffsDETAIL_figures/Gratio.pdf',bbox_inches='tight')
@@ -365,21 +323,20 @@ figGratio.suptitle('Comparison of relative magnitudes of one and two side superc
 # lgd = figdiffG.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.15),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffG[0].transAxes)
 
 
-# handles, labels = axdiffD[0].get_legend_handles_labels()
-# handles1, labels1 = axdiffD[1].get_legend_handles_labels()
-# joined_handles = handles.copy()
-# joined_labels = labels.copy()
-# for i,label in enumerate(labels1):
-#     if label not in joined_labels:
-#         joined_labels.append(label)
-#         joined_handles.append(handles1[i])
-# lgd = figdiffD.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.17),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffD[0].transAxes)
+handles, labels = axdiffG[0].get_legend_handles_labels()
+handles1, labels1 = axdiffG[1].get_legend_handles_labels()
+joined_handles = handles.copy()
+joined_labels = labels.copy()
+for i,label in enumerate(labels1):
+    if label not in joined_labels:
+        joined_labels.append(label)
+        joined_handles.append(handles1[i])
+lgd = figdiffG.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-1),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffG[0].transAxes)
 
 # list(set(x).symmetric_difference(set(f)))
 
-# figdiffG.savefig('diffsDETAIL_figures/diffG.pdf',bbox_inches='tight')
-# figdiffD.savefig('diffsDETAIL_figures/diffD.pdf',bbox_inches='tight')
-# figdiffD.savefig('diffD.pdf',bbox_inches='tight')
+figdiffG.savefig('diffsDETAIL_figures/diffG.pdf',bbox_inches='tight')
+
 
 
 # fig.suptitle(r"Superconducting Green's functions for $\lambda=0.05$")

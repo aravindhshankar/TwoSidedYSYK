@@ -38,11 +38,11 @@ plt.rcParams['legend.fontsize'] = '8'
 plt.rcParams['figure.titlesize'] = '8'
 plt.rcParams['axes.titlesize'] = '8'
 plt.rcParams['axes.labelsize'] = '8'
-plt.rcParams['figure.figsize'] = f'{3.25*2/3},{3.25*2/3}'
+# plt.rcParams['figure.figsize'] = f'{3.25},{3.25}'
 # plt.rcParams['lines.markersize'] = '6'
 plt.rcParams['lines.linewidth'] = '1'
 plt.rcParams['lines.linewidth'] = '1'
-
+plt.rcParams['axes.formatter.limits'] = '-2,2'
 
 
 DUMP = False
@@ -105,11 +105,14 @@ figSL.tight_layout(pad=2)
 
 
 figSEs, axSEs = plt.subplots(1,4)
-figSEs.tight_layout(pad=2)
-axSEs[0].set_title(r'Re/Im $\Sigma_d$')
-axSEs[1].set_title(r'Re/Im $\Sigma_{od}$')
-axSEs[2].set_title(r'$|\Phi_{d}|$')
-axSEs[3].set_title(r'$|\Phi_{od}|$')
+figSEs.tight_layout(pad=1)
+figSEs.set_figwidth(3.25*2)
+axSEs[0].set_title(r'Re/Im $\Sigma_d$',pad=1,loc='right')
+axSEs[1].set_title(r'Re/Im $\Sigma_{od}$',pad=1,loc='right')
+axSEs[2].set_title(r'$|\Phi_{d}|$',pad=1,loc='right')
+axSEs[3].set_title(r'$|\Phi_{od}|$',pad=1,loc='right')
+for axval in axSEs:
+    axval.set_box_aspect(aspect=1)
 axSEs[0].set_xlabel(r'$\omega_n$')
 axSEs[1].set_xlabel(r'$\omega_n$')
 axSEs[2].set_xlabel(r'$\omega_n$')
@@ -118,7 +121,7 @@ axSEs[0].set_xlim(-10,10)
 axSEs[1].set_xlim(-10,10)
 axSEs[2].set_xlim(-10,10)
 axSEs[3].set_xlim(-10,10)
-figSEs.suptitle(r'$\lambda = 0.05$' )
+# figSEs.suptitle(r'$\lambda = 0.05$' )
 
 
 figFE, axFEs = plt.subplots(nrows=1,ncols=2)
@@ -392,8 +395,8 @@ for i, beta in enumerate(betalist):
     axSEs[1].plot(omega,SigmaODomega.real + offset, ls = '-', c=col,label=lab)
     axSEs[1].plot(omega,SigmaODomega.imag + offset, ls = '--', c=col)
     axSEs[2].plot(omega,np.abs(PhiDomega) + offset, ls = '-', c=col,label=lab)
-    axSEs[3].plot(omega,np.abs(PhiODomega), ls = '-', c=col,label=lab)
-    [axSEsnum.legend() for axSEsnum in axSEs]
+    axSEs[3].plot(omega,np.abs(PhiODomega) + offset, ls = '-', c=col,label=lab)
+    # [axSEsnum.legend() for axSEsnum in axSEs]
     # figSEs.savefig('../../KoenraadEmails/Magnitude of self energies.pdf', bbox_inches = 'tight')
 
     thetalist = np.linspace(0,2*np.pi,100)
@@ -432,6 +435,12 @@ handles, labels = axFE.get_legend_handles_labels()
 figFE.tight_layout()
 # figFE.savefig('../Figuremaker/JosephsonCurrent.pdf',bbox_inches='tight')
 # figFE2.savefig('../Figuremaker/PhaseDepFreeEnergy.pdf',bbox_inches='tight')
+axSEs[3].set_ylim(-0.01,0.05)
+
+handles,labels = axSEs[0].get_legend_handles_labels()
+lgd = figSEs.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(1,-0.8),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=axSEs[1].transAxes)
+
+# figSEs.savefig('../Figuremaker/MagnitudeSEs.pdf')
 
 
 plt.show()
