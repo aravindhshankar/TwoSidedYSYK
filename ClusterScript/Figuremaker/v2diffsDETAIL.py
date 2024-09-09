@@ -113,14 +113,17 @@ axdiffG[1].set_title(r'$|\Re{G^{\mathrm{met}}_{d}(\tau)}|$')
 # axdiffG[1].yaxis.set_label_coords(-0.1, 0.5)
 
 
-figdiffF, axdiffF = plt.subplots(1)
+# figdiffF, axdiffF = plt.subplots(1)
+figdiffF, (axdiffF, axGratio) = plt.subplots(1,2)
 figdiffF.set_figwidth(3.25)
 figdiffF.tight_layout()
 axdiffF.tick_params(axis='both', labelsize=5,pad=0.0)
 
-figGratio, axGratio = plt.subplots(1)
+axdiffF.set_box_aspect(aspect=1)
+axGratio.set_box_aspect(aspect=1)
+# figGratio, axGratio = plt.subplots(1)
 # figGratio.set_figwidth(3.25)
-figGratio.tight_layout()
+# figGratio.tight_layout()
 axGratio.tick_params(axis='both', labelsize=5,pad=0.0)
 
 ############### EVENT LOOP STARTS ##############################
@@ -280,8 +283,10 @@ for i, beta in enumerate(betalist):
     Fratio = diffsF/np.abs(Ftau)
     axdiffF.semilogy(tau[llplotslice]/beta, Fratio[llplotslice],c=col,label=lab)
     axdiffF.set_xlabel(r'$\tau/\beta$',labelpad = 0)
-    axdiffF.set_ylabel(r'$||F(\tau)| -|F_{\mathrm{one side}}(\tau)||/|F_{\mathrm{one side}}(\tau)|$')
-    axdiffF.legend(framealpha=0.0)
+    # axdiffF.set_ylabel(r'$||F(\tau)| -|F_{\mathrm{one side}}(\tau)||/|F_{\mathrm{one side}}(\tau)|$')
+    # axdiffF.set_title(r'$||F(\tau)| -|F_{\mathrm{one side}}(\tau)||/|F_{\mathrm{one side}}(\tau)|$')
+    axdiffF.set_title(r'$\frac{||F| -|F_{\mathrm{one side}}||}{|F_{\mathrm{one side}}|}$')
+    # axdiffF.legend(framealpha=0.0)
 
 for axi in axSUP:
     axi.legend(framealpha=0.0)
@@ -304,10 +309,11 @@ figSUP.suptitle('One sided Greens functions Including superconductivity')
 
 axGratio.set_xlabel(r'$\tau/\beta$',labelpad = 0)
 # Gratio = (np.abs(np.real(GDtau-Gtau)))/(np.abs(np.real(Gtau)))
-axGratio.set_title(r'$|\Re G^{\mathrm{sup}}_d(\tau) - \Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|/|\Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|$')
+# axGratio.set_title(r'$|\Re G^{\mathrm{sup}}_d(\tau) - \Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|/|\Re G^{\mathrm{sup}}_{\mathrm{one side}}(\tau)|$')
+axGratio.set_title(r'$\frac{|\Re G^{\mathrm{sup}}_d - \Re G^{\mathrm{sup}}_{\mathrm{one side}}|}{|\Re G^{\mathrm{sup}}_{\mathrm{one side}}|}$',y=1.01)
 # axGratio.legend(framealpha=0.0)
 
-figGratio.suptitle('Comparison of relative magnitudes of one and two side superconducting Greens functions',y=1.001)
+# figGratio.suptitle('Comparison of relative magnitudes of one and two side superconducting Greens functions',y=1.001)
 # figGratio.savefig('diffsDETAIL_figures/Gratio.pdf',bbox_inches='tight')
 
 # figSUP.savefig('diffsDETAIL_figures/OnesidedInclSUP.pdf')
@@ -331,24 +337,34 @@ for i,label in enumerate(labels1):
     if label not in joined_labels:
         joined_labels.append(label)
         joined_handles.append(handles1[i])
-lgd = figdiffG.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-1),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffG[0].transAxes)
+lgd = figdiffG.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-1),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffF.transAxes)
 
 # list(set(x).symmetric_difference(set(f)))
 
-figdiffG.savefig('diffsDETAIL_figures/diffG.pdf',bbox_inches='tight')
+# figdiffG.savefig('diffsDETAIL_figures/diffG.pdf',bbox_inches='tight')
 
+handles, labels = axdiffF.get_legend_handles_labels()
+handles1, labels1 = axGratio.get_legend_handles_labels()
+joined_handles = handles.copy()
+joined_labels = labels.copy()
+for i,label in enumerate(labels1):
+    if label not in joined_labels:
+        joined_labels.append(label)
+        joined_handles.append(handles1[i])
+lgd = figdiffF.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-0.8),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffF.transAxes, fontsize=8)
 
 
 # fig.suptitle(r"Superconducting Green's functions for $\lambda=0.05$")
 # fig.savefig('SupCondFigs.pdf', bbox_inches='tight')
 
 # figdiffF.savefig('ratioFs.pdf')
+figdiffF.savefig('diffsDETAIL_figures/ratioFsv2.pdf',bbox_inches='tight')
 
 
 
 
 
 
-plt.show()
+# plt.show()
 
 
