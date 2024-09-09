@@ -13,7 +13,8 @@ if not os.path.exists('../Dump/'):
     raise Exception("Error - Path to Dump directory not found ")
     exit(1)
 else:
-	path_to_dump_lamb = '../Dump/v2LOWTEMP_lamb_anneal_dumpfiles/'
+	# path_to_dump_lamb = '../Dump/v2LOWTEMP_lamb_anneal_dumpfiles/'
+	path_to_dump_lamb = '../Dump/kappa10LOWTEMP_lamb_anneal_dumpfiles/'
 	# path_to_dump_lamb = '../Dump/LOWTEMP_lamb_anneal_dumpfiles/'
 	# path_to_dump_temp = '../Dump/zoom_xshift_temp_anneal_dumpfiles/rev'
 	if not os.path.exists(path_to_dump_lamb):
@@ -48,15 +49,16 @@ plt.rcParams['axes.labelsize'] = '10'
 # plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
 # plt.rcParams['lines.markersize'] = '6'
 plt.rcParams['lines.linewidth'] = '1'
-plt.rcParams['axes.formatter.limits'] = '-2,2'
+# plt.rcParams['axes.formatter.limits'] = '-2,2'
 plt.rcParams['text.usetex'] = 'False'
 
 
 
 
-delta = 0.420374134464041
+# delta = 0.420374134464041
+delta = 0.193052
 
-which = 'DD' 
+which = 'GD' 
 
 
 slope_expect = 1./(2-2*delta)
@@ -69,15 +71,15 @@ path_to_dump = path_to_dump_lamb
 gaplist = []
 Nbig = int(2**16)
 beta_start = 1 
-target_beta = 2000
-# target_beta = 5000
+# target_beta = 2000
+target_beta = 5000
 beta = target_beta
 mu = 0.0
 g = 0.5
 r = 1.
 # lamb = 0.05
 J = 0
-kappa = 1.
+kappa = 10.
 omegar2 = ret_omegar2(g,beta)
 beta_step = 1
 # betasavelist = [50,100,500,1000,5000,10000]
@@ -85,7 +87,8 @@ betasavelist = [target_beta,]
 lamblooplist = np.arange(1,0.01 - 1e-10,-0.001)
 # lambsavelist = [0.1,0.05,0.01,0.005,0.001]
 
-lambsavelist = np.arange(0.009,0.002 - 1e-10,-0.001)
+# lambsavelist = np.arange(0.009,0.002 - 1e-10,-0.001)
+lambsavelist = np.arange(0.05,0.01 - 1e-10,-0.001)
 # lambsavelist = np.arange(0.006,0.001 - 1e-10,-0.001)
 # lambsavelist = np.arange(0.035,0.005 - 1e-10,-0.001)
 
@@ -94,11 +97,12 @@ nu = ImagGridMaker(Nbig,beta,'boson')
 tau = ImagGridMaker(Nbig,beta,'tau')
 # lambval = savelist[np.isclose(savelist,lamb)][0]
 lambinset = 0.002
-startT, stopT = 0, Nbig//2
+lambinset = 0.01
+startT, stopT = 0, Nbig//20
 
 # for lambval in (lambval,):
 for lambval in lambsavelist:
-	savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+	savefile = 'kappa10_0' + 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 	savefile += 'lamb' + f'{lambval:.3}' + 'J' + str(J)
 	savefile += 'g' + str(g) + 'r' + str(r)
 	savefile = savefile.replace('.','_') 
@@ -131,7 +135,8 @@ for lambval in lambsavelist:
 	# stop_idx = np.argmin(np.abs(xaxis-0.2))
 	# start_idx = np.argmin(np.abs(xaxis-0.3))
 	# stop_idx = np.argmin(np.abs(xaxis-0.35))
-	startval, stopval = 0.1, 0.2
+	startval, stopval = 0.008, 0.01
+	# startval, stopval = 0.1, 0.13
 	start_idx = np.argmin(np.abs(xaxis-startval))
 	stop_idx = np.argmin(np.abs(xaxis-stopval))
 	
@@ -139,12 +144,13 @@ for lambval in lambsavelist:
 		################## INSET #############################
 		titlestring =  r' $\beta $ = ' + str(beta)
 		titlestring += r' $\lambda$ = ' + f'{lambval:.3}' 
-		left, bottom, width, height = [0.25, 0.55, 0.2, 0.2]
+		left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
 		# left, bottom, width, height = [0.25, 0.5, 0.2, 0.2]
 		ax2 = fig.add_axes([left, bottom, width, height])
 		#plottable = np.abs(np.real(GDtau))
-		startT, stopT = 0, Nbig//2
-		skip = 50
+		# startT, stopT = 0, Nbig//2
+		# skip = 50
+		skip = 1
 		xaxis = tau[startT:stopT:skip]/beta
 		# yaxis = 
 		ax2.semilogy(xaxis, plottable[startT:stopT:skip],'p',label = 'numerics DDtau',markersize=2,c='C2')
@@ -188,7 +194,7 @@ print(f'calculated scaling = {m:.4}')
 ax.set_xlabel(r'$\lambda$')
 ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
 
-titleval = r'Gap scaling calculated from $G_d$' if which =='GD' else r'Gap scaling calculated from $D_d$'
+titleval = r'Gap scaling calculated from $G_d$ for $\kappa = 10$' if which =='GD' else r'Gap scaling calculated from $D_d$ for $\kappa=10$'
 
 
 ax.set_title(titleval)
@@ -203,9 +209,9 @@ ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, t
 
 
 if which == 'GD':
-	plt.savefig('GdGapscalingv2.pdf',bbox_inches='tight')
+	plt.savefig('kappa10GdGapscalingv2.pdf',bbox_inches='tight')
 elif which == 'DD':
-	plt.savefig('DdGapscalingv2.pdf',bbox_inches='tight')
+	plt.savefig('kappa10DdGapscalingv2.pdf',bbox_inches='tight')
 else: 
 	print("Please try to be less stupid in the future. Kind regards.")
 	exit(1)
