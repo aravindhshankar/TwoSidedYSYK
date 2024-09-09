@@ -42,7 +42,7 @@ import concurrent.futures
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 # plt.rcParams['figure.dpi'] = "120"
 # # plt.rcParams['legend.fontsize'] = '14'
-plt.rcParams['legend.fontsize'] = '8'
+plt.rcParams['legend.fontsize'] = '10'
 plt.rcParams['figure.titlesize'] = '10'
 plt.rcParams['axes.titlesize'] = '10'
 plt.rcParams['axes.labelsize'] = '10'
@@ -58,7 +58,7 @@ plt.rcParams['text.usetex'] = 'False'
 # delta = 0.420374134464041
 delta = 0.193052
 
-which = 'GD' 
+which = 'DD' 
 
 
 slope_expect = 1./(2-2*delta)
@@ -144,7 +144,7 @@ for lambval in lambsavelist:
 		################## INSET #############################
 		titlestring =  r' $\beta $ = ' + str(beta)
 		titlestring += r' $\lambda$ = ' + f'{lambval:.3}' 
-		left, bottom, width, height = [0.25, 0.6, 0.2, 0.2]
+		left, bottom, width, height = [0.25, 0.55, 0.2, 0.2]
 		# left, bottom, width, height = [0.25, 0.5, 0.2, 0.2]
 		ax2 = fig.add_axes([left, bottom, width, height])
 		#plottable = np.abs(np.real(GDtau))
@@ -166,8 +166,8 @@ for lambval in lambsavelist:
 		ax2.axvline(stopval, ls='--')
 		ax2.tick_params(which='major', length=3, width=0.6, direction="in", right=True, top=True)
 		ax2.tick_params(which='minor', length=1, width=0.3, direction="in", right=True, top=True)
-		ax2.tick_params(axis='x', labelsize=6)
-		ax2.tick_params(axis='y', labelsize=6)
+		ax2.tick_params(axis='x', labelsize=8)
+		ax2.tick_params(axis='y', labelsize=8)
 
 
 	fitslice = slice(start_idx,stop_idx)

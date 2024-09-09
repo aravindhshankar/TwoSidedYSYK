@@ -41,7 +41,7 @@ import concurrent.futures
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 # plt.rcParams['figure.dpi'] = "120"
 # # plt.rcParams['legend.fontsize'] = '14'
-plt.rcParams['legend.fontsize'] = '8'
+plt.rcParams['legend.fontsize'] = '10'
 plt.rcParams['figure.titlesize'] = '10'
 plt.rcParams['axes.titlesize'] = '10'
 plt.rcParams['axes.labelsize'] = '10'
@@ -160,8 +160,8 @@ for lambval in lambsavelist:
 		ax2.axvline(stopval, ls='--')
 		ax2.tick_params(which='major', length=3, width=0.6, direction="in", right=True, top=True)
 		ax2.tick_params(which='minor', length=1, width=0.3, direction="in", right=True, top=True)
-		ax2.tick_params(axis='x', labelsize=6)
-		ax2.tick_params(axis='y', labelsize=6)
+		ax2.tick_params(axis='x', labelsize=8)
+		ax2.tick_params(axis='y', labelsize=8)
 
 
 	fitslice = slice(start_idx,stop_idx)
