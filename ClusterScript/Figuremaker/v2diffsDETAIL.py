@@ -108,7 +108,7 @@ axdiffG[0].set_title(r'$|\Re G^{\mathrm{sup}}_d - \Re G^{\mathrm{sup}}_{\mathrm{
 # figdiffG.suptitle('Subtracting two sided and one sided superconducting solutions compared to two sided metallic solution',y=1.001)
 axdiffG[1].set_xlabel(r'$\tau/\beta$',labelpad = -3)
 # axdiffG[1].set_ylabel(r'$|\Re{G^{\mathrm{met}}_{d}(\tau)}|$',labelpad=-4)
-axdiffG[1].set_title(r'$|\Re{G^{\mathrm{met}}_{d}(\tau)}|$')
+axdiffG[1].set_title(r'$|\Re{G^{\mathrm{non-sup}}_{d}(\tau)}|$')
 # axdiffG[0].yaxis.set_label_coords(-0.1, 0.55)
 # axdiffG[1].yaxis.set_label_coords(-0.1, 0.5)
 
@@ -337,7 +337,7 @@ for i,label in enumerate(labels1):
     if label not in joined_labels:
         joined_labels.append(label)
         joined_handles.append(handles1[i])
-lgd = figdiffG.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-1),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffF.transAxes)
+lgd = figdiffG.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 , loc="lower center", bbox_to_anchor=(1.2,-1),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=axdiffG[0].transAxes)
 
 # list(set(x).symmetric_difference(set(f)))
 
@@ -358,13 +358,13 @@ lgd = figdiffF.legend(joined_handles, joined_labels, ncol=len(joined_labels)//2 
 # fig.savefig('SupCondFigs.pdf', bbox_inches='tight')
 
 # figdiffF.savefig('ratioFs.pdf')
-figdiffF.savefig('diffsDETAIL_figures/ratioFsv2.pdf',bbox_inches='tight')
+# figdiffF.savefig('diffsDETAIL_figures/ratioFsv2.pdf',bbox_inches='tight')
 
 
 
 
 
 
-# plt.show()
+plt.show()
 
 

@@ -231,6 +231,12 @@ for i, beta in enumerate(betalist):
     #################### Superconducting state diagonals ###########
     ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(GDtau[llplotslice])),c=col,label=lab)
     ax[0].semilogy(tau[llplotslice]/beta, np.abs(np.real(Gtau[llplotslice])),c=col,ls='--')
+    fitslicemet1 = slice(np.argmin(np.abs(tau/beta - 0.3)),np.argmin(np.abs(tau/beta - 0.4)))
+    
+    if beta > 60:
+        SUPm1,SUPlogc1 = np.polyfit(tau[fitslicemet1]/beta,np.log(np.abs(np.real(Gtau))[fitslicemet1]),1)
+        Supc1 = np.exp(SUPlogc1)
+        ax[0].semilogy(tau[llplotslice]/beta, Supc1*np.exp(SUPm1*tau[llplotslice]/beta),c='k',label = f'Gap $\\Delta = $ {np.abs(SUPm1/beta):.4}',ls='--')
     # axinset0.plot(tau[llplotslice]/beta, np.real(GDtau[llplotslice]), c = col, label = lab)
     # axinset0.plot(tau[llplotslice]/beta, np.real(Gtau[llplotslice]), c = col, ls='--' )
     # axinset0.plot(tau[llplotslice]/beta, np.real(Gconftau[llplotslice]), c = col, ls='--' )
@@ -395,7 +401,7 @@ for i, beta in enumerate(betalist):
 handles, labels = ax[0].get_legend_handles_labels()
 lgd = fig.legend(handles, labels, ncol=len(labels), loc="lower center", bbox_to_anchor=(0.5,-0.25),frameon=True,fancybox=True,borderaxespad=2, bbox_transform=ax[1].transAxes)
 fig.suptitle(r"Superconducting Green's functions for $\lambda=0.05$")
-# fig.savefig('SupCondFigs.pdf', bbox_inches='tight')
+fig.savefig('SupCondFigs.pdf', bbox_inches='tight')
 
 
 
@@ -410,6 +416,6 @@ fig.suptitle(r"Superconducting Green's functions for $\lambda=0.05$")
 
 #plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
-plt.show()
+# plt.show()
 
 
