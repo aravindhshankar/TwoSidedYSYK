@@ -7,6 +7,15 @@ else:
 	sys.path.insert(1,'../Sources')	
 
 
+if not os.path.exists('../Dump'):
+    print("error- Path to Dump directory not found ")
+    exit(1)
+
+path_to_dump = '../Dump/OneSideYSYKg2/'
+if not os.path.exists(path_to_dump):
+    print('Creating Target directory ', path_to_dump)
+    os.makedirs(path_to_dump)
+
 from SYK_fft import *
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,9 +25,10 @@ from ConformalAnalytical import *
 
 
 Nbig = int(2**14)
-err = 1e-6
-
-beta = 100
+x = 0.001
+# err = 1e-6
+err = 1e-3 * (x**2)
+# beta = 100
 mu = 0.0
 g = 2
 #r = 0.0 + 1e-8 * 1j
@@ -27,23 +37,13 @@ r = 1.
 #r = 1e-8
 kappa = 1.
 
-omega = ImagGridMaker(Nbig,beta,'fermion')
-nu = ImagGridMaker(Nbig,beta,'boson')
-tau = ImagGridMaker(Nbig,beta,'tau')
-
-
-
-#Gtau = Gtau_powerlaw * (-0.5/Gtau_powerlaw[0])
-#Dtau = Dtau_powerlaw * (DfreeImagtau(tau,r,beta)[0]/Dtau_powerlaw[0])
-
-# Gtau = -0.5*np.ones(Nbig)
-# Dtau = 1.0*np.ones(Nbig)
-
-
-def Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.01,0.01],DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True):
+def Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.001,0.001],err = err, DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True):
     Gtau, Dtau = GFtaus
     xG, xD = x
     for beta in betalist:
+        omega = ImagGridMaker(Nbig,beta,'fermion')
+        nu = ImagGridMaker(Nbig,beta,'boson')
+        # tau = ImagGridMaker(Nbig,beta,'tau')
         itern = 0
         diff = 1.
         diffG = 1.
@@ -84,42 +84,69 @@ def Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.01,0.01],DUMP
             
             diffG = np.sum((np.abs(Gtau-oldGtau))**2) #changed
             diffD = np.sum((np.abs(Dtau-oldDtau))**2)
-            diff = np.max([diffG,diffD])
+            # diff = np.max([diffG,diffD])
+            diff = 0.5 * (diffG + diffD)
             
             # if diffG>diffoldG:
             #     xG/=2.
             # if diffD>diffoldD:
             #     xD/=2.
             #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD, end = '\r')
-            print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD) if verbose == True else None
+            # print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD) if verbose == True else None
 
 
         
-    #print("itern = ",itern, " , diff = ", diff, " , x = ", xG,xD, end = '\r')
+        print(" Finished beta = ", beta, " with itern = ", itern, " , diff = ", diff, " , x = ", xG) if verbose == True else None
 
+        if DUMP == True and np.isclose(beta,savelist).any():
+            savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
+            # savefile += 'lamb' + str(lamb) + 'J' + str(J)
+            savefile += 'g' + str(g) + 'r' + str(r)
+            savefile = savefile.replace('.','_') 
+            savefile += '.npy'
+            np.save(os.path.join(path_to_dump, savefile), np.array([Gtau,Dtau])) 
+            print(savefile) if verbose == True else None
     return [Gtau,Dtau]
 
 
 ###################### CALCULATION ###########################
 
-Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
-Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
-# Dfreetau = Freq2TimeB(-1./(nu**2 + r),Nbig,beta)
-delta = 0.420374134464041
-omegar2 = ret_omegar2(g,beta)
-Gtau_powerlaw = -1.0*np.sign(tau)*(np.pi/np.abs(beta*np.sin(np.pi*tau/beta))) ** (2*delta)
-Dtau_powerlaw =  1.0*(np.pi/np.abs(beta*np.sin(np.pi*tau/beta))) ** (2 - 4*delta)
+# Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
+# Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
+# # Dfreetau = Freq2TimeB(-1./(nu**2 + r),Nbig,beta)
+# delta = 0.420374134464041
+# omegar2 = ret_omegar2(g,beta)
+# Gtau_powerlaw = -1.0*np.sign(tau)*(np.pi/np.abs(beta*np.sin(np.pi*tau/beta))) ** (2*delta)
+# Dtau_powerlaw =  1.0*(np.pi/np.abs(beta*np.sin(np.pi*tau/beta))) ** (2 - 4*delta)
 
-Gtau = Gfreetau
-Dtau = Dfreetau
+# Gtau = Gfreetau
+# Dtau = Dfreetau
+#Gtau = Gtau_powerlaw * (-0.5/Gtau_powerlaw[0])
+#Dtau = Dtau_powerlaw * (DfreeImagtau(tau,r,beta)[0]/Dtau_powerlaw[0])
+target_beta = 10
+beta_step = 1
+beta_start = 1
+
+
+betalist = np.arange(beta_start, target_beta + beta_step, beta_step)
+
+omega = ImagGridMaker(Nbig,beta_start,'fermion')
+nu = ImagGridMaker(Nbig,beta_start,'boson')
+tau = ImagGridMaker(Nbig,beta_start,'tau')
+
+Gtau = -0.5*np.ones(Nbig)
+Dtau = 1.0*np.ones(Nbig)
+Gtau = Freq2TimeF(GconfImag(omega,g,beta_start),Nbig,beta_start)
+Dtau = Freq2TimeB(DconfImag(nu,g,beta_start),Nbig,beta_start)
 GFtaus = [Gtau,Dtau]
 
-# Gtau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
-# Dtau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
-target_beta = 50
-betalist = np.arange(1, target_beta + 1)
-Gtau, Dtau = Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.01,0.01],DUMP=False,path_to_dump=None,savelist=None,calcfe=False,verbose=True)
-
+Gtau, Dtau = Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.001,0.001],err=err,DUMP=True,path_to_dump=path_to_dump,savelist=betalist,calcfe=False,verbose=True)
+beta = betalist[-1]
+omega = ImagGridMaker(Nbig,beta,'fermion')
+nu = ImagGridMaker(Nbig,beta,'boson')
+tau = ImagGridMaker(Nbig,beta,'tau')
+Gomega = Time2FreqF(Gtau,Nbig,beta)
+Domega = Time2FreqB(Dtau,Nbig,beta)
 ################## PLOTTING ######################
 
 Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
@@ -144,7 +171,7 @@ ax[1].set_ylabel(r'$\Re{D(\tau)}$')
 ax[1].legend()
 
 #plt.savefig('KoenraadEmails/WithMR_imagtime.pdf',bbox_inches='tight')
-plt.show()
+# plt.show()
 
 ################ POWER LAW PLOT #####################
 
