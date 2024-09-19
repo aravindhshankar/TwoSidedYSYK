@@ -1,0 +1,900 @@
+##### Finished beta =  9 ############
+
+diff = 8.1968e-11, itern = 554, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  10 ############
+
+diff = 9.405e-11, itern = 423, free energy = 0.0, x = 1.0
+##### Finished beta =  19 ############
+
+diff = 8.7046e-11, itern = 974, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  20 ############
+
+diff = 9.2457e-11, itern = 1049, free energy = 0.0, x = 1.0
+##### Finished beta =  49 ############
+
+diff = 9.9548e-11, itern = 691, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  50 ############
+
+diff = 8.5803e-11, itern = 691, free energy = 0.0, x = 1.0
+##### Finished beta =  99 ############
+
+diff = 8.3924e-11, itern = 456, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  100 ############
+
+diff = 8.0026e-11, itern = 457, free energy = 0.0, x = 1.0
+##### Finished beta =  149 ############
+
+diff = 9.2402e-11, itern = 354, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  150 ############
+
+diff = 9.052e-11, itern = 354, free energy = 0.0, x = 1.0
+##### Finished beta =  199 ############
+
+diff = 9.6263e-11, itern = 266, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  200 ############
+
+diff = 9.7313e-11, itern = 266, free energy = 0.0, x = 1.0
+##### Finished beta =  299 ############
+
+diff = 5.5882e-11, itern = 252, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  300 ############
+
+diff = 5.5321e-11, itern = 252, free energy = 0.0, x = 1.0
+##### Finished beta =  499 ############
+
+diff = 5.8005e-11, itern = 154, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  500 ############
+
+diff = 5.7655e-11, itern = 154, free energy = 0.0, x = 1.0
+##### Finished beta =  699 ############
+
+diff = 5.9199e-11, itern = 140, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  700 ############
+
+diff = 5.8945e-11, itern = 140, free energy = 0.0, x = 1.0
+##### Finished beta =  999 ############
+
+diff = 7.9622e-11, itern = 61, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_1J0g0_5r1_0.npy
+
+##### Finished beta =  1000 ############
+
+diff = 7.9378e-11, itern = 61, free energy = 0.0, x = 1.0
+##### Finished beta =  9 ############
+
+diff = 6.3168e-11, itern = 469, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  10 ############
+
+diff = 7.3937e-11, itern = 438, free energy = 0.0, x = 1.0
+##### Finished beta =  19 ############
+
+diff = 8.049e-11, itern = 511, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  20 ############
+
+diff = 9.2089e-11, itern = 514, free energy = 0.0, x = 1.0
+##### Finished beta =  49 ############
+
+diff = 9.3063e-11, itern = 1139, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  50 ############
+
+diff = 9.682e-11, itern = 1171, free energy = 0.0, x = 1.0
+##### Finished beta =  99 ############
+
+diff = 9.7221e-11, itern = 732, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  100 ############
+
+diff = 9.5067e-11, itern = 742, free energy = 0.0, x = 1.0
+##### Finished beta =  149 ############
+
+diff = 9.895e-11, itern = 525, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  150 ############
+
+diff = 9.8286e-11, itern = 525, free energy = 0.0, x = 1.0
+##### Finished beta =  199 ############
+
+diff = 8.3083e-11, itern = 431, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  200 ############
+
+diff = 8.1661e-11, itern = 431, free energy = 0.0, x = 1.0
+##### Finished beta =  299 ############
+
+diff = 7.7869e-11, itern = 295, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  300 ############
+
+diff = 7.7075e-11, itern = 295, free energy = 0.0, x = 1.0
+##### Finished beta =  499 ############
+
+diff = 9.8696e-11, itern = 198, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  500 ############
+
+diff = 9.8118e-11, itern = 198, free energy = 0.0, x = 1.0
+##### Finished beta =  699 ############
+
+diff = 8.9483e-11, itern = 156, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  700 ############
+
+diff = 8.9092e-11, itern = 156, free energy = 0.0, x = 1.0
+##### Finished beta =  999 ############
+
+diff = 9.9357e-11, itern = 151, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_05J0g0_5r1_0.npy
+
+##### Finished beta =  1000 ############
+
+diff = 9.9161e-11, itern = 151, free energy = 0.0, x = 1.0
+##### Finished beta =  9 ############
+
+diff = 8.6557e-11, itern = 323, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  10 ############
+
+diff = 5.3417e-11, itern = 417, free energy = 0.0, x = 1.0
+##### Finished beta =  19 ############
+
+diff = 4.3634e-11, itern = 367, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  20 ############
+
+diff = 3.8234e-11, itern = 354, free energy = 0.0, x = 1.0
+##### Finished beta =  49 ############
+
+diff = 7.4925e-11, itern = 304, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  50 ############
+
+diff = 8.171e-11, itern = 304, free energy = 0.0, x = 1.0
+##### Finished beta =  99 ############
+
+diff = 8.3152e-11, itern = 256, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  100 ############
+
+diff = 8.7162e-11, itern = 256, free energy = 0.0, x = 1.0
+##### Finished beta =  149 ############
+
+diff = 5.0113e-11, itern = 268, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  150 ############
+
+diff = 5.279e-11, itern = 268, free energy = 0.0, x = 1.0
+##### Finished beta =  199 ############
+
+diff = 8.6194e-11, itern = 267, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  200 ############
+
+diff = 8.755e-11, itern = 266, free energy = 0.0, x = 1.0
+##### Finished beta =  299 ############
+
+diff = 6.1509e-11, itern = 267, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  300 ############
+
+diff = 5.3387e-11, itern = 270, free energy = 0.0, x = 1.0
+##### Finished beta =  499 ############
+
+diff = 8.1879e-11, itern = 258, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  500 ############
+
+diff = 8.337e-11, itern = 258, free energy = 0.0, x = 1.0
+##### Finished beta =  699 ############
+
+diff = 7.6359e-11, itern = 255, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  700 ############
+
+diff = 8.6679e-11, itern = 294, free energy = 0.0, x = 1.0
+##### Finished beta =  999 ############
+
+diff = 6.5979e-11, itern = 280, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_01J0g0_5r1_0.npy
+
+##### Finished beta =  1000 ############
+
+diff = 5.8503e-11, itern = 280, free energy = 0.0, x = 1.0
+##### Finished beta =  9 ############
+
+diff = 8.2114e-11, itern = 320, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  10 ############
+
+diff = 5.2621e-11, itern = 417, free energy = 0.0, x = 1.0
+##### Finished beta =  19 ############
+
+diff = 3.4491e-11, itern = 375, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  20 ############
+
+diff = 3.8941e-11, itern = 353, free energy = 0.0, x = 1.0
+##### Finished beta =  49 ############
+
+diff = 9.4577e-11, itern = 302, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  50 ############
+
+diff = 9.7238e-11, itern = 299, free energy = 0.0, x = 1.0
+##### Finished beta =  99 ############
+
+diff = 7.5337e-11, itern = 240, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  100 ############
+
+diff = 9.5086e-11, itern = 231, free energy = 0.0, x = 1.0
+##### Finished beta =  149 ############
+
+diff = 8.5413e-11, itern = 203, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  150 ############
+
+diff = 7.4581e-11, itern = 203, free energy = 0.0, x = 1.0
+##### Finished beta =  199 ############
+
+diff = 9.688e-11, itern = 215, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  200 ############
+
+diff = 8.8783e-11, itern = 215, free energy = 0.0, x = 1.0
+##### Finished beta =  299 ############
+
+diff = 7.8157e-11, itern = 190, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  300 ############
+
+diff = 8.4457e-11, itern = 190, free energy = 0.0, x = 1.0
+##### Finished beta =  499 ############
+
+diff = 7.8887e-11, itern = 223, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  500 ############
+
+diff = 4.0466e-11, itern = 224, free energy = 0.0, x = 1.0
+##### Finished beta =  699 ############
+
+diff = 7.0391e-11, itern = 220, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  700 ############
+
+diff = 7.0606e-11, itern = 220, free energy = 0.0, x = 1.0
+##### Finished beta =  999 ############
+
+diff = 8.2263e-11, itern = 259, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_005J0g0_5r1_0.npy
+
+##### Finished beta =  1000 ############
+
+diff = 6.6885e-11, itern = 237, free energy = 0.0, x = 1.0
+##### Finished beta =  9 ############
+
+diff = 7.9568e-11, itern = 320, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  10 ############
+
+diff = 5.2384e-11, itern = 417, free energy = 0.0, x = 1.0
+##### Finished beta =  19 ############
+
+diff = 3.395e-11, itern = 375, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  20 ############
+
+diff = 3.823e-11, itern = 353, free energy = 0.0, x = 1.0
+##### Finished beta =  49 ############
+
+diff = 9.0154e-11, itern = 302, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  50 ############
+
+diff = 9.1979e-11, itern = 282, free energy = 0.0, x = 1.0
+##### Finished beta =  99 ############
+
+diff = 4.0157e-11, itern = 131, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  100 ############
+
+diff = 4.9392e-11, itern = 131, free energy = 0.0, x = 1.0
+##### Finished beta =  149 ############
+
+diff = 9.0191e-11, itern = 204, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  150 ############
+
+diff = 2.4795e-11, itern = 196, free energy = 0.0, x = 1.0
+##### Finished beta =  199 ############
+
+diff = 6.7896e-11, itern = 179, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  200 ############
+
+diff = 5.6283e-11, itern = 173, free energy = 0.0, x = 1.0
+##### Finished beta =  299 ############
+
+diff = 3.0186e-12, itern = 153, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  300 ############
+
+diff = 5.1641e-11, itern = 157, free energy = 0.0, x = 1.0
+##### Finished beta =  499 ############
+
+diff = 6.7061e-11, itern = 135, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  500 ############
+
+diff = 8.0357e-11, itern = 144, free energy = 0.0, x = 1.0
+##### Finished beta =  699 ############
+
+diff = 2.144e-11, itern = 107, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  700 ############
+
+diff = 2.3803e-11, itern = 135, free energy = 0.0, x = 1.0
+##### Finished beta =  999 ############
+
+diff = 7.7522e-11, itern = 81, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_001J0g0_5r1_0.npy
+
+##### Finished beta =  1000 ############
+
+diff = 7.6403e-11, itern = 102, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 7.5773e-11, itern = 326, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 7.3413e-11, itern = 326, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 8.5309e-11, itern = 287, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 8.144e-11, itern = 287, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 7.8696e-11, itern = 171, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 9.1943e-11, itern = 157, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 8.9103e-11, itern = 113, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 7.5281e-11, itern = 113, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 7.8673e-11, itern = 55, free energy = 0.0, x = 1.0
+
+Nbig14beta10lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 8.9339e-11, itern = 11, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 9.8259e-11, itern = 758, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 9.3181e-11, itern = 757, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 8.4845e-11, itern = 458, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 9.4793e-11, itern = 441, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 7.8691e-11, itern = 259, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 8.2733e-11, itern = 243, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 9.3983e-11, itern = 195, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 7.2453e-11, itern = 193, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 9.7289e-11, itern = 112, free energy = 0.0, x = 1.0
+
+Nbig14beta20lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 8.5613e-11, itern = 88, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 9.3199e-11, itern = 566, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 8.1422e-11, itern = 583, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 9.9e-11, itern = 1612, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 8.7535e-11, itern = 1422, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 6.9332e-11, itern = 334, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 8.4959e-11, itern = 319, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 8.8123e-11, itern = 272, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 9.4518e-11, itern = 257, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 7.107e-11, itern = 192, free energy = 0.0, x = 1.0
+
+Nbig14beta50lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 8.8883e-11, itern = 144, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 9.8983e-11, itern = 431, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 8.3e-11, itern = 444, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 9.2503e-11, itern = 899, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 8.6596e-11, itern = 907, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 9.8035e-11, itern = 363, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 7.7033e-11, itern = 362, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 7.9219e-11, itern = 317, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 7.1743e-11, itern = 300, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 8.9921e-11, itern = 223, free energy = 0.0, x = 1.0
+
+Nbig14beta100lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 9.2401e-11, itern = 174, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 8.7756e-11, itern = 401, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 9.371e-11, itern = 400, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 9.8255e-11, itern = 751, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 9.0928e-11, itern = 761, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 7.258e-11, itern = 407, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 7.5932e-11, itern = 393, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 8.8669e-11, itern = 331, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 9.1122e-11, itern = 316, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 9.7004e-11, itern = 237, free energy = 0.0, x = 1.0
+
+Nbig14beta150lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 9.6704e-11, itern = 189, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 8.3868e-11, itern = 387, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 8.9438e-11, itern = 386, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 8.8179e-11, itern = 702, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 9.3858e-11, itern = 687, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 6.938e-11, itern = 436, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 8.7107e-11, itern = 406, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 8.3133e-11, itern = 346, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 8.3084e-11, itern = 331, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 9.9298e-11, itern = 254, free energy = 0.0, x = 1.0
+
+Nbig14beta200lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 9.855e-11, itern = 206, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 9.5358e-11, itern = 343, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 8.2505e-11, itern = 356, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 9.4785e-11, itern = 644, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 8.8032e-11, itern = 669, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 1.3284e-08, itern = 5000, free energy = 0.0, x = 0.0179
+
+Nbig14beta300lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 8.668e-11, itern = 2742, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 9.6308e-11, itern = 359, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 9.2275e-11, itern = 344, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 6.748e-11, itern = 282, free energy = 0.0, x = 1.0
+
+Nbig14beta300lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 9.518e-11, itern = 221, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 9.6544e-11, itern = 311, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 9.7409e-11, itern = 314, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 9.8445e-11, itern = 586, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 9.0579e-11, itern = 611, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 9.3937e-11, itern = 2415, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 9.9175e-11, itern = 2746, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 4.5188e-07, itern = 5000, free energy = 0.0, x = 0.014
+
+Nbig14beta500lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 8.133e-11, itern = 405, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 7.2525e-11, itern = 297, free energy = 0.0, x = 1.0
+
+Nbig14beta500lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 8.0852e-11, itern = 251, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 9.548e-11, itern = 281, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 9.7756e-11, itern = 284, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 8.5857e-11, itern = 572, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 9.1954e-11, itern = 567, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 9.8632e-11, itern = 2139, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 9.2858e-11, itern = 2385, free energy = 0.0, x = 1.0
+diff = 9.7662e-11, itern = 4608, free energy = 0.0, x = 1.0
+
+WARNING : CONVERGENCE NOT REACHED FOR BETA = 700, LAMB = 0.004999999999999116 in LAMB ANNEAL
+
+Nbig14beta700lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 1.6737e-09, itern = 5000, free energy = 0.0, x = 0.0141
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 9.9757e-11, itern = 297, free energy = 0.0, x = 1.0
+
+Nbig14beta700lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 7.3324e-11, itern = 265, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.1009999999999992 ############
+
+diff = 8.9791e-11, itern = 267, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_1J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0999999999999992 ############
+
+diff = 9.1322e-11, itern = 270, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.05099999999999916 ############
+
+diff = 8.6305e-11, itern = 528, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_05J0g0_5r1_0.npy
+
+##### Finished lamb =  0.049999999999999156 ############
+
+diff = 9.281e-11, itern = 523, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.010999999999999122 ############
+
+diff = 9.9938e-11, itern = 1979, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_01J0g0_5r1_0.npy
+
+##### Finished lamb =  0.00999999999999912 ############
+
+diff = 9.4901e-11, itern = 2210, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.005999999999999117 ############
+
+diff = 9.653e-11, itern = 3555, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_005J0g0_5r1_0.npy
+
+##### Finished lamb =  0.004999999999999116 ############
+
+diff = 9.935e-11, itern = 4465, free energy = 0.0, x = 1.0
+##### Finished lamb =  0.0019999999999991136 ############
+
+diff = 8.3613e-11, itern = 3527, free energy = 0.0, x = 1.0
+
+Nbig14beta1000lamb0_001J0g0_5r1_0.npy
+
+##### Finished lamb =  0.0009999999999991127 ############
+
+diff = 9.6287e-11, itern = 266, free energy = 0.0, x = 1.0

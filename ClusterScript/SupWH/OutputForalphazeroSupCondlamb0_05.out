@@ -1,0 +1,504 @@
+rubens [993] $ 
+rubens [993] $ 
+rubens [993] $ python scanv1inclF.py 
+SUPNbig14beta1g0_5r1_0lamb0_05.npy
+##### Finished beta =  1 ############
+FD(tau = 0+) = (3.265e-07+3.265e-07j)
+end x =  0.01  , end diff =  9.854289364287827e-13  , end itern =  1486 
+
+SUPNbig14beta2g0_5r1_0lamb0_05.npy
+##### Finished beta =  2 ############
+FD(tau = 0+) = (4.689e-07+4.689e-07j)
+end x =  0.01  , end diff =  9.846649238028285e-13  , end itern =  1450 
+
+SUPNbig14beta3g0_5r1_0lamb0_05.npy
+##### Finished beta =  3 ############
+FD(tau = 0+) = (3.4e-07+3.4e-07j)
+end x =  0.01  , end diff =  9.921590908597758e-13  , end itern =  1482 
+
+SUPNbig14beta4g0_5r1_0lamb0_05.npy
+##### Finished beta =  4 ############
+FD(tau = 0+) = (2.345e-07+2.345e-07j)
+end x =  0.01  , end diff =  9.835727375858676e-13  , end itern =  1519 
+
+SUPNbig14beta5g0_5r1_0lamb0_05.npy
+##### Finished beta =  5 ############
+FD(tau = 0+) = (1.667e-07+1.667e-07j)
+end x =  0.01  , end diff =  9.996058024591074e-13  , end itern =  1553 
+
+SUPNbig14beta6g0_5r1_0lamb0_05.npy
+##### Finished beta =  6 ############
+FD(tau = 0+) = (5.367e-08+5.367e-08j)
+end x =  0.01  , end diff =  9.924260886311333e-13  , end itern =  1666 
+
+SUPNbig14beta7g0_5r1_0lamb0_05.npy
+##### Finished beta =  7 ############
+FD(tau = 0+) = (4.905e-08+4.905e-08j)
+end x =  0.01  , end diff =  9.875107719864416e-13  , end itern =  1675 
+
+SUPNbig14beta8g0_5r1_0lamb0_05.npy
+##### Finished beta =  8 ############
+FD(tau = 0+) = (1.998e-08+1.998e-08j)
+end x =  0.01  , end diff =  9.990849040263614e-13  , end itern =  1765 
+
+SUPNbig14beta9g0_5r1_0lamb0_05.npy
+##### Finished beta =  9 ############
+FD(tau = 0+) = (1.217e-08+1.217e-08j)
+end x =  0.01  , end diff =  9.926528057058303e-13  , end itern =  1815 
+
+SUPNbig14beta10g0_5r1_0lamb0_05.npy
+##### Finished beta =  10 ############
+FD(tau = 0+) = (2.04e-08+2.04e-08j)
+end x =  0.01  , end diff =  9.87375708921983e-13  , end itern =  1763 
+
+SUPNbig14beta11g0_5r1_0lamb0_05.npy
+##### Finished beta =  11 ############
+FD(tau = 0+) = (3.496e-08+3.496e-08j)
+end x =  0.01  , end diff =  9.972464090614526e-13  , end itern =  1709 
+
+SUPNbig14beta12g0_5r1_0lamb0_05.npy
+##### Finished beta =  12 ############
+FD(tau = 0+) = (3.891e-09+3.891e-09j)
+end x =  0.01  , end diff =  9.973833540197814e-13  , end itern =  1933 
+
+SUPNbig14beta13g0_5r1_0lamb0_05.npy
+##### Finished beta =  13 ############
+FD(tau = 0+) = (5.042e-09+5.042e-09j)
+end x =  0.01  , end diff =  9.890526595125264e-13  , end itern =  1906 
+
+SUPNbig14beta14g0_5r1_0lamb0_05.npy
+##### Finished beta =  14 ############
+FD(tau = 0+) = (-1.55e-42-2.171e-42j)
+end x =  0.01  , end diff =  6.1499907215117056e-12  , end itern =  15000 
+
+SUPNbig14beta15g0_5r1_0lamb0_05.npy
+##### Finished beta =  15 ############
+FD(tau = 0+) = (-2.11e-06-2.305e-06j)
+end x =  0.01  , end diff =  9.937164977479076e-13  , end itern =  2035 
+
+SUPNbig14beta16g0_5r1_0lamb0_05.npy
+##### Finished beta =  16 ############
+FD(tau = 0+) = (-5.324e-06-4.657e-06j)
+end x =  0.01  , end diff =  9.983395144786216e-13  , end itern =  3277 
+
+SUPNbig14beta17g0_5r1_0lamb0_05.npy
+##### Finished beta =  17 ############
+FD(tau = 0+) = (4.545e-10+4.545e-10j)
+end x =  0.01  , end diff =  9.973992734188634e-13  , end itern =  2236 
+
+SUPNbig14beta18g0_5r1_0lamb0_05.npy
+##### Finished beta =  18 ############
+FD(tau = 0+) = (8.232e-09+8.233e-09j)
+end x =  0.01  , end diff =  9.890591207772352e-13  , end itern =  1886 
+
+SUPNbig14beta19g0_5r1_0lamb0_05.npy
+##### Finished beta =  19 ############
+FD(tau = 0+) = (3.347e-07+3.297e-07j)
+end x =  0.01  , end diff =  9.888854036882101e-13  , end itern =  1880 
+
+SUPNbig14beta20g0_5r1_0lamb0_05.npy
+##### Finished beta =  20 ############
+FD(tau = 0+) = (-9.862e-06-3.975e-06j)
+end x =  0.01  , end diff =  9.966531735655343e-13  , end itern =  3298 
+
+SUPNbig14beta21g0_5r1_0lamb0_05.npy
+##### Finished beta =  21 ############
+FD(tau = 0+) = (-1.015e-11-9.305e-12j)
+end x =  0.01  , end diff =  9.965961959166864e-13  , end itern =  3054 
+
+SUPNbig14beta22g0_5r1_0lamb0_05.npy
+##### Finished beta =  22 ############
+FD(tau = 0+) = (4.659e-09+4.66e-09j)
+end x =  0.01  , end diff =  9.95247331770507e-13  , end itern =  2029 
+
+SUPNbig14beta23g0_5r1_0lamb0_05.npy
+##### Finished beta =  23 ############
+FD(tau = 0+) = (4.915e-10+4.921e-10j)
+end x =  0.01  , end diff =  9.99964268381265e-13  , end itern =  2176 
+
+SUPNbig14beta24g0_5r1_0lamb0_05.npy
+##### Finished beta =  24 ############
+FD(tau = 0+) = (3.388e-09-7.675e-10j)
+end x =  0.01  , end diff =  9.992479610776194e-13  , end itern =  6693 
+
+SUPNbig14beta25g0_5r1_0lamb0_05.npy
+##### Finished beta =  25 ############
+FD(tau = 0+) = (3.915e-08+3.915e-08j)
+end x =  0.01  , end diff =  9.930412466848827e-13  , end itern =  2265 
+
+SUPNbig14beta26g0_5r1_0lamb0_05.npy
+##### Finished beta =  26 ############
+FD(tau = 0+) = (1.173e-09+1.174e-09j)
+end x =  0.01  , end diff =  9.930073493581189e-13  , end itern =  2294 
+
+SUPNbig14beta27g0_5r1_0lamb0_05.npy
+##### Finished beta =  27 ############
+FD(tau = 0+) = (5.47e-10+5.204e-10j)
+end x =  0.01  , end diff =  9.970251398474195e-13  , end itern =  2565 
+
+SUPNbig14beta28g0_5r1_0lamb0_05.npy
+##### Finished beta =  28 ############
+FD(tau = 0+) = (1.192e-08+1.192e-08j)
+end x =  0.01  , end diff =  9.969671167022228e-13  , end itern =  2469 
+
+SUPNbig14beta29g0_5r1_0lamb0_05.npy
+##### Finished beta =  29 ############
+FD(tau = 0+) = (-6.077e-10-6.001e-10j)
+end x =  0.01  , end diff =  9.897327040310844e-13  , end itern =  2773 
+
+SUPNbig14beta30g0_5r1_0lamb0_05.npy
+##### Finished beta =  30 ############
+FD(tau = 0+) = (-3.424e-06-5.69e-06j)
+end x =  0.01  , end diff =  9.988787303518201e-13  , end itern =  5337 
+
+SUPNbig14beta31g0_5r1_0lamb0_05.npy
+##### Finished beta =  31 ############
+FD(tau = 0+) = (-3.225e-10-3.222e-10j)
+end x =  0.01  , end diff =  9.901948943151651e-13  , end itern =  2329 
+
+SUPNbig14beta32g0_5r1_0lamb0_05.npy
+##### Finished beta =  32 ############
+FD(tau = 0+) = (-1.574e-10-1.597e-10j)
+end x =  0.01  , end diff =  9.955625583160576e-13  , end itern =  2840 
+
+SUPNbig14beta33g0_5r1_0lamb0_05.npy
+##### Finished beta =  33 ############
+FD(tau = 0+) = (-0.0001723-0.000209j)
+end x =  0.01  , end diff =  2.652375866136736e-12  , end itern =  15000 
+
+SUPNbig14beta34g0_5r1_0lamb0_05.npy
+##### Finished beta =  34 ############
+FD(tau = 0+) = (-2.187e-06+6.389e-06j)
+end x =  0.01  , end diff =  9.995039996926707e-13  , end itern =  9172 
+
+SUPNbig14beta35g0_5r1_0lamb0_05.npy
+##### Finished beta =  35 ############
+FD(tau = 0+) = (1.338e-05+1.338e-05j)
+end x =  0.01  , end diff =  9.99629703727257e-13  , end itern =  2714 
+
+SUPNbig14beta36g0_5r1_0lamb0_05.npy
+##### Finished beta =  36 ############
+FD(tau = 0+) = (1.366e-08+1.375e-08j)
+end x =  0.01  , end diff =  9.973518327954998e-13  , end itern =  3068 
+
+SUPNbig14beta37g0_5r1_0lamb0_05.npy
+##### Finished beta =  37 ############
+FD(tau = 0+) = (2.025e-05+1.867e-05j)
+end x =  0.01  , end diff =  9.924907057183286e-13  , end itern =  3500 
+
+SUPNbig14beta38g0_5r1_0lamb0_05.npy
+##### Finished beta =  38 ############
+FD(tau = 0+) = (0.1145-0.1262j)
+end x =  0.01  , end diff =  9.992976028448329e-13  , end itern =  10236 
+
+SUPNbig14beta39g0_5r1_0lamb0_05.npy
+##### Finished beta =  39 ############
+FD(tau = 0+) = (-0.004183-0.173j)
+end x =  0.01  , end diff =  0.049834483470035544  , end itern =  15000 
+
+SUPNbig14beta40g0_5r1_0lamb0_05.npy
+##### Finished beta =  40 ############
+FD(tau = 0+) = (-2.114e-08-2.099e-08j)
+end x =  0.01  , end diff =  9.957259488036692e-13  , end itern =  3864 
+
+SUPNbig14beta41g0_5r1_0lamb0_05.npy
+##### Finished beta =  41 ############
+FD(tau = 0+) = (0.0797+0.1757j)
+end x =  0.01  , end diff =  9.979236513615804e-13  , end itern =  4420 
+
+SUPNbig14beta42g0_5r1_0lamb0_05.npy
+##### Finished beta =  42 ############
+FD(tau = 0+) = (0.1958+0.02467j)
+end x =  0.01  , end diff =  9.975680007812875e-13  , end itern =  6260 
+
+SUPNbig14beta43g0_5r1_0lamb0_05.npy
+##### Finished beta =  43 ############
+FD(tau = 0+) = (-0.003158+0.1923j)
+end x =  0.01  , end diff =  0.030655192979020578  , end itern =  15000 
+
+SUPNbig14beta44g0_5r1_0lamb0_05.npy
+##### Finished beta =  44 ############
+FD(tau = 0+) = (0.182+0.09193j)
+end x =  0.01  , end diff =  9.982626185051963e-13  , end itern =  5505 
+
+SUPNbig14beta45g0_5r1_0lamb0_05.npy
+##### Finished beta =  45 ############
+FD(tau = 0+) = (0.1217+0.1217j)
+end x =  0.01  , end diff =  8.443403908854471e-06  , end itern =  15000 
+
+SUPNbig14beta46g0_5r1_0lamb0_05.npy
+##### Finished beta =  46 ############
+FD(tau = 0+) = (0.1443+0.1441j)
+end x =  0.01  , end diff =  3.494875049214887e-07  , end itern =  15000 
+
+SUPNbig14beta47g0_5r1_0lamb0_05.npy
+##### Finished beta =  47 ############
+FD(tau = 0+) = (0.08267-0.1931j)
+end x =  0.01  , end diff =  9.961608106367288e-13  , end itern =  4573 
+
+SUPNbig14beta48g0_5r1_0lamb0_05.npy
+##### Finished beta =  48 ############
+FD(tau = 0+) = (-0.1477-0.1513j)
+end x =  0.01  , end diff =  9.955886068941334e-13  , end itern =  11672 
+
+SUPNbig14beta49g0_5r1_0lamb0_05.npy
+##### Finished beta =  49 ############
+FD(tau = 0+) = (-0.0861+0.1616j)
+end x =  0.01  , end diff =  0.014459963838734368  , end itern =  15000 
+
+SUPNbig14beta50g0_5r1_0lamb0_05.npy
+##### Finished beta =  50 ############
+FD(tau = 0+) = (-0.1747+0.05887j)
+end x =  0.01  , end diff =  0.025347772536834935  , end itern =  15000 
+
+SUPNbig14beta51g0_5r1_0lamb0_05.npy
+##### Finished beta =  51 ############
+FD(tau = 0+) = (0.1839+0.01888j)
+end x =  0.01  , end diff =  0.01142443421924998  , end itern =  15000 
+
+SUPNbig14beta52g0_5r1_0lamb0_05.npy
+##### Finished beta =  52 ############
+FD(tau = 0+) = (-0.2145+0.02038j)
+end x =  0.01  , end diff =  9.99331837746627e-13  , end itern =  4230 
+
+SUPNbig14beta53g0_5r1_0lamb0_05.npy
+##### Finished beta =  53 ############
+FD(tau = 0+) = (-0.06689+0.1646j)
+end x =  0.01  , end diff =  0.13494193614833552  , end itern =  15000 
+
+SUPNbig14beta54g0_5r1_0lamb0_05.npy
+##### Finished beta =  54 ############
+FD(tau = 0+) = (-0.1532-0.1533j)
+end x =  0.01  , end diff =  9.972381653529793e-13  , end itern =  12642 
+
+SUPNbig14beta55g0_5r1_0lamb0_05.npy
+##### Finished beta =  55 ############
+FD(tau = 0+) = (-0.2163-0.02019j)
+end x =  0.01  , end diff =  9.988372928758083e-13  , end itern =  13443 
+
+SUPNbig14beta56g0_5r1_0lamb0_05.npy
+##### Finished beta =  56 ############
+FD(tau = 0+) = (-0.1839-0.1165j)
+end x =  0.01  , end diff =  9.98273740366243e-13  , end itern =  5043 
+
+SUPNbig14beta57g0_5r1_0lamb0_05.npy
+##### Finished beta =  57 ############
+FD(tau = 0+) = (0.2082+0.06509j)
+end x =  0.01  , end diff =  9.957727886801086e-13  , end itern =  4287 
+
+SUPNbig14beta58g0_5r1_0lamb0_05.npy
+##### Finished beta =  58 ############
+FD(tau = 0+) = (-0.211-0.0566j)
+end x =  0.01  , end diff =  9.973184116003158e-13  , end itern =  3944 
+
+SUPNbig14beta59g0_5r1_0lamb0_05.npy
+##### Finished beta =  59 ############
+FD(tau = 0+) = (-0.004147-0.01936j)
+end x =  0.01  , end diff =  0.0024049586839322967  , end itern =  15000 
+
+SUPNbig14beta60g0_5r1_0lamb0_05.npy
+##### Finished beta =  60 ############
+FD(tau = 0+) = (-0.06222+0.21j)
+end x =  0.01  , end diff =  9.983111524631161e-13  , end itern =  3579 
+
+SUPNbig14beta61g0_5r1_0lamb0_05.npy
+##### Finished beta =  61 ############
+FD(tau = 0+) = (0.155+0.155j)
+end x =  0.01  , end diff =  9.996481655742067e-13  , end itern =  10707 
+
+SUPNbig14beta62g0_5r1_0lamb0_05.npy
+##### Finished beta =  62 ############
+FD(tau = 0+) = (-0.1555-0.1549j)
+end x =  0.01  , end diff =  9.947030674901966e-13  , end itern =  14296 
+
+SUPNbig14beta63g0_5r1_0lamb0_05.npy
+##### Finished beta =  63 ############
+FD(tau = 0+) = (0.1798+0.1231j)
+end x =  0.01  , end diff =  1.156738287299797e-07  , end itern =  15000 
+
+SUPNbig14beta64g0_5r1_0lamb0_05.npy
+##### Finished beta =  64 ############
+FD(tau = 0+) = (0.04178+0.2158j)
+end x =  0.01  , end diff =  9.974898646212442e-13  , end itern =  3851 
+
+SUPNbig14beta65g0_5r1_0lamb0_05.npy
+##### Finished beta =  65 ############
+FD(tau = 0+) = (-0.1543+0.08771j)
+end x =  0.01  , end diff =  0.01958132120972235  , end itern =  15000 
+
+SUPNbig14beta66g0_5r1_0lamb0_05.npy
+##### Finished beta =  66 ############
+FD(tau = 0+) = (-0.08168+0.1571j)
+end x =  0.01  , end diff =  0.009205789129171792  , end itern =  15000 
+
+SUPNbig14beta67g0_5r1_0lamb0_05.npy
+##### Finished beta =  67 ############
+FD(tau = 0+) = (-0.05123-0.2142j)
+end x =  0.01  , end diff =  9.965061798379376e-13  , end itern =  6593 
+
+SUPNbig14beta68g0_5r1_0lamb0_05.npy
+##### Finished beta =  68 ############
+FD(tau = 0+) = (-0.1691-0.1413j)
+end x =  0.01  , end diff =  9.98489776810689e-13  , end itern =  4137 
+
+SUPNbig14beta69g0_5r1_0lamb0_05.npy
+##### Finished beta =  69 ############
+FD(tau = 0+) = (0.2201-0.01228j)
+end x =  0.01  , end diff =  9.936643911488176e-13  , end itern =  3942 
+
+SUPNbig14beta70g0_5r1_0lamb0_05.npy
+##### Finished beta =  70 ############
+FD(tau = 0+) = (-0.02377+0.2192j)
+end x =  0.01  , end diff =  9.968232308289625e-13  , end itern =  3712 
+
+SUPNbig14beta71g0_5r1_0lamb0_05.npy
+##### Finished beta =  71 ############
+FD(tau = 0+) = (0.2163+0.0436j)
+end x =  0.01  , end diff =  9.981873355548849e-13  , end itern =  5562 
+
+SUPNbig14beta72g0_5r1_0lamb0_05.npy
+##### Finished beta =  72 ############
+FD(tau = 0+) = (0.1048-0.1335j)
+end x =  0.01  , end diff =  0.0014852018576631337  , end itern =  15000 
+
+SUPNbig14beta73g0_5r1_0lamb0_05.npy
+##### Finished beta =  73 ############
+FD(tau = 0+) = (5.349e-06+3.469e-06j)
+end x =  0.01  , end diff =  9.977739587326509e-13  , end itern =  7545 
+
+SUPNbig14beta74g0_5r1_0lamb0_05.npy
+##### Finished beta =  74 ############
+FD(tau = 0+) = (-0.1882+0.00273j)
+end x =  0.01  , end diff =  0.029285702453977575  , end itern =  15000 
+
+SUPNbig14beta75g0_5r1_0lamb0_05.npy
+##### Finished beta =  75 ############
+FD(tau = 0+) = (-1.216e-06-6.998e-07j)
+end x =  0.01  , end diff =  9.982385460030263e-13  , end itern =  5425 
+
+SUPNbig14beta76g0_5r1_0lamb0_05.npy
+##### Finished beta =  76 ############
+FD(tau = 0+) = (0.1369+0.1733j)
+end x =  0.01  , end diff =  9.950602742355786e-13  , end itern =  4813 
+
+SUPNbig14beta77g0_5r1_0lamb0_05.npy
+##### Finished beta =  77 ############
+FD(tau = 0+) = (-0.1521-0.1602j)
+end x =  0.01  , end diff =  9.954159871256714e-13  , end itern =  6795 
+
+SUPNbig14beta78g0_5r1_0lamb0_05.npy
+##### Finished beta =  78 ############
+FD(tau = 0+) = (0.1627+0.1497j)
+end x =  0.01  , end diff =  6.156597476626865e-09  , end itern =  15000 
+
+SUPNbig14beta79g0_5r1_0lamb0_05.npy
+##### Finished beta =  79 ############
+FD(tau = 0+) = (-0.1239-0.147j)
+end x =  0.01  , end diff =  0.014666166467748841  , end itern =  15000 
+
+SUPNbig14beta80g0_5r1_0lamb0_05.npy
+##### Finished beta =  80 ############
+FD(tau = 0+) = (0.1746+0.1355j)
+end x =  0.01  , end diff =  9.955409183980433e-13  , end itern =  5135 
+
+SUPNbig14beta81g0_5r1_0lamb0_05.npy
+##### Finished beta =  81 ############
+FD(tau = 0+) = (-0.08427-0.2043j)
+end x =  0.01  , end diff =  9.999626982789898e-13  , end itern =  8908 
+
+SUPNbig14beta82g0_5r1_0lamb0_05.npy
+##### Finished beta =  82 ############
+FD(tau = 0+) = (0.151+0.1614j)
+end x =  0.01  , end diff =  9.9414426999627e-13  , end itern =  8419 
+
+SUPNbig14beta83g0_5r1_0lamb0_05.npy
+##### Finished beta =  83 ############
+FD(tau = 0+) = (-0.1635+0.1488j)
+end x =  0.01  , end diff =  9.977233935618086e-13  , end itern =  5102 
+
+SUPNbig14beta84g0_5r1_0lamb0_05.npy
+##### Finished beta =  84 ############
+FD(tau = 0+) = (-0.2204-0.01701j)
+end x =  0.01  , end diff =  9.954622247697267e-13  , end itern =  3678 
+
+SUPNbig14beta85g0_5r1_0lamb0_05.npy
+##### Finished beta =  85 ############
+FD(tau = 0+) = (-0.1564-0.1563j)
+end x =  0.01  , end diff =  9.971288445315394e-13  , end itern =  12478 
+
+SUPNbig14beta86g0_5r1_0lamb0_05.npy
+##### Finished beta =  86 ############
+FD(tau = 0+) = (0.09285+0.1577j)
+end x =  0.01  , end diff =  0.015656055992125717  , end itern =  15000 
+
+SUPNbig14beta87g0_5r1_0lamb0_05.npy
+##### Finished beta =  87 ############
+FD(tau = 0+) = (-0.1719-5.468e-05j)
+end x =  0.01  , end diff =  0.0010676331647243465  , end itern =  15000 
+
+SUPNbig14beta88g0_5r1_0lamb0_05.npy
+##### Finished beta =  88 ############
+FD(tau = 0+) = (-0.08971+0.1039j)
+end x =  0.01  , end diff =  2.604507518484098e-12  , end itern =  15000 
+
+SUPNbig14beta89g0_5r1_0lamb0_05.npy
+##### Finished beta =  89 ############
+FD(tau = 0+) = (0.05291+0.2147j)
+end x =  0.01  , end diff =  9.948503229758795e-13  , end itern =  8780 
+
+SUPNbig14beta90g0_5r1_0lamb0_05.npy
+##### Finished beta =  90 ############
+FD(tau = 0+) = (-0.1415+0.1699j)
+end x =  0.01  , end diff =  9.984110555566827e-13  , end itern =  5012 
+
+SUPNbig14beta91g0_5r1_0lamb0_05.npy
+##### Finished beta =  91 ############
+FD(tau = 0+) = (-0.1779-0.02915j)
+end x =  0.01  , end diff =  0.00848244385826073  , end itern =  15000 
+
+SUPNbig14beta92g0_5r1_0lamb0_05.npy
+##### Finished beta =  92 ############
+FD(tau = 0+) = (0.1563+0.1565j)
+end x =  0.01  , end diff =  9.941576720925193e-13  , end itern =  9708 
+
+SUPNbig14beta93g0_5r1_0lamb0_05.npy
+##### Finished beta =  93 ############
+FD(tau = 0+) = (-0.1201+0.1388j)
+end x =  0.01  , end diff =  0.013366624064821695  , end itern =  15000 
+
+SUPNbig14beta94g0_5r1_0lamb0_05.npy
+##### Finished beta =  94 ############
+FD(tau = 0+) = (0.2203+0.02023j)
+end x =  0.01  , end diff =  9.965740407104125e-13  , end itern =  7433 
+
+SUPNbig14beta95g0_5r1_0lamb0_05.npy
+##### Finished beta =  95 ############
+FD(tau = 0+) = (0.05786+0.2135j)
+end x =  0.01  , end diff =  9.95472808329193e-13  , end itern =  6119 
+
+SUPNbig14beta96g0_5r1_0lamb0_05.npy
+##### Finished beta =  96 ############
+FD(tau = 0+) = (-0.1616-0.151j)
+end x =  0.01  , end diff =  9.99290263822101e-13  , end itern =  8004 
+
+SUPNbig14beta97g0_5r1_0lamb0_05.npy
+##### Finished beta =  97 ############
+FD(tau = 0+) = (0.1157-0.1885j)
+end x =  0.01  , end diff =  9.9395722669323e-13  , end itern =  7496 
+
+SUPNbig14beta98g0_5r1_0lamb0_05.npy
+##### Finished beta =  98 ############
+FD(tau = 0+) = (-0.1805+0.0566j)
+end x =  0.01  , end diff =  0.023081837990437254  , end itern =  15000 
+
+SUPNbig14beta99g0_5r1_0lamb0_05.npy
+##### Finished beta =  99 ############
+FD(tau = 0+) = (-0.0241+0.2199j)
+end x =  0.01  , end diff =  9.93449398548319e-13  , end itern =  3383 
+
+SUPNbig14beta100g0_5r1_0lamb0_05.npy
+##### Finished beta =  100 ############
+FD(tau = 0+) = (0.08026-0.2062j)
+end x =  0.01  , end diff =  9.995576317827292e-13  , end itern =  5539 
+
+Simulation Finished, exiting Without PLOTTING ........

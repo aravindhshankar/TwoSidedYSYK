@@ -1,0 +1,209 @@
+nohup: ignoring input
+Path to Dump directory not found 
+Creating Dump directory
+DUMP =  True
+############ Started : target beta = ,  100.0  #############
+##### Finished beta =  1.0 ############
+diff =  3.2109542609985223e-07  , itern =  93  , free energy =  3.04547424477895
+##### Finished beta =  2.0 ############
+diff =  7.27758513575907e-07  , itern =  65  , free energy =  3669.7390994188086
+##### Finished beta =  3.0 ############
+diff =  9.51672438264836e-07  , itern =  798  , free energy =  59.03837998430051
+##### Finished beta =  4.0 ############
+diff =  9.629444448371667e-07  , itern =  1339  , free energy =  2.6668869884273962
+##### Finished beta =  5.0 ############
+diff =  8.66480507021894e-07  , itern =  1305  , free energy =  2.301128838355513
+##### Finished beta =  6.0 ############
+diff =  8.652601528580979e-07  , itern =  1179  , free energy =  2.5751109432488044
+##### Finished beta =  7.0 ############
+diff =  9.380438349409969e-07  , itern =  1125  , free energy =  2.5138636414167013
+##### Finished beta =  8.0 ############
+diff =  9.939937515462672e-07  , itern =  2353  , free energy =  1.3142493028352669
+##### Finished beta =  9.0 ############
+diff =  9.934614420743623e-07  , itern =  2276  , free energy =  1.3085765587548353
+##### Finished beta =  10.0 ############
+diff =  9.989918112295435e-07  , itern =  3925  , free energy =  1.2970146079533458
+##### Finished beta =  11.0 ############
+diff =  9.987569657622582e-07  , itern =  4924  , free energy =  1.2886834824203475
+##### Finished beta =  12.0 ############
+diff =  9.996106343766357e-07  , itern =  5264  , free energy =  1.282232284528823
+##### Finished beta =  13.0 ############
+diff =  9.98939108822879e-07  , itern =  5105  , free energy =  1.2743702840501627
+##### Finished beta =  14.0 ############
+diff =  9.983648212159341e-07  , itern =  4753  , free energy =  1.2675832776525329
+##### Finished beta =  15.0 ############
+diff =  9.998037245863699e-07  , itern =  4318  , free energy =  1.2591781192545768
+##### Finished beta =  16.0 ############
+diff =  9.99510900386366e-07  , itern =  3903  , free energy =  1.2554137161682046
+##### Finished beta =  17.0 ############
+diff =  9.814928677085214e-07  , itern =  3210  , free energy =  1.2503533852139386
+##### Finished beta =  18.0 ############
+diff =  9.761724598092337e-07  , itern =  1868  , free energy =  1.254802778018493
+##### Finished beta =  19.0 ############
+diff =  9.923594571579056e-07  , itern =  3189  , free energy =  1.2392458552864314
+##### Finished beta =  20.0 ############
+diff =  9.941204352450859e-07  , itern =  3823  , free energy =  1.2335781892536013
+##### Finished beta =  21.0 ############
+diff =  9.973029631896257e-07  , itern =  4372  , free energy =  1.2283761080241822
+##### Finished beta =  22.0 ############
+diff =  9.996250546868346e-07  , itern =  4647  , free energy =  1.222686267209535
+##### Finished beta =  23.0 ############
+diff =  9.996110328957004e-07  , itern =  4951  , free energy =  1.2179542265750574
+##### Finished beta =  24.0 ############
+diff =  9.995722307505675e-07  , itern =  5151  , free energy =  1.21458302035266
+##### Finished beta =  25.0 ############
+diff =  9.988714177480938e-07  , itern =  5219  , free energy =  1.2102890481748205
+##### Finished beta =  26.0 ############
+diff =  9.991782725131108e-07  , itern =  5204  , free energy =  1.2059090804282335
+##### Finished beta =  27.0 ############
+diff =  9.995094339702048e-07  , itern =  5077  , free energy =  1.2007206693607015
+##### Finished beta =  28.0 ############
+diff =  9.994357995214967e-07  , itern =  4883  , free energy =  1.196672044865353
+##### Finished beta =  29.0 ############
+diff =  9.993624401760452e-07  , itern =  4600  , free energy =  1.1939331685887684
+##### Finished beta =  30.0 ############
+diff =  9.991548676569212e-07  , itern =  4272  , free energy =  1.1887388897761515
+##### Finished beta =  31.0 ############
+diff =  9.99369027744946e-07  , itern =  4011  , free energy =  1.1866508309698347
+##### Finished beta =  32.0 ############
+diff =  9.997944893022838e-07  , itern =  3754  , free energy =  1.1816776625089105
+##### Finished beta =  33.0 ############
+diff =  9.985807380673883e-07  , itern =  3596  , free energy =  1.1779743631814505
+##### Finished beta =  34.0 ############
+diff =  9.948299549084693e-07  , itern =  3318  , free energy =  1.176431672999973
+##### Finished beta =  35.0 ############
+diff =  10.950363338924129  , itern =  8000  , free energy =  2.6882623362165123
+##### Finished beta =  36.0 ############
+diff =  0.03834472046962835  , itern =  8000  , free energy =  0.6357584870983541
+##### Finished beta =  37.0 ############
+diff =  0.1290913916091012  , itern =  8000  , free energy =  0.4831405827211507
+##### Finished beta =  38.0 ############
+diff =  0.207222081513352  , itern =  8000  , free energy =  0.6670106956826383
+##### Finished beta =  39.0 ############
+diff =  0.06706663541403173  , itern =  8000  , free energy =  0.9632016486896654
+##### Finished beta =  40.0 ############
+diff =  0.06281022836057154  , itern =  8000  , free energy =  0.16440192399813208
+##### Finished beta =  41.0 ############
+diff =  0.021065658598277477  , itern =  8000  , free energy =  0.7610007652683723
+##### Finished beta =  42.0 ############
+diff =  0.2888315594427973  , itern =  8000  , free energy =  1.1112627046164312
+##### Finished beta =  43.0 ############
+diff =  0.011329602999249212  , itern =  8000  , free energy =  0.4958659151294689
+##### Finished beta =  44.0 ############
+diff =  0.06534568603867269  , itern =  8000  , free energy =  1.091984164940987
+##### Finished beta =  45.0 ############
+diff =  0.029534479466835004  , itern =  8000  , free energy =  0.3235470227378428
+##### Finished beta =  46.0 ############
+diff =  0.051534842580870675  , itern =  8000  , free energy =  0.5754167000962892
+##### Finished beta =  47.0 ############
+diff =  0.011459519832489889  , itern =  8000  , free energy =  0.3042958619399116
+##### Finished beta =  48.0 ############
+diff =  0.01806227609737487  , itern =  8000  , free energy =  0.9345557556197087
+##### Finished beta =  49.0 ############
+diff =  0.08358418245769933  , itern =  8000  , free energy =  0.1018112122971323
+Nbig14beta50_0lamb0_05J0_0g2_0r1_0.npy
+##### Finished beta =  50.0 ############
+diff =  0.125501617474539  , itern =  8000  , free energy =  0.10884913561828294
+##### Finished beta =  51.0 ############
+diff =  0.13978640757943797  , itern =  8000  , free energy =  1.0087256855872895
+##### Finished beta =  52.0 ############
+diff =  0.41179976038720323  , itern =  8000  , free energy =  0.294158023411872
+##### Finished beta =  53.0 ############
+diff =  0.029850575150422314  , itern =  8000  , free energy =  0.28942828978215873
+##### Finished beta =  54.0 ############
+diff =  0.023399028181001556  , itern =  8000  , free energy =  0.8675191038570589
+##### Finished beta =  55.0 ############
+diff =  0.01964855432254687  , itern =  8000  , free energy =  0.46994511999037836
+##### Finished beta =  56.0 ############
+diff =  0.3018864553062805  , itern =  8000  , free energy =  0.14652738192510664
+##### Finished beta =  57.0 ############
+diff =  0.042106906751995625  , itern =  8000  , free energy =  0.0920163075541891
+##### Finished beta =  58.0 ############
+diff =  0.014798744591556974  , itern =  8000  , free energy =  0.5592645407326734
+##### Finished beta =  59.0 ############
+diff =  0.10109162941897305  , itern =  8000  , free energy =  0.4987015285668819
+##### Finished beta =  60.0 ############
+diff =  0.021128874988643197  , itern =  8000  , free energy =  0.2768136481480157
+##### Finished beta =  61.0 ############
+diff =  0.1263748189132198  , itern =  8000  , free energy =  0.5558594329353467
+##### Finished beta =  62.0 ############
+diff =  0.0075113154303629946  , itern =  8000  , free energy =  0.17502457279670736
+##### Finished beta =  63.0 ############
+diff =  0.05306187240542012  , itern =  8000  , free energy =  0.2857570518903191
+##### Finished beta =  64.0 ############
+diff =  0.012723006216842171  , itern =  8000  , free energy =  -0.03120843240826301
+##### Finished beta =  65.0 ############
+diff =  0.008603814853795537  , itern =  8000  , free energy =  0.04549997765206324
+##### Finished beta =  66.0 ############
+diff =  0.016295643891126862  , itern =  8000  , free energy =  0.4082339158545132
+##### Finished beta =  67.0 ############
+diff =  0.029599157623972177  , itern =  8000  , free energy =  0.4934853457880236
+##### Finished beta =  68.0 ############
+diff =  0.0587848554023528  , itern =  8000  , free energy =  0.5016702262943344
+##### Finished beta =  69.0 ############
+diff =  0.003568870596058363  , itern =  8000  , free energy =  1.069132405173993
+##### Finished beta =  70.0 ############
+diff =  0.0983678273779875  , itern =  8000  , free energy =  0.16491315088802452
+##### Finished beta =  71.0 ############
+diff =  0.014970275304983877  , itern =  8000  , free energy =  -0.24199936169260777
+##### Finished beta =  72.0 ############
+diff =  0.009788838195333863  , itern =  8000  , free energy =  0.546071909079022
+##### Finished beta =  73.0 ############
+diff =  0.014934390659727192  , itern =  8000  , free energy =  0.2502223134711227
+##### Finished beta =  74.0 ############
+diff =  0.02014695773470186  , itern =  8000  , free energy =  0.26306644619071556
+##### Finished beta =  75.0 ############
+diff =  0.04427702786461893  , itern =  8000  , free energy =  0.37562403971609193
+##### Finished beta =  76.0 ############
+diff =  0.017981349085516265  , itern =  8000  , free energy =  0.661063438358139
+##### Finished beta =  77.0 ############
+diff =  0.02121891448227607  , itern =  8000  , free energy =  1.0548040770713987
+##### Finished beta =  78.0 ############
+diff =  0.018082358494552177  , itern =  8000  , free energy =  -0.01328617515953392
+##### Finished beta =  79.0 ############
+diff =  0.00919602811630107  , itern =  8000  , free energy =  0.4196578464529973
+##### Finished beta =  80.0 ############
+diff =  0.03976306057018074  , itern =  8000  , free energy =  0.3847592053758886
+##### Finished beta =  81.0 ############
+diff =  0.022345954254018304  , itern =  8000  , free energy =  0.5317164291266163
+##### Finished beta =  82.0 ############
+diff =  0.03241595315935397  , itern =  8000  , free energy =  0.6195456763802624
+##### Finished beta =  83.0 ############
+diff =  0.011465686774380528  , itern =  8000  , free energy =  0.09282977473207465
+##### Finished beta =  84.0 ############
+diff =  0.007834930430576724  , itern =  8000  , free energy =  0.19523954334275692
+##### Finished beta =  85.0 ############
+diff =  0.01997627861580631  , itern =  8000  , free energy =  0.08455209331917311
+##### Finished beta =  86.0 ############
+diff =  0.0003186670768201327  , itern =  8000  , free energy =  1.1743900099964826
+##### Finished beta =  87.0 ############
+diff =  0.0124200853839029  , itern =  8000  , free energy =  -0.17533312028727868
+##### Finished beta =  88.0 ############
+diff =  0.007986786884999798  , itern =  8000  , free energy =  0.29419886733758377
+##### Finished beta =  89.0 ############
+diff =  0.029063792368450928  , itern =  8000  , free energy =  0.06719987530225593
+##### Finished beta =  90.0 ############
+diff =  0.011270145313901313  , itern =  8000  , free energy =  -0.2581813972201097
+##### Finished beta =  91.0 ############
+diff =  0.0061272188203382386  , itern =  8000  , free energy =  0.13977062107955887
+##### Finished beta =  92.0 ############
+diff =  0.020249138752490233  , itern =  8000  , free energy =  0.03833355577875569
+##### Finished beta =  93.0 ############
+diff =  0.019930081505438076  , itern =  8000  , free energy =  0.17459052947796042
+##### Finished beta =  94.0 ############
+diff =  0.21406937200647339  , itern =  8000  , free energy =  -0.033149968681085135
+##### Finished beta =  95.0 ############
+diff =  0.009128690261077925  , itern =  8000  , free energy =  -0.2282308111568613
+##### Finished beta =  96.0 ############
+diff =  0.011107714027662691  , itern =  8000  , free energy =  0.05181082061022507
+##### Finished beta =  97.0 ############
+diff =  0.006138546433241687  , itern =  8000  , free energy =  0.1931966072527819
+##### Finished beta =  98.0 ############
+diff =  0.013252933563900757  , itern =  8000  , free energy =  0.4102033288018791
+##### Finished beta =  99.0 ############
+diff =  9.971522390439917e-07  , itern =  7331  , free energy =  1.1269834770214533
+100.0
+98.99697875976562
+slope of fit = -0.671
+2 Delta - 1 =  -0.15925173107191803
+slope of fit = 0.292
