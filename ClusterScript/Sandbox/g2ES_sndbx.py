@@ -123,7 +123,7 @@ def Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.001,0.001],er
 # Dtau = Dfreetau
 #Gtau = Gtau_powerlaw * (-0.5/Gtau_powerlaw[0])
 #Dtau = Dtau_powerlaw * (DfreeImagtau(tau,r,beta)[0]/Dtau_powerlaw[0])
-target_beta = 10
+target_beta = 1000
 beta_step = 1
 beta_start = 1
 
