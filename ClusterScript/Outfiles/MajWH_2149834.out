@@ -1,0 +1,36 @@
+[/bin/bash] ## This is shankaras1 on #HOSTNAME and job ID 2149834
+[/bin/bash] Current working directory: /home/shankaras1/data1/Maj_WH
+[/bin/bash] Running Python script
+/data1/shankaras1/Maj_WH/./Sources/SYK_fft.py:87: RuntimeWarning: overflow encountered in exp
+  return (1.0/(1.0 + np.exp(arg)))
+T =  1048576 , dw =   0.000003 , dt =  0.031250 , omega_max =  100.531
+dw/temp =  0.0599
+flag fft_check =  True
+grid_flag =  True
+######## State Variables ################
+J =  1.0
+mu =  0.001
+log_2 M =  25.0
+eta =  2.9960562244468747e-05
+T =  1048576
+err =  0.01
+######## End of State variables #########
+itern =  1  , diff =  131.3425780260749  , x =  0.25
+itern =  2  , diff =  8.365648345691213  , x =  0.25
+itern =  3  , diff =  4.712876674749658  , x =  0.25
+itern =  4  , diff =  2.66216022618291  , x =  0.25
+itern =  5  , diff =  1.5075945952883734  , x =  0.25
+itern =  6  , diff =  0.8563416585479894  , x =  0.25
+itern =  7  , diff =  0.4878362681077047  , x =  0.25
+itern =  8  , diff =  0.2787251175659239  , x =  0.25
+itern =  9  , diff =  0.15988852928112648  , x =  0.25
+itern =  10  , diff =  0.09156920745804076  , x =  0.25
+itern =  11  , diff =  0.05244807837377897  , x =  0.25
+itern =  12  , diff =  0.030125776336738987  , x =  0.25
+itern =  13  , diff =  0.01742875410194571  , x =  0.25
+itern =  14  , diff =  0.01024928192890227  , x =  0.25
+itern =  15  , diff =  0.006227528300412531  , x =  0.25
+
+###########Data Writing############
+*********Program exited successfully with itern = 15 *********
+[/bin/bash]#### SLURM script finished. 

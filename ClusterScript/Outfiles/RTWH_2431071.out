@@ -1,0 +1,4 @@
+[/bin/bash] ## This is shankaras1 on #HOSTNAME and job ID 2431071
+[/bin/bash] Current working directory: /home/shankaras1/data1/Maj_WH
+[/bin/bash] Running Python script
+slurmstepd: error: *** JOB 2431071 ON node012 CANCELLED AT 2024-04-11T15:10:36 DUE TO TIME LIMIT ***

@@ -1,0 +1,6 @@
+[/bin/bash] ## This is shankaras1 on #HOSTNAME and job ID 2132493
+[/bin/bash] Current working directory: /home/shankaras1/data1/Maj_WH/ClusterScript
+[/bin/bash] Running Python script
+/cm/local/apps/slurm/var/spool/job2132493/slurm_script: line 23: 20084 Killed                  python ClusterMajWH.py "$file_name"
+[/bin/bash]#### SLURM script finished. 
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=2132493.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.

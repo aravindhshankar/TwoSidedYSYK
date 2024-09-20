@@ -1,0 +1,66 @@
+[/bin/bash] ## This is shankaras1 on #HOSTNAME and job ID 2148726
+[/bin/bash] Current working directory: /home/shankaras1/data1/Maj_WH/ClusterScript
+[/bin/bash] Running Python script
+/data1/shankaras1/Maj_WH/ClusterScript/./Sources/SYK_fft.py:87: RuntimeWarning: overflow encountered in exp
+  return (1.0/(1.0 + np.exp(arg)))
+/data1/shankaras1/Maj_WH/ClusterScript/./Sources/SYK_fft.py:102: RuntimeWarning: overflow encountered in exp
+  return (1.0/(np.exp(arg)-1))
+/data1/shankaras1/Maj_WH/ClusterScript/./Sources/testingscripts.py:39: UserWarning: converging too slowly in function RE_wormhole_YSYK_iterator
+  warnings.warn('converging too slowly in function ' + inspect.stack()[1][3])
+T =  262144 , dw =   0.000012 , dt =  0.031250 , omega_max =  100.531
+dw/temp =  0.0060
+flag fft_check =  True
+grid_flag =  True
+######## State Variables ################
+g =  0.5
+mu =  0.0
+r =  1.0
+lamb=  0.02
+J =  0.0
+beta =  500.0
+log_2 M =  23.0
+eta =  0.00011984224897787499
+T =  262144
+err =  0.01
+######## End of State variables #########
+itern =  1  , diff =  13960.673200267795 13960.673200267795  , x =  0.25 0.25
+itern =  2  , diff =  5637.58397064336 5637.58397064336  , x =  0.25 0.25
+itern =  3  , diff =  4564.131637232042 4564.131637232042  , x =  0.25 0.25
+itern =  4  , diff =  3614.220155705206 3614.220155705206  , x =  0.25 0.25
+itern =  5  , diff =  2971.9192823156327 2971.9192823156327  , x =  0.25 0.25
+itern =  6  , diff =  2489.740951147099 2489.740951147099  , x =  0.25 0.25
+itern =  7  , diff =  2131.1386657230187 2131.1386657230187  , x =  0.25 0.25
+itern =  8  , diff =  1868.6724285698492 1868.6724285698492  , x =  0.25 0.25
+itern =  9  , diff =  1677.7804816381454 1677.7804816381454  , x =  0.25 0.25
+itern =  10  , diff =  1531.3355660413827 1531.3355660413827  , x =  0.25 0.25
+itern =  11  , diff =  1401.1259630091913 1401.1259630091913  , x =  0.25 0.25
+itern =  12  , diff =  1262.5687787590707 1262.5687787590707  , x =  0.25 0.25
+itern =  13  , diff =  1103.8813590572627 1103.8813590572627  , x =  0.25 0.25
+itern =  14  , diff =  930.5986321225976 930.5986321225976  , x =  0.25 0.25
+itern =  15  , diff =  758.1702928054111 758.1702928054111  , x =  0.25 0.25
+itern =  16  , diff =  600.5362891965553 600.5362891965553  , x =  0.25 0.25
+itern =  17  , diff =  465.9287150464749 465.9287150464749  , x =  0.25 0.25
+itern =  18  , diff =  357.11592663965655 357.11592663965655  , x =  0.25 0.25
+itern =  19  , diff =  270.73691932122057 270.73691932122057  , x =  0.25 0.25
+itern =  20  , diff =  201.10810372873763 201.10810372873763  , x =  0.25 0.25
+itern =  21  , diff =  144.09935796908596 144.09935796908596  , x =  0.25 0.25
+itern =  22  , diff =  99.0386075557523 99.0386075557523  , x =  0.25 0.25
+itern =  23  , diff =  70.97705474749291 70.97705474749291  , x =  0.25 0.25
+itern =  24  , diff =  67.1723410893758 67.1723410893758  , x =  0.25 0.25
+itern =  25  , diff =  75.88174197663945 75.88174197663945  , x =  0.125 0.125
+itern =  26  , diff =  42.080465842226054 42.080465842226054  , x =  0.125 0.125
+itern =  27  , diff =  43.47225165132682 43.47225165132682  , x =  0.0625 0.0625
+itern =  28  , diff =  22.178253307828427 22.178253307828427  , x =  0.0625 0.0625
+itern =  29  , diff =  22.314189692328597 22.314189692328597  , x =  0.03125 0.03125
+itern =  30  , diff =  11.196531221353423 11.196531221353423  , x =  0.03125 0.03125
+itern =  31  , diff =  11.207048674573322 11.207048674573322  , x =  0.015625 0.015625
+itern =  32  , diff =  5.605544514777824 5.605544514777824  , x =  0.015625 0.015625
+itern =  33  , diff =  5.605507209353684 5.605507209353684  , x =  0.015625 0.015625
+itern =  34  , diff =  5.6047044903854815 5.6047044903854815  , x =  0.015625 0.015625
+itern =  35  , diff =  5.603152939393369 5.603152939393369  , x =  0.015625 0.015625
+itern =  36  , diff =  5.600869218782943 5.600869218782943  , x =  0.015625 0.015625
+
+###########Data Writing############
+Dictionary saved to ./Outputs/Y_WH_2148726.h5
+*********Program exited successfully *********
+[/bin/bash]#### SLURM script finished. 

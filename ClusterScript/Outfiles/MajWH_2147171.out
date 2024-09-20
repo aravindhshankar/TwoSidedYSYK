@@ -1,0 +1,10 @@
+[/bin/bash] ## This is shankaras1 on #HOSTNAME and job ID 2147171
+[/bin/bash] Current working directory: /home/shankaras1/data1/Maj_WH/ClusterScript
+[/bin/bash] Running Python script
+/data1/shankaras1/Maj_WH/ClusterScript/ShOut_ClusterMajWH.py:55: SyntaxWarning: 'float' object is not callable; perhaps you missed a comma?
+  beta = 1.(5e-5)
+Traceback (most recent call last):
+  File "/data1/shankaras1/Maj_WH/ClusterScript/ShOut_ClusterMajWH.py", line 55, in <module>
+    beta = 1.(5e-5)
+TypeError: 'float' object is not callable
+[/bin/bash]#### SLURM script finished. 

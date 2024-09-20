@@ -1,0 +1,28 @@
+[/bin/bash] ## This is shankaras1 on #HOSTNAME and job ID 2132484
+[/bin/bash] Current working directory: /home/shankaras1/data1/Maj_WH/ClusterScript
+[/bin/bash] Running Python script
+/data1/shankaras1/Maj_WH/ClusterScript/./Sources/SYK_fft.py:87: RuntimeWarning: overflow encountered in exp
+  return (1.0/(1.0 + np.exp(arg)))
+T =  1024 , dw =   0.003068 , dt =  0.015625 , omega_max =  201.059
+dw/temp =  0.1534
+######## State Variables ################
+J =  1.0 
+
+mu =  0.01 
+
+M =  65536 
+
+eta =  0.03067961575766276 
+
+T =  1024 
+
+err =  0.01 
+
+######## End of State variables #########
+itern =  1  , diff =  0.06886448497948881  , x =  0.5
+itern =  2  , diff =  0.010221116851178484  , x =  0.5
+itern =  3  , diff =  0.0006823419497266887  , x =  0.5
+
+###########Data Writing############
+*********Program exited successfully with itern = 3 *********
+[/bin/bash]#### SLURM script finished. 

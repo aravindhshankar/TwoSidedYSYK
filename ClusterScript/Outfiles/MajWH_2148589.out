@@ -1,0 +1,6 @@
+[/bin/bash] ## This is shankaras1 on #HOSTNAME and job ID 2148589
+[/bin/bash] Current working directory: /home/shankaras1/data1/Maj_WH/ClusterScript
+[/bin/bash] Running Python script
+/data1/shankaras1/Maj_WH/ClusterScript/./Sources/SYK_fft.py:87: RuntimeWarning: overflow encountered in exp
+  return (1.0/(1.0 + np.exp(arg)))
+slurmstepd: error: *** JOB 2148589 ON node006 CANCELLED AT 2023-12-14T01:36:39 DUE TO TIME LIMIT ***
