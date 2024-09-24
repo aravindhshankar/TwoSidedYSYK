@@ -24,13 +24,13 @@ from ConformalAnalytical import *
 #import time
 
 
-Nbig = int(2**14)
+Nbig = int(2**16)
 x = 0.001
-# err = 1e-6
-err = 1e-3 * (x**2)
+# err = 1e-2
+err = 1e-1 * (x**2)
 # beta = 100
 mu = 0.0
-g = 2
+g = 1.2
 #r = 0.0 + 1e-8 * 1j
 r = 1.
 #r = g**2 * beta/2 + 0.001
@@ -92,7 +92,7 @@ def Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.001,0.001],er
             # if diffD>diffoldD:
             #     xD/=2.
             #print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD, end = '\r')
-            # print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD) if verbose == True else None
+            print("itern = ",itern, " , diff = ", diffG, diffD, " , x = ", xG, xD) if verbose == True else None
 
 
         
@@ -123,24 +123,27 @@ def Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.001,0.001],er
 # Dtau = Dfreetau
 #Gtau = Gtau_powerlaw * (-0.5/Gtau_powerlaw[0])
 #Dtau = Dtau_powerlaw * (DfreeImagtau(tau,r,beta)[0]/Dtau_powerlaw[0])
-target_beta = 1000
+target_beta = 50
 beta_step = 1
-beta_start = 1
+beta_start = 50
 
 
-betalist = np.arange(beta_start, target_beta + beta_step, beta_step)
+# betalist = np.arange(beta_start, target_beta + beta_step, beta_step)
+betalist = [beta_start,]
 
 omega = ImagGridMaker(Nbig,beta_start,'fermion')
 nu = ImagGridMaker(Nbig,beta_start,'boson')
 tau = ImagGridMaker(Nbig,beta_start,'tau')
 
-Gtau = -0.5*np.ones(Nbig)
-Dtau = 1.0*np.ones(Nbig)
+# Gtau = -0.5*np.ones(Nbig)
+# Dtau = 1.0*np.ones(Nbig)
 Gtau = Freq2TimeF(GconfImag(omega,g,beta_start),Nbig,beta_start)
 Dtau = Freq2TimeB(DconfImag(nu,g,beta_start),Nbig,beta_start)
+# Gtau = Freq2TimeF(GImpImag(omega,g,beta_start),Nbig,beta_start)
+# Dtau = Freq2TimeB(DImpImag(nu,g,beta_start),Nbig,beta_start)
 GFtaus = [Gtau,Dtau]
 
-Gtau, Dtau = Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[0.001,0.001],err=err,DUMP=True,path_to_dump=path_to_dump,savelist=betalist,calcfe=False,verbose=True)
+Gtau, Dtau = Single_YSYK_anneal_temp(betalist,GFtaus,Nbig,g,r,mu,kappa,x=[x,x],err=err,DUMP=False,path_to_dump=path_to_dump,savelist=betalist,calcfe=False,verbose=True)
 beta = betalist[-1]
 omega = ImagGridMaker(Nbig,beta,'fermion')
 nu = ImagGridMaker(Nbig,beta,'boson')
@@ -152,11 +155,14 @@ Domega = Time2FreqB(Dtau,Nbig,beta)
 Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
 FreeDtau = DfreeImagtau(tau,r,beta)
+ImpGtau = Freq2TimeF(GImpImag(omega,g,beta), Nbig, beta)
+ImpDtau = Freq2TimeB(DImpImag(nu,g,beta),Nbig,beta)
 
 fig, ax = plt.subplots(2)
 
 ax[0].plot(tau/beta, np.real(Gtau), 'r', label = 'numerics Gtau')
 ax[0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
+ax[0].plot(tau/beta, np.real(ImpGtau), 'm--', label = 'analytical imp Gtau' )
 ax[0].set_ylim(-1,1)
 ax[0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[0].set_ylabel(r'$\Re{G(\tau)}$')
@@ -165,6 +171,7 @@ ax[0].legend()
 ax[1].plot(tau/beta, np.real(Dtau), 'r', label = 'numerics Dtau')
 ax[1].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
 ax[1].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
+ax[1].plot(tau/beta, np.real(ImpDtau), 'm-.', label = 'Imp D Dtau' )
 #ax[1].set_ylim(0,1)
 ax[1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[1].set_ylabel(r'$\Re{D(\tau)}$')

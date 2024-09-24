@@ -158,3 +158,27 @@ def CrazyDconfReal(omega,g,beta,eta=0):
     omegar2 = c2 * (T/(g**2))**(4*delta - 1)
     print('boo')
     return 1.0/(1*(omega+1j*eta)**2 + omegar2 + c3*(np.abs((omega+1j*eta)/(1j* (g**2))))**(4*delta - 1))
+
+
+def GImpImag(omega,g,beta):
+    ''' 
+    Arguments omega,g,beta
+    So far we will implement only the kappa=1 result eq.23-25 of esterlis-schmalian
+    omega is the grid of fermionic matsubara frequencies
+    '''
+    omega0 = (16/(3*np.pi)) * (g**2)
+    num = -2j * np.heaviside(omega,0)
+    denom = np.sqrt(omega**2 + omega0**2) + np.abs(omega)
+    
+    return num/denom
+
+def DImpImag(nu,g,beta):
+    ''' 
+    Arguments: nu,g,beta
+    So far we will implement only the kappa=1 result eq.23-25 of esterlis-schmalian
+    nu is the grid of bosonic matsubara frequencies
+    '''
+    T = 1.0/beta
+    omegar2 = (3*np.pi/8)**2 * (T/(g**2))
+    
+    return 1.0/(nu**2 + omegar2)

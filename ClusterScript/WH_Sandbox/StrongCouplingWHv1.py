@@ -30,17 +30,17 @@ print("DUMP = ", DUMP)
 Nbig = int(2**14)
 err = None
 #err = 1e-2
-ITERMAX = 20000
+ITERMAX = 40000
 
 global beta
 
-beta = 50
+beta = 100
 mu = 0.0
 g_load = 0.5
-g = 0.51
+# g = 0.51
 # glist = np.linspace(0.5,2.,10)
 glist = np.arange(0.5,2.,0.01)
-gsavelist = (0,6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0)
+gsavelist = (0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0)
 r = 1.
 
 lamb = 0.05
@@ -75,7 +75,7 @@ tau = ImagGridMaker(Nbig,beta,'tau')
 Gfreetau = Freq2TimeF(1./(1j*omega + mu),Nbig,beta)
 Dfreetau = Freq2TimeB(1./(nu**2 + r),Nbig,beta)
 delta = 0.420374134464041
-omegar2 = ret_omegar2(g,beta)
+# omegar2 = ret_omegar2(g,beta)
 
 
 
@@ -100,7 +100,7 @@ for g in glist:
 
 
 GDtau, GODtau, DDtau, DODtau = GFtaus
-
+if g == None: g = glist[-1]
 
 ################## PLOTTING ######################
 Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)

@@ -26,7 +26,8 @@ else:
 	# path_to_dump_temp_fwd = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/fwd/'
 	# path_to_dump_temp_rev = '../Dump/24Aprzoom_x0_01_temp_anneal_dumpfiles/rev/'
 	# path_to_dump = '../Dump/gap_powerlawx01_lamb_anneal_dumpfiles/'
-	path_to_dump = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
+	# path_to_dump = '../Dump/zoom_xshift_temp_anneal_dumpfiles/fwd'
+	path_to_dump = '../Dump/OneSideYSYKg2/'
 	
 	# if not os.path.exists(path_to_dump_lamb):
 	# 	raise Exception('Generate Data first! Path to lamb dump not found')
@@ -50,10 +51,11 @@ err = 1e-5
 
 global beta
 
-beta = 30
+beta = 50
+beta = 100
 mu = 0.0
-g = 0.5
-# g = 2.
+# g = 0.5
+g = 0.9
 r = 1.
 
 kappa = 1.
@@ -64,6 +66,7 @@ J = 0
 # path_to_dump = path_to_dump_lamb
 # path_to_dump = path_to_dump_temp
 
+# Nbig14beta50lamb0_05J0g1_8r1_0.npy
 savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 savefile += 'lamb' + str(lamb) + 'J' + str(J)
 # savefile += 'lamb' + str(lamb) 
@@ -118,7 +121,8 @@ print(beta), print(tau[-1])
 Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
 Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
 FreeDtau = DfreeImagtau(tau,r,beta)
-
+ImpGtau = Freq2TimeF(GImpImag(omega,g,beta), Nbig, beta)
+ImpDtau = Freq2TimeB(DImpImag(nu,g,beta),Nbig,beta)
 
 fig, ax = plt.subplots(2,2)
 
@@ -127,7 +131,8 @@ titlestring += r' $\lambda$ = ' + str(lamb) + r' J = ' + str(J)
 fig.suptitle(titlestring)
 fig.tight_layout(pad=2)
 ax[0,0].plot(tau/beta, np.real(GDtau), 'r', label = 'numerics GDtau')
-ax[0,0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical Gtau' )
+ax[0,0].plot(tau/beta, np.real(Gconftau), 'b--', label = 'analytical conf Gtau' )
+ax[0,0].plot(tau/beta, np.real(ImpGtau), 'm--', label = 'analytical imp Gtau' )
 #ax[0,0].set_ylim(-1,1)
 ax[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[0,0].set_ylabel(r'$\Re{GD(\tau)}$')
@@ -144,6 +149,7 @@ ax[0,1].legend()
 ax[1,0].plot(tau/beta, np.real(DDtau), 'r', label = 'numerics DDtau')
 ax[1,0].plot(tau/beta, np.real(Dconftau), 'b--', label = 'analytical Dtau' )
 ax[1,0].plot(tau/beta, np.real(FreeDtau), 'g-.', label = 'Free D Dtau' )
+ax[1,0].plot(tau/beta, np.real(ImpDtau), 'm-.', label = 'Imp D Dtau' )
 #ax[1,0].set_ylim(0,1)
 ax[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
 ax[1,0].set_ylabel(r'$\Re{DD(\tau)}$')
@@ -293,13 +299,14 @@ ax.plot(omega,SigmaDomega.real,label = 'ReSigmaD')
 ax.plot(omega,SigmaDomega.imag,label = 'ImSigmaD')
 ax.plot(omega,SigmaODomega.real,label = 'ReSigmaOD')
 ax.plot(omega,SigmaODomega.imag,label = 'ImSigmaOD')
+ax.set_xlabel(r'$\omega_n$')
 ax.legend()
 
-theta = np.pi/2
+# theta = np.pi/2
 # thetalist = [0,np.pi/6,np.pi/4, np.pi/3,np.pi/2]
-thetalist = np.linspace(0,2*np.pi,100)
+# thetalist = np.linspace(0,2*np.pi,100)
 # theta = 0.
-fig,ax=plt.subplots(1)
+# fig,ax=plt.subplots(1)
 # for theta in thetalist:
 # 	FEmetalContr = np.log((lamb**2 + SigmaODomega.real**2 + 2 * lamb * SigmaODomega.real * np.cos(theta) - (omega - SigmaDomega.imag)**2)**2)
 # 	ax.plot(omega,FEmetalContr)
@@ -309,10 +316,10 @@ fig,ax=plt.subplots(1)
 #plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
 
 
-retFE = lambda theta : np.sum(-np.log((lamb**2 + SigmaODomega.real**2 + 2 * lamb * SigmaODomega.real * np.cos(theta) - (omega - SigmaDomega.imag)**2)**2))
-normaln = -np.sum(np.log(omega**4))
-FEsumangle = [retFE(theta) - normaln for theta in thetalist] 
-ax.plot(thetalist, FEsumangle)
+# retFE = lambda theta : np.sum(-np.log((lamb**2 + SigmaODomega.real**2 + 2 * lamb * SigmaODomega.real * np.cos(theta) - (omega - SigmaDomega.imag)**2)**2))
+# normaln = -np.sum(np.log(omega**4))
+# FEsumangle = [retFE(theta) - normaln for theta in thetalist] 
+# ax.plot(thetalist, FEsumangle)
 
 plt.show()
 
