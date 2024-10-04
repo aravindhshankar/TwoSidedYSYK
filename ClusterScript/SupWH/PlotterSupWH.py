@@ -1,4 +1,5 @@
 import sys
+################
 import os 
 if not os.path.exists('../Sources'):
 	print("Error - Path to Sources directory not found ")
@@ -441,7 +442,7 @@ handles,labels = axSEs[0].get_legend_handles_labels()
 lgd = figSEs.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(1,-0.8),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=axSEs[1].transAxes)
 
 # figSEs.savefig('../Figuremaker/MagnitudeSEs.pdf')
-
+########## END #####################
 
 plt.show()
 

@@ -333,8 +333,8 @@ else:
     # ax[1,0].set_xlabel(r'$\nu_n/g^2$')
     # ax[1,0].set_ylabel(r'$g^2\,\Re{DD(\nu_n)}$',labelpad = None)
     # #ax[1,0].set_aspect('equal', adjustable='box')
-    # ax[1,0].legend()
-
+    # ax[1,0].legend() ############
+	
 
 
 

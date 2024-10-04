@@ -92,6 +92,7 @@ for beta in betasavelist:
 
 if not PLOTTING:
 	print("pushbetadownwh.py exiting without plotting")
+	###############################
 	exit(0)
 
 
