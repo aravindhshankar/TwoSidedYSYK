@@ -1,3 +1,5 @@
+### DEPRECATED !!!!!!!! ########
+### USE ./ClusterScript/Sources/ConformalAnalytical.py instead ##############
 import numpy as np
 from SYK_fft import *
 
