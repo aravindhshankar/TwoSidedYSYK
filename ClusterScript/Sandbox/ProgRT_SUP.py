@@ -23,10 +23,10 @@ from SUP_iterator import RE_SUP_iterator
 import testingscripts
 assert testingscripts.realtimeFFT_validator(), "FT_Testing failed" # Should return True
 
-DUMP = True
+DUMP = False
 
 M = int(2**16) #number of points in the grid
-T = 2**12 #upper cut-off for the time
+T = 2**10 #upper cut-off for the time
 err = 1e-6
 #err = 1e-2
 
@@ -49,7 +49,7 @@ kappa = 1.
 eta = dw*2.1
 alpha=0.
 
-betalooplist = np.arange(1,201,1)
+betalooplist = np.arange(1,50,1)
 DELTA = 0.25
 
 #GRomega,DRomega = np.load(os.path.join(path_to_dump,'M16T12beta10_0g0_5r1_0.npy'))
@@ -65,7 +65,7 @@ for beta in betalooplist:
     #beta_step = 0.01 if (beta<1) else 1
     if np.sum(np.abs(FRomega[M+1:M+10])) < 1e-2:
         FRomega = (DELTA)/((omega+1j*eta)**2 - DELTA**2)
-    GRomega, DRomega, FRomega, INFO = RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=False,diffcheck=False,alpha=alpha) 
+    GRomega, DRomega, FRomega, INFO = RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=err,ITERMAX=ITERMAX,eta = eta,verbose=True,diffcheck=False,alpha=alpha) 
     itern, diff = INFO
     if DUMP == True :
         savefile = 'M' + str(int(np.log2(M))) + 'T' + str(int(np.log2(T))) 
