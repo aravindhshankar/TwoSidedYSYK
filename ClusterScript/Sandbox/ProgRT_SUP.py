@@ -49,7 +49,7 @@ kappa = 1.
 eta = dw*2.1
 alpha=0.
 
-betalooplist = np.arange(1,50,1)
+betalooplist = np.arange(1,10,1)
 DELTA = 0.25
 
 #GRomega,DRomega = np.load(os.path.join(path_to_dump,'M16T12beta10_0g0_5r1_0.npy'))
