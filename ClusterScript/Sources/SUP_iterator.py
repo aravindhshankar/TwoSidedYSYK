@@ -83,7 +83,7 @@ def RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=1e-5,ITERMAX=150,
         # GRomega = 1.0*xG/(omega + 1j*eta + mu - SigmaOmega) + (1-xG)*GRoldomega
         detGmat = ((omega+1j*eta - mu - SigmaOmega)*(omega+1j*eta + mu + np.conj(SigmaOmega))) - (np.abs(Phiomega))**2
         GRomega = 1.0*xG*(omega + 1j*eta + mu + np.conj(SigmaOmega))/(detGmat) + (1-xG)*GRoldomega
-        FRomega = 1.0*xG*(Phiomega)/(detGmat) + (1-xG)*GRoldomega
+        FRomega = 1.0*xG*(Phiomega)/(detGmat) + (1-xG)*FRoldomega
 
         diffG = np. sqrt(np.sum((np.abs(GRomega-GRoldomega))**2)) #changed
         diffD = np. sqrt(np.sum((np.abs(DRomega-DRoldomega))**2))
