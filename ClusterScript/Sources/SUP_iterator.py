@@ -103,6 +103,69 @@ def RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=1e-5,ITERMAX=150,
 
 
 
+def GF_RE_SUP_iterator(GRomega,DRomega,FRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False,alpha=0.):
+    '''
+    signature:
+    GRomega,DRomega,grid,pars,beta,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False
+    grid is a list [M,omega,t]
+    pars is a list [g,mu,r]
+    '''
+    M,omega,t = grid
+    g,mu,r = pars
+    itern = 0
+    omegar2 = ret_omegar2(g,beta)
+
+    diff = 1.
+    diffG,diffD = (1.0,1.0)
+    x = 0.01
+
+    xG, xD = x,x
+    diffseries = []
+    flag = True
+    fdplus = np.array([fermidirac(beta*omegaval, default = False) for omegaval in omega])
+    fdminus = np.array([fermidirac(-1.0*beta*omegaval, default = False) for omegaval in omega])
+    beplus = np.array([boseeinstein(beta*omegaval, default = False) for omegaval in omega])
+    beminus = np.array([boseeinstein(-1.0*beta*omegaval, default = False) for omegaval in omega])
+    BMf = [fdplus, fdminus, beplus, beminus]
+
+    while (diff>err and itern<ITERMAX and flag): 
+        itern += 1 
+        if itern == ITERMAX:
+            warnings.warn('WARNING: ITERMAX reached for beta = ' + str(beta))
+        diffoldG,diffoldD = (diffG,diffD)
+        GRoldomega,DRoldomega,FRoldomega = (1.0*GRomega, 1.0*DRomega,1.0*FRomega)
+
+        rhoG = -1.0*np.imag(GRomega)
+        rhoD = -1.0*np.imag(DRomega)
+        rhoF = -1.0*np.imag(FRomega)
+
+        #SigmaOmega,PiOmega = newcheckrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        SigmaOmega,PiOmega,Phiomega = SupDav_rhotosigma(rhoG,rhoD,rhoF,M,t,g,beta,BMf,kappa=1,alpha=alpha)
+        #SigmaOmega,PiOmega = newrhotosigma(rhoG,rhoD,M,t,g,beta,BMf,kappa=1,delta=eta)
+        if np.imag(SigmaOmega[M] > 0) :
+            warnings.warn('Violation of causality : Pole of Gomega in UHP for beta = ' + str(beta))
+     
+        DRomega = 1.0*xD/(-1.0*(omega+1j*eta)**2 + r - PiOmega) + (1-xD)*DRoldomega
+        #DRomega = 1.0*xD/(1.0*(omega+1j*eta)**2 - r - PiOmega) + (1-xD)*DRoldomega #modified
+        # GRomega = 1.0*xG/(omega + 1j*eta + mu - SigmaOmega) + (1-xG)*GRoldomega
+        detGmat = (omega+1j*eta - mu - SigmaOmega)**2 - (Phiomega)**2
+        GRomega = 1.0*xG*(omega + 1j*eta - mu - SigmaOmega)/(detGmat) + (1-xG)*GRoldomega
+        FRomega = 1.0*xG*(Phiomega)/(detGmat) + (1-xG)*FRoldomega
+
+        diffG = np. sqrt(np.sum((np.abs(GRomega-GRoldomega))**2)) #changed
+        diffD = np. sqrt(np.sum((np.abs(DRomega-DRoldomega))**2))
+        diffF = np. sqrt(np.sum((np.abs(FRomega-FRoldomega))**2))
+        diff = 0.33*(diffG+diffD+diffF)
+        diffG,diffD,diffF = diff,diff,diff
+        if diffcheck:
+            diffseries += [diff]
+            flag = testingscripts.diff_checker(diffseries, tol = 1e-3, periods = 5)
+        
+        if verbose:
+            print("itern = ",itern, " , diff = ", diff, " , x = ", x)
+
+    INFO = (itern, diff)
+    return (GRomega,DRomega,FRomega, INFO)
 
 
 def RE_SUPWH_iterator(GFs,grid,pars,beta,lamb,J,x = 0.01,err=1e-5,ITERMAX=150,eta=1e-6, verbose=True, diffcheck = False):
