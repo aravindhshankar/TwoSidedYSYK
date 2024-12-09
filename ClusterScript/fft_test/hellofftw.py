@@ -7,9 +7,9 @@ sys.path.insert(0,'../')
 # sys.path.insert(0,'../../')
 from Sources.SYK_fft import time2freq, freq2time, RealGridMaker
 import pyfftw
-from h5_handler import dict2h5, h52dict
+from Sources.h5_handler import dict2h5, h52dict
 
-N = int(2**20) #make sure this is an even number 
+N = int(2**22) #make sure this is an even number 
 np.testing.assert_equal(N%2,0)
 T = 2**12
 t = np.linspace(0,T,N)
@@ -40,22 +40,22 @@ print(f'SYK fourier transform computed in {stop-start} seconds.')
 
 #now for the pyfftw
 wisdomflag = False
-try : 
+try : # Warning : the first time for the parameters where there's no wisdom, the computed transform is wrong
     wisdom = h52dict('wisdom_file.h5')
     pyfftw.import_wisdom(wisdom['wisdom'])
-except FileNotFoundError :
+except FileNotFoundError : 
     wisdomflag = True
 a = pyfftw.empty_aligned(N, dtype='complex128')
 b = pyfftw.empty_aligned(N, dtype='complex128')
-a[:] = x #does this work or should I copy elements one by one? 
+a[:] = x # the elements should be copied into the created array a 
 start = time.perf_counter()
-fft_object = pyfftw.FFTW(a, b)
+fft_object = pyfftw.FFTW(a, b) #this plan is able to do the fourier transform of the array placed in memeory as a and produce results in place in b
 fft_a = fft_object()
 stop = time.perf_counter()
-if wisdomflag == True:
-    wisdom = pyfftw.export_wisdom()
-    wisdom_dict = {'wisdom':wisdom}
-    h52dict('wisdom_file.h5', wisdom_dict, verbose=True)
+# Write newly accumulated wisdom back to file 
+wisdom = pyfftw.export_wisdom()
+wisdom_dict = {'wisdom':wisdom}
+dict2h5(wisdom_dict, 'wisdom_file.h5', verbose=True)
 
 print(fft_object.input_array is a)
 print(fft_a is b)
