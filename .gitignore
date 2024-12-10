@@ -6,6 +6,7 @@
 *.npz
 *.txt
 *.pyc
+*.swp
 .DS_Store
 *.pyc
 .env/
