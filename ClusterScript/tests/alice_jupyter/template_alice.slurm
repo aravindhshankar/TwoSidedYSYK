@@ -10,7 +10,10 @@
 
 unset XDG_RUNTIME_DIR
 module load ALICE/default
-module load JupyterLab
+module load Python/3.10.8-GCCcore-12.2.0
+# module load JupyterLab
+source $HOME/WH_env/bin/activate
+python -m ipykernel install --user --name=kernelenv --display-name "Python (kernelenv)"
 
 echo "Running the notebook on $(hostname)"
 IPADDR=$(hostname -i)
@@ -19,7 +22,7 @@ port=8989
 
 SALT="$(head /dev/urandom | tr -dc 'A-Z-a-z-0-9{}[]=+.:-_' | head -c 16;echo;)"
 #password="$(head /dev/urandom | tr -dc 'A-Z-a-z-0-9{}[]=+.:-_' | head -c 16;echo;)"
-password=""
+password = ""
 PASSWORD_SHA="$(echo -n "${password}${SALT}" | openssl dgst -sha256 | awk '{print $NF}')"
 echo "-------------------------"
 echo "Log in using the password: $password"
