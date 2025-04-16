@@ -202,17 +202,17 @@ ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, t
 
 
 
-if which == 'GD':
-	plt.savefig('GdGapscalingv2.pdf',bbox_inches='tight')
-elif which == 'DD':
-	plt.savefig('DdGapscalingv2.pdf',bbox_inches='tight')
-else: 
-	print("Please try to be less stupid in the future. Kind regards.")
-	exit(1)
+# if which == 'GD':
+	# plt.savefig('GdGapscalingv2.pdf',bbox_inches='tight')
+# elif which == 'DD':
+	# plt.savefig('DdGapscalingv2.pdf',bbox_inches='tight')
+# else: 
+	# print("Please try to be less stupid in the future. Kind regards.")
+	# exit(1)
 
 
 
-# plt.show()
+plt.show()
 
 
 

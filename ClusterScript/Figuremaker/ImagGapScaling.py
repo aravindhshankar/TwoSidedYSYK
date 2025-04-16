@@ -185,7 +185,7 @@ if calc == True:
 	# print(slope)
 
 
-	plt.savefig('GdGapscaling.pdf',bbox_inches='tight')
+	# plt.savefig('GdGapscaling.pdf',bbox_inches='tight')
 	plt.show()
 
 
