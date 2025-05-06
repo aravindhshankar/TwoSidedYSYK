@@ -50,6 +50,7 @@ plt.rcParams['axes.labelsize'] = '12'
 plt.rcParams['lines.linewidth'] = '1'
 plt.rcParams['axes.formatter.limits'] = '-2,2'
 plt.rcParams['text.usetex'] = 'True'
+plt.rcParams['text.latex.preamble']=r"\usepackage{amsmath}"
 
 
 
@@ -64,7 +65,8 @@ fig,ax = plt.subplots(1)
 fig.tight_layout()
 # fig.set_figwidth(3.25)
 fig.set_figwidth(3.375 * 2 / 4) #single column width * 2 cols / 4 figs
-# ax.set_box_aspect(aspect=1)
+# fig.set_figwidth(3.375 * 2 / 3) #single column width * 2 cols / 3 figs
+ax.set_box_aspect(aspect=1)
 
 path_to_dump = path_to_dump_lamb
 gaplist = []
@@ -132,7 +134,8 @@ for lambval in lambsavelist:
         titlestring =  r' $\beta $ = ' + str(beta) + '\n'
         titlestring += r' $\lambda$ = ' + f'{lambval:.3}' 
         # left, bottom, width, height = [0.25, 0.55, 0.2, 0.2] #starting default
-        left, bottom, width, height = [0.24, 0.70, 0.275, 0.275]
+        # left, bottom, width, height = [0.24, 0.70, 0.275, 0.275] #first done version
+        left, bottom, width, height = [-0.10, 0.65, 0.3, 0.3]
         ax2 = fig.add_axes([left, bottom, width, height])
         #plottable = np.abs(np.real(GDtau))
         startT, stopT = 0, Nbig//2
@@ -143,14 +146,21 @@ for lambval in lambsavelist:
             ax2.semilogy(xaxis, plottableval[startT:stopT:skip],'p',label = 'numerics DDtau',markersize=2,c=f'C{i}')
         # ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
         ax2.set_xlabel(r'$\tau/\beta$',labelpad=-2)
-        insetitle = r'$|G_d(\tau)|$' 
-        ax2.set_ylabel(insetitle)
+        insetitle = r'$\boldsymbol{|G_d(\tau)|}$' 
+        ax2.set_ylabel(insetitle,labelpad=-2)
+        ax2.yaxis.label.set_color('C0')
         ax2.set_title(titlestring,pad=-1)
         ax2.set_box_aspect(aspect=1)
+        ax3 = ax2.twinx()
+        ax3.set_ylabel(r'$\boldsymbol{|D_d(\tau)|}$',labelpad=-2)
+        ax3.yaxis.label.set_color('C1')
+        ax3.yaxis.set_major_formatter(NullFormatter())
+
         # ax2.axvline(0.1, ls='--')
         # ax2.axvline(0.2, ls='--')
         ax2.axvline(startval, ls='--')
         ax2.axvline(stopval, ls='--')
+        ax2.yaxis.set_major_formatter(NullFormatter())
         ax2.tick_params(which='major', length=3, width=0.6, direction="in", right=True, top=True)
         ax2.tick_params(which='minor', length=1, width=0.3, direction="in", right=True, top=True)
         ax2.tick_params(axis='x', labelsize=8)
@@ -177,8 +187,9 @@ gaplist = np.array(gaplist).T
 
 
 
+ax.loglog([],[],ls='None',label = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.2}')
 for i, gaplistval in enumerate(gaplist):
-    ax.loglog(lambsavelist,gaplistval,'.')
+    ax.loglog(lambsavelist,gaplistval,'.',c=f'C{i}')
 print(gaplist)
 fitpars = [np.polyfit(np.log(lambsavelist),np.log(gaplistval),1) for gaplistval in gaplist]
 # m,c = np.polyfit(np.log(lambsavelist[-10:-1]),np.log(gaplist[-10:-1]),1)
@@ -186,20 +197,20 @@ textvals = [r'$E_g^F$', r'$E_g^B$']
 for i in [0,1]:
     mval = fitpars[i][0]
     cval = fitpars[i][1]
-    ax.loglog(lambsavelist, np.exp(cval) * lambsavelist**mval, label = textvals[i] + f'= {mval:.4}', c=f'C{i}')
+    ax.loglog(lambsavelist, np.exp(cval) * lambsavelist**mval, label = textvals[i] + f'= {mval:.2}', c=f'C{i}')
     print(f'calculated scaling = {mval:.4}')
-ax.loglog([],[],ls='None',label = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.4}')
 print(f'dimensional analysis scaling = {slope_expect:.4}')
 ax.set_xlabel(r'$\lambda \times 10^{-3}$')
 ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
 
 titleval = r'Gap scaling calculated from $G_d$' 
+titleval = ''
 
 
 ax.set_title(titleval)
-ax.legend(loc='lower right') # add option fontsize = 12 for example
+# ax.legend(loc='lower right', bbox_to_anchor=(1.2,-0.001) ) # first version works
+ax.legend(loc='upper right', bbox_to_anchor=(1.282,1.69) ) # coords (x,y)
 
-ax.set_title('FUCK YOU!')
 
 # tick_locs = np.logspace(np.log10(np.min(lambsavelist)), np.log10(np.max(lambsavelist)), num=10)
 tick_locs = np.linspace(2e-3, 1e-2, num=9)
@@ -211,26 +222,8 @@ ax.xaxis.set_major_formatter(FixedFormatter(tick_labels))
 ax.xaxis.set_minor_formatter(FixedFormatter(tick_labels))
 ax.set_xticks = tick_locs
 
-class IntScalarFormatter(ScalarFormatter):
-    def __call__(self,x,pos=None):
-        if np.isclose(x,int(x)):
-            return f"{int(x)}"
-        else:
-            # return f"{x:g}"
-            return super().__call__(x,pos)
 
-# formatter = IntScalarFormatter(useMathText=True)
-# formatter = ScalarFormatter(useMathText=True)
-# formatter.set_powerlimits((-3,-3))
-# formatter.set_scientific(True)
-# ax.xaxis.set_major_locator(LogLocator(base=10.0))
-# ax.xaxis.set_minor_locator(LogLocator(base=10.0,subs='auto',numticks=10))
-# ax.xaxis.set_major_formatter(formatter)
-# ax.xaxis.set_minor_formatter(FixedFormatter(['2','3','4','5','6','7','8','9']))
-# # ax.xaxis.set_minor_formatter(formatter)
-# ax.ticklabel_format(style='sci', axis='x',scilimits=(-3,-3))
-
-ax.tick_params(which='major', length=14, width=0.8, direction="in", right=True, top=True)
+ax.tick_params(which='major', length=4, width=0.8, direction="in", right=True, top=True)
 ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, top=True)
 # ax.tick_params(axis='x', labelsize=6)
 # ax.tick_params(axis='y', labelsize=6)
@@ -240,6 +233,10 @@ for elem in def_tls:
 
 print(f'min of lamblist = {np.min(lambsavelist)}')
 print(f'max of lamblist = {np.max(lambsavelist)}')
+
+print('######### legends #####')
+legend = ax.get_legend()
+
 
 plt.savefig('PRLgapscaling.pdf', bbox_inches='tight')
 
