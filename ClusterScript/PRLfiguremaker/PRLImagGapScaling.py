@@ -35,7 +35,7 @@ from matplotlib import rcParams
 from ConformalAnalytical import *
 from free_energy import free_energy_YSYKWH 
 #from annealers import anneal_temp, anneal_lamb
-from matplotlib.ticker import StrMethodFormatter, NullFormatter
+from matplotlib.ticker import StrMethodFormatter, NullFormatter, FixedLocator, FormatStrFormatter, FixedFormatter
 from matplotlib.ticker import LogLocator
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
@@ -190,7 +190,7 @@ for i in [0,1]:
     print(f'calculated scaling = {mval:.4}')
 ax.loglog([],[],ls='None',label = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.4}')
 print(f'dimensional analysis scaling = {slope_expect:.4}')
-ax.set_xlabel(r'$\lambda$')
+ax.set_xlabel(r'$\lambda \times 10^{-3}$')
 ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
 
 titleval = r'Gap scaling calculated from $G_d$' 
@@ -201,9 +201,15 @@ ax.legend(loc='lower right') # add option fontsize = 12 for example
 
 ax.set_title('FUCK YOU!')
 
-
-ax.tick_params(which='major', length=4, width=0.8, direction="in", right=True, top=True)
-ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, top=True)
+tick_locs = np.logspace(np.log10(np.min(lambsavelist)), np.log10(np.max(lambsavelist)), num=4)
+tick_labels = [f"{val*1000:.0f}" for val in tick_locs]
+print('tick_labels', tick_labels)
+print('tick_locs = ', tick_locs) 
+ax.xaxis.set_minor_locator(FixedLocator(tick_locs))
+ax.xaxis.set_minor_formatter(FixedFormatter(tick_labels))
+# ax.set_xticks = tick_locs
+# ax.tick_params(which='major', length=4, width=0.8, direction="in", right=True, top=True)
+# ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, top=True)
 # ax.tick_params(axis='x', labelsize=6)
 # ax.tick_params(axis='y', labelsize=6)
 
