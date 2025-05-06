@@ -36,7 +36,7 @@ from ConformalAnalytical import *
 from free_energy import free_energy_YSYKWH 
 #from annealers import anneal_temp, anneal_lamb
 from matplotlib.ticker import StrMethodFormatter, NullFormatter, FixedLocator, FormatStrFormatter, FixedFormatter
-from matplotlib.ticker import LogLocator
+from matplotlib.ticker import LogLocator, ScalarFormatter
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 # plt.rcParams['figure.dpi'] = "120"
@@ -201,20 +201,45 @@ ax.legend(loc='lower right') # add option fontsize = 12 for example
 
 ax.set_title('FUCK YOU!')
 
-tick_locs = np.logspace(np.log10(np.min(lambsavelist)), np.log10(np.max(lambsavelist)), num=4)
+# tick_locs = np.logspace(np.log10(np.min(lambsavelist)), np.log10(np.max(lambsavelist)), num=10)
+tick_locs = np.linspace(2e-3, 1e-2, num=9)
 tick_labels = [f"{val*1000:.0f}" for val in tick_locs]
 print('tick_labels', tick_labels)
 print('tick_locs = ', tick_locs) 
 ax.xaxis.set_minor_locator(FixedLocator(tick_locs))
+ax.xaxis.set_major_formatter(FixedFormatter(tick_labels))
 ax.xaxis.set_minor_formatter(FixedFormatter(tick_labels))
-# ax.set_xticks = tick_locs
-# ax.tick_params(which='major', length=4, width=0.8, direction="in", right=True, top=True)
-# ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, top=True)
+ax.set_xticks = tick_locs
+
+class IntScalarFormatter(ScalarFormatter):
+    def __call__(self,x,pos=None):
+        if np.isclose(x,int(x)):
+            return f"{int(x)}"
+        else:
+            # return f"{x:g}"
+            return super().__call__(x,pos)
+
+# formatter = IntScalarFormatter(useMathText=True)
+# formatter = ScalarFormatter(useMathText=True)
+# formatter.set_powerlimits((-3,-3))
+# formatter.set_scientific(True)
+# ax.xaxis.set_major_locator(LogLocator(base=10.0))
+# ax.xaxis.set_minor_locator(LogLocator(base=10.0,subs='auto',numticks=10))
+# ax.xaxis.set_major_formatter(formatter)
+# ax.xaxis.set_minor_formatter(FixedFormatter(['2','3','4','5','6','7','8','9']))
+# # ax.xaxis.set_minor_formatter(formatter)
+# ax.ticklabel_format(style='sci', axis='x',scilimits=(-3,-3))
+
+ax.tick_params(which='major', length=14, width=0.8, direction="in", right=True, top=True)
+ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, top=True)
 # ax.tick_params(axis='x', labelsize=6)
 # ax.tick_params(axis='y', labelsize=6)
+def_tls = ax.get_xticklabels(which='minor')
+for elem in def_tls:
+    print(elem)
 
-
-
+print(f'min of lamblist = {np.min(lambsavelist)}')
+print(f'max of lamblist = {np.max(lambsavelist)}')
 
 plt.savefig('PRLgapscaling.pdf', bbox_inches='tight')
 
