@@ -135,7 +135,8 @@ for lambval in lambsavelist:
         titlestring += r' $\lambda$ = ' + f'{lambval:.3}' 
         # left, bottom, width, height = [0.25, 0.55, 0.2, 0.2] #starting default
         # left, bottom, width, height = [0.24, 0.70, 0.275, 0.275] #first done version
-        left, bottom, width, height = [-0.10, 0.65, 0.3, 0.3]
+        left, bottom, width, height = [0.24, 0.475, 0.275, 0.275] #first done version
+        # left, bottom, width, height = [-0.10, 0.65, 0.3, 0.3]
         ax2 = fig.add_axes([left, bottom, width, height])
         #plottable = np.abs(np.real(GDtau))
         startT, stopT = 0, Nbig//2
@@ -149,7 +150,7 @@ for lambval in lambsavelist:
         insetitle = r'$\boldsymbol{|G_d(\tau)|}$' 
         ax2.set_ylabel(insetitle,labelpad=-2)
         ax2.yaxis.label.set_color('C0')
-        ax2.set_title(titlestring,pad=-1)
+        ax2.set_title(titlestring,pad=7)
         ax2.set_box_aspect(aspect=1)
         ax3 = ax2.twinx()
         ax3.set_ylabel(r'$\boldsymbol{|D_d(\tau)|}$',labelpad=-2)
@@ -174,12 +175,6 @@ for lambval in lambsavelist:
 
 
 gaplist = np.array(gaplist).T
-# temp = [[],[]]
-# for i, gaplist_ in enumerate(gaplist):
-    # temp[0] += [gaplist_[0]]
-    # temp[1] += [gaplist_[1]]
-# gaplist = temp
-#print(f'dims of gaplist = {gaplist.size}')
 
 
 ################## MAIN FIGURE ###################
@@ -187,12 +182,10 @@ gaplist = np.array(gaplist).T
 
 
 
-ax.loglog([],[],ls='None',label = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.2}')
 for i, gaplistval in enumerate(gaplist):
     ax.loglog(lambsavelist,gaplistval,'.',c=f'C{i}')
 print(gaplist)
 fitpars = [np.polyfit(np.log(lambsavelist),np.log(gaplistval),1) for gaplistval in gaplist]
-# m,c = np.polyfit(np.log(lambsavelist[-10:-1]),np.log(gaplist[-10:-1]),1)
 textvals = [r'$E_g^F$', r'$E_g^B$']
 for i in [0,1]:
     mval = fitpars[i][0]
@@ -202,14 +195,23 @@ for i in [0,1]:
 print(f'dimensional analysis scaling = {slope_expect:.4}')
 ax.set_xlabel(r'$\lambda \times 10^{-3}$')
 ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
+ax.set_ylim(top=1e-1)
 
 titleval = r'Gap scaling calculated from $G_d$' 
 titleval = ''
+ax.loglog([],[],ls='None',label = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.2}')
 
 
 ax.set_title(titleval)
-# ax.legend(loc='lower right', bbox_to_anchor=(1.2,-0.001) ) # first version works
-ax.legend(loc='upper right', bbox_to_anchor=(1.282,1.69) ) # coords (x,y)
+# ax.legend(loc='lower right', bbox_to_anchor=(1.2,-0.001), prop={'size':10}) # first version works
+# ax.legend(loc='upper right', bbox_to_anchor=(1.282,1.69) ) # coords (x,y)
+handles, labels = ax.get_legend_handles_labels()
+lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(0.40,-0.65),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=ax.transAxes, columnspacing=-1.5)
+
+
+
+
+
 
 
 # tick_locs = np.logspace(np.log10(np.min(lambsavelist)), np.log10(np.max(lambsavelist)), num=10)
@@ -218,6 +220,14 @@ tick_labels = [f"{val*1000:.0f}" for val in tick_locs]
 print('tick_labels', tick_labels)
 print('tick_locs = ', tick_locs) 
 ax.xaxis.set_minor_locator(FixedLocator(tick_locs))
+### hack for pwe lims ##
+hackformatter = ScalarFormatter(useMathText=True)
+hackformatter.set_powerlimits((-3,-3))
+ax.xaxis.set_minor_formatter(hackformatter)
+ax.xaxis.set_major_formatter(hackformatter)
+plt.draw()
+offset_txt = ax.xaxis.get_offset_text().get_text()
+###########
 ax.xaxis.set_major_formatter(FixedFormatter(tick_labels))
 ax.xaxis.set_minor_formatter(FixedFormatter(tick_labels))
 ax.set_xticks = tick_locs
@@ -225,11 +235,15 @@ ax.set_xticks = tick_locs
 
 ax.tick_params(which='major', length=4, width=0.8, direction="in", right=True, top=True)
 ax.tick_params(which='minor', length=2, width=0.5, direction="in", right=True, top=True)
-# ax.tick_params(axis='x', labelsize=6)
-# ax.tick_params(axis='y', labelsize=6)
 def_tls = ax.get_xticklabels(which='minor')
 for elem in def_tls:
     print(elem)
+ax.xaxis.offsetText.set_visible(True)
+# ax.xaxis.offsetText.set_text(r"$10^{-3}$")
+ax.xaxis.offsetText.set_text(offset_txt)
+plt.draw()
+print("offsetText : ", ax.xaxis.offsetText.get_text())
+print("offsetVisibility:", ax.xaxis.offsetText.get_visible())
 
 print(f'min of lamblist = {np.min(lambsavelist)}')
 print(f'max of lamblist = {np.max(lambsavelist)}')
@@ -240,13 +254,6 @@ legend = ax.get_legend()
 
 plt.savefig('PRLgapscaling.pdf', bbox_inches='tight')
 
-# if which == 'GD':
-        # plt.savefig('GdGapscalingv2.pdf',bbox_inches='tight')
-# elif which == 'DD':
-        # plt.savefig('DdGapscalingv2.pdf',bbox_inches='tight')
-# else: 
-        # print("Please try to be less stupid in the future. Kind regards.")
-        # exit(1)
 
 
 
