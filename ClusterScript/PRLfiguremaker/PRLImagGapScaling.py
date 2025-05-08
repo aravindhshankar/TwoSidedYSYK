@@ -187,7 +187,7 @@ for i, gaplistval in enumerate(gaplist):
     ax.loglog(lambsavelist,gaplistval,'.',c=f'C{i}')
 print(gaplist)
 fitpars = [np.polyfit(np.log(lambsavelist),np.log(gaplistval),1) for gaplistval in gaplist]
-textvals = [r'$E_g^F$', r'$E_g^B$']
+textvals = [r'$\Delta_{\text{fit}}^G$', r'$\Delta_{\text{fit}}^D$']
 for i in [0,1]:
     mval = fitpars[i][0]
     cval = fitpars[i][1]
