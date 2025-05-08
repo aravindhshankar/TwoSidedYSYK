@@ -135,7 +135,7 @@ for lambval in lambsavelist:
         titlestring += r' $\lambda$ = ' + f'{lambval:.3}' 
         # left, bottom, width, height = [0.25, 0.55, 0.2, 0.2] #starting default
         # left, bottom, width, height = [0.24, 0.70, 0.275, 0.275] #first done version
-        left, bottom, width, height = [0.24, 0.475, 0.275, 0.275] #first done version
+        left, bottom, width, height = [0.20, 0.475, 0.275, 0.275] #first done version
         # left, bottom, width, height = [-0.10, 0.65, 0.3, 0.3]
         ax2 = fig.add_axes([left, bottom, width, height])
         #plottable = np.abs(np.real(GDtau))
@@ -146,14 +146,14 @@ for lambval in lambsavelist:
         for i, plottableval in enumerate(plottable):
             ax2.semilogy(xaxis, plottableval[startT:stopT:skip],'p',label = 'numerics DDtau',markersize=2,c=f'C{i}')
         # ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
-        ax2.set_xlabel(r'$\tau/\beta$',labelpad=-2)
+        ax2.set_xlabel(r'$\tau/\beta$',labelpad=-6,fontsize=10)
         insetitle = r'$\boldsymbol{|G_d(\tau)|}$' 
-        ax2.set_ylabel(insetitle,labelpad=-2)
+        ax2.set_ylabel(insetitle,labelpad=2,fontsize=10)
         ax2.yaxis.label.set_color('C0')
         ax2.set_title(titlestring,pad=7)
         ax2.set_box_aspect(aspect=1)
         ax3 = ax2.twinx()
-        ax3.set_ylabel(r'$\boldsymbol{|D_d(\tau)|}$',labelpad=-2)
+        ax3.set_ylabel(r'$\boldsymbol{|D_d(\tau)|}$',labelpad=-1,fontsize=10)
         ax3.yaxis.label.set_color('C1')
         ax3.yaxis.set_major_formatter(NullFormatter())
 
@@ -164,8 +164,8 @@ for lambval in lambsavelist:
         ax2.yaxis.set_major_formatter(NullFormatter())
         ax2.tick_params(which='major', length=3, width=0.6, direction="in", right=True, top=True)
         ax2.tick_params(which='minor', length=1, width=0.3, direction="in", right=True, top=True)
-        ax2.tick_params(axis='x', labelsize=8)
-        ax2.tick_params(axis='y', labelsize=8)
+        ax2.tick_params(axis='x', labelsize=8, pad=0.5)
+        ax2.tick_params(axis='y', labelsize=8, pad=0.5)
 
 
     fitslice = slice(start_idx,stop_idx)
@@ -196,17 +196,23 @@ print(f'dimensional analysis scaling = {slope_expect:.4}')
 ax.set_xlabel(r'$\lambda \times 10^{-3}$')
 ax.set_ylabel(r'mass gap $\gamma\left[\lambda\right]$')
 ax.set_ylim(top=1e-1)
+ax.set_ylim(bottom=1e-3)
 
 titleval = r'Gap scaling calculated from $G_d$' 
 titleval = ''
-ax.loglog([],[],ls='None',label = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.2}')
+titleval = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.2}' 
+# ax.loglog([],[],ls='None',label = r'$\frac{1}{2-2\Delta}=$ '+f'{slope_expect:.2}')
+ax.text(0.002,0.002,titleval,color='red')
 
 
-ax.set_title(titleval)
+# ax.set_title(titleval, loc='right')
 # ax.legend(loc='lower right', bbox_to_anchor=(1.2,-0.001), prop={'size':10}) # first version works
 # ax.legend(loc='upper right', bbox_to_anchor=(1.282,1.69) ) # coords (x,y)
+
 handles, labels = ax.get_legend_handles_labels()
-lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(0.40,-0.65),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=ax.transAxes, columnspacing=-1.5)
+print(labels)
+# lgd = fig.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(0.40,-0.65),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=ax.transAxes, columnspacing=-1.5)
+lgd = fig.legend(handles, labels, ncol=len(labels)//2, loc="lower center", bbox_to_anchor=(0.68,-0.025),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=ax.transAxes, columnspacing=-1.8, handletextpad=0.1)
 
 
 
