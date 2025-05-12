@@ -37,9 +37,9 @@ from annealers import anneal_temp, anneal_lamb
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
 plt.rcParams['legend.fontsize'] = '8'
-plt.rcParams['figure.titlesize'] = '10'
-plt.rcParams['axes.titlesize'] = '10'
-plt.rcParams['axes.labelsize'] = '10'
+plt.rcParams['figure.titlesize'] = '12'
+plt.rcParams['axes.titlesize'] = '12'
+plt.rcParams['axes.labelsize'] = '12'
 # plt.rcParams['figure.figsize'] = f'{3.25*2},{3.25*2}'
 # plt.rcParams['lines.markersize'] = '6'
 plt.rcParams['lines.linewidth'] = '0.5'
@@ -223,6 +223,7 @@ ax3.axvline(1/61, ls = '--', c='grey')
 diffs = FEstempfwd - FEstemprev
 axHYS.plot(Tlist,diffs)
 axHYS.axvline(1/61, ls = '--', c='grey')
+axHYS.set_xlabel(r'$T$',labelpad=1)
 # figHYS.suptitle('Free energy')
 
 axHYS.set_xlim(0.01,0.025)
@@ -250,7 +251,7 @@ fig.tight_layout()
 fig.savefig('../Figuremaker/ButterFlyPlot.pdf')
 
 
-plt.show()
+# plt.show()
 
 
 
