@@ -1,5 +1,6 @@
 import sys
 import os 
+import json
 if not os.path.exists('../Sources'):
     print("Error - Path to Sources directory not found ")
     raise Exception("Error - Path to Sources directory not found ")
@@ -258,10 +259,37 @@ print('######### legends #####')
 legend = ax.get_legend()
 
 
-plt.savefig('PRLgapscaling.pdf', bbox_inches='tight')
+# plt.savefig('PRLgapscaling.pdf', bbox_inches='tight')
+################## EXTRACTING DATA INTO CSV ######################
+print("#################### EXTRACTING DATA #####################")
+print("axis ax")
+data = {}
+for line in ax.lines:
+    label = line.get_label()
+    xdata = line.get_xdata().tolist()
+    ydata = line.get_ydata().tolist()
+    data[label] = {"x" : xdata, "y": ydata}
 
+with open('main_panel.json', 'w') as f:
+    json.dump(data, f, indent=4)
 
+print("axis ax2")
+data2 = {}
+for line in ax2.lines:
+    label = line.get_label()
+    try:
+        xdata = line.get_xdata().tolist()
+    except:
+        xdata = line.get_xdata()
+    try:
+        ydata = line.get_ydata().tolist()
+    except:
+        ydata = line.get_xdata()
+    data2[label] = {"x" : xdata, "y": ydata}
 
+data2['axvlines'] = {"startval" : startval, "stopval" : stopval}
+with open('inset.json', 'w') as f:
+    json.dump(data2, f, indent=4)
 
 # plt.show()
 
