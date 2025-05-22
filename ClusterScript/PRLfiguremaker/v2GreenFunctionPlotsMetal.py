@@ -37,21 +37,21 @@ from Insethelpers import add_subplot_axes
 #import time
 
 plt.style.use('../Figuremaker/physrev.mplstyle') # Set full path to if physrev.mplstyle is not in the same in directory as the notebook
-plt.rcParams['figure.dpi'] = "120"
+#plt.rcParams['figure.dpi'] = "120"
 # plt.rcParams['figure.figsize'] = '8 ,7'
 plt.rcParams['lines.markersize'] = '6'
 plt.rcParams['lines.linewidth'] = '1.2'
 plt.rcParams['axes.labelsize'] = '9'
 plt.rcParams['axes.titlesize'] = '9'
 plt.rcParams['figure.titlesize'] = '9'
-# plt.rcParams['text.latex.preamble']=r'\usepackage{cmbright}'
+plt.rcParams['figure.figsize'] = f'{3.375},{3.375}'
+plt.rcParams['text.latex.preamble']=r'\usepackage{amsmath}'
 
 # plt.rcParams['legend.fontsize'] = '12'
 # # # plt.rcParams['legend.fontsize'] = '14'
 # plt.rcParams['figure.titlesize'] = '10'
 # plt.rcParams['axes.titlesize'] = '10'
 # plt.rcParams['axes.labelsize'] = '10'
-plt.rcParams['figure.figsize'] = f'{3.375},{3.375}'
 # # plt.rcParams['lines.markersize'] = '6'
 # plt.rcParams['lines.linewidth'] = '0.5'
 plt.rcParams['axes.formatter.limits'] = '-2,2'
@@ -86,64 +86,56 @@ path_to_dump = path_to_dump_temp
 titlestring = "Imaginary time Green's functions for "
 # # titlestring +=  r', $g = $' + str(g)
 titlestring += r' $\lambda$ = ' + str(lamb) 
-# fig.suptitle(titlestring)
-# fig.tight_layout(pad=3)
-# for axi in ax:
-# 	for axj in axi:
-# 		axj.tick_params(labelsize=7)
-
-# GDinsetax.set_xlabel(r'$\tau/\beta$',labelpad = 0, fontsize=8)
-# GDinsetax.tick_params(axis='both', labelsize=4,pad=0.5)
 
 
-figSL,axSL = plt.subplots(2,2, constrained_layout=True)
+figSL,axSL = plt.subplots(2,2)
 figSL.set_tight_layout(True)
-# figSL.set_figwidth(3.25*2)
-# figSL.set_figwidth(3.25*2.2)
-figSL.suptitle(titlestring)
+figSL.set_figwidth(3.375)
+figSL.suptitle(titlestring,x = 0.55,y=0.92)
 # figSL.tight_layout(pad=2)
 axSL[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-axSL[0,0].set_ylabel(r'$|\Re{G_{d}(\tau)}|$',labelpad = 1)
+axSL[0,0].set_ylabel(r'$|\mathrm{Re}\,{G_{d}(\tau)}|$',labelpad = 1)
 
 axSL[0,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-axSL[0,1].set_ylabel(r'$|\Re{G_{od}(\tau)}|$',labelpad = 1)
+axSL[0,1].set_ylabel(r'$|\mathrm{Re}\,{G_{od}(\tau)}|$',labelpad = 1)
 
 axSL[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-axSL[1,0].set_ylabel(r'$|\Re{D_{d}(\tau)}|$',labelpad = 1)
+axSL[1,0].set_ylabel(r'$|\mathrm{Re}\,{D_{d}(\tau)}|$',labelpad = 1)
 
 axSL[1,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-axSL[1,1].set_ylabel(r'$|\Re{D_{od}(\tau)}|$',labelpad = 1)
+axSL[1,1].set_ylabel(r'$|\mathrm{Re}\,{D_{od}(\tau)}|$',labelpad = 1)
 
-# GDinsetax = add_subplot_axes(axSL[0,0], [0.1,0.1,0.5,0.5])
-# GODinsetax = add_subplot_axes(axSL[0,1], [0.1,0.4,0.5,0.5])
-# DDinsetax = add_subplot_axes(axSL[1,0], [0.05,0.09,0.5,0.5])
-# DODinsetax = add_subplot_axes(axSL[1,1], [0.1,0.3,0.5,0.5])
 
-GDinsetax = add_subplot_axes(axSL[0,0], [-0.08,-0.064,0.4,0.4])
-GODinsetax = add_subplot_axes(axSL[0,1], [0.1,0.0,0.4,0.4])
-DDinsetax = add_subplot_axes(axSL[1,0], [0.5,0.35,0.4,0.4])
-DODinsetax = add_subplot_axes(axSL[1,1], [0.6,0.25,0.4,0.4])
+# GDinsetax = add_subplot_axes(axSL[0,0], [-0.08,-0.064,0.4,0.4])
+# GODinsetax = add_subplot_axes(axSL[0,1], [0.1,0.0,0.4,0.4])
+# DDinsetax = add_subplot_axes(axSL[1,0], [0.5,0.35,0.4,0.4])
+# DODinsetax = add_subplot_axes(axSL[1,1], [0.6,0.25,0.4,0.4])
+# insetaxes = [GDinsetax,GODinsetax,DDinsetax,DODinsetax]
+
+GDinsetax = add_subplot_axes(axSL[0,0], [0.24,-0.015,0.4,0.4])
+GODinsetax = add_subplot_axes(axSL[0,1], [0.4,0.0,0.4,0.4])
+DDinsetax = add_subplot_axes(axSL[1,0], [0.47,0.31,0.4,0.4])
+DODinsetax = add_subplot_axes(axSL[1,1], [0.6,0.30,0.4,0.4])
 insetaxes = [GDinsetax,GODinsetax,DDinsetax,DODinsetax]
-
 
 
 # GDinsetax.set_xticklabels([])
 # 	insetax.set_xlabel('')
-insetfontsize = 7
+insetfontsize = 8
 insetlabelpad = -5
 GDinsetax.set_xlabel(r'$\omega_n$',fontsize=insetfontsize,labelpad=-5)
-GDinsetax.set_ylabel(r'$-\Im{G_d}(\omega_n)$',fontsize=insetfontsize,labelpad=-4)
+GDinsetax.set_ylabel(r'$-\mathrm{Im}{G_d}(\omega_n)$',fontsize=insetfontsize,labelpad=-4)
 GODinsetax.set_xlabel(r'$\omega_n$',fontsize=insetfontsize,labelpad=-4)
 GODinsetax.set_ylabel(r'$G_{od}(\omega_n)$',fontsize=insetfontsize,labelpad=-3)
 DODinsetax.set_xlabel(r'$\nu_n$',fontsize=insetfontsize,labelpad=-3)
 DODinsetax.set_ylabel(r'$D_{od}(\nu_n)$',labelpad = 1,fontsize=insetfontsize)
 DDinsetax.set_xlabel(r'$\nu_n$',fontsize=insetfontsize,labelpad=-3)
-DDinsetax.set_ylabel(r'$\Re{D_d}(\nu_n)$',labelpad = -1,fontsize=insetfontsize)
+DDinsetax.set_ylabel(r'$\mathrm{Re}{D_d}(\nu_n)$',labelpad = -1,fontsize=insetfontsize)
 # DODinsetax.set_ylabel(r'$|\Re{D_{od}(\tau)}|$')
 
 for axi in axSL:
 	for axj in axi:
-		axj.tick_params(axis='both', labelsize=10,pad=0.5)
+		axj.tick_params(axis='both', labelsize=8,pad=0.5)
 		# axj.set_box_aspect(aspect=1)
 
 # figLL,axLL = plt.subplots(2,2)
@@ -154,7 +146,7 @@ for axi in axSL:
 
 for i, beta in enumerate(betalist):
 	col = 'C'+str(i+1) #to have same color scheme as superconductor
-	lab = r'$\beta = $ ' + str(beta) + (' (BH)' if beta < 63 else ' (WH)' )
+	lab = r'$\beta = $ ' + str(beta) + (' (2BH)' if beta < 63 else ' (WH)' )
 	savefile = 'Nbig' + str(int(np.log2(Nbig))) + 'beta' + str(beta) 
 	savefile += 'lamb' + str(lamb) + 'J' + str(J)
 	savefile += 'g' + str(g) + 'r' + str(r)
@@ -203,44 +195,6 @@ for i, beta in enumerate(betalist):
 	Gomega = Time2FreqF(Gtau, Nbig, beta)
 	Domega = Time2FreqB(Dtau, Nbig, beta)
 
-
-	# ################## PLOTTING ######################
-	# print(beta), print(tau[-1])
-	# Gconftau = Freq2TimeF(GconfImag(omega,g,beta),Nbig,beta)
-	# Dconftau = Freq2TimeB(DconfImag(nu,g,beta),Nbig,beta)
-	# FreeDtau = DfreeImagtau(tau,r,beta)
-
-
-
-	# ax[0,0].plot(tau/beta, np.real(GDtau), c=col, ls = '-', label = lab)
-	# ax[0,0].plot(tau/beta, np.real(Gtau), c=col, ls='--' )
-	# ax[0,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-	# ax[0,0].set_ylabel(r'$\Re{G_{d}(\tau)}$')
-	# ax[0,0].legend()
-
-	# ax[0,1].plot(tau/beta, np.real(GODtau), c = col, ls='-',  label = lab)
-	# ax[0,1].plot(tau/beta, np.zeros_like(GODtau), c= col, ls = '--')
-
-	# ax[0,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-	# ax[0,1].set_ylabel(r'$\Re{G_{od}(\tau)}$')
-	# ax[0,1].legend()
-
-	# ax[1,0].plot(tau/beta, np.real(DDtau), c = col, ls='-', label = lab)
-	# ax[1,0].plot(tau/beta, np.real(Dtau), c = col, ls= '--')
-
-	# ax[1,0].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-	# ax[1,0].set_ylabel(r'$\Re{D_{d}(\tau)}$')
-	# ax[1,0].legend()
-
-	# ax[1,1].plot(tau/beta, np.real(DODtau), c = col, ls='-', label = lab)
-	# ax[1,1].plot(tau/beta, np.zeros_like(DODtau), c = col, ls='--')
-	# ax[1,1].set_xlabel(r'$\tau/\beta$',labelpad = 0)
-	# ax[1,1].set_ylabel(r'$\Re{D_{od}(\tau)}$')
-	# ax[1,1].legend()
-
-	# #fig.suptitle(r'$\beta$ = ', beta)
-	# #plt.savefig('../../KoenraadEmails/Withx0_01constImagTime.pdf',bbox_inches='tight')
-	# #plt.show()
 
 
 
@@ -314,21 +268,19 @@ for i, beta in enumerate(betalist):
 
 # fig.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
+axSL[0,0].set_ylim(bottom=9e-5)
+axSL[1,0].set_ylim(top=2e0)
+axSL[1,1].set_ylim(top=2e-1)
 axSL[1,1].yaxis.set_minor_formatter(NullFormatter())
 # axSL[1,1].ticklabel_format(axis='y', scilimits=(0,0))
 # axSL[1,1].tick_params('y',labelsize=2)
 handles, labels = axSL[0,0].get_legend_handles_labels()
-lgd = figSL.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(1,-0.35),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=axSL[1,0].transAxes)
+lgd = figSL.legend(handles, labels, ncol=len(labels)//2+1, loc="lower center", bbox_to_anchor=(1.2,-0.45),frameon=True,fancybox=True,borderaxespad=0, bbox_transform=axSL[1,0].transAxes)
 for insetax in insetaxes:
 	insetax.set_xticks([],labels=[])
 	insetax.set_yticks([],labels=[])
 
-# figSL.savefig('LLINSETGreenFunctionPlotsMetal.pdf', bbox_inches='tight')
-# plt.savefig('GreenFunctionPlotsMetal.pdf', bbox_inches='tight')
-
-#plt.savefig('../../KoenraadEmails/lowenergy_powerlaw_ImagTime_SingleYSYK.pdf', bbox_inches = 'tight')
-#plt.savefig('../../KoenraadEmails/ImagFreqpowerlaw_withxconst0_01.pdf', bbox_inches = 'tight')
-plt.show()
+figSL.savefig('LLINSETGreenFunctionPlotsMetal.pdf', bbox_inches='tight')
 
 
 

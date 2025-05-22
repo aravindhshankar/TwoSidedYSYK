@@ -163,7 +163,10 @@ for i, beta in enumerate(betalist):
 
 
 # ax.plot(thetalist, (1./beta) * np.gradient(FEsumangle,thetalist), ls ='-', c=col,label=lab)
+
 ax.plot(1./betalist, CritCurrlist, '.-')
+gradcritcur = np.gradient(CritCurrlist, 1./betalist) 
+# ax.plot(1./betalist, gradcritcur, '--', c='k')
 ax.axvline(1./62,ls='--',c='C1',label =r'$T_{WH}$')
 # ax.axvline(1./32,ls='--',c='C2',label = r'$T_c$')
 ax.axvline(1./35,ls='--',c='C2',label = r'$T_c$')
@@ -187,9 +190,10 @@ interpol = CubicSpline(x=Tlist[interslice],y=CritCurrlist[interslice],extrapolat
 print(interpol(Tlist[predictslice]))
 ax.set_xlabel(r'$T$')
 ax.set_ylabel(r'$I_c$')
-# ax.set_xlim(0,0.121)
+
 ax.set_xlim(0.005,0.04)
 ax.set_ylim(-1e-4,)
+
 ax.set_title(r'Critical current',pad=-8,loc='right')
 # ax.legend(fontsize=16)
 
