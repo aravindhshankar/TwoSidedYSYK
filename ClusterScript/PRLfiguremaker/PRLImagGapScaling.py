@@ -114,6 +114,7 @@ for lambval in lambsavelist:
     # plottableGD = np.abs(np.real(GDtau))
     # plottableDD = np.abs(np.real(DDtau))
     plottable = [np.abs(np.real(GDtau)),np.abs(np.real(DDtau))]
+    plotlabels = ['numerics GDtau', 'numerics DDtau']
     lambinv = 1./(lambval*beta)
     xaxis = tau[startT:stopT]/beta
     # logder = np.gradient(np.log(plottable))
@@ -146,7 +147,7 @@ for lambval in lambsavelist:
         xaxis = tau[startT:stopT:skip]/beta
         # yaxis = 
         for i, plottableval in enumerate(plottable):
-            ax2.semilogy(xaxis, plottableval[startT:stopT:skip],'p',label = 'numerics DDtau',markersize=2,c=f'C{i}')
+            ax2.semilogy(xaxis, plottableval[startT:stopT:skip],'p',label = plotlabels[i],markersize=2,c=f'C{i}')
         # ax2.plot(xaxis, plottable[startT:stopT],'p',label = 'numerics GDtau',markersize=2,c='C2')
         ax2.set_xlabel(r'$\tau/\beta$',labelpad=-6,fontsize=10)
         insetitle = r'$\boldsymbol{|G_d(\tau)|}$' 
@@ -185,7 +186,7 @@ gaplist = np.array(gaplist).T
 
 
 for i, gaplistval in enumerate(gaplist):
-    ax.loglog(lambsavelist,gaplistval,'.',c=f'C{i}')
+    ax.loglog(lambsavelist,gaplistval,'.',c=f'C{i}', label = plotlabels[i])
 print(gaplist)
 fitpars = [np.polyfit(np.log(lambsavelist),np.log(gaplistval),1) for gaplistval in gaplist]
 textvals = [r'$\Delta_{\text{fit}}^G$', r'$\Delta_{\text{fit}}^D$']
@@ -277,6 +278,7 @@ print("axis ax2")
 data2 = {}
 for line in ax2.lines:
     label = line.get_label()
+    print("inset label : ", label)
     try:
         xdata = line.get_xdata().tolist()
     except:

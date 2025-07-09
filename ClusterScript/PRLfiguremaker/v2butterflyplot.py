@@ -1,5 +1,6 @@
 import sys ###
 import os 
+import json
 if not os.path.exists('../Sources'):
 	print("Error - Path to Sources directory not found ")
 	raise Exception("Error - Path to Sources directory not found ")
@@ -262,6 +263,38 @@ fig.tight_layout()
 # plt.savefig('../Figuremaker/butterflyplotmetal.pdf',bbox_inches='tight')
 
 fig.savefig('ButterFlyPlot.pdf',bbox_inches='tight')
+
+################## EXTRACTING DATA INTO CSV ######################
+print("#################### EXTRACTING DATA #####################")
+# print("axis ax3")
+# data = {}
+# for line in ax3.lines:
+    # label = line.get_label()
+    # xdata = line.get_xdata().tolist()
+    # ydata = line.get_ydata().tolist()
+    # data[label] = {"x" : xdata, "y": ydata}
+# 
+# with open('partialTmet.json', 'w') as f:
+    # json.dump(data, f, indent=4)
+
+print("axis ax3")
+data2 = {}
+for line in ax3.lines:
+    label = line.get_label()
+    print("inset label : ", label)
+    try:
+        xdata = line.get_xdata().tolist()
+    except:
+        xdata = line.get_xdata()
+    try:
+        ydata = line.get_ydata().tolist()
+    except:
+        ydata = line.get_xdata()
+    data2[label] = {"x" : xdata, "y": ydata}
+
+# data2['axvlines'] = {"startval" : startval, "stopval" : stopval}
+with open('partialTmet.json', 'w') as f:
+    json.dump(data2, f, indent=4)
 
 
 # plt.show()
